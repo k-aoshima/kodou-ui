@@ -48,7 +48,7 @@ description: エンジニアが毎日使う道具（開発ツール、ランチ�
 | 色 | `--red` `--green` `--yellow` `--blue` `--magenta` `--cyan` | ANSI の並び。色相は CUD 寄りで、赤と緑は明るさも変える |
 | アクセント | `--accent` `--blue-hover` | フォーカス、主な操作、主な操作のホバー |
 | 塗った面の文字 | `--on` | 色の面の上の文字 |
-| 字体 | `--font` `--font-read` | 等幅（JetBrains Mono＋BIZ UDゴシック）と、文（IBM Plex Sans JP） |
+| 字体 | `--font` `--font-read` | 等幅（JetBrains Mono＋BIZ UDゴシック）と、文（Noto Sans JP） |
 | 余白 | `--s1`〜`--s6` | 4・8・12・16・24・32px |
 | 動き | `--t-fast` `--t-base` | 80ms と 140ms。動かすのは transform と opacity だけ |
 
