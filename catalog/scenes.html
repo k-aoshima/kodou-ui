@@ -1,0 +1,799 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Kodou-ui 見本帳</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+/* 配置: 端末の文字の格子。上に tmux の帯、各部品は罫線の枠、下に powerline のステータスライン。描画と動きは今の質で */
+:root {
+  --bg: #F4F4EF; --panel: #FBFBF8; --fg: #20242B; --dim: #6C7079; --faint: #7A7E86; --rule: rgba(32,36,43,.28); --rule-soft: rgba(32,36,43,.12);
+  --sel-bg: #20242B; --sel-fg: #F4F4EF;
+  --red: #C23F38; --green: #2C8A4B; --yellow: #A47610; --blue: #2F56C4; --magenta: #8A4DB5; --cyan: #1B8590;
+  --accent: var(--blue); --pulse: var(--red);
+  --red-bg: rgba(194,63,56,.10); --green-bg: rgba(44,138,75,.11); --yellow-bg: rgba(164,118,16,.12);
+  --font: "JetBrains Mono", "BIZ UDGothic", ui-monospace, Menlo, monospace;
+  /* 文として読むところは UD のプロポーショナル体。行の長さ・行間・コントラストは読みやすさの研究に合わせる */
+  --font-read: "BIZ UDPGothic", "Hiragino Sans", "Noto Sans JP", system-ui, sans-serif;
+  --measure: 38em;
+  --t-fast: 80ms; --t-base: 140ms;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #15171C; --panel: #1A1D23; --fg: #D9DCE3; --dim: #8F94A0; --faint: #7C818D; --rule: rgba(217,220,227,.26); --rule-soft: rgba(217,220,227,.10);
+  --sel-bg: #D9DCE3; --sel-fg: #15171C;
+  --red: #F06B63; --green: #62C987; --yellow: #E6B450; --blue: #7C9CFF; --magenta: #C590F0; --cyan: #5CC8D2;
+  --red-bg: rgba(240,107,99,.13); --green-bg: rgba(98,201,135,.12); --yellow-bg: rgba(230,180,80,.13); color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #15171C; --panel: #1A1D23; --fg: #D9DCE3; --dim: #8F94A0; --faint: #7C818D; --rule: rgba(217,220,227,.26); --rule-soft: rgba(217,220,227,.10);
+  --sel-bg: #D9DCE3; --sel-fg: #15171C;
+  --red: #F06B63; --green: #62C987; --yellow: #E6B450; --blue: #7C9CFF; --magenta: #C590F0; --cyan: #5CC8D2;
+  --red-bg: rgba(240,107,99,.13); --green-bg: rgba(98,201,135,.12); --yellow-bg: rgba(230,180,80,.13); color-scheme: dark }
+
+* { box-sizing: border-box }
+[hidden] { display: none !important }
+body { background: var(--bg); color: var(--fg); font: 13.5px/1.6 var(--font); font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased; font-feature-settings: "calt" 0 }
+:focus-visible { outline: 1px dashed var(--accent); outline-offset: 3px }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important } }
+svg.px { flex: none; fill: currentColor; shape-rendering: crispEdges; vertical-align: -0.2em; image-rendering: pixelated }
+[data-px] { display: inline-flex; align-items: center }
+.dim { color: var(--dim) } .faint { color: var(--faint) }
+.c-red { color: var(--red) } .c-green { color: var(--green) } .c-yellow { color: var(--yellow) } .c-blue { color: var(--blue) } .c-magenta { color: var(--magenta) } .c-cyan { color: var(--cyan) }
+b, strong { font-weight: 700 }
+
+/* tmux の帯 */
+.tmux { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 15; display: flex; gap: 0; height: 26px; align-items: stretch; background: var(--sel-bg); color: var(--sel-fg); font-size: 12.5px; padding-left: max(0px, env(safe-area-inset-left, 0px)); padding-right: max(0px, env(safe-area-inset-right, 0px)); overflow: hidden; white-space: nowrap }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 16; background: var(--sel-bg) }
+.tmux > * { display: flex; align-items: center; padding: 0 10px }
+.tmux .sess { background: var(--green); color: #fff; font-weight: 700 }
+.tmux a { color: inherit; text-decoration: none; opacity: .72 }
+.tmux a:hover { opacity: 1 }
+.tmux a.cur { opacity: 1; font-weight: 700 }
+.tmux .sp { flex: 1; padding: 0 }
+.tmux .beat { color: var(--red) }
+
+.wrap { max-width: 1100px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0 80px }
+
+/* man ページの頭 */
+.man { display: flex; justify-content: space-between; gap: 12px; padding-block: 20px 0; color: var(--dim); font-size: 12.5px; white-space: nowrap; overflow: hidden }
+.man span:nth-child(2) { overflow: hidden; text-overflow: ellipsis }
+.hero { padding-block: 28px 30px; border-bottom: 1px dashed var(--rule) }
+.logo { font-size: clamp(30px, 6vw, 52px); font-weight: 700; letter-spacing: -.01em; line-height: 1.1; display: flex; align-items: center; gap: .2em }
+.logo .heart { color: var(--red); font-size: .55em; animation: beat 1.1s infinite; display: inline-block }
+.cursor { display: inline-block; width: .55em; height: 1em; background: var(--fg); animation: blink 1.05s steps(1) infinite; vertical-align: -0.1em }
+@keyframes blink { 50% { opacity: 0 } }
+@keyframes beat { 0%, 100% { transform: scale(1) } 12% { transform: scale(1.3) } 24% { transform: scale(1) } 36% { transform: scale(1.18) } }
+.hero p { margin: 14px 0 0; max-width: 68ch; color: var(--dim) }
+.hero p .prompt { color: var(--green) }
+.legend { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px 14px; font-size: 12.5px }
+
+/* 罫線の枠 */
+section.part { padding-block: 34px 6px }
+.part-title { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; margin-bottom: 6px }
+.part-title h2 { margin: 0; font-size: 15px; font-weight: 700 }
+.part-title h2 .no { color: var(--faint); font-weight: 400 }
+.part-desc { margin: 0 0 16px; color: var(--dim); max-width: 78ch; font-size: 13px }
+.tag { font-size: 12px; white-space: nowrap }
+.tag::before { content: "["; color: var(--faint) } .tag::after { content: "]"; color: var(--faint) }
+.t1 { color: var(--blue) } .t2 { color: var(--green) } .t3 { color: var(--yellow) } .t4 { color: var(--magenta) }
+
+.box { position: relative; border: 1px solid var(--rule); background: var(--panel); margin-top: 10px }
+.box > .ttl { position: absolute; top: -0.8em; left: 10px; padding: 0 6px; background: var(--panel); font-size: 12.5px; line-height: 1.5; color: var(--fg); white-space: nowrap; max-width: calc(100% - 20px); overflow: hidden; text-overflow: ellipsis }
+.box > .ttl .dim { font-weight: 400 }
+.box > .ttl-r { position: absolute; top: -0.8em; right: 10px; padding: 0 6px; background: var(--panel); font-size: 12px; color: var(--dim); white-space: nowrap }
+.box:focus-within, .box:focus { border-color: var(--fg); outline: none }
+.box-in { padding: 14px 14px 10px }
+.scroll-x { overflow-x: auto }
+
+/* nano のキーの帯 */
+.keys { display: flex; flex-wrap: wrap; gap: 4px 16px; padding: 7px 14px; border-top: 1px solid var(--rule-soft); font-size: 12px; color: var(--dim) }
+.keys span { white-space: nowrap }
+.keys kbd, kbd { font: 700 11.5px var(--font); background: var(--sel-bg); color: var(--sel-fg); padding: 0 4px; margin-right: 4px; white-space: nowrap }
+kbd.soft { background: transparent; color: var(--fg); border: 1px solid var(--rule); margin-right: 2px }
+
+/* 1 fzf */
+.fz-line { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 12px 14px 4px }
+.fz-line .pr { color: var(--blue); font-weight: 700 }
+.chip { display: inline-flex; align-items: center; gap: 2px; padding: 0 2px 0 6px; background: var(--blue); color: var(--panel); font-size: 12.5px; line-height: 22px; animation: pop var(--t-base) ease-out }
+.chip button { border: 0; background: transparent; color: inherit; font: inherit; cursor: pointer; padding: 0 4px; opacity: .75 }
+.chip button:hover { opacity: 1 }
+@keyframes pop { from { opacity: .2; transform: translateY(2px) } to { opacity: 1; transform: none } }
+.fz-line input { flex: 1; min-width: 140px; border: 0; outline: 0; background: transparent; color: var(--fg); font: 15px var(--font); height: 26px; caret-color: var(--fg); caret-shape: block }
+.fz-line input::placeholder { color: var(--faint) }
+.fz-info { display: flex; align-items: center; gap: 10px; padding: 0 14px 6px; color: var(--yellow); font-size: 12.5px }
+.fz-info .rule { flex: 1; height: 0; border-top: 1px solid var(--rule-soft) }
+.fz-info .ms { color: var(--faint) }
+.explain { padding: 2px 14px 8px; color: var(--green); font-size: 12.5px }
+.explain code { font: inherit; color: var(--blue); font-weight: 700 }
+.list { max-height: 280px; overflow: auto; padding: 0 0 6px }
+.ln { display: grid; grid-template-columns: 2ch 2.4ch minmax(0,1fr) auto; gap: 0 6px; align-items: center; padding: 1px 14px; cursor: pointer; transition: background var(--t-fast), color var(--t-fast); white-space: nowrap }
+.ln .mk { color: var(--blue); font-weight: 700; visibility: hidden }
+.ln .ic { color: var(--dim) }
+.ln .nm { overflow: hidden; text-overflow: ellipsis }
+.ln .nm mark { background: transparent; color: var(--green); font-weight: 700 }
+.ln .mt { color: var(--faint); font-size: 12.5px }
+.ln.on { background: var(--sel-bg); color: var(--sel-fg) }
+.ln.on .mk { visibility: visible; color: var(--sel-fg) }
+.ln.on .ic, .ln.on .mt { color: inherit; opacity: .7 }
+.ln.on .nm mark { color: inherit; text-decoration: underline }
+.ln:hover:not(.on) { background: var(--rule-soft) }
+.empty { padding: 6px 14px 10px; color: var(--dim) }
+.sugg .ln { grid-template-columns: 2ch 8ch 6ch minmax(0,1fr) }
+.sugg .k { color: var(--blue); font-weight: 700 }
+.ln.on .k { color: inherit }
+.opened { color: var(--green) }
+
+/* 2 htop */
+.meters { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 2px 24px; padding: 12px 14px 10px; font-size: 13px }
+.meter { display: flex; gap: 6px; white-space: nowrap; min-width: 0 }
+.meter .lb { color: var(--cyan); font-weight: 700; width: 3.5ch }
+.meter .br { flex: 1; min-width: 0; overflow: hidden }
+.meter .br .on-g { color: var(--green) } .meter .br .on-y { color: var(--yellow) } .meter .br .on-r { color: var(--red) } .meter .br .off { color: var(--faint) }
+table.top { width: 100%; border-collapse: collapse; font-size: 13px }
+table.top th { text-align: left; font-weight: 700; background: var(--green); color: #fff; padding: 1px 10px; white-space: nowrap }
+table.top td { padding: 1px 10px; white-space: nowrap }
+table.top .num { text-align: right }
+table.top tbody tr { cursor: pointer; transition: background var(--t-fast), color var(--t-fast) }
+table.top tbody tr:hover:not(.on) { background: var(--rule-soft) }
+table.top tbody tr.on { background: var(--sel-bg); color: var(--sel-fg) }
+table.top tbody tr.on .dim, table.top tbody tr.on .memb span { color: inherit }
+table.top tbody tr.gone td { color: var(--faint); text-decoration: line-through }
+table.top tbody tr.on.gone td { color: var(--sel-fg); opacity: .6 }
+.memb { white-space: pre }
+.memb .h { color: var(--yellow) }
+.msgline { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: center; padding: 6px 14px; border-top: 1px solid var(--rule-soft); font-size: 13px; min-height: 34px }
+.msgline.ask { background: var(--red-bg) }
+.msgline .q { color: var(--red); font-weight: 700 }
+.msgline code { font: inherit; font-weight: 700 }
+.msgline .cd { color: var(--red); letter-spacing: -.05em }
+
+/* 3 AI */
+.tr { padding: 12px 14px 6px; font-size: 13px }
+.tr .st { animation: pop var(--t-base) ease-out; margin-bottom: 4px }
+.tr .bul { color: var(--green) }
+.tr .bul.ai { color: var(--magenta) }
+.tr .bul.me { color: var(--blue) }
+.tr .tool { font-weight: 700 }
+.tr .sub { color: var(--dim); padding-left: 2ch; white-space: pre-wrap }
+.diff { margin: 2px 0 8px 2ch; border-left: 1px solid var(--rule); font-size: 12.5px; overflow-x: auto }
+.diff div { white-space: pre; padding: 0 10px 0 0; display: grid; grid-template-columns: 4ch 2ch auto }
+.diff .n { color: var(--faint); text-align: right; padding-right: 1ch }
+.diff .add { background: var(--green-bg); color: var(--green) }
+.diff .del { background: var(--red-bg); color: var(--red) }
+.choice { margin: 6px 14px 12px; border: 1px solid var(--rule); padding: 8px 12px; font-size: 13px }
+.choice .qq { margin-bottom: 4px }
+.choice .opt { display: block; width: 100%; text-align: left; border: 0; background: transparent; color: var(--fg); font: inherit; padding: 1px 0; cursor: pointer }
+.choice .opt .p { display: inline-block; width: 2ch; color: var(--blue); font-weight: 700; visibility: hidden }
+.choice .opt.on { color: var(--blue) }
+.choice .opt.on .p { visibility: visible }
+.choice .opt .dim { margin-left: 1ch }
+.result { margin: 0 14px 12px; font-size: 13px }
+.steer { display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-top: 1px solid var(--rule-soft) }
+.steer .pr { color: var(--blue); font-weight: 700 }
+.steer input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; color: var(--fg); font: 13.5px var(--font); caret-shape: block }
+.steer input::placeholder { color: var(--faint) }
+.state { font-size: 12px }
+.state .dot { display: inline-block; animation: beat 1.1s infinite }
+
+.shell { padding: 12px 14px; font-size: 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 0 1ch }
+.shell .ps1 { color: var(--cyan) } .shell .ps1 b { color: var(--magenta) }
+.ghost-wrap { position: relative; flex: 1; min-width: 220px; height: 26px }
+.ghost-wrap input, .ghost-wrap .gh { position: absolute; inset: 0; font: 14px var(--font); border: 0; padding: 0; white-space: pre; display: flex; align-items: center }
+.ghost-wrap input { z-index: 1; background: transparent; color: var(--fg); outline: 0; caret-shape: block; width: 100% }
+.ghost-wrap .gh { color: var(--faint); overflow: hidden; pointer-events: none }
+.ghost-wrap .gh .typed { visibility: hidden }
+
+/* 4 tail -f / less */
+.tabs { display: flex; flex-wrap: wrap; gap: 0; padding: 10px 14px 6px; font-size: 12.5px }
+.tabs button { border: 0; background: transparent; color: var(--dim); font: inherit; padding: 0 8px; cursor: pointer; line-height: 22px }
+.tabs button[aria-pressed="true"] { background: var(--sel-bg); color: var(--sel-fg); font-weight: 700 }
+.tabs button .n { opacity: .7 }
+.log { height: 230px; overflow: auto; font-size: 12.5px; line-height: 1.6; padding: 2px 0 6px }
+.log div { display: grid; grid-template-columns: 9ch 6ch minmax(0,1fr); gap: 0 1ch; padding: 0 14px; white-space: nowrap }
+.log .t { color: var(--faint) }
+.log .lv-info { color: var(--cyan) } .log .lv-warn { color: var(--yellow) } .log .lv-error { color: var(--red); font-weight: 700 }
+.log div.e { background: var(--red-bg) }
+.log .m { overflow: hidden; text-overflow: ellipsis }
+.less { display: flex; align-items: center; gap: 10px; padding: 3px 14px; border-top: 1px solid var(--rule-soft); font-size: 12.5px; min-height: 30px }
+.less .mode { font-weight: 700 }
+.less .mode.paused { background: var(--yellow); color: var(--panel); padding: 0 6px }
+.less .sp { flex: 1 }
+.less input { width: 18ch; border: 0; outline: 0; background: transparent; color: var(--fg); font: 12.5px var(--font); caret-shape: block }
+.less input::placeholder { color: var(--faint) }
+
+/* 5 pytest */
+.pt { padding: 12px 14px; font-size: 12.5px; line-height: 1.65; overflow-x: auto }
+.pt div { white-space: pre }
+.pt .bar { color: var(--green) }
+.pt .barf { color: var(--red) }
+.pt .h { font-weight: 700 }
+.pt .F { color: var(--red); font-weight: 700 } .pt .ok { color: var(--green) } .pt .run { color: var(--blue); animation: blink .6s steps(1) infinite }
+.pt .pct { color: var(--cyan) }
+.pt .sum-f { color: var(--red); font-weight: 700 }
+.pt .sum-ok { color: var(--green); font-weight: 700 }
+
+/* 6 基本 */
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px }
+.grid2 .box { margin-top: 10px }
+.btn { display: inline-flex; align-items: center; gap: 1ch; border: 1px solid var(--rule); background: var(--panel); color: var(--fg); font: 13px var(--font); padding: 2px 10px; cursor: pointer; transition: background var(--t-fast), color var(--t-fast), transform var(--t-fast); white-space: nowrap }
+.btn::before { content: "["; color: var(--faint); margin-right: -.4ch } .btn::after { content: "]"; color: var(--faint); margin-left: -.4ch }
+.btn:hover { background: var(--sel-bg); color: var(--sel-fg) }
+.btn:hover::before, .btn:hover::after { color: inherit }
+.btn:active { transform: translateY(1px) }
+.btn.primary { background: var(--blue); color: var(--panel); border-color: var(--blue); font-weight: 700 }
+.btn.primary::before, .btn.primary::after { color: inherit; opacity: .6 }
+.btn.danger { color: var(--red); border-color: var(--red) }
+.btn.danger:hover { background: var(--red); color: var(--panel) }
+.btn kbd { background: transparent; color: inherit; opacity: .7; padding: 0; margin: 0; font-weight: 400 }
+.row { display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: center }
+.cb { display: flex; gap: 1ch; align-items: baseline; cursor: pointer; font-size: 13px; padding: 1px 0 }
+.cb input { position: absolute; opacity: 0; pointer-events: none }
+.cb .mk { color: var(--blue); font-weight: 700; white-space: pre }
+.cb input:focus-visible + .mk { outline: 1px dashed var(--accent); outline-offset: 2px }
+.cb .v { color: var(--faint); margin-left: auto }
+.fld { font-size: 13px }
+.fld .line { display: flex; gap: 1ch; align-items: center }
+.fld input { width: 12ch; border: 0; border-bottom: 1px solid var(--rule); background: transparent; color: var(--fg); font: 13.5px var(--font); padding: 0 2px; outline: 0; caret-shape: block }
+.fld input:focus { border-bottom-color: var(--fg) }
+.fld .msg { margin-top: 4px; color: var(--dim); font-size: 12.5px }
+.fld.bad input { border-bottom-color: var(--red); color: var(--red) }
+.fld.bad .msg { color: var(--red) }
+.sysd { font-size: 13px; line-height: 1.75 }
+.sysd div { white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+.sysd .s { white-space: pre; font-weight: 700 }
+.spin { color: var(--blue) }
+
+/* 7 トークン */
+.ansi { display: grid; grid-template-columns: repeat(8, minmax(0,1fr)); gap: 0; border: 1px solid var(--rule) }
+.ansi div { padding: 8px 6px; font-size: 11.5px; min-height: 58px; display: flex; flex-direction: column; justify-content: space-between }
+.grid-demo { font-size: 15px; line-height: 1.5; padding: 12px 14px; overflow-x: auto }
+.grid-demo div { white-space: pre; background-image: linear-gradient(to right, var(--rule-soft) 1px, transparent 1px); background-size: 1ch 100%; width: max-content }
+.mot { padding: 12px 14px; display: grid; gap: 6px; font-size: 12.5px }
+.mot .r { display: grid; grid-template-columns: 12ch minmax(0,1fr); gap: 1ch; align-items: center }
+.mot .track { position: relative; height: 1.6em; border: 1px solid var(--rule-soft) }
+.mot .track i { position: absolute; top: 2px; bottom: 2px; left: 2px; width: 1ch; background: var(--fg) }
+.mot .track.go i { left: calc(100% - 1ch - 2px) }
+
+/* 文面の読みやすさ（今の研究に合わせる）: 文は UD プロポーショナル体、1行 35〜40字、行間 1.8、本文 15px 以上 */
+.hero p, .part-desc, .explain, .msgline, .empty, .fld .msg, .result, .tr .prose, .choice, .opened { font-family: var(--font-read); letter-spacing: .02em }
+.hero p, .part-desc { font-size: 15px; line-height: 1.85; max-width: var(--measure) }
+.explain, .msgline, .result, .tr .prose, .choice { font-size: 14px; line-height: 1.75 }
+.hero p code, .part-desc code, .explain code, .msgline code, .tr .prose code, .result code { font-family: var(--font); font-size: .92em }
+
+/* powerline のステータスライン */
+.statusline { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; display: flex; align-items: stretch; height: calc(26px + env(safe-area-inset-bottom, 0px)); padding-bottom: env(safe-area-inset-bottom, 0px); padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-area-inset-right, 0px); background: var(--panel); border-top: 1px solid var(--rule); font-size: 12.5px; overflow: hidden; white-space: nowrap }
+.statusline > * { display: flex; align-items: center; padding: 0 10px; gap: 6px }
+.pl { position: relative; margin-right: 10px }
+.pl::after { content: ""; position: absolute; right: -10px; top: 0; bottom: 0; width: 10px; background: inherit; clip-path: polygon(0 0, 100% 50%, 0 100%) }
+.sl-mode { background: var(--blue); color: var(--panel); font-weight: 700; z-index: 3 }
+.sl-mode.ins { background: var(--green) }
+.sl-br { background: var(--rule-soft); color: var(--fg); z-index: 2; padding-left: 18px; margin-left: -10px }
+.sl-where { color: var(--fg); font-weight: 700; padding-left: 8px }
+.sl-msg { flex: 1; min-width: 0; color: var(--dim); overflow: hidden; text-overflow: ellipsis; display: block; line-height: 26px }
+.sl-key kbd { animation: pop var(--t-fast) ease-out }
+.sl-r { color: var(--dim); border-left: 1px solid var(--rule-soft) }
+.sl-r .beat { color: var(--red); display: inline-block; animation: beat 1.1s infinite }
+
+@media (max-width: 720px) {
+  .grid2, .meters { grid-template-columns: minmax(0,1fr) }
+  .ansi { grid-template-columns: repeat(4, minmax(0,1fr)) }
+  .sl-hide, .tmux .hide { display: none !important }
+  .man span:nth-child(2) { display: none }
+}
+</style>
+
+
+<nav class="tmux" aria-label="節">
+  <span class="sess">kodou</span>
+  <a href="#command" class="cur">0:fzf*</a><a href="#procs">1:top</a><a href="#agent">2:agent</a><a href="#logs" class="hide">3:tail</a><a href="#progress" class="hide">4:test</a><a href="#basics" class="hide">5:parts</a><a href="#tokens" class="hide">6:colors</a>
+  <span class="sp"></span>
+  <span><span class="beat" data-px="heart" data-cell="2"></span>&nbsp;<span id="clock">--:--</span></span>
+</nav>
+
+<div class="wrap">
+  <div class="man"><span>KODOU-UI(7)</span><span>エンジニアの道具のための部品集</span><span>KODOU-UI(7)</span></div>
+  <header class="hero">
+    <div class="logo"><span class="heart" aria-hidden="true" data-px="heart" data-cell="5"></span>kodou-ui<span class="cursor" aria-hidden="true"></span></div>
+    <p><span class="prompt">$</span> 見た目は端末のまま、中身は今の道具。罫線の枠、反転表示、ステータスラインはそのままに、描画の質、動き、マウス操作、説明の出し方を今のものにしています。どの部品も触って試せて、押したキーは下のステータスラインに出ます。</p>
+    <div class="legend"><span class="tag t1">手応え</span><span class="tag t2">中が見える</span><span class="tag t3">ハンドルは人</span><span class="tag t4">うまくなる</span></div>
+  </header>
+
+  <!-- 1 fzf -->
+  <section class="part" id="command">
+    <div class="part-title"><h2><span class="no">1.</span> コマンド入力</h2><span class="tag t1">手応え</span><span class="tag t2">中が見える</span><span class="tag t4">うまくなる</span></div>
+    <p class="part-desc">fzf と同じく、1文字ごとに絞れます。打った言葉を機械がどう解釈したかは、チップと緑の行で見せます。「ブランチ 」と打つ、<kbd class="soft">#</kbd> で絞り込みの一覧。</p>
+    <div class="box" id="cmd">
+      <span class="ttl">fzf <span class="dim">~/kodou-ui</span></span>
+      <div class="fz-line"><span class="pr">&gt;</span><span id="chips" class="row" style="gap:6px"></span><input id="q" autocomplete="off" spellcheck="false" placeholder="探す  # で絞り込み" aria-label="コマンド入力"></div>
+      <div class="fz-info"><span id="count"></span><span class="rule"></span><span class="ms" id="took"></span></div>
+      <div class="explain" id="explain" hidden></div>
+      <div class="list sugg" id="sugg" hidden></div>
+      <div class="list" id="results" role="listbox" aria-label="結果"></div>
+      <div class="keys"><span><kbd>⏎</kbd>開く</span><span><kbd>↑↓</kbd>選ぶ</span><span><kbd>#</kbd>絞り込み</span><span><kbd>⌫</kbd>チップを外す</span><span><kbd>Esc</kbd>空にする</span><span class="opened" id="opened"></span></div>
+    </div>
+  </section>
+
+  <!-- 2 htop -->
+  <section class="part" id="procs">
+    <div class="part-title"><h2><span class="no">2.</span> 一覧と確認</h2><span class="tag t2">中が見える</span><span class="tag t3">ハンドルは人</span></div>
+    <p class="part-desc">htop の形で詰めて並べます。止めるときは、実際に送る信号と空くメモリを下の行に出して <kbd class="soft">y/N</kbd> で聞きます。画面を止めるダイアログは出しません。</p>
+    <div class="box" id="procPanel" tabindex="0" aria-label="プロセスの一覧">
+      <span class="ttl">top</span><span class="ttl-r" id="procLoad">load 2.41 1.98 1.77</span>
+      <div class="meters">
+        <div class="meter"><span class="lb">Mem</span><span class="br" id="memBar"></span></div>
+        <div class="meter"><span class="lb">Swp</span><span class="br" id="swpBar"></span></div>
+      </div>
+      <div class="scroll-x">
+        <table class="top">
+          <thead><tr><th class="num">PID</th><th>名前</th><th>MEM</th><th class="num">CPU%</th><th>コマンド</th></tr></thead>
+          <tbody id="procRows"></tbody>
+        </table>
+      </div>
+      <div class="msgline" id="msgline"></div>
+      <div class="keys"><span><kbd>j/k</kbd>移動</span><span><kbd>x</kbd>停止</span><span><kbd>y</kbd>送る</span><span><kbd>n</kbd>やめる</span></div>
+    </div>
+  </section>
+
+  <!-- 3 AI -->
+  <section class="part" id="agent">
+    <div class="part-title"><h2><span class="no">3.</span> AI の作業</h2><span class="tag t2">中が見える</span><span class="tag t3">ハンドルは人</span></div>
+    <p class="part-desc">AI が読んだファイル、探したもの、変えようとしている差分を、端末の記録の形で流します。変更は提案で止まり、決めるのは人です。下の <kbd class="soft">&gt;</kbd> からいつでも割り込めます。</p>
+    <div class="box" id="agentPanel" tabindex="0" aria-label="AI の作業">
+      <span class="ttl">agent <span class="dim">feat/command-chips</span></span><span class="ttl-r state" id="agentState"></span>
+      <div class="tr" id="steps"></div>
+      <div id="decideBox"></div>
+      <form class="steer" id="steer"><span class="pr">&gt;</span><input id="steerIn" placeholder="割り込んで指示する（例: テストも直して）" aria-label="AI への指示"><button class="btn" type="button" id="replay">もう一度</button></form>
+      <div class="keys"><span><kbd>↑↓</kbd>選ぶ</span><span><kbd>⏎</kbd>決める</span><span><kbd>1</kbd>適用</span><span><kbd>2</kbd>却下</span></div>
+    </div>
+    <div class="box" style="margin-top:22px">
+      <span class="ttl">zsh <span class="dim">補完</span></span>
+      <div class="shell"><span class="ps1">~/kodou-ui <b>(feat/command-chips)</b> $</span>
+        <div class="ghost-wrap"><div class="gh" aria-hidden="true"><span class="typed" id="ghTyped"></span><span id="ghRest"></span></div><input id="ghostIn" value="git push origin " spellcheck="false" autocomplete="off" aria-label="補完つきの入力"></div>
+      </div>
+      <div class="keys"><span><kbd>Tab</kbd>候補を確定</span><span>候補は提案で、打ち続ければ消えます</span></div>
+    </div>
+  </section>
+
+  <!-- 4 tail -->
+  <section class="part" id="logs">
+    <div class="part-title"><h2><span class="no">4.</span> ログの流れ</h2><span class="tag t1">手応え</span><span class="tag t2">中が見える</span></div>
+    <p class="part-desc">tail -f と less を合わせた形です。上にさかのぼると追いかけを止め、止めていることを下の行に出します。<kbd class="soft">G</kbd> で最新へ、<kbd class="soft">/</kbd> で絞り込み。</p>
+    <div class="box" id="logBox" tabindex="0" aria-label="ログ">
+      <span class="ttl">tail -f <span class="dim">server.log</span></span><span class="ttl-r" id="logRate"></span>
+      <div class="tabs" id="lvSeg" role="group" aria-label="水準">
+        <button data-lv="all" aria-pressed="true">すべて <span class="n" id="n-all">0</span></button>
+        <button data-lv="warn" aria-pressed="false">warn <span class="n" id="n-warn">0</span></button>
+        <button data-lv="error" aria-pressed="false">error <span class="n" id="n-error">0</span></button>
+      </div>
+      <div class="log" id="log"></div>
+      <div class="less"><span class="mode" id="followState">-- 追いかけ中 --</span><span class="sp"></span><input id="logQ" placeholder="/絞り込み" aria-label="ログの絞り込み"></div>
+    </div>
+  </section>
+
+  <!-- 5 pytest -->
+  <section class="part" id="progress">
+    <div class="part-title"><h2><span class="no">5.</span> 進み具合</h2><span class="tag t2">中が見える</span><span class="tag t1">手応え</span></div>
+    <p class="part-desc">スピナーの代わりに、1件を1文字で出します。<span class="c-green">.</span> が成功、<span class="c-red">F</span> が失敗で、どこで落ちたかが終わる前に分かります。</p>
+    <div class="box">
+      <span class="ttl">pytest</span><span class="ttl-r"><button class="btn" id="pRun" style="font-size:12px;padding:0 8px">もう一度</button></span>
+      <div class="pt" id="pt"></div>
+    </div>
+  </section>
+
+  <!-- 6 基本 -->
+  <section class="part" id="basics">
+    <div class="part-title"><h2><span class="no">6.</span> 基本の部品</h2><span class="tag t1">手応え</span><span class="tag t4">うまくなる</span></div>
+    <p class="part-desc">ボタンは角かっこ、チェックは <kbd class="soft">[x]</kbd>、状態は起動ログの <kbd class="soft">[  OK  ]</kbd> の形。押すと起きることをそのまま書き、キーがあれば添えます。</p>
+    <div class="grid2">
+      <div class="box"><span class="ttl">ボタン</span><div class="box-in row">
+        <button class="btn primary">マージ <kbd>⌘⏎</kbd></button>
+        <button class="btn">ブランチを切る</button>
+        <button class="btn">閉じる <kbd>Esc</kbd></button>
+        <button class="btn danger">停止</button>
+      </div></div>
+      <div class="box"><span class="ttl">チェック</span><div class="box-in">
+        <label class="cb"><input type="checkbox" id="sw1" checked><span class="mk">[x]</span>保存したら自動で整形<span class="v" id="sw1v">on</span></label>
+        <label class="cb"><input type="checkbox" id="sw2"><span class="mk">[ ]</span>AI の自動適用<span class="v" id="sw2v">off</span></label>
+      </div></div>
+      <div class="box"><span class="ttl">入力</span><div class="box-in fld" id="portField">
+        <div class="line"><label for="port">ポート:</label><input id="port" value="8080" inputmode="numeric"></div>
+        <div class="msg" id="portMsg">1024〜65535。8080 は空いています</div>
+      </div></div>
+      <div class="box"><span class="ttl">状態</span><div class="box-in sysd">
+        <div><span class="s">[  <span class="c-green">OK</span>  ]</span> CI を通過しました</div>
+        <div><span class="s">[ <span class="c-yellow">WAIT</span> ]</span> レビュー待ち（1人）</div>
+        <div><span class="s">[<span class="c-red">FAILED</span>]</span> 衝突 2件: StatusLine.tsx, tokens.css</div>
+        <div><span class="s">[ <span class="spin" id="spin">⠋</span>  ]</span> 依存を取得中 <span id="dep">38</span>/112</div>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- 7 トークン -->
+  <section class="part" id="tokens">
+    <div class="part-title"><h2><span class="no">7.</span> 色・文字・動き</h2></div>
+    <p class="part-desc">色は端末の ANSI の並びで持ちます。文字は欧文が JetBrains Mono、和文が BIZ UDゴシックで、和文1字が欧文2字の幅に収まり、格子が崩れません。赤い ♥ は「今動いている」ものだけに使います。</p>
+    <div class="box"><span class="ttl">ansi</span><div class="ansi" id="ansi"></div></div>
+    <div class="box" style="margin-top:22px"><span class="ttl">格子</span><div class="grid-demo">
+      <div>PID   名前      MEM</div>
+      <div>48213 node      1.24G</div>
+      <div>47102 エディタ  0.86G</div>
+    </div></div>
+    <div class="box" style="margin-top:22px"><span class="ttl">動き</span><span class="ttl-r"><button class="btn" id="motionGo" style="font-size:12px;padding:0 8px">動かす</button></span><div class="mot">
+      <div class="r"><span>fast  80ms</span><div class="track" data-t="80"><i></i></div></div>
+      <div class="r"><span>base 140ms</span><div class="track" data-t="140"><i></i></div></div>
+    </div></div>
+  </section>
+</div>
+
+<div class="statusline" role="status" aria-live="off">
+  <span class="sl-mode pl" id="slMode">NORMAL</span>
+  <span class="sl-br pl sl-hide"><span data-px="branch" data-cell="2"></span> feat/command-chips</span>
+  <span class="sl-where" id="slWhere">kodou-ui</span>
+  <span class="sl-msg" id="slMsg">キーを押すと、ここに出ます</span>
+  <span class="sl-key" id="slKey"></span>
+  <span class="sl-r sl-hide"><span class="beat" data-px="heart" data-cell="2"></span><span id="slLiveTxt">0.0 行/秒</span></span>
+</div>
+
+<script>
+const $ = (s, r = document) => r.querySelector(s);
+/* ドット絵のアイコン: 8×8 の格子。1マス2px で描き、にじませない */
+const PX = {
+  file:   ['#####...', '#...##..', '#...#.#.', '#...####', '#......#', '#.##.#.#', '#......#', '########'],
+  branch: ['##....##', '##....##', '.#.....#', '.#....#.', '.#..##..', '.###....', '##......', '##......'],
+  pr:     ['##..#...', '##.#####', '.#..#..#', '.#.....#', '.#.....#', '.#.....#', '##....##', '##....##'],
+  term:   ['########', '#......#', '#.#....#', '#..#...#', '#.#..###', '#......#', '########', '........'],
+  tag:    ['#####...', '#...##..', '#.#..##.', '#.....##', '##....#.', '.##..#..', '..##.#..', '...##...'],
+  cal:    ['.#...#..', '########', '#......#', '########', '#.#.#.##', '#......#', '#.#.#..#', '########'],
+  heart:  ['.##.##.', '#######', '#######', '#######', '.#####.', '..###..', '...#...'],
+};
+function px(name, cell = 2) {
+  const rows = PX[name]; const w = rows[0].length, h = rows.length; let d = '';
+  rows.forEach((r, y) => { for (let x = 0; x < w;) { if (r[x] !== '#') { x++; continue } let e = x; while (r[e] === '#') e++; d += `M${x} ${y}h${e - x}v1h-${e - x}z`; x = e } });
+  return `<svg class="px" width="${w * cell}" height="${h * cell}" viewBox="0 0 ${w} ${h}" aria-hidden="true"><path d="${d}"/></svg>`;
+}
+const ico = id => px(id);
+document.querySelectorAll('[data-px]').forEach(el => { el.innerHTML = px(el.dataset.px, +el.dataset.cell || 2) });
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+/* 時計と tmux */
+function tick() { const d = new Date(); $('#clock').textContent = d.toTimeString().slice(0, 5) }
+tick(); setInterval(tick, 10000);
+const secs = [...document.querySelectorAll('section.part')];
+const tabs = [...document.querySelectorAll('.tmux a')];
+addEventListener('scroll', () => {
+  let cur = secs[0]; for (const s of secs) if (s.getBoundingClientRect().top < 140) cur = s;
+  tabs.forEach(a => { const on = a.getAttribute('href') === '#' + cur.id; a.classList.toggle('cur', on); a.textContent = a.textContent.replace(/\*$/, '') + (on ? '*' : '') });
+}, { passive: true });
+
+/* ステータスライン */
+const sl = { msg(t) { $('#slMsg').textContent = t }, where(t) { $('#slWhere').textContent = t } };
+const keyName = e => ({ ArrowUp: '↑', ArrowDown: '↓', ArrowLeft: '←', ArrowRight: '→', Enter: '⏎', Escape: 'Esc', Backspace: '⌫', Tab: 'Tab', ' ': 'Space' }[e.key] || e.key);
+document.addEventListener('keydown', e => {
+  if (['Shift', 'Meta', 'Control', 'Alt'].includes(e.key)) return;
+  const mods = (e.metaKey ? '⌘' : '') + (e.ctrlKey ? '⌃' : '') + (e.altKey ? '⌥' : '');
+  $('#slKey').innerHTML = `<kbd>${esc(mods + keyName(e))}</kbd>`;
+}, true);
+document.addEventListener('focusin', e => {
+  const typing = e.target.matches('input:not([type=checkbox])');
+  $('#slMode').textContent = typing ? 'INSERT' : 'NORMAL';
+  $('#slMode').classList.toggle('ins', typing);
+  const sec = e.target.closest('section.part'); if (sec) sl.where(sec.querySelector('h2').textContent.replace(/^\d+\.\s*/, '').trim());
+});
+
+/* 1 fzf */
+const ITEMS = [
+  { k: 'cmd', name: 'npm run test -- --watch', meta: '今日 9回', d: 'today' },
+  { k: 'file', name: 'src/server/session.ts', meta: '12分前 +42 -8', d: 'today' },
+  { k: 'branch', name: 'feat/command-chips', meta: '3 ahead', d: 'today' },
+  { k: 'pr', name: '#128 入力の解釈をチップで見せる', meta: 'レビュー待ち', d: 'today' },
+  { k: 'file', name: 'src/ui/StatusLine.tsx', meta: '1時間前', d: 'today' },
+  { k: 'cmd', name: 'git rebase -i main', meta: '今週 4回', d: 'week' },
+  { k: 'file', name: 'packages/tokens/ansi.css', meta: '昨日', d: 'week' },
+  { k: 'branch', name: 'fix/log-follow', meta: 'merged', d: 'week' },
+  { k: 'pr', name: '#121 ステータスラインの区切りを揃える', meta: 'merged', d: 'week' },
+  { k: 'file', name: 'docs/principles.md', meta: '3日前', d: 'week' },
+  { k: 'cmd', name: 'docker compose up -d', meta: '先月 12回', d: 'month' },
+  { k: 'file', name: 'README.md', meta: '先月', d: 'month' },
+  { k: 'branch', name: 'spike/agent-steer', meta: '24日前', d: 'month' },
+  { k: 'file', name: 'scripts/release.sh', meta: '先月', d: 'month' },
+];
+const KIND_ICON = { file: 'file', branch: 'branch', pr: 'pr', cmd: 'term' };
+const FILTERS = [
+  { key: 'kind', label: '種類', ex: 'file branch pr cmd' },
+  { key: 'date', label: '時期', ex: 'today week month' },
+  { key: 'ext', label: '拡張子', ex: 'ts md css' },
+];
+const ALIAS = { 'ブランチ': ['kind', 'branch'], 'ファイル': ['kind', 'file'], 'コマンド': ['kind', 'cmd'], 'pr': ['kind', 'pr'], 'プルリク': ['kind', 'pr'], '今日': ['date', 'today'], '今週': ['date', 'week'], '先月': ['date', 'month'] };
+const cmd = { chips: [], sel: 0, suggSel: 0, list: [], suggList: [], lastAlias: null };
+const q = $('#q');
+function matchChip(it, c) {
+  if (c.key === 'kind') return it.k === c.val;
+  if (c.key === 'date') return c.val === 'week' ? it.d !== 'month' : it.d === c.val;
+  if (c.key === 'ext') return it.k === 'file' && it.name.endsWith('.' + c.val);
+  return true;
+}
+function renderChips() {
+  $('#chips').innerHTML = cmd.chips.map((c, i) => `<span class="chip">#${c.key}:${esc(c.val)}<button data-i="${i}" aria-label="#${c.key} ${esc(c.val)} を外す">×</button></span>`).join('');
+}
+function renderCmd() {
+  const t0 = performance.now();
+  const text = q.value;
+  const hashM = text.match(/(?:^|\s)#(\w*)$/);
+  const sugg = $('#sugg');
+  if (hashM) {
+    const fs = FILTERS.filter(f => f.key.startsWith(hashM[1]));
+    cmd.suggSel = Math.min(cmd.suggSel, Math.max(0, fs.length - 1));
+    sugg.hidden = false;
+    sugg.innerHTML = fs.length ? fs.map((f, i) => `<div class="ln${i === cmd.suggSel ? ' on' : ''}" data-f="${f.key}"><span class="mk">&gt;</span><span class="k">#${f.key}</span><span>${f.label}</span><span class="mt">${f.ex}</span></div>`).join('') : `<div class="empty">#${esc(hashM[1])} という絞り込みはありません</div>`;
+    cmd.suggList = fs;
+  } else { sugg.hidden = true; cmd.suggList = [] }
+  const words = text.replace(/(?:^|\s)#\w*$/, '').trim().toLowerCase();
+  cmd.list = ITEMS.filter(it => cmd.chips.every(c => matchChip(it, c)) && (!words || it.name.toLowerCase().includes(words)));
+  cmd.sel = Math.min(cmd.sel, Math.max(0, cmd.list.length - 1));
+  const hl = s => { if (!words) return esc(s); const i = s.toLowerCase().indexOf(words); if (i < 0) return esc(s); return esc(s.slice(0, i)) + '<mark>' + esc(s.slice(i, i + words.length)) + '</mark>' + esc(s.slice(i + words.length)) };
+  $('#results').innerHTML = cmd.list.length ? cmd.list.map((it, i) => `<div class="ln${i === cmd.sel ? ' on' : ''}" role="option" aria-selected="${i === cmd.sel}" data-i="${i}"><span class="mk">&gt;</span><span class="ic">${ico(KIND_ICON[it.k])}</span><span class="nm">${hl(it.name)}</span><span class="mt">${esc(it.meta)}</span></div>`).join('')
+    : `<div class="empty">当てはまるものはありません。チップを外すか、言葉を短くしてください。</div>`;
+  $('#count').textContent = `${cmd.list.length}/${ITEMS.length}`;
+  $('#took').textContent = `${(performance.now() - t0).toFixed(1)}ms`;
+  const ex = $('#explain');
+  if (cmd.lastAlias) { ex.hidden = false; ex.innerHTML = `✓ 「${esc(cmd.lastAlias.word)}」を <code>#${cmd.lastAlias.key}:${cmd.lastAlias.val}</code> として絞りました。次からはこう打てます。` }
+  else ex.hidden = true;
+  const sel = $('#results .ln.on'); if (sel) sel.scrollIntoView({ block: 'nearest' });
+}
+function addChip(key, val, word) {
+  cmd.chips = cmd.chips.filter(c => c.key !== key);
+  cmd.chips.push({ key, val });
+  cmd.lastAlias = word ? { word, key, val } : null;
+  renderChips(); sl.msg(`#${key}:${val} で絞りました`);
+}
+const openIt = it => { $('#opened').textContent = `→ ${it.name}`; sl.msg(`開いた: ${it.name}`) };
+q.addEventListener('input', () => {
+  let v = q.value;
+  const m = v.match(/(?:^|\s)#(kind|date|ext)[\s:]+(\S+)\s$/);
+  if (m) { addChip(m[1], m[2]); v = v.slice(0, m.index).trimStart() }
+  else { const a = v.match(/(?:^|\s)(\S+)\s$/); if (a && ALIAS[a[1].toLowerCase()]) { const [k, val] = ALIAS[a[1].toLowerCase()]; addChip(k, val, a[1]); v = v.slice(0, a.index).trimStart() } }
+  if (v !== q.value) q.value = v;
+  cmd.sel = 0; renderCmd();
+});
+q.addEventListener('keydown', e => {
+  const inSugg = cmd.suggList.length;
+  if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+    e.preventDefault(); const d = e.key === 'ArrowDown' ? 1 : -1;
+    if (inSugg) cmd.suggSel = (cmd.suggSel + d + inSugg) % inSugg; else if (cmd.list.length) cmd.sel = (cmd.sel + d + cmd.list.length) % cmd.list.length;
+    renderCmd();
+  } else if ((e.key === 'Tab' || e.key === 'Enter') && inSugg) {
+    e.preventDefault(); q.value = q.value.replace(/#\w*$/, '#' + cmd.suggList[cmd.suggSel].key + ' '); cmd.suggSel = 0; renderCmd();
+  } else if (e.key === 'Enter') { const it = cmd.list[cmd.sel]; if (it) openIt(it) }
+  else if (e.key === 'Backspace' && !q.value && cmd.chips.length) { const c = cmd.chips.pop(); cmd.lastAlias = null; renderChips(); renderCmd(); sl.msg(`#${c.key}:${c.val} を外しました`) }
+  else if (e.key === 'Escape') { q.value = ''; cmd.chips = []; cmd.lastAlias = null; renderChips(); renderCmd(); sl.msg('入力を空にしました') }
+});
+$('#chips').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; const c = cmd.chips.splice(+b.dataset.i, 1)[0]; cmd.lastAlias = null; renderChips(); renderCmd(); q.focus(); sl.msg(`#${c.key}:${c.val} を外しました`) });
+$('#results').addEventListener('click', e => { const r = e.target.closest('.ln'); if (!r) return; cmd.sel = +r.dataset.i; renderCmd(); openIt(cmd.list[cmd.sel]) });
+$('#sugg').addEventListener('click', e => { const r = e.target.closest('.ln'); if (!r) return; q.value = q.value.replace(/#\w*$/, '#' + r.dataset.f + ' '); q.focus(); renderCmd() });
+addChip('kind', 'branch', 'ブランチ'); renderCmd(); sl.msg('キーを押すと、ここに出ます');
+
+/* 2 top */
+const PROCS = [
+  { pid: 48213, name: 'node', cmd: 'node server.js --port 8080', mem: 1.24, cpu: 38.2 },
+  { pid: 47102, name: 'claude', cmd: 'claude --resume 7f3a', mem: 0.86, cpu: 12.0 },
+  { pid: 46988, name: 'vite', cmd: 'vite --host', mem: 0.41, cpu: 4.1 },
+  { pid: 45530, name: 'postgres', cmd: 'postgres -D /usr/local/var/pg', mem: 0.33, cpu: 0.7 },
+  { pid: 44871, name: 'ollama', cmd: 'ollama serve', mem: 6.12, cpu: 0.0 },
+  { pid: 43007, name: 'tsc', cmd: 'tsc -w -p tsconfig.json', mem: 0.58, cpu: 22.5 },
+];
+const TOTAL = 16;
+const pr = { sel: 0, armed: null, timer: null, gone: new Set(), left: 0 };
+function meterHTML(used, total, w = 34) {
+  const n = Math.round(used / total * w); let s = '';
+  for (let i = 0; i < w; i++) { const cls = i >= n ? 'off' : i < w * .5 ? 'on-g' : i < w * .8 ? 'on-y' : 'on-r'; s += `<span class="${cls}">${i < n ? '|' : ' '}</span>` }
+  return `[${s}<span class="dim"> ${used.toFixed(1)}G/${total.toFixed(1)}G</span>]`;
+}
+function memCol(p, max) { const w = 8, n = Math.max(1, Math.round(p.mem / max * w)); return `<span class="memb"><span class="dim">[</span><span class="${p.mem > 2 ? 'h' : ''}">${'|'.repeat(n)}${' '.repeat(w - n)}</span><span class="dim">]</span> ${p.mem.toFixed(2)}G</span>` }
+function renderProcs() {
+  const live = PROCS.filter(p => !pr.gone.has(p.pid));
+  const used = 4.1 + live.reduce((a, p) => a + p.mem, 0);
+  $('#memBar').innerHTML = meterHTML(used, TOTAL);
+  $('#swpBar').innerHTML = meterHTML(used > 12 ? 1.6 : 0.2, 4);
+  const max = Math.max(...PROCS.map(p => p.mem));
+  $('#procRows').innerHTML = PROCS.map((p, i) => {
+    const gone = pr.gone.has(p.pid);
+    return `<tr class="${i === pr.sel ? 'on' : ''}${gone ? ' gone' : ''}" data-i="${i}"><td class="num">${p.pid}</td><td>${esc(p.name)}</td><td>${memCol(p, max)}</td><td class="num">${gone ? '-' : p.cpu.toFixed(1)}</td><td class="dim">${gone ? '(停止済み)' : esc(p.cmd)}</td></tr>`;
+  }).join('');
+  const m = $('#msgline'); const p = PROCS.find(x => x.pid === pr.armed);
+  if (p) { m.className = 'msgline ask'; m.innerHTML = `<span class="q">?</span><span><code>kill -TERM ${p.pid}</code> を送りますか（${esc(p.name)}・${p.mem.toFixed(2)}G 空きます）<b> [y/N]</b></span><span class="cd">${'█'.repeat(pr.left)}${'░'.repeat(6 - pr.left)}</span><button class="btn" data-y>送る</button><button class="btn" data-n>やめる</button>` }
+  else if (!m.dataset.keep) { m.className = 'msgline'; m.innerHTML = `<span class="dim">${live.length} 件のプロセス。行を選んで x で停止できます</span>` }
+}
+function disarm(msg) { clearInterval(pr.timer); pr.armed = null; renderProcs(); if (msg) sl.msg(msg) }
+function arm(i) {
+  const p = PROCS[i]; if (pr.gone.has(p.pid)) return;
+  pr.sel = i; pr.armed = p.pid; pr.left = 6; clearInterval(pr.timer);
+  $('#msgline').dataset.keep = '';
+  pr.timer = setInterval(() => { pr.left--; if (pr.left <= 0) disarm('停止をやめました（3秒たったため）'); else renderProcs() }, 500);
+  sl.msg(`${p.name} を止めるなら y`); renderProcs();
+}
+function confirmStop() {
+  const p = PROCS.find(x => x.pid === pr.armed); if (!p) return;
+  clearInterval(pr.timer); pr.gone.add(p.pid); pr.armed = null;
+  const m = $('#msgline'); m.dataset.keep = '1'; m.className = 'msgline'; m.innerHTML = `<span class="c-green">✓</span><span>停止しました: ${esc(p.name)} (PID ${p.pid})  ${p.mem.toFixed(2)}G 空きました</span>`;
+  sl.msg(`停止しました: ${p.name}`); renderProcs();
+  setTimeout(() => { delete m.dataset.keep }, 2500);
+}
+$('#procPanel').addEventListener('click', e => {
+  if (e.target.closest('[data-y]')) return confirmStop();
+  if (e.target.closest('[data-n]')) return disarm('停止をやめました');
+  const tr = e.target.closest('tbody tr'); if (tr) { const i = +tr.dataset.i; if (pr.sel === i && !pr.armed) arm(i); else { pr.sel = i; disarm() } }
+});
+$('#procPanel').addEventListener('keydown', e => {
+  if (e.target.matches('button')) return;
+  if (pr.armed) { if (e.key === 'y' || e.key === 'x') confirmStop(); else if (e.key === 'n' || e.key === 'Escape' || e.key === 'Enter') disarm('停止をやめました'); return }
+  if (e.key === 'j' || e.key === 'ArrowDown') { e.preventDefault(); pr.sel = Math.min(PROCS.length - 1, pr.sel + 1); renderProcs() }
+  else if (e.key === 'k' || e.key === 'ArrowUp') { e.preventDefault(); pr.sel = Math.max(0, pr.sel - 1); renderProcs() }
+  else if (e.key === 'x') arm(pr.sel);
+});
+renderProcs();
+
+/* 3 AI */
+const STEPS = [
+  ['tool', 'Read', 'src/ui/CommandInput.tsx', '128 行'],
+  ['tool', 'Search', 'parseFilter', '3 件  src/ui/CommandInput.tsx:41, :77, src/ui/Chip.tsx:12'],
+  ['tool', 'Read', 'src/ui/Chip.tsx', '54 行'],
+  ['ai', '言い方の置き換えを <code>parseFilter</code> の前に足します。チップには元の言葉も残します。'],
+  ['diff'],
+];
+const DIFF = [['41', ' ', '  const onInput = (v: string) => {'], ['42', '-', '    const chips = parseFilter(v)'], ['42', '+', '    const alias = matchAlias(v)'], ['43', '+', '    if (alias) explain(alias)'], ['44', '+', '    const chips = parseFilter(alias ? alias.rest : v)'], ['45', '+', '    addChips(chips, alias)'], ['46', ' ', '    render(chips)']];
+function stepHTML(s) {
+  if (s[0] === 'tool') return `<div class="st"><span class="bul">●</span> <span class="tool">${s[1]}</span>(${esc(s[2])})<div class="sub">⎿  ${esc(s[3])}</div></div>`;
+  if (s[0] === 'ai') return `<div class="st prose"><span class="bul ai">●</span> ${s[1]}</div>`;
+  if (s[0] === 'me') return `<div class="st prose"><span class="bul me">&gt;</span> ${esc(s[1])}</div>`;
+  if (s[0] === 'diff') return `<div class="st"><span class="bul">●</span> <span class="tool">Update</span>(src/ui/CommandInput.tsx)<div class="sub">⎿  +4 -1</div><div class="diff">${DIFF.map(([n, k, t]) => `<div class="${k === '+' ? 'add' : k === '-' ? 'del' : ''}"><span class="n">${n}</span><span>${k}</span><span>${esc(t)}</span></div>`).join('')}</div></div>`;
+}
+const ag = { timer: null, opt: 0, open: false };
+function agentState(kind) {
+  const m = { live: '<span class="c-red"><span class="dot">●</span> 作業中</span>', wait: '<span class="c-yellow">◆ 確認待ち</span>', ok: '<span class="c-green">✓ 適用済み</span>', no: '<span class="dim">✗ 却下</span>' };
+  $('#agentState').innerHTML = m[kind];
+}
+function renderChoice() {
+  const opts = [['適用する', 'ファイルを書き換えます'], ['却下する', 'ファイルは変わりません']];
+  $('#decideBox').innerHTML = `<div class="choice" role="listbox" aria-label="変更を適用するか"><div class="qq">この変更を適用しますか</div>${opts.map((o, i) => `<button class="opt${i === ag.opt ? ' on' : ''}" data-o="${i}"><span class="p">❯</span>${i + 1}. ${o[0]}<span class="dim">${o[1]}</span></button>`).join('')}</div>`;
+  ag.open = true; agentState('wait');
+}
+function agentFull() { $('#steps').innerHTML = STEPS.map(stepHTML).join(''); ag.opt = 0; renderChoice() }
+function agentPlay() {
+  clearTimeout(ag.timer); $('#steps').innerHTML = ''; $('#decideBox').innerHTML = ''; ag.open = false; agentState('live'); sl.msg('エージェントが作業を始めました');
+  let i = 0; const next = () => { if (i >= STEPS.length) { ag.opt = 0; renderChoice(); sl.msg('エージェントの変更が確認待ちです'); return } $('#steps').insertAdjacentHTML('beforeend', stepHTML(STEPS[i++])); ag.timer = setTimeout(next, 650) }; next();
+}
+function decide(ok) {
+  if (!ag.open) return; ag.open = false;
+  $('#decideBox').innerHTML = `<div class="result">${ok ? '<span class="c-green">✓</span> 適用しました: src/ui/CommandInput.tsx  +4 -1' : '<span class="dim">✗</span> 却下しました。ファイルは変わっていません'}</div>`;
+  agentState(ok ? 'ok' : 'no'); sl.msg(ok ? '変更を適用しました' : '変更を却下しました');
+}
+$('#agentPanel').addEventListener('click', e => {
+  const o = e.target.closest('[data-o]'); if (o) return decide(o.dataset.o === '0');
+  if (e.target.closest('#replay')) agentPlay();
+});
+$('#agentPanel').addEventListener('keydown', e => {
+  if (e.target.matches('input') || !ag.open) return;
+  if (e.key === 'ArrowDown' || e.key === 'ArrowUp' || e.key === 'j' || e.key === 'k') { e.preventDefault(); ag.opt = 1 - ag.opt; renderChoice() }
+  else if (e.key === 'Enter' && !e.target.matches('button')) decide(ag.opt === 0);
+  else if (e.key === '1') decide(true); else if (e.key === '2' || e.key === 'Escape') decide(false);
+});
+$('#steer').addEventListener('submit', e => {
+  e.preventDefault(); const v = $('#steerIn').value.trim(); if (!v) return;
+  clearTimeout(ag.timer); ag.open = false; $('#decideBox').innerHTML = '';
+  $('#steps').insertAdjacentHTML('beforeend', stepHTML(['me', v])); $('#steerIn').value = '';
+  agentState('live'); sl.msg('指示を送りました。エージェントは今の作業を止めて考え直します');
+  ag.timer = setTimeout(() => { $('#steps').insertAdjacentHTML('beforeend', stepHTML(['ai', '指示を受けて、方針を見直します。'])); ag.opt = 0; renderChoice() }, 900);
+});
+agentFull();
+
+const GHOST_FULL = 'git push origin feat/command-chips';
+const gi = $('#ghostIn');
+function renderGhost() { const v = gi.value; $('#ghTyped').textContent = v; $('#ghRest').textContent = GHOST_FULL.startsWith(v) && v.length < GHOST_FULL.length ? GHOST_FULL.slice(v.length) : '' }
+gi.addEventListener('input', renderGhost);
+gi.addEventListener('keydown', e => { if ((e.key === 'Tab' || e.key === 'ArrowRight') && $('#ghRest').textContent && gi.selectionStart === gi.value.length) { e.preventDefault(); gi.value = GHOST_FULL; renderGhost(); sl.msg('候補を確定しました') } });
+renderGhost();
+
+/* 4 tail */
+const LOGS = [
+  ['info', 'GET /api/session 200 12ms'], ['info', 'GET /api/usage 200 8ms'], ['info', 'ws: client connected (3)'],
+  ['warn', 'slow query: SELECT * FROM events 412ms'], ['info', 'POST /api/run 202 4ms'], ['info', 'job 7f3a: started'],
+  ['info', 'GET /api/session 200 11ms'], ['error', 'job 7f3a: exit 1  TypeError: cannot read "chips" of undefined'],
+  ['info', 'GET /health 200 1ms'], ['warn', 'memory: free 2.1G (below 3G)'], ['info', 'ws: client disconnected (2)'],
+  ['info', 'GET /api/files?q=chip 200 6ms'],
+];
+const lg = { lines: [], lv: 'all', q: '', follow: true, i: 0, sec: [] };
+const logEl = $('#log');
+const fmtT = d => d.toTimeString().slice(0, 8);
+const lineOk = l => (lg.lv === 'all' || l.lv === lg.lv) && (!lg.q || l.m.toLowerCase().includes(lg.q));
+const lineHTML = l => `<div class="${l.lv === 'error' ? 'e' : ''}"><span class="t">${l.t}</span><span class="lv-${l.lv}">${l.lv.toUpperCase()}</span><span class="m">${esc(l.m)}</span></div>`;
+function renderLog() { logEl.innerHTML = lg.lines.filter(lineOk).map(lineHTML).join(''); if (lg.follow) logEl.scrollTop = logEl.scrollHeight }
+function counts() { $('#n-all').textContent = lg.lines.length; $('#n-warn').textContent = lg.lines.filter(l => l.lv === 'warn').length; $('#n-error').textContent = lg.lines.filter(l => l.lv === 'error').length }
+function pushLog() {
+  const [lv, m] = LOGS[lg.i++ % LOGS.length]; const l = { t: fmtT(new Date()), lv, m };
+  lg.lines.push(l); if (lg.lines.length > 400) lg.lines.shift(); lg.sec.push(Date.now());
+  if (lineOk(l)) { logEl.insertAdjacentHTML('beforeend', lineHTML(l)); if (lg.follow) logEl.scrollTop = logEl.scrollHeight }
+  counts();
+}
+for (let k = 0; k < 14; k++) { const [lv, m] = LOGS[k % LOGS.length]; lg.lines.push({ t: fmtT(new Date(Date.now() - (14 - k) * 900)), lv, m }); lg.i++ }
+counts(); renderLog(); setInterval(pushLog, 900);
+setInterval(() => { const now = Date.now(); lg.sec = lg.sec.filter(t => now - t < 5000); const r = (lg.sec.length / 5).toFixed(1); $('#logRate').textContent = `${r} 行/秒`; $('#slLiveTxt').textContent = `${r} 行/秒` }, 1000);
+function setFollow(on) {
+  if (on === lg.follow) return; lg.follow = on;
+  const f = $('#followState');
+  f.className = 'mode' + (on ? '' : ' paused');
+  f.textContent = on ? '-- 追いかけ中 --' : ':止めています（上を読んでいるため）  G で最新へ';
+}
+logEl.addEventListener('scroll', () => setFollow(logEl.scrollHeight - logEl.scrollTop - logEl.clientHeight < 8));
+$('#logBox').addEventListener('keydown', e => {
+  if (e.target.matches('input')) { if (e.key === 'Escape') { e.target.value = ''; lg.q = ''; renderLog(); $('#logBox').focus() } return }
+  if (e.key === 'G') { logEl.scrollTop = logEl.scrollHeight; setFollow(true); sl.msg('最新へ移りました') }
+  else if (e.key === 'g') { logEl.scrollTop = 0; setFollow(false) }
+  else if (e.key === '/') { e.preventDefault(); $('#logQ').focus() }
+});
+$('#lvSeg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; lg.lv = b.dataset.lv; $('#lvSeg').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); renderLog(); sl.msg(`ログを ${b.dataset.lv === 'all' ? 'すべて' : b.dataset.lv} に絞りました`) });
+$('#logQ').addEventListener('input', e => { lg.q = e.target.value.replace(/^\//, '').toLowerCase(); renderLog() });
+
+/* 5 pytest */
+const FILES = [['tests/test_parse_filter.py', 24], ['tests/test_alias.py', 18], ['tests/test_chip.py', 16], ['tests/test_statusline.py', 20], ['tests/test_log_stream.py', 22], ['tests/test_confirm.py', 12]];
+const TOTALT = FILES.reduce((a, f) => a + f[1], 0), FAILT = 47;
+const pg = { timer: null };
+function renderPt(done, secs) {
+  const fail = done > FAILT ? 1 : 0;
+  const out = [`<div class="h">=================== test session starts ===================</div>`, `<div>collected ${TOTALT} items</div>`, `<div> </div>`];
+  let start = 0;
+  for (const [f, c] of FILES) {
+    if (start > done || (start === done && done >= TOTALT)) break;
+    let s = '', shown = 0;
+    for (let j = 0; j < c; j++) {
+      const g = start + j;
+      if (g < done) { s += g === FAILT ? '<span class="F">F</span>' : '<span class="ok">.</span>'; shown++ }
+      else { if (g === done) { s += '<span class="run">_</span>'; shown++ } break }
+    }
+    const pct = Math.round(Math.min(start + c, done) / TOTALT * 100);
+    out.push(`<div>${f.padEnd(28)} ${s}${' '.repeat(Math.max(1, 26 - shown))}<span class="pct">[${String(pct).padStart(3)}%]</span></div>`);
+    start += c;
+  }
+  if (done >= TOTALT) {
+    out.push(`<div> </div>`, `<div class="barf">========================= FAILURES ========================</div>`, `<div class="F">_____ test_backspace_on_empty_removes_one_chip _____</div>`, `<div>    assert len(chips) == 1</div>`, `<div class="F">E   assert 0 == 1</div>`);
+    out.push(`<div class="${fail ? 'sum-f' : 'sum-ok'}">=========== ${fail} failed, ${TOTALT - fail} passed in ${secs.toFixed(2)}s ===========</div>`);
+  } else out.push(`<div> </div>`, `<div class="dim">${done}/${TOTALT}  ${secs.toFixed(1)}s  失敗 ${fail}</div>`);
+  $('#pt').innerHTML = out.join('');
+}
+function runTests(startAt) {
+  clearInterval(pg.timer); let d = startAt; const t0 = performance.now() - startAt * 37;
+  renderPt(d, startAt * .037);
+  pg.timer = setInterval(() => { d++; renderPt(d, (performance.now() - t0) / 1000); if (d >= TOTALT) clearInterval(pg.timer) }, 70);
+}
+$('#pRun').addEventListener('click', () => { runTests(0); sl.msg('テストを走らせています') });
+runTests(80);
+
+/* 6 基本 */
+['sw1', 'sw2'].forEach(id => $('#' + id).addEventListener('change', e => {
+  const on = e.target.checked; e.target.nextElementSibling.textContent = on ? '[x]' : '[ ]'; $('#' + id + 'v').textContent = on ? 'on' : 'off';
+  sl.msg(`${e.target.parentElement.childNodes[2].textContent.trim()}: ${on ? 'on' : 'off'}`);
+}));
+const USED = { 3000: 'vite', 5432: 'postgres', 8790: 'api' };
+$('#port').addEventListener('input', e => {
+  const v = e.target.value.trim(), n = +v; let bad = false, msg;
+  if (!/^\d+$/.test(v)) { bad = true; msg = '数字だけで入れてください' }
+  else if (n < 1024 || n > 65535) { bad = true; msg = '1024〜65535 の範囲で入れてください' }
+  else if (USED[n]) { bad = true; msg = `${n} は ${USED[n]} が使っています` }
+  else msg = `1024〜65535。${n} は空いています`;
+  $('#portField').classList.toggle('bad', bad); $('#portMsg').textContent = msg;
+});
+const SP = '⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏'; let spi = 0, dep = 38;
+setInterval(() => { $('#spin').textContent = SP[spi++ % SP.length]; if (spi % 4 === 0) { dep = dep >= 112 ? 38 : dep + 1; $('#dep').textContent = dep } }, 90);
+
+/* 7 トークン */
+const ANSI = [['0', 'fg', '--fg'], ['1', 'red', '--red'], ['2', 'green', '--green'], ['3', 'yellow', '--yellow'], ['4', 'blue', '--blue'], ['5', 'magenta', '--magenta'], ['6', 'cyan', '--cyan'], ['7', 'dim', '--dim']];
+function renderAnsi() {
+  const cs = getComputedStyle(document.documentElement);
+  $('#ansi').innerHTML = ANSI.map(([n, name, t]) => `<div style="background:var(${t});color:var(--panel)"><b>${n}</b><span>${name}<br>${cs.getPropertyValue(t).trim()}</span></div>`).join('');
+}
+renderAnsi();
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', renderAnsi);
+new MutationObserver(renderAnsi).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+$('#motionGo').addEventListener('click', () => document.querySelectorAll('.track').forEach(t => { t.querySelector('i').style.transition = `left ${t.dataset.t}ms cubic-bezier(.2,.7,.2,1)`; t.classList.toggle('go') }));
+</script>
