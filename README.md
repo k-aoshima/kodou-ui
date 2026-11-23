@@ -52,3 +52,7 @@ python3 scripts/icon.py catalog/index.html --out build/icons --tone   # SVG を�
 
 - 文書とスキルは日本語を主にします。
 - 部品は Web から作り、ライブラリに依存しません（CSS の変数と、素の JS）。
+
+## ライセンス
+
+MIT License です。[LICENSE](LICENSE) を見てください。
