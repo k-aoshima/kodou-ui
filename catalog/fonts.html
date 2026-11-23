@@ -1,0 +1,112 @@
+<title>Kodou-ui 書体見本</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=BIZ+UDGothic:wght@400;700&family=IBM+Plex+Sans+JP:wght@400;500;700&family=IBM+Plex+Mono:wght@400;600&family=Noto+Sans+JP:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=M+PLUS+2:wght@400;500;700&family=M+PLUS+1+Code:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* 配置: 同じ Kodou の部品を、文の書体だけ替えて縦に並べる。上の切り替えで等幅の組み合わせも替えられる */
+:root {
+  --bg: #F4F4EF; --panel: #FBFBF8; --fg: #20242B; --dim: #565A63; --faint: #6E727A; --ui: #8C9098; --deco: #B9BBBF;
+  --sel-bg: #20242B; --sel-fg: #F4F4EF; --blue: #1F5FA8; --red: #C2410C; --green: #1B7A5A; --red-bg: rgba(194,65,12,.09);
+  --mono: "JetBrains Mono", "BIZ UDGothic", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #15171C; --panel: #1A1D23; --fg: #D9DCE3; --dim: #A6ABB6; --faint: #8F94A0; --ui: #6C717D; --deco: #454A55;
+  --sel-bg: #D9DCE3; --sel-fg: #15171C; --blue: #7FB2FF; --red: #FF8A5C; --green: #4CC9A0; --red-bg: rgba(255,138,92,.12); color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #15171C; --panel: #1A1D23; --fg: #D9DCE3; --dim: #A6ABB6; --faint: #8F94A0; --ui: #6C717D; --deco: #454A55;
+  --sel-bg: #D9DCE3; --sel-fg: #15171C; --blue: #7FB2FF; --red: #FF8A5C; --green: #4CC9A0; --red-bg: rgba(255,138,92,.12); color-scheme: dark }
+* { box-sizing: border-box }
+[hidden] { display: none !important }
+body { background: var(--bg); color: var(--fg); font: 13.5px/1.6 var(--mono); -webkit-font-smoothing: antialiased }
+.wrap { max-width: 1080px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 64px }
+h1 { margin: 0; font-size: 20px }
+.lead { margin: 8px 0 0; font: 15px/1.85 "IBM Plex Sans JP", sans-serif; color: var(--dim); max-width: 40em }
+.pick { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 16px; font-size: 12.5px; color: var(--dim) }
+.pick button { border: 1px solid var(--ui); background: var(--panel); color: var(--fg); font: 12.5px var(--mono); padding: 2px 10px; cursor: pointer; margin-right: -9px; min-height: 26px }
+.pick button[aria-pressed="true"] { background: var(--sel-bg); color: var(--sel-fg); border-color: var(--sel-bg) }
+.pick span { margin-right: 6px }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px }
+
+.cand { position: relative; border: 1px solid var(--ui); background: var(--panel); margin-top: 34px; padding: 22px 16px 16px }
+.cand > .ttl { position: absolute; top: -0.8em; left: 10px; padding: 0 6px; background: var(--panel); font-weight: 600; white-space: nowrap }
+.cand > .ttl small { font-weight: 400; color: var(--faint); margin-left: 1ch }
+.cand.now > .ttl::after { content: "今"; margin-left: 1ch; padding: 0 5px; background: var(--sel-bg); color: var(--sel-fg); font-size: 11px }
+.grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 20px }
+.r { font-family: var(--read) }
+.big { font-size: 22px; font-weight: 700; line-height: 1.35; margin: 0 0 8px; letter-spacing: .01em }
+.para { font-size: 15px; line-height: 1.85; margin: 0; letter-spacing: .02em; max-width: 36em }
+.err { margin-top: 12px; border: 1px solid var(--red); background: var(--red-bg); padding: 8px 12px; font-size: 14px; line-height: 1.75 }
+.err b { color: var(--red) }
+.err code, .para code { font-family: var(--mono); font-size: .92em }
+.kana { margin-top: 12px; font-size: 13px; color: var(--dim); line-height: 1.7 }
+.list { border: 1px solid var(--deco) }
+.li { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 1ch; padding: 3px 10px; align-items: baseline }
+.li.on { background: var(--sel-bg); color: var(--sel-fg) }
+.li .nm { font-family: var(--read); font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+.li .mt { font-family: var(--mono); font-size: 12.5px; color: var(--faint); white-space: nowrap }
+.li.on .mt { color: inherit; opacity: .7 }
+.ask { margin-top: 10px; border: 1px solid var(--ui); padding: 8px 12px; font-size: 14px; line-height: 1.7 }
+.ask .q { font-family: var(--read) }
+.ask .k { font-family: var(--mono); font-weight: 600 }
+.btns { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px }
+.btn { border: 1px solid var(--ui); background: var(--panel); color: var(--fg); font: 13px var(--read); padding: 3px 12px; min-height: 28px; cursor: pointer }
+.btn.p { background: var(--blue); border-color: var(--blue); color: var(--panel); font-weight: 700 }
+.btn.d { color: var(--red); border-color: var(--red) }
+.btn .kb { font-family: var(--mono); opacity: .7; margin-left: 1ch }
+.note { margin-top: 10px; font: 12.5px/1.7 var(--mono); color: var(--faint) }
+@media (max-width: 760px) { .grid { grid-template-columns: minmax(0,1fr) } }
+</style>
+
+<div class="wrap">
+  <h1>書体見本</h1>
+  <p class="lead">文として読むところの書体だけを替えて、同じ Kodou の部品を並べています。上の切り替えで、桁をそろえる等幅の書体も替えられます。</p>
+  <div class="pick" role="group" aria-label="等幅の書体"><span>等幅:</span>
+    <button data-m="jb" aria-pressed="true">JetBrains Mono＋BIZ UDゴシック</button>
+    <button data-m="plex" aria-pressed="false">IBM Plex Mono＋Plex Sans JP</button>
+    <button data-m="mplus" aria-pressed="false">M PLUS 1 Code</button>
+  </div>
+  <div id="list"></div>
+</div>
+
+<script>
+const C = [
+  { id: 'biz', name: 'BIZ UDPゴシック', note: '今の見本帳。読みやすさの研究で選んだ UD 書体', font: '"BIZ UDPGothic"', now: true },
+  { id: 'plex', name: 'IBM Plex Sans JP', note: '技術者向けの硬さ。等幅の IBM Plex Mono と同じ系列', font: '"IBM Plex Sans JP"' },
+  { id: 'noto', name: 'Noto Sans JP', note: '癖がなく無難。どの環境でも同じ形', font: '"Noto Sans JP"' },
+  { id: 'zen', name: 'Zen Kaku Gothic New', note: '細身で上品。画面では軽めに見える', font: '"Zen Kaku Gothic New"' },
+  { id: 'mplus', name: 'M PLUS 2', note: '少し柔らかい。等幅の M PLUS 1 Code と同じ系列', font: '"M PLUS 2"' },
+];
+const MONO = {
+  jb: '"JetBrains Mono", "BIZ UDGothic", ui-monospace, monospace',
+  plex: '"IBM Plex Mono", "IBM Plex Sans JP", ui-monospace, monospace',
+  mplus: '"M PLUS 1 Code", ui-monospace, monospace',
+};
+document.getElementById('list').innerHTML = C.map(c => `
+  <section class="cand${c.now ? ' now' : ''}" style="--read:${c.font}, 'Hiragino Sans', sans-serif"><span class="ttl">${c.name}<small>${c.note}</small></span>
+    <div class="grid">
+      <div class="r">
+        <p class="big">メモリの空きが 2.1 GB を下回りました</p>
+        <p class="para">眠っている分の多いセッションから止める案を出します。止める前に、まだコミットしていない変更と <code>claude --resume 7f3a</code> を見せるので、あとから続きを再開できます。</p>
+        <div class="err"><b>保存できませんでした。</b>ポート 8080 は vite がすでに使っています。別のポートを入れるか、vite を止めてからもう一度保存してください。</div>
+        <div class="kana">あいうえお アイウエオ 漢字の濃さ 0123456789 ABCabc 「かぎかっこ」、句読点。</div>
+      </div>
+      <div>
+        <div class="list">
+          <div class="li on"><span class="nm">入力の解釈をチップで見せる</span><span class="mt">+124 -18</span></div>
+          <div class="li"><span class="nm">ログの追いかけを止められるようにする</span><span class="mt">+40 -6</span></div>
+          <div class="li"><span class="nm">ステータスラインの区切りを揃える</span><span class="mt">+12 -12</span></div>
+          <div class="li"><span class="nm">使っていないブランチを片付ける</span><span class="mt">3日前</span></div>
+        </div>
+        <div class="ask"><span class="q">spike/agent-steer を削除しますか。リモートにまだ送っていないコミットが 2 件あります。</span> <span class="k">[y/N]</span></div>
+        <div class="btns"><button class="btn p">マージする<span class="kb">⌘⏎</span></button><button class="btn">ブランチを切る</button><button class="btn d">停止</button></div>
+        <div class="note">48213 node 1.24G 38.2%  ← 等幅の欄</div>
+      </div>
+    </div>
+  </section>`).join('');
+document.querySelector('.pick').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  document.querySelectorAll('.pick button').forEach(x => x.setAttribute('aria-pressed', x === b));
+  document.documentElement.style.setProperty('--mono', MONO[b.dataset.m]);
+});
+</script>

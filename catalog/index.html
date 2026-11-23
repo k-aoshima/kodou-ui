@@ -2,7 +2,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=IBM+Plex+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
 <style>
 /* 配置: 上に tmux の帯、左に部品の目次、右に部品。どの部品も罫線の枠で、下に powerline のステータスライン */
 :root {
@@ -13,7 +13,7 @@
   --accent: var(--blue); --blue-hover: #00477F;
   --red-bg: rgba(190,63,14,.10); --green-bg: rgba(0,101,74,.10); --yellow-bg: rgba(138,88,0,.11); --blue-bg: rgba(0,88,160,.10);
   --font: "JetBrains Mono", "BIZ UDGothic", ui-monospace, Menlo, monospace;
-  --font-read: "BIZ UDPGothic", "Hiragino Sans", "Noto Sans JP", system-ui, sans-serif;
+  --font-read: "IBM Plex Sans JP", "Hiragino Sans", "Noto Sans JP", system-ui, sans-serif;
   --measure: 38em;
   --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px;
   --t-fast: 80ms; --t-base: 140ms;
@@ -915,7 +915,7 @@ dialog.dlg[open] { animation: pop var(--t-base) ease-out }
 
 <section class="comp" id="c-tokens" data-grp="土台">
   <div class="comp-head"><h2>色・文字・余白・動き<span class="en">tokens</span></h2></div>
-  <p class="lead">色は端末の ANSI の並びで持ち、色相は色覚の違いがあっても見分けやすい CUD 寄りにしています。赤と緑は明るさも変えています。各色の下の数字は、地とのコントラスト比です（文字は 4.5 以上）。文字は、データとコマンドが JetBrains Mono と BIZ UDゴシック、文が BIZ UDPゴシックです。</p>
+  <p class="lead">色は端末の ANSI の並びで持ち、色相は色覚の違いがあっても見分けやすい CUD 寄りにしています。赤と緑は明るさも変えています。各色の下の数字は、地とのコントラスト比です（文字は 4.5 以上）。文字は、データとコマンドが JetBrains Mono と BIZ UDゴシック、文が IBM Plex Sans JP です。</p>
   <div class="box"><span class="ttl">色</span><div class="ansi" id="ansi"></div></div>
   <div class="box"><span class="ttl">文字</span><div class="box-in">
     <div class="tok-row"><span class="lb">--font 13.5</span><span>git rebase -i main  48213  1.24G</span></div>
