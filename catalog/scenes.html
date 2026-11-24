@@ -10,11 +10,11 @@
 <style>
 /* 配置: 端末の文字の格子。上に tmux の帯、各部品は罫線の枠、下に powerline のステータスライン。描画と動きは今の質で */
 :root {
-  --bg: #F4F4EF; --panel: #FBFBF8; --fg: #20242B; --dim: #6C7079; --faint: #7A7E86; --rule: rgba(32,36,43,.28); --rule-soft: rgba(32,36,43,.12);
+  --bg: #F4F4EF; --panel: #FBFBF8; --fg: #20242B; --dim: #575B63; --faint: #666A72; --rule: rgba(32,36,43,.30); --rule-soft: rgba(32,36,43,.12);
   --sel-bg: #20242B; --sel-fg: #F4F4EF;
-  --red: #C23F38; --green: #2C8A4B; --yellow: #A47610; --blue: #2F56C4; --magenta: #8A4DB5; --cyan: #1B8590;
+  --red: #BE3F0E; --green: #00654A; --yellow: #8A5800; --blue: #0058A0; --magenta: #9A3C78; --cyan: #006A8C;
   --accent: var(--blue); --pulse: var(--red);
-  --red-bg: rgba(194,63,56,.10); --green-bg: rgba(44,138,75,.11); --yellow-bg: rgba(164,118,16,.12);
+  --red-bg: rgba(190,63,14,.10); --green-bg: rgba(0,101,74,.10); --yellow-bg: rgba(138,88,0,.11);
   --font: "JetBrains Mono", "BIZ UDGothic", ui-monospace, Menlo, monospace;
   /* 文として読むところはプロポーショナル体（Noto Sans JP）。行の長さ・行間・コントラストは読みやすさの研究に合わせる */
   --font-read: "Noto Sans JP", "Hiragino Sans", system-ui, sans-serif;
@@ -22,15 +22,15 @@
   --t-fast: 80ms; --t-base: 140ms;
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --bg: #15171C; --panel: #1A1D23; --fg: #D9DCE3; --dim: #8F94A0; --faint: #7C818D; --rule: rgba(217,220,227,.26); --rule-soft: rgba(217,220,227,.10);
+  --bg: #15171C; --panel: #1A1D23; --fg: #D9DCE3; --dim: #A7ACB6; --faint: #9196A1; --rule: rgba(217,220,227,.28); --rule-soft: rgba(217,220,227,.10);
   --sel-bg: #D9DCE3; --sel-fg: #15171C;
-  --red: #F06B63; --green: #62C987; --yellow: #E6B450; --blue: #7C9CFF; --magenta: #C590F0; --cyan: #5CC8D2;
-  --red-bg: rgba(240,107,99,.13); --green-bg: rgba(98,201,135,.12); --yellow-bg: rgba(230,180,80,.13); color-scheme: dark } }
+  --red: #FF9670; --green: #2FAA80; --yellow: #EDBE4F; --blue: #72B2FF; --magenta: #E58EC6; --cyan: #5CC6EE;
+  --red-bg: rgba(255,150,112,.13); --green-bg: rgba(47,170,128,.13); --yellow-bg: rgba(237,190,79,.12); color-scheme: dark } }
 :root[data-theme="dark"] {
-  --bg: #15171C; --panel: #1A1D23; --fg: #D9DCE3; --dim: #8F94A0; --faint: #7C818D; --rule: rgba(217,220,227,.26); --rule-soft: rgba(217,220,227,.10);
+  --bg: #15171C; --panel: #1A1D23; --fg: #D9DCE3; --dim: #A7ACB6; --faint: #9196A1; --rule: rgba(217,220,227,.28); --rule-soft: rgba(217,220,227,.10);
   --sel-bg: #D9DCE3; --sel-fg: #15171C;
-  --red: #F06B63; --green: #62C987; --yellow: #E6B450; --blue: #7C9CFF; --magenta: #C590F0; --cyan: #5CC8D2;
-  --red-bg: rgba(240,107,99,.13); --green-bg: rgba(98,201,135,.12); --yellow-bg: rgba(230,180,80,.13); color-scheme: dark }
+  --red: #FF9670; --green: #2FAA80; --yellow: #EDBE4F; --blue: #72B2FF; --magenta: #E58EC6; --cyan: #5CC6EE;
+  --red-bg: rgba(255,150,112,.13); --green-bg: rgba(47,170,128,.13); --yellow-bg: rgba(237,190,79,.12); color-scheme: dark }
 
 * { box-sizing: border-box }
 [hidden] { display: none !important }
@@ -98,9 +98,6 @@ kbd.soft { background: transparent; color: var(--fg); border: 1px solid var(--ru
 /* 1 fzf */
 .fz-line { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 12px 14px 4px }
 .fz-line .pr { color: var(--blue); font-weight: 700 }
-.chip { display: inline-flex; align-items: center; gap: 2px; padding: 0 2px 0 6px; background: var(--blue); color: var(--panel); font-size: 12.5px; line-height: 22px; animation: pop var(--t-base) ease-out }
-.chip button { border: 0; background: transparent; color: inherit; font: inherit; cursor: pointer; padding: 0 4px; opacity: .75 }
-.chip button:hover { opacity: 1 }
 @keyframes pop { from { opacity: .2; transform: translateY(2px) } to { opacity: 1; transform: none } }
 .fz-line input { flex: 1; min-width: 140px; border: 0; outline: 0; background: transparent; color: var(--fg); font: 15px var(--font); height: 26px; caret-color: var(--fg); caret-shape: block }
 .fz-line input::placeholder { color: var(--faint) }
@@ -122,8 +119,6 @@ kbd.soft { background: transparent; color: var(--fg); border: 1px solid var(--ru
 .ln.on .nm mark { color: inherit; text-decoration: underline }
 .ln:hover:not(.on) { background: var(--rule-soft) }
 .empty { padding: 6px 14px 10px; color: var(--dim) }
-.sugg .ln { grid-template-columns: 2ch 8ch 6ch minmax(0,1fr) }
-.sugg .k { color: var(--blue); font-weight: 700 }
 .ln.on .k { color: inherit }
 .opened { color: var(--green) }
 
@@ -298,25 +293,24 @@ table.top tbody tr.on.gone td { color: var(--sel-fg); opacity: .6 }
 </nav>
 
 <div class="wrap">
-  <div class="man"><span>KODOU-UI(7)</span><span>エンジニアの道具のための部品集</span><span>KODOU-UI(7)</span></div>
+  <div class="man"><span>KODOU-UI(7)</span><span>エンジニアのツールのための部品集</span><span>KODOU-UI(7)</span></div>
   <header class="hero">
     <div class="logo"><span class="heart" aria-hidden="true" data-px="heart" data-cell="5"></span>kodou-ui<span class="cursor" aria-hidden="true"></span></div>
-    <p><span class="prompt">$</span> 見た目は端末のまま、中身は今の道具。罫線の枠、反転表示、ステータスラインはそのままに、描画の質、動き、マウス操作、説明の出し方を今のものにしています。どの部品も触って試せて、押したキーは下のステータスラインに出ます。</p>
+    <p><span class="prompt">$</span> 見た目は端末のまま、中身は今のツール。罫線の枠、反転表示、ステータスラインはそのままに、描画の質、動き、マウス操作、説明の出し方を今のものにしています。どの部品も触って試せて、押したキーは下のステータスラインに出ます。</p>
     <div class="legend"><span class="tag t1">手応え</span><span class="tag t2">中が見える</span><span class="tag t3">ハンドルは人</span><span class="tag t4">うまくなる</span></div>
   </header>
 
   <!-- 1 fzf -->
   <section class="part" id="command">
     <div class="part-title"><h2><span class="no">1.</span> コマンド入力</h2><span class="tag t1">手応え</span><span class="tag t2">中が見える</span><span class="tag t4">うまくなる</span></div>
-    <p class="part-desc">fzf と同じく、1文字ごとに絞れます。打った言葉を機械がどう解釈したかは、チップと緑の行で見せます。「ブランチ 」と打つ、<kbd class="soft">#</kbd> で絞り込みの一覧。</p>
+    <p class="part-desc">fzf と同じく、1文字ごとに絞れます。何件中何件か、描くのにかかった時間をその場で出します。開いたものは次から上に出るので、2回目からは打つ量が減ります。</p>
     <div class="box" id="cmd">
       <span class="ttl">fzf <span class="dim">~/kodou-ui</span></span>
-      <div class="fz-line"><span class="pr">&gt;</span><span id="chips" class="row" style="gap:6px"></span><input id="q" autocomplete="off" spellcheck="false" placeholder="探す  # で絞り込み" aria-label="コマンド入力"></div>
+      <div class="fz-line"><span class="pr">&gt;</span><input id="q" autocomplete="off" spellcheck="false" placeholder="ファイル・ブランチ・コマンドを探す" aria-label="コマンド入力"></div>
       <div class="fz-info"><span id="count"></span><span class="rule"></span><span class="ms" id="took"></span></div>
       <div class="explain" id="explain" hidden></div>
-      <div class="list sugg" id="sugg" hidden></div>
       <div class="list" id="results" role="listbox" aria-label="結果"></div>
-      <div class="keys"><span><kbd>⏎</kbd>開く</span><span><kbd>↑↓</kbd>選ぶ</span><span><kbd>#</kbd>絞り込み</span><span><kbd>⌫</kbd>チップを外す</span><span><kbd>Esc</kbd>空にする</span><span class="opened" id="opened"></span></div>
+      <div class="keys"><span><kbd>⏎</kbd>開く</span><span><kbd>↑↓</kbd>選ぶ</span><span><kbd>Esc</kbd>空にする</span><span class="opened" id="opened"></span></div>
     </div>
   </section>
 
@@ -541,7 +535,7 @@ const divSetH = (el, v) => { el.style.height = v };
 
 /* 時計と tmux */
 function tick() { const d = new Date(); $('#clock').textContent = d.toTimeString().slice(0, 5) }
-tick(); setInterval(tick, 10000);
+tick(); setInterval(() => { if (!document.hidden) tick() }, 10000);
 const secs = [...document.querySelectorAll('section.part')];
 const tabs = [...document.querySelectorAll('.tmux a')];
 addEventListener('scroll', () => {
@@ -582,13 +576,7 @@ const ITEMS = [
   { k: 'file', name: 'scripts/release.sh', meta: '先月', d: 'month' },
 ];
 const KIND_ICON = { file: 'file', branch: 'branch', pr: 'pr', cmd: 'term' };
-const FILTERS = [
-  { key: 'kind', label: '種類', ex: 'file branch pr cmd' },
-  { key: 'date', label: '時期', ex: 'today week month' },
-  { key: 'ext', label: '拡張子', ex: 'ts md css' },
-];
-const ALIAS = { 'ブランチ': ['kind', 'branch'], 'ファイル': ['kind', 'file'], 'コマンド': ['kind', 'cmd'], 'pr': ['kind', 'pr'], 'プルリク': ['kind', 'pr'], '今日': ['date', 'today'], '今週': ['date', 'week'], '先月': ['date', 'month'] };
-const cmd = { chips: [], sel: 0, suggSel: 0, list: [], suggList: [], lastAlias: null };
+const cmd = { sel: 0, list: [], recent: [], last: null };
 const q = $('#q');
 /* 結果: 見えている行だけ描く。打つたびに並びが変わるので、描いている行だけ中身を書き換える */
 const resEl = $('#results');
@@ -597,29 +585,12 @@ const resV = virt(resEl, { parent: resEl, gap: divSpacer, gapH: divSetH,
   fill(d, i) { const it = cmd.list[i], c = d.children; d.dataset.i = i; c[1].innerHTML = ico(KIND_ICON[it.k]); c[2].innerHTML = cmd.hl(it.name); c[3].textContent = it.meta },
   mark(d, i) { const on = i === cmd.sel; if (d.classList.contains('on') !== on) d.classList.toggle('on', on); d.setAttribute('aria-selected', on) } });
 resEl.insertAdjacentHTML('beforeend', '<div class="empty" id="resEmpty" hidden>当てはまるものはありません。チップを外すか、言葉を短くしてください。</div>');
-function matchChip(it, c) {
-  if (c.key === 'kind') return it.k === c.val;
-  if (c.key === 'date') return c.val === 'week' ? it.d !== 'month' : it.d === c.val;
-  if (c.key === 'ext') return it.k === 'file' && it.name.endsWith('.' + c.val);
-  return true;
-}
-function renderChips() {
-  $('#chips').innerHTML = cmd.chips.map((c, i) => `<span class="chip">#${c.key}:${esc(c.val)}<button data-i="${i}" aria-label="#${c.key} ${esc(c.val)} を外す">×</button></span>`).join('');
-}
 function renderCmd() {
   const t0 = performance.now();
-  const text = q.value;
-  const hashM = text.match(/(?:^|\s)#(\w*)$/);
-  const sugg = $('#sugg');
-  if (hashM) {
-    const fs = FILTERS.filter(f => f.key.startsWith(hashM[1]));
-    cmd.suggSel = Math.min(cmd.suggSel, Math.max(0, fs.length - 1));
-    sugg.hidden = false;
-    sugg.innerHTML = fs.length ? fs.map((f, i) => `<div class="ln${i === cmd.suggSel ? ' on' : ''}" data-f="${f.key}"><span class="mk">&gt;</span><span class="k">#${f.key}</span><span>${f.label}</span><span class="mt">${f.ex}</span></div>`).join('') : `<div class="empty">#${esc(hashM[1])} という絞り込みはありません</div>`;
-    cmd.suggList = fs;
-  } else { sugg.hidden = true; cmd.suggList = [] }
-  const words = text.replace(/(?:^|\s)#\w*$/, '').trim().toLowerCase();
-  cmd.list = ITEMS.filter(it => cmd.chips.every(c => matchChip(it, c)) && (!words || it.name.toLowerCase().includes(words)));
+  const words = q.value.trim().toLowerCase();
+  /* 前に開いたものを上に、あとは元の並び。同じ入力なら並びは毎回同じ */
+  const rank = it => { const r = cmd.recent.indexOf(it); return r < 0 ? 1e3 + ITEMS.indexOf(it) : r };
+  cmd.list = ITEMS.filter(it => !words || it.name.toLowerCase().includes(words)).sort((x, y) => rank(x) - rank(y));
   cmd.sel = Math.min(cmd.sel, Math.max(0, cmd.list.length - 1));
   const hl = s => { if (!words) return esc(s); const i = s.toLowerCase().indexOf(words); if (i < 0) return esc(s); return esc(s.slice(0, i)) + '<mark>' + esc(s.slice(i, i + words.length)) + '</mark>' + esc(s.slice(i + words.length)) };
   cmd.hl = hl;
@@ -628,41 +599,22 @@ function renderCmd() {
   $('#count').textContent = `${cmd.list.length}/${ITEMS.length} · 描いている行 ${resV.count}`;
   $('#took').textContent = `${(performance.now() - t0).toFixed(1)}ms`;
   const ex = $('#explain');
-  if (cmd.lastAlias) { ex.hidden = false; ex.innerHTML = `✓ 「${esc(cmd.lastAlias.word)}」を <code>#${cmd.lastAlias.key}:${cmd.lastAlias.val}</code> として絞りました。次からはこう打てます。` }
+  if (cmd.last) { ex.hidden = false; ex.innerHTML = `✓ <code>${esc(cmd.last.name)}</code> を開きました。次からはいちばん上に出ます。` }
   else ex.hidden = true;
   if (cmd.list.length) resV.to(cmd.sel);
 }
-function addChip(key, val, word) {
-  cmd.chips = cmd.chips.filter(c => c.key !== key);
-  cmd.chips.push({ key, val });
-  cmd.lastAlias = word ? { word, key, val } : null;
-  renderChips(); sl.msg(`#${key}:${val} で絞りました`);
-}
-const openIt = it => { $('#opened').textContent = `→ ${it.name}`; sl.msg(`開いた: ${it.name}`) };
-q.addEventListener('input', () => {
-  let v = q.value;
-  const m = v.match(/(?:^|\s)#(kind|date|ext)[\s:]+(\S+)\s$/);
-  if (m) { addChip(m[1], m[2]); v = v.slice(0, m.index).trimStart() }
-  else { const a = v.match(/(?:^|\s)(\S+)\s$/); if (a && ALIAS[a[1].toLowerCase()]) { const [k, val] = ALIAS[a[1].toLowerCase()]; addChip(k, val, a[1]); v = v.slice(0, a.index).trimStart() } }
-  if (v !== q.value) q.value = v;
-  cmd.sel = 0; renderCmd();
-});
+const openIt = it => { cmd.recent = [it, ...cmd.recent.filter(x => x !== it)]; cmd.last = it; $('#opened').textContent = `→ ${it.name}`; sl.msg(`開いた: ${it.name}`); renderCmd() };
+q.addEventListener('input', () => { cmd.sel = 0; renderCmd() });
 q.addEventListener('keydown', e => {
-  const inSugg = cmd.suggList.length;
   if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
     e.preventDefault(); const d = e.key === 'ArrowDown' ? 1 : -1;
-    if (inSugg) cmd.suggSel = (cmd.suggSel + d + inSugg) % inSugg; else if (cmd.list.length) cmd.sel = (cmd.sel + d + cmd.list.length) % cmd.list.length;
+    if (cmd.list.length) cmd.sel = (cmd.sel + d + cmd.list.length) % cmd.list.length;
     renderCmd();
-  } else if ((e.key === 'Tab' || e.key === 'Enter') && inSugg) {
-    e.preventDefault(); q.value = q.value.replace(/#\w*$/, '#' + cmd.suggList[cmd.suggSel].key + ' '); cmd.suggSel = 0; renderCmd();
   } else if (e.key === 'Enter') { const it = cmd.list[cmd.sel]; if (it) openIt(it) }
-  else if (e.key === 'Backspace' && !q.value && cmd.chips.length) { const c = cmd.chips.pop(); cmd.lastAlias = null; renderChips(); renderCmd(); sl.msg(`#${c.key}:${c.val} を外しました`) }
-  else if (e.key === 'Escape') { q.value = ''; cmd.chips = []; cmd.lastAlias = null; renderChips(); renderCmd(); sl.msg('入力を空にしました') }
+  else if (e.key === 'Escape') { q.value = ''; cmd.sel = 0; renderCmd(); sl.msg('入力を空にしました') }
 });
-$('#chips').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; const c = cmd.chips.splice(+b.dataset.i, 1)[0]; cmd.lastAlias = null; renderChips(); renderCmd(); q.focus(); sl.msg(`#${c.key}:${c.val} を外しました`) });
-$('#results').addEventListener('click', e => { const r = e.target.closest('.ln'); if (!r) return; cmd.sel = +r.dataset.i; renderCmd(); openIt(cmd.list[cmd.sel]) });
-$('#sugg').addEventListener('click', e => { const r = e.target.closest('.ln'); if (!r) return; q.value = q.value.replace(/#\w*$/, '#' + r.dataset.f + ' '); q.focus(); renderCmd() });
-addChip('kind', 'branch', 'ブランチ'); renderCmd(); sl.msg('キーを押すと、ここに出ます');
+$('#results').addEventListener('click', e => { const r = e.target.closest('.ln'); if (!r) return; cmd.sel = +r.dataset.i; openIt(cmd.list[cmd.sel]) });
+q.value = 'feat'; renderCmd(); sl.msg('キーを押すと、ここに出ます');
 
 /* 2 top */
 const PROCS = [
@@ -731,18 +683,18 @@ renderProcs();
 
 /* 3 AI */
 const STEPS = [
-  ['tool', 'Read', 'src/ui/CommandInput.tsx', '128 行'],
-  ['tool', 'Search', 'parseFilter', '3 件  src/ui/CommandInput.tsx:41, :77, src/ui/Chip.tsx:12'],
-  ['tool', 'Read', 'src/ui/Chip.tsx', '54 行'],
-  ['ai', '言い方の置き換えを <code>parseFilter</code> の前に足します。チップには元の言葉も残します。'],
+  ['tool', 'Read', 'src/ui/StatusLine.tsx', '128 行'],
+  ['tool', 'Search', 'onKey', '3 件  src/ui/StatusLine.tsx:41, :77, src/ui/KeyCast.tsx:12'],
+  ['tool', 'Read', 'src/ui/KeyCast.tsx', '54 行'],
+  ['ai', '押したキーを <code>onKey</code> で受けてステータスラインに出します。修飾キーだけの入力は出しません。'],
   ['diff'],
 ];
-const DIFF = [['41', ' ', '  const onInput = (v: string) => {'], ['42', '-', '    const chips = parseFilter(v)'], ['42', '+', '    const alias = matchAlias(v)'], ['43', '+', '    if (alias) explain(alias)'], ['44', '+', '    const chips = parseFilter(alias ? alias.rest : v)'], ['45', '+', '    addChips(chips, alias)'], ['46', ' ', '    render(chips)']];
+const DIFF = [['41', ' ', '  const onKey = (e: KeyboardEvent) => {'], ['42', '-', '    setLast(e.key)'], ['42', '+', '    if (isModifierOnly(e)) return'], ['43', '+', '    const label = keyLabel(e)'], ['44', '+', '    setLast(label)'], ['45', '+', '    cast.push(label)'], ['46', ' ', '    render()']];
 function stepHTML(s) {
   if (s[0] === 'tool') return `<div class="st"><span class="bul">●</span> <span class="tool">${s[1]}</span>(${esc(s[2])})<div class="sub">⎿  ${esc(s[3])}</div></div>`;
   if (s[0] === 'ai') return `<div class="st prose"><span class="bul ai">●</span> ${s[1]}</div>`;
   if (s[0] === 'me') return `<div class="st prose"><span class="bul me">&gt;</span> ${esc(s[1])}</div>`;
-  if (s[0] === 'diff') return `<div class="st"><span class="bul">●</span> <span class="tool">Update</span>(src/ui/CommandInput.tsx)<div class="sub">⎿  +4 -1</div><div class="diff">${DIFF.map(([n, k, t]) => `<div class="${k === '+' ? 'add' : k === '-' ? 'del' : ''}"><span class="n">${n}</span><span>${k}</span><span>${esc(t)}</span></div>`).join('')}</div></div>`;
+  if (s[0] === 'diff') return `<div class="st"><span class="bul">●</span> <span class="tool">Update</span>(src/ui/StatusLine.tsx)<div class="sub">⎿  +4 -1</div><div class="diff">${DIFF.map(([n, k, t]) => `<div class="${k === '+' ? 'add' : k === '-' ? 'del' : ''}"><span class="n">${n}</span><span>${k}</span><span>${esc(t)}</span></div>`).join('')}</div></div>`;
 }
 const ag = { timer: null, opt: 0, open: false };
 const STEP_CAP = 200;  // 記録は上限つき。古いものから捨てる（高さがそろわないので、画面外は content-visibility で描かない）
@@ -763,7 +715,7 @@ function agentPlay() {
 }
 function decide(ok) {
   if (!ag.open) return; ag.open = false;
-  $('#decideBox').innerHTML = `<div class="result">${ok ? '<span class="c-green">✓</span> 適用しました: src/ui/CommandInput.tsx  +4 -1' : '<span class="dim">✗</span> 却下しました。ファイルは変わっていません'}</div>`;
+  $('#decideBox').innerHTML = `<div class="result">${ok ? '<span class="c-green">✓</span> 適用しました: src/ui/StatusLine.tsx  +4 -1' : '<span class="dim">✗</span> 却下しました。ファイルは変わっていません'}</div>`;
   agentState(ok ? 'ok' : 'no'); sl.msg(ok ? '変更を適用しました' : '変更を却下しました');
 }
 $('#agentPanel').addEventListener('click', e => {
@@ -796,9 +748,9 @@ renderGhost();
 const LOGS = [
   ['info', 'GET /api/session 200 12ms'], ['info', 'GET /api/usage 200 8ms'], ['info', 'ws: client connected (3)'],
   ['warn', 'slow query: SELECT * FROM events 412ms'], ['info', 'POST /api/run 202 4ms'], ['info', 'job 7f3a: started'],
-  ['info', 'GET /api/session 200 11ms'], ['error', 'job 7f3a: exit 1  TypeError: cannot read "chips" of undefined'],
+  ['info', 'GET /api/session 200 11ms'], ['error', 'job 7f3a: exit 1  TypeError: cannot read "keys" of undefined'],
   ['info', 'GET /health 200 1ms'], ['warn', 'memory: free 2.1G (below 3G)'], ['info', 'ws: client disconnected (2)'],
-  ['info', 'GET /api/files?q=chip 200 6ms'],
+  ['info', 'GET /api/files?q=status 200 6ms'],
 ];
 const LCAP = 400;  // 持つ行の上限。いっぱいになったら一番古い行に上書きする
 const lg = { ring: new Array(LCAP), head: 0, size: 0, vis: [], n: { all: 0, warn: 0, error: 0 }, lv: 'all', q: '', follow: true, i: 0, sec: [] };
@@ -822,8 +774,9 @@ function addLine(l) {  // 古い行を捨てて見せる並びの番号がずれ
 }
 function pushLog() { const [lv, m] = LOGS[lg.i++ % LOGS.length]; const shifted = addLine({ t: fmtT(new Date()), lv, m }); lg.sec.push(Date.now()); drawLog(shifted); counts() }
 for (let k = 0; k < 14; k++) { const [lv, m] = LOGS[k % LOGS.length]; addLine({ t: fmtT(new Date(Date.now() - (14 - k) * 900)), lv, m }); lg.i++ }
-counts(); renderLog(); setInterval(pushLog, 900);
-setInterval(() => { const now = Date.now(); lg.sec = lg.sec.filter(t => now - t < 5000); const r = (lg.sec.length / 5).toFixed(1); $('#logRate').textContent = `${r} 行/秒`; $('#slLiveTxt').textContent = `${r} 行/秒` }, 1000);
+/* 頁が隠れている間は流さない */
+counts(); renderLog(); setInterval(() => { if (!document.hidden) pushLog() }, 900);
+setInterval(() => { if (document.hidden) return; const now = Date.now(); lg.sec = lg.sec.filter(t => now - t < 5000); const r = (lg.sec.length / 5).toFixed(1); $('#logRate').textContent = `${r} 行/秒`; $('#slLiveTxt').textContent = `${r} 行/秒` }, 1000);
 function setFollow(on) {
   if (on === lg.follow) return; lg.follow = on;
   const f = $('#followState');
@@ -840,7 +793,7 @@ $('#lvSeg').addEventListener('click', e => { const b = e.target.closest('button'
 $('#logQ').addEventListener('input', e => { lg.q = e.target.value.replace(/^\//, '').toLowerCase(); renderLog() });
 
 /* 5 pytest */
-const FILES = [['tests/test_parse_filter.py', 24], ['tests/test_alias.py', 18], ['tests/test_chip.py', 16], ['tests/test_statusline.py', 20], ['tests/test_log_stream.py', 22], ['tests/test_confirm.py', 12]];
+const FILES = [['tests/test_key_label.py', 24], ['tests/test_key_cast.py', 18], ['tests/test_modifiers.py', 16], ['tests/test_statusline.py', 20], ['tests/test_log_stream.py', 22], ['tests/test_confirm.py', 12]];
 const TOTALT = FILES.reduce((a, f) => a + f[1], 0), FAILT = 47;
 const pg = { timer: null };
 /* 出力: 行は [class, 中身] で持ち、描くのは見えている行だけ。中身が変わった行だけ書き換える */
@@ -865,7 +818,7 @@ function renderPt(done, secs) {
     start += c;
   }
   if (done >= TOTALT) {
-    out.push(['', ' '], ['barf', '========================= FAILURES ========================'], ['F', '_____ test_backspace_on_empty_removes_one_chip _____'], ['', '    assert len(chips) == 1'], ['F', 'E   assert 0 == 1']);
+    out.push(['', ' '], ['barf', '========================= FAILURES ========================'], ['F', '_____ test_modifier_only_is_not_shown _____'], ['', '    assert cast == []'], ['F', "E   assert ['Shift'] == []"]);
     out.push([fail ? 'sum-f' : 'sum-ok', `=========== ${fail} failed, ${TOTALT - fail} passed in ${secs.toFixed(2)}s ===========`]);
   } else out.push(['', ' '], ['dim', `${done}/${TOTALT}  ${secs.toFixed(1)}s  失敗 ${fail}`]);
   const atEnd = ptEl.scrollHeight - ptEl.scrollTop - ptEl.clientHeight < 8;  // 下を見ていたら、伸びても下についていく
@@ -895,7 +848,7 @@ $('#port').addEventListener('input', e => {
   $('#portField').classList.toggle('bad', bad); $('#portMsg').textContent = msg;
 });
 const SP = '⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏'; let spi = 0, dep = 38;
-setInterval(() => { $('#spin').textContent = SP[spi++ % SP.length]; if (spi % 4 === 0) { dep = dep >= 112 ? 38 : dep + 1; $('#dep').textContent = dep } }, 90);
+setInterval(() => { if (document.hidden) return; $('#spin').textContent = SP[spi++ % SP.length]; if (spi % 4 === 0) { dep = dep >= 112 ? 38 : dep + 1; $('#dep').textContent = dep } }, 90);
 
 /* 7 トークン */
 const ANSI = [['0', 'fg', '--fg'], ['1', 'red', '--red'], ['2', 'green', '--green'], ['3', 'yellow', '--yellow'], ['4', 'blue', '--blue'], ['5', 'magenta', '--magenta'], ['6', 'cyan', '--cyan'], ['7', 'dim', '--dim']];

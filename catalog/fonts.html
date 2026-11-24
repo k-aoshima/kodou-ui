@@ -6,16 +6,16 @@
 <style>
 /* 配置: 同じ Kodou の部品を、文の書体だけ替えて縦に並べる。上の切り替えで等幅の組み合わせも替えられる */
 :root {
-  --bg: #F4F4EF; --panel: #FBFBF8; --fg: #20242B; --dim: #565A63; --faint: #6E727A; --ui: #8C9098; --deco: #B9BBBF;
-  --sel-bg: #20242B; --sel-fg: #F4F4EF; --blue: #1F5FA8; --red: #C2410C; --green: #1B7A5A; --red-bg: rgba(194,65,12,.09);
+  --bg: #F4F4EF; --panel: #FBFBF8; --fg: #20242B; --dim: #575B63; --faint: #666A72; --ui: #84878D; --deco: #A7AAAF;
+  --sel-bg: #20242B; --sel-fg: #F4F4EF; --blue: #0058A0; --red: #BE3F0E; --green: #00654A; --red-bg: rgba(190,63,14,.10);
   --mono: "JetBrains Mono", "BIZ UDGothic", ui-monospace, monospace;
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --bg: #15171C; --panel: #1A1D23; --fg: #D9DCE3; --dim: #A6ABB6; --faint: #8F94A0; --ui: #6C717D; --deco: #454A55;
-  --sel-bg: #D9DCE3; --sel-fg: #15171C; --blue: #7FB2FF; --red: #FF8A5C; --green: #4CC9A0; --red-bg: rgba(255,138,92,.12); color-scheme: dark } }
+  --bg: #15171C; --panel: #1A1D23; --fg: #D9DCE3; --dim: #A7ACB6; --faint: #9196A1; --ui: #707684; --deco: #4B505B;
+  --sel-bg: #D9DCE3; --sel-fg: #15171C; --blue: #72B2FF; --red: #FF9670; --green: #2FAA80; --red-bg: rgba(255,150,112,.13); color-scheme: dark } }
 :root[data-theme="dark"] {
-  --bg: #15171C; --panel: #1A1D23; --fg: #D9DCE3; --dim: #A6ABB6; --faint: #8F94A0; --ui: #6C717D; --deco: #454A55;
-  --sel-bg: #D9DCE3; --sel-fg: #15171C; --blue: #7FB2FF; --red: #FF8A5C; --green: #4CC9A0; --red-bg: rgba(255,138,92,.12); color-scheme: dark }
+  --bg: #15171C; --panel: #1A1D23; --fg: #D9DCE3; --dim: #A7ACB6; --faint: #9196A1; --ui: #707684; --deco: #4B505B;
+  --sel-bg: #D9DCE3; --sel-fg: #15171C; --blue: #72B2FF; --red: #FF9670; --green: #2FAA80; --red-bg: rgba(255,150,112,.13); color-scheme: dark }
 * { box-sizing: border-box }
 [hidden] { display: none !important }
 body { background: var(--bg); color: var(--fg); font: 13.5px/1.6 var(--mono); -webkit-font-smoothing: antialiased }

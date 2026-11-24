@@ -329,7 +329,8 @@ table.t tr.picked td.ck::before { content: "[x]" }
 .plot .gl { position: absolute; left: 0; right: 0; border-top: 1px dotted var(--rule-soft) }
 .bars { position: absolute; inset: 0; display: flex; align-items: flex-end; justify-content: space-around; padding: 0 2% }
 .bar { position: relative; width: 9%; background: repeating-linear-gradient(to top, var(--blue) 0 6px, transparent 6px 8px); cursor: pointer }
-.bar:hover, .bar:focus-visible { background: repeating-linear-gradient(to top, var(--fg) 0 6px, transparent 6px 8px); outline: 0 }
+.bar:hover, .bar:focus-visible { background: repeating-linear-gradient(to top, var(--fg) 0 6px, transparent 6px 8px) }
+.bar:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
 .bar .ov { position: absolute; left: 0; right: 0; top: 0; background: repeating-linear-gradient(45deg, var(--red) 0 3px, transparent 3px 6px); border-top: 2px solid var(--red) }
 .bar .ovl { position: absolute; left: 50%; bottom: 100%; transform: translateX(-50%); font-size: 11px; color: var(--red); white-space: nowrap; padding-bottom: 2px }
 .sw-blue { background: repeating-linear-gradient(to top, var(--blue) 0 3px, transparent 3px 4px) } .sw-red { background: repeating-linear-gradient(45deg, var(--red) 0 2px, transparent 2px 4px); outline: 1px solid var(--red) }
@@ -532,7 +533,7 @@ dialog.dlg[open] { animation: pop var(--t-base) ease-out }
   <div class="man"><span>KODOU-UI(7)</span><span>基本の部品</span><span>KODOU-UI(7)</span></div>
   <header class="hero">
     <div class="logo"><span class="beat c-red" data-px="heart" data-cell="5" aria-hidden="true"></span>kodou-ui<span class="cursor" aria-hidden="true"></span></div>
-    <p>どの道具でも使える基本の部品です。見た目は端末のまま、反応・説明・確認の出し方を今の質にしています。どれも触って試せて、押したキーと起きたこと、描画までの時間は下のステータスラインに出ます。</p>
+    <p>どのツールでも使える基本の部品です。見た目は端末のまま、反応・説明・確認の出し方を今の質にしています。どれも触って試せて、押したキーと起きたこと、描画までの時間は下のステータスラインに出ます。</p>
   </header>
 
   <div class="layout">
@@ -942,7 +943,7 @@ dialog.dlg[open] { animation: pop var(--t-base) ease-out }
 
 <section class="comp" id="c-perf" data-grp="土台">
   <div class="comp-head"><h2>速さと軽さ<span class="en">performance</span></h2><span class="tag t1">手応え</span><span class="tag t2">中が見える</span></div>
-  <p class="lead">道具は待たせず、メモリを食わないことが前提です。下の数字は、この頁がいま自分を測った値です。測れないものは目標として書いています。</p>
+  <p class="lead">ツールは待たせず、メモリを食わないことが前提です。下の数字は、この頁がいま自分を測った値です。測れないものは目標として書いています。</p>
   <div class="box"><span class="ttl">いまの値</span><span class="ttl-r">1秒ごとに更新</span><div class="perf" id="perf"></div></div>
   <div class="box"><span class="ttl">仕組み</span><ol class="how">
     <li>ライブラリは使いません。チェックの印、ツールチップ、エラーの枠、ログの絞り込みは CSS だけで出します（<code>:checked</code> <code>:has()</code> <code>:hover</code>）。</li>
