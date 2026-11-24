@@ -1,22 +1,32 @@
 ---
 name: kodou-ui-review
-description: Kodou-ui の考え方で作ったエンジニア向けの道具の画面を点検するときに使う。4つの原則（手応え・中が見える・ハンドルは人・うまくなる）、コントラスト比、色だけで伝えていないか、押せる範囲、フォーカス、待ち時間の見せ方、エラーの文、キー入力から描画までの時間と要素の数を確かめ、場所・問題・直し方の形で指摘を出す。「Kodou-ui で点検して」「この画面を見直して」と頼まれたとき、kodou-ui-build で画面を作り終えたときに使う。
+description: Kodou-ui の考え方で作ったエンジニア向けのツールの画面を点検するときに使う。4つの原則（手応え・中が見える・ハンドルは人・うまくなる）、コントラスト比、色だけで伝えていないか、押せる範囲、フォーカス、待ち時間の見せ方、エラーの文、キー入力から描画までの時間と要素の数を確かめ、場所・問題・直し方の形で指摘を出す。「Kodou-ui で点検して」「この画面を見直して」と頼まれたとき、kodou-ui-build で画面を作り終えたときに使う。
+license: MIT
+metadata:
+  version: "0.1.0"
+  homepage: https://github.com/k-aoshima/kodou-ui
 ---
 
 # Kodou-ui の画面を点検する
 
-作る側の決まりは `kodou-ui-build` スキル（SKILL.md と references）にある。点検はその決まりに照らして行う。スクリプトはこのスキルのフォルダの `scripts/` にある。`contrast.py` と `icon.py` は Python 3 の標準ライブラリだけで動き、`measure.mjs` は Node と puppeteer-core と Chrome を使う。下のコマンドの `scripts/` は、このスキルのフォルダからの相対。
+作る側の決まりは `kodou-ui-build` スキル（SKILL.md と references）にある。点検はその決まりに照らして行う。スクリプトはこのスキルのフォルダの `scripts/` にある。`check.py`・`lint.py`・`contrast.py`・`icon.py` は Python 3 の標準ライブラリだけで動き、`measure.mjs` は Node と puppeteer-core と Chrome を使う。下のコマンドの `scripts/` は、このスキルのフォルダからの相対。
 
 ## 手順
 
-1. **スクリプトで測れるものを先に測る**
+1. **スクリプトで測れるものを先に測る**: まず `check.py` で全部をまとめて回す。終了コードは 0 が全部通った、1 が基準を割るものがあった、2 が回せなかった。CI にもそのまま載せられる。
    ```sh
+   python3 scripts/check.py path/to/page.html src/      # 下の 3 つをまとめて回し、結果を表で出す
+   python3 scripts/check.py path/to/page.html --measure # 加えて軽さも測る
+   ```
+   1 つずつ回すときは次のとおり。
+   ```sh
+   python3 scripts/lint.py path/to/page.html src/       # 決まりの検出（規則は --rules で一覧）
    python3 scripts/contrast.py path/to/page.html        # 文字と地のコントラスト比
    python3 scripts/icon.py path/to/page.html            # アイコンのマス目（PX12）
    python3 scripts/icon.py path/to/page.html --set PX   # 8×8 のアイコン
    node scripts/measure.mjs path/to/page.html           # 要素の数、JS のヒープ、見えている間と隠れている間の忙しさ
    ```
-   `contrast.py` は素の `:root` と `:root[data-theme="dark"]` のトークンを読み、文字（4.5:1）、部品の境界とフォーカス（3:1）、塗った面の上の文字を表で出す。基準を割るものがあると終了コード 1 を返す。トークンの名前が違う画面では `--text` と `--ground` で指定する。
+   `contrast.py` は素の `:root` と `:root[data-theme="dark"]` のトークンを読み、文字（4.5:1）、部品の境界とフォーカス（3:1）、塗った面の上の文字を表で出す。基準を割るものがあると終了コード 1 を返す。トークンの名前が違う画面では `--text` と `--ground` で指定する。`lint.py` は、ファイルを読むだけで分かる決まりの違反を探す。たとえば confirm()・「処理中…」だけの表示・「検索」ボタン・左端の色の縦線・消したフォーカス・止めない動き・隠れても回るタイマーで、見つけたものは下の「指摘の出し方」と同じ形で出す。わざと残す所は、同じ行か 1 行前に `kodou-lint: ignore 規則名` と書く。lint で見つからなくても、チェックリストは省かない（規則で見つけられるのは一部だけ）。
 2. **ブラウザで操作して見る**: キーボードだけで、開く→打つ→選ぶ→実行→閉じるが通るかを試す。マウスでも同じことをする。ライトとダーク、狭い幅（400px）でも見る。
 3. **チェックリストを1つずつ当てる**（下）。
 4. **速さを測る**: `measure.mjs` の結果（要素 3,000 以下、隠れている間の忙しさ 1% 以下が目安）と、画面に出しているキー入力から描画までの時間を読む。キー入力から描画までの時間を出していなければ、出すこと自体を指摘する。
