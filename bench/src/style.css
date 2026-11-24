@@ -1,0 +1,15 @@
+* { box-sizing: border-box }
+body { margin: 0; background: #F4F4EF; color: #20242B; font: 13px/1.6 "JetBrains Mono", ui-monospace, monospace }
+.app { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 420px 300px; gap: 20px; padding: 24px 16px }
+.box { position: relative; border: 1px solid #8C9098; background: #FBFBF8; padding: 14px 8px 8px; min-width: 0; contain: content }
+.box.wide { grid-column: 1 / -1 }
+.ttl { position: absolute; top: -0.8em; left: 10px; padding: 0 6px; background: #FBFBF8; font-weight: 600 }
+.vl { height: 100%; overflow: auto; position: relative; outline: none }
+#sp { position: relative }
+.row { position: absolute; left: 0; right: 0; height: 22px; display: grid; grid-template-columns: 8ch 6ch 1fr 6ch; gap: 1ch; padding: 0 6px; white-space: nowrap; overflow: hidden }
+.row.on { background: #20242B; color: #F4F4EF }
+.row[data-s="run"] .s { color: #1F5FA8 } .row[data-s="wait"] .s { color: #C2410C }
+.log { height: 100%; overflow: auto; font-size: 12px }
+.log > div { display: grid; grid-template-columns: 9ch 6ch 1fr; gap: 1ch; white-space: nowrap }
+.log .warn .lv { color: #8A5A00 } .log .error .lv { color: #C2410C }
+.cv { position: relative; height: 100% } .cv canvas { position: absolute; inset: 0; width: 100%; height: 100% }
