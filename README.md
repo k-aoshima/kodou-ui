@@ -100,7 +100,7 @@ node $S/measure.mjs page.html             # 要素の数、JS のヒープ、隠
 | 比較 | 同じ画面を Kodou-ui と React で作り、メモリと描画の重さを比べた結果 | `bench/` |
 | プラグイン | Claude Code のプラグインとして入れるための定義 | `.claude-plugin/marketplace.json` |
 
-## まだのこと
+## 今後の予定
 
 - 部品を npm のパッケージとしても配る。
 
