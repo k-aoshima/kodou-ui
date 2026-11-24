@@ -1,0 +1,32 @@
+name: check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      # コントラスト・アイコン・決まりの検出（標準ライブラリだけで動く）
+      - run: python3 skills/kodou-ui-review/scripts/check.py -q catalog site skills/kodou-ui-build/assets
+      # SKILL.md の項目と、プラグインの定義の形を確かめる
+      - name: skill frontmatter
+        run: |
+          for f in skills/*/SKILL.md; do
+            d=$(basename "$(dirname "$f")")
+            head -1 "$f" | grep -qx -- '---' || { echo "$f: 先頭に --- がない"; exit 1; }
+            grep -q "^name: $d$" "$f" || { echo "$f: name がフォルダ名（$d）と違う"; exit 1; }
+            desc=$(grep -m1 '^description: ' "$f" | sed 's/^description: //')
+            n=$(printf '%s' "$desc" | python3 -c 'import sys; print(len(sys.stdin.read()))')
+            [ "$n" -ge 1 ] && [ "$n" -le 1024 ] || { echo "$f: description が $n 文字（1〜1024）"; exit 1; }
+          done
+          python3 -c 'import json; m=json.load(open(".claude-plugin/marketplace.json")); [print(p["name"], p["skills"]) for p in m["plugins"]]'

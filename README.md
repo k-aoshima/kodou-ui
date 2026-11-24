@@ -1,16 +1,87 @@
 # Kodou-ui
 
-エンジニアが毎日使う道具のための、UI と UX のデザインシステム。CLI の手触りを残したまま、見た目と分かりやすさを今のものにする。
+エンジニアが毎日使うツールのための、UI と UX のデザインシステム。CLI の手触りを残したまま、見た目と分かりやすさを今のものにする。
 
-> 状態: 作成中。部品は見本帳（`catalog/index.html`）にあり、スキルは最初の版があります。部品をパッケージとして切り出す作業はまだです。
+[紹介ページ](https://k-aoshima.github.io/kodou-ui/) ・ [見本帳](https://k-aoshima.github.io/kodou-ui/catalog/) ・ [English](README.en.md)
+
+![紹介ページ](docs/img/site.png)
+
+> 状態: 0.1.0。部品は見本帳（`catalog/index.html`）にあり、作るスキルと点検するスキルがあります。部品をパッケージとして切り出す作業はまだです。
 
 ## 考え方
 
-旧車の車体と手触りを残し、中身を今の技術に載せ替える「レストモッド」という改造があります。Kodou-ui は同じことを道具の UI でします。
+旧車の車体と手触りを残し、中身を今の技術に載せ替える「レストモッド」という改造があります。Kodou-ui は同じことをツールの UI でします。
 
-今のエンジニアの道具は2つに分かれています。CLI（git、grep、fzf、Vim）は打てば必ず応え、使うほどうまくなりますが、何ができるのか分かりにくく、状態も見えにくい道具です。GUI（IDE、Web のダッシュボード、AI のエージェント画面）は分かりやすい一方で、待たされ、中を隠し、AI が勝手に進めます。Kodou-ui は、CLI の手触りを持った今の道具を作るための部品と判断の基準をそろえます。
+今のエンジニアのツールは2つに分かれています。CLI（git、grep、fzf、Vim）は打てば必ず応え、使うほどうまくなりますが、何ができるのか分かりにくく、状態も見えにくいツールです。GUI（IDE、Web のダッシュボード、AI のエージェント画面）は分かりやすい一方で、待たされ、中を隠し、AI が勝手に進めます。Kodou-ui は、CLI の手触りを持った今のツールを作るための部品と判断の基準をそろえます。
 
 大事にするのは**操作するよろこび**と**機械との対話**です。詳しくは [docs/principles.md](docs/principles.md) にあります。
+
+部品だけでは、手応えも透明さもない画面を組めてしまいます。そのため Kodou-ui は、判断の部分をスキルとしてエージェントに渡し、UX まで一緒に届けます。見た目の CSS を配るのではなく、作る手順と点検の基準を配ります。
+
+## 作れる画面
+
+キーだけで最後まで動く、変更したファイルを選んでコミットする小さなツールです（紹介ページのサンプル）。
+
+![commit のサンプル](docs/img/commit.png)
+
+36 の基本部品は見本帳で触って試せます。
+
+![見本帳](docs/img/catalog.png)
+
+同じ画面を React（MUI と Recharts、よく勧められる手当てをしたもの）で作って比べると、ページの使用メモリは 128 MB に対して 57 MB、JS のヒープは 15 分の 1 でした。測り方と結果は [bench/README.md](bench/README.md) にあります。
+
+## 入れ方
+
+### Claude Code（プラグイン）
+
+```
+/plugin marketplace add k-aoshima/kodou-ui
+/plugin install kodou-ui@kodou-ui
+```
+
+作るスキル（`kodou-ui:kodou-ui-build`）と点検するスキル（`kodou-ui:kodou-ui-review`）が一緒に入ります。
+
+### ほかのエージェント（Codex、Cursor など）
+
+スキルは [Agent Skills](https://agentskills.io/) の形（`SKILL.md` を含むフォルダ）で書いてあります。[skills](https://github.com/vercel-labs/skills) の CLI を使うと、エージェントを選んで入れられます。
+
+```sh
+npx skills add k-aoshima/kodou-ui
+```
+
+### 手で置く
+
+`SKILL.md` を含むフォルダを、エージェントのスキルのフォルダに写します。Claude Code では次のとおりです。
+
+```sh
+cp -R skills/kodou-ui-build skills/kodou-ui-review ~/.claude/skills/   # すべてのプロジェクトで使う
+cp -R skills/kodou-ui-build skills/kodou-ui-review .claude/skills/     # このプロジェクトだけで使う
+```
+
+2 つのスキルは一緒に入れてください（作る側のスキルが、点検のスクリプトを使います）。トークンの CSS、一覧の描き方、DESIGN.md、点検のスクリプトはスキルの中に入っているので、スキルだけで使えます。
+
+## 使い方
+
+エージェントに「Kodou-ui で作って」と頼むと、部品と決まりに沿って画面を作ります。「Kodou-ui で点検して」と頼むと、手応えやキーの覚えやすさを確かめて、場所・問題・直し方の形で指摘します。
+
+プロジェクトの根に `DESIGN.md` を置くと、作るスキルが最初に読みます。ひな形は `skills/kodou-ui-build/assets/DESIGN.md` にあり、[DESIGN.md](https://github.com/google-labs-code/design.md) の形で書いてあるので、ほかのツールからも読めます。「このプロジェクトの前提」の欄に、元にする CLI の手触りやアクセントの色を書き足してください。
+
+## 点検のスクリプト
+
+AI を使わずに回せます。終了コードは 0 が全部通った、1 が基準を割るものがあった、2 が回せなかった、です。
+
+```sh
+S=skills/kodou-ui-review/scripts
+python3 $S/check.py page.html src/        # 下の点検をまとめて回し、結果を表で出す（CI 向け）
+python3 $S/lint.py page.html src/         # 決まりの検出: confirm()、「処理中…」だけの表示、「検索」ボタン、左端の色の縦線、消したフォーカス など
+python3 $S/lint.py --rules                # 規則の一覧
+python3 $S/contrast.py page.html          # 文字と地のコントラスト比
+python3 $S/icon.py page.html              # 12×12 のアイコンを点検
+python3 $S/icon.py page.html --out build/icons --tone   # SVG を書き出す
+node $S/measure.mjs page.html             # 要素の数、JS のヒープ、隠れている間の忙しさ（puppeteer-core と Chrome が要る）
+```
+
+`check.py`、`lint.py`、`contrast.py`、`icon.py` は Python 3 の標準ライブラリだけで動きます。このリポジトリでは、push のたびに GitHub Actions が見本帳と紹介ページに `check.py` を回します。
 
 ## 構成
 
@@ -18,38 +89,20 @@
 |---|---|---|
 | 原則 | 判断の基準になる4つの原則、昔のままにするものと今に替えるもの、文面の読みやすさ、速さと軽さ | `docs/principles.md` |
 | 根拠 | 昔の見せ方と今の見せ方を比べた文献調査 | `docs/research/retro-vs-modern.md` |
+| 紹介ページ | 考え方、サンプル、部品の見本、点検の例 | `site/index.html` |
 | 見本帳 | 36 の基本部品を触って試せる頁と、トークン | `catalog/index.html` |
 | アイコン見本 | マス目で描いたアイコンの3案の比較 | `catalog/icons.html` |
 | 場面の見本 | fzf・htop・AI の作業など、部品を組んだ場面 | `catalog/scenes.html` |
-| スキル（作る） | エージェントが画面を作るときの手順、部品・アイコン・パターンの決まり | `skills/kodou-ui-build/` |
-| スキル（点検） | できた画面の点検手順とチェックリスト | `skills/kodou-ui-review/` |
-| 道具 | コントラスト比の計算、アイコンの点検と SVG の書き出し、軽さの計測 | `skills/kodou-ui-review/scripts/` |
+| スキル（作る） | エージェントが画面を作るときの手順、部品・アイコン・パターンの決まり、トークン、DESIGN.md | `skills/kodou-ui-build/` |
+| スキル（点検） | できた画面の点検手順、チェックリスト、点検のスクリプト | `skills/kodou-ui-review/` |
 | 比較 | 同じ画面を Kodou-ui と React で作り、メモリと描画の重さを比べた結果 | `bench/` |
-| UI の部品 | 見本帳から切り出す CSS と JS | `packages/`（未作成） |
+| プラグイン | Claude Code のプラグインとして入れるための定義 | `.claude-plugin/marketplace.json` |
 
-部品だけでは、手応えも透明さもない画面を組めてしまいます。そのため Kodou-ui は、判断の部分をスキルとしてエージェントに渡し、UX まで一緒に届けます。
+## まだのこと
 
-## スキルの入れ方（Claude Code）
+- 見本帳の部品を、CSS と JS のパッケージとして切り出す（`packages/` に置く予定）。
 
-Claude Code は、`SKILL.md` を含むフォルダを skills のフォルダに置くと、そのスキルを読み込みます。
-
-- すべてのプロジェクトで使う: `~/.claude/skills/` に置きます
-  ```sh
-  cp -R skills/kodou-ui-build skills/kodou-ui-review ~/.claude/skills/
-  ```
-- 1つのプロジェクトだけで使う: そのプロジェクトの `.claude/skills/` に置きます
-
-2 つのスキルは一緒に入れてください（作る側のスキルが、点検のスクリプトを使います）。トークンの CSS、一覧の描き方、点検のスクリプトはスキルの中に入っているので、スキルだけで使えます。スキルの中の `catalog/`・`docs/`・`bench/` の参照は、このリポジトリを見たいときのためのものです。
-
-## 道具
-
-```sh
-S=skills/kodou-ui-review/scripts
-python3 $S/contrast.py catalog/index.html     # 文字と地のコントラスト比（基準を割ると終了コード 1）
-python3 $S/icon.py catalog/index.html         # 12×12 のアイコンを点検
-python3 $S/icon.py catalog/index.html --out build/icons --tone   # SVG を書き出す
-node $S/measure.mjs catalog/index.html        # 要素の数、JS のヒープ、隠れている間の忙しさ（puppeteer-core と Chrome が要る）
-```
+変わったことは [CHANGELOG.md](CHANGELOG.md) に書きます。
 
 ## 方針
 

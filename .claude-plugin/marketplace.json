@@ -1,0 +1,20 @@
+{
+  "name": "kodou-ui",
+  "description": "Kodou-ui: CLI/TUI の手触りを残した、エンジニア向けツールの UI と UX のスキル",
+  "owner": { "name": "k-aoshima", "url": "https://github.com/k-aoshima" },
+  "plugins": [
+    {
+      "name": "kodou-ui",
+      "source": "./",
+      "description": "エンジニア向けツールの画面を Kodou-ui の部品と決まりで作るスキル（kodou-ui-build）と、点検するスキル（kodou-ui-review）",
+      "version": "0.1.0",
+      "license": "MIT",
+      "homepage": "https://github.com/k-aoshima/kodou-ui",
+      "repository": "https://github.com/k-aoshima/kodou-ui",
+      "keywords": ["design-system", "tui", "cli", "ux", "japanese", "accessibility"],
+      "category": "design",
+      "strict": false,
+      "skills": ["./skills/kodou-ui-build", "./skills/kodou-ui-review"]
+    }
+  ]
+}
