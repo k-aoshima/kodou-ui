@@ -18,12 +18,13 @@
 |---|---|---|
 | 原則 | 判断の基準になる4つの原則、昔のままにするものと今に替えるもの、文面の読みやすさ、速さと軽さ | `docs/principles.md` |
 | 根拠 | 昔の見せ方と今の見せ方を比べた文献調査 | `docs/research/retro-vs-modern.md` |
-| 見本帳 | 37 の基本部品を触って試せる頁と、トークン | `catalog/index.html` |
+| 見本帳 | 36 の基本部品を触って試せる頁と、トークン | `catalog/index.html` |
 | アイコン見本 | マス目で描いたアイコンの3案の比較 | `catalog/icons.html` |
 | 場面の見本 | fzf・htop・AI の作業など、部品を組んだ場面 | `catalog/scenes.html` |
 | スキル（作る） | エージェントが画面を作るときの手順、部品・アイコン・パターンの決まり | `skills/kodou-ui-build/` |
 | スキル（点検） | できた画面の点検手順とチェックリスト | `skills/kodou-ui-review/` |
-| 道具 | コントラスト比の計算、アイコンの点検と SVG の書き出し | `scripts/contrast.py`、`scripts/icon.py` |
+| 道具 | コントラスト比の計算、アイコンの点検と SVG の書き出し、軽さの計測 | `skills/kodou-ui-review/scripts/` |
+| 比較 | 同じ画面を Kodou-ui と React で作り、メモリと描画の重さを比べた結果 | `bench/` |
 | UI の部品 | 見本帳から切り出す CSS と JS | `packages/`（未作成） |
 
 部品だけでは、手応えも透明さもない画面を組めてしまいます。そのため Kodou-ui は、判断の部分をスキルとしてエージェントに渡し、UX まで一緒に届けます。
@@ -38,14 +39,16 @@ Claude Code は、`SKILL.md` を含むフォルダを skills のフォルダに�
   ```
 - 1つのプロジェクトだけで使う: そのプロジェクトの `.claude/skills/` に置きます
 
-スキルの中の `catalog/`・`docs/`・`scripts/` の参照は、このリポジトリの根からの相対で書いています。点検のスクリプトを使うときは、このリポジトリを手元に置いてください。
+2 つのスキルは一緒に入れてください（作る側のスキルが、点検のスクリプトを使います）。トークンの CSS、一覧の描き方、点検のスクリプトはスキルの中に入っているので、スキルだけで使えます。スキルの中の `catalog/`・`docs/`・`bench/` の参照は、このリポジトリを見たいときのためのものです。
 
 ## 道具
 
 ```sh
-python3 scripts/contrast.py catalog/index.html     # 文字と地のコントラスト比（基準を割ると終了コード 1）
-python3 scripts/icon.py catalog/index.html         # 12×12 のアイコンを点検
-python3 scripts/icon.py catalog/index.html --out build/icons --tone   # SVG を書き出す
+S=skills/kodou-ui-review/scripts
+python3 $S/contrast.py catalog/index.html     # 文字と地のコントラスト比（基準を割ると終了コード 1）
+python3 $S/icon.py catalog/index.html         # 12×12 のアイコンを点検
+python3 $S/icon.py catalog/index.html --out build/icons --tone   # SVG を書き出す
+node $S/measure.mjs catalog/index.html        # 要素の数、JS のヒープ、隠れている間の忙しさ（puppeteer-core と Chrome が要る）
 ```
 
 ## 方針

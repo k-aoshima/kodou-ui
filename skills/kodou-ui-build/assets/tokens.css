@@ -1,0 +1,24 @@
+/* Kodou-ui のトークン。見本帳 catalog/index.html の :root と同じもの。部品はこの変数だけを使う */
+:root {
+  /* 色覚の違いがあっても分かるよう、CUD（カラーユニバーサルデザイン）寄りの色相。読ませる色は地に対して 4.5:1 以上、部品の境界は 3:1 以上 */
+  --bg: #F4F4EF; --panel: #FBFBF8; --fg: #20242B; --dim: #575B63; --faint: #666A72; --deco: #A7AAAF; --ui: #84878D; --rule: rgba(32,36,43,.30); --rule-soft: rgba(32,36,43,.12);
+  --sel-bg: #20242B; --sel-fg: #F4F4EF; --on: var(--panel);
+  --red: #BE3F0E; --green: #00654A; --yellow: #8A5800; --blue: #0058A0; --magenta: #9A3C78; --cyan: #006A8C;
+  --accent: var(--blue); --blue-hover: #00477F;
+  --red-bg: rgba(190,63,14,.10); --green-bg: rgba(0,101,74,.10); --yellow-bg: rgba(138,88,0,.11); --blue-bg: rgba(0,88,160,.10);
+  --font: "JetBrains Mono", "BIZ UDGothic", ui-monospace, Menlo, monospace;
+  --font-read: "Noto Sans JP", "Hiragino Sans", system-ui, sans-serif;
+  --measure: 38em;
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px;
+  --t-fast: 80ms; --t-base: 140ms;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #15171C; --panel: #1A1D23; --fg: #D9DCE3; --dim: #A7ACB6; --faint: #9196A1; --deco: #4B505B; --ui: #707684; --rule: rgba(217,220,227,.28); --rule-soft: rgba(217,220,227,.10);
+  --sel-bg: #D9DCE3; --sel-fg: #15171C; --on: var(--panel);
+  --red: #FF9670; --green: #2FAA80; --yellow: #EDBE4F; --blue: #72B2FF; --magenta: #E58EC6; --cyan: #5CC6EE;
+  --red-bg: rgba(255,150,112,.13); --green-bg: rgba(47,170,128,.13); --yellow-bg: rgba(237,190,79,.12); --blue-bg: rgba(114,178,255,.13); --blue-hover: #9CC8FF; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #15171C; --panel: #1A1D23; --fg: #D9DCE3; --dim: #A7ACB6; --faint: #9196A1; --deco: #4B505B; --ui: #707684; --rule: rgba(217,220,227,.28); --rule-soft: rgba(217,220,227,.10);
+  --sel-bg: #D9DCE3; --sel-fg: #15171C; --on: var(--panel);
+  --red: #FF9670; --green: #2FAA80; --yellow: #EDBE4F; --blue: #72B2FF; --magenta: #E58EC6; --cyan: #5CC6EE;
+  --red-bg: rgba(255,150,112,.13); --green-bg: rgba(47,170,128,.13); --yellow-bg: rgba(237,190,79,.12); --blue-bg: rgba(114,178,255,.13); --blue-hover: #9CC8FF; color-scheme: dark }

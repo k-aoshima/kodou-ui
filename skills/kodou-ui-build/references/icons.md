@@ -42,9 +42,10 @@ Mac アプリの SF Symbols を置き換えるために足した 91 個: ring、
 2. 8×8 の版が要るなら同じ名前で `PX` にも書く。8×8 では細部を省き、形の特徴だけを残す。
 3. 点検する。
    ```sh
-   python3 scripts/icon.py catalog/index.html                 # PX12 をすべて
-   python3 scripts/icon.py catalog/index.html --name gear --show   # 1個をマス目で表示
-   python3 scripts/icon.py my-icons.txt --out build/icons --tone   # SVG を書き出す
+   # icon.py は kodou-ui-review スキルの scripts/ にある
+   python3 <kodou-ui-review>/scripts/icon.py page.html                 # PX12 をすべて
+   python3 <kodou-ui-review>/scripts/icon.py page.html --name gear --show   # 1個をマス目で表示
+   python3 <kodou-ui-review>/scripts/icon.py my-icons.txt --out build/icons --tone   # SVG を書き出す
    ```
    大きさが合わないものは問題として、中心のずれと孤立したマス（斜めも含めて周りに `#` が無いマス）は注意として出る。
 4. ほかのアイコンと並べて、18px と 24px で見る。`catalog/icons.html` の「部品の中に置く」で、ボタン・一覧・状態の表示に置いた見え方も確かめる。

@@ -70,8 +70,8 @@
 
 - **依存を持たない**: ライブラリを使わない。状態の見た目はできるだけ CSS で出す（`:hover` `:focus-visible` `:has` `:checked` `:user-invalid`、`details`、`popover` 属性、`<dialog>`）。
 - **イベントは委譲**: 部品の親で1つだけ受ける。
-- **差分だけ更新**: 一覧は全体を `innerHTML` で作り直さず、変わった行だけ差し替える。並べ替えは行の要素を動かす。
-- **仮想スクロール**: 長い一覧は見えている行だけを描き、行の要素を使い回す。
+- **差分だけ更新**: 一覧は全体を `innerHTML` で作り直さず、変わった行だけ差し替える。
+- **見えている分だけ描く**: 数が決まっていない集まりは、件数が少なくても見えている分だけ描く。高さがそろう行（リスト、ツリー、表、候補、ログ、プロセス）は仮想スクロールで、窓の行数＋数行の要素を使い回す。高さがそろわないもの（会話、カード）は `content-visibility: auto` と `contain-intrinsic-size` で画面外を描かない。ログの上限は持つ行の数で、作る要素の数ではない。メニューやタブのように数が設計で決まる少ないものは全部作ってよい。作りは `assets/virt.js` をそのまま使う（下の例）。
 - **リングバッファ**: 流れ続けるデータは上限を決め、古いものから捨てる。
 - **描画の範囲を絞る**: 画面外の節に `content-visibility: auto` と `contain-intrinsic-size`、部品の中身に `contain: content`。
 - **動きは transform と opacity だけ**: 読み取りと書き込みは `requestAnimationFrame` でまとめる。
@@ -79,4 +79,34 @@
 - **隠れたら止める**: 頁が隠れている間（`visibilitychange`）と画面外（`IntersectionObserver`）では、タイマーとアニメーションを止める。タイマーは `requestAnimationFrame` の1本にまとめる。
 - **測って見せる**: キー入力から描画までの時間（`performance.now` と `requestAnimationFrame`）、要素の数、JS ヒープ（`performance.memory` がある時だけ）を画面に出す。目標はキー入力から描画まで 16ms 以内。
 
-見本帳を headless Chrome で測った値（2026-11-23）は、要素の数 1,782、JS ヒープ 9.5 MB、2万点のグラフを 831 列に間引いて描画 0.5ms だった。キー入力から描画までの時間は headless では測れていない。
+`assets/virt.js` の使い方:
+
+```js
+const v = virt(box, {                       // box はスクロールする要素。CSS で max-height か height を決めておく
+  H: 24,                                    // 行の高さ（px）。省くと 1 度だけ測る
+  id: 'files-',                             // 付けると、選んでいる行を aria-activedescendant で読み上げに伝える
+  make: () => { const r = document.createElement('div'); r.className = 'row'; r.setAttribute('role', 'option'); return r },
+  fill: (r, i) => { r.textContent = items[i].name },        // 行に i 番目の中身を入れる（番号が変わったときだけ呼ばれる）
+  mark: (r, i) => r.classList.toggle('on', i === act),       // 印だけ付け直す（毎回呼ばれる）
+});
+v.set(items.length);                                          // 数か中身が変わったとき
+const move = i => { const p = act; act = i; v.mark(p); v.to(act); v.active(act) };  // 選択を動かしたとき
+box.addEventListener('click', e => { const i = v.index(e.target); if (i >= 0) move(i) });  // イベントは箱で 1 つだけ受ける
+```
+
+表のときは `parent` に `tbody`、`gap` に `<tr><td colspan>` を作る関数、`stick` に見出しの高さを返す関数を渡す。フォーカスは箱（`owner`）に置いたままにし、行の要素にフォーカスを置かない（使い回されて別の行に変わるため）。
+
+見本帳を headless Chrome で測った値（2026-11-24）は、要素の数 1,855（1万行のリストを含む）だった。同じ画面を React で作った版との比べ方と結果は `bench/README.md` にある。自分の画面は `kodou-ui-review` の `scripts/measure.mjs` で、要素の数、JS のヒープ、見えている間と隠れている間の忙しさを測れる。キー入力から描画までの時間は headless では測れない。
+
+## React などの土台で使うとき
+
+Kodou-ui の見本は依存なしで書いているが、使う側の画面が React や Vue、Electron で作られているなら、その土台のまま決まりだけを当てる。土台を入れ替えない。
+
+- トークンは `assets/tokens.css` をそのまま読み込み、部品の CSS は変数だけを使う。CSS-in-JS で色や余白を直書きしない。
+- 数が決まっていない集まりは、土台の中でも見えている分だけ描く。React なら react-window などを使うか、`assets/virt.js` と同じ作りを hook にする。行の部品は `memo` にし、選択の印のように毎回変わるものは行の外から props で渡す。
+- 速く変わる状態（流れるログ、0.1 秒ごとのグラフ）は、画面全体の状態に置かない。置くと、1 行増えるたびに関係のない一覧まで描き直しになる（`bench/` の react-plain がこれで 100% 忙しくなった）。部品の中に閉じるか、ref と `requestAnimationFrame` で直接描く。
+- グラフの点は描く幅まで間引いてから渡す。点が多いなら canvas に描く。
+- 隠れている間は止める。`setInterval` は `visibilitychange` で止め、`requestAnimationFrame` の 1 本にまとめる。
+- 点検は「ライブラリを使っているか」ではなく、測った値で判断する（`kodou-ui-review` の `scripts/measure.mjs`）。同じ画面を依存なしと React で作って比べた結果は、リポジトリの `bench/README.md` にある（手当てした React でも、依存なしの 2 倍強のメモリを使った）。
+
+Mac のアプリ（SwiftUI、AppKit）でも考え方は同じで、長い一覧は `List` や `LazyVStack` で見えている分だけ作り、隠れている間はタイマーを止める。
