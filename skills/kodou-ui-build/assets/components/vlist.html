@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kodou-ui 長いリスト</title>
+<!-- Kodou-ui の部品の見本: 長いリスト（virtual list）。tools/build-assets.py が見本帳から書き出す（手で直さない）。
+     決まりは references/components.md の「長いリスト」。作るときは、下の HTML と、最後の <script> の中の JS をそのまま写して使う。
+     共通の CSS と関数は ../tokens.css ・ ../kodou.css ・ ../virt.js ・ ../ledbar.js ・ ../kodou.js ・ ../icons.js にある（この順に読む）。 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../kodou.css">
+<style>.kd-page { max-width: 960px; margin: 0 auto; padding: 24px max(16px, env(safe-area-inset-left, 0px)) 80px }</style>
+<body>
+<main class="kd-page">
+<section class="comp" id="c-vlist" data-grp="表示">
+  <div class="comp-head"><h2>長いリスト<span class="en">virtual list</span></h2><span class="tag t1">手応え</span></div>
+  <p class="lead">1万行でも、描くのは見えている行だけです。行は使い回し、データは行番号から必要な分だけ作ります。</p>
+  <div class="box"><span class="ttl">git log  10,000 件</span><span class="ttl-r" id="vlInfo"></span><div class="vlist" id="vl" data-key="j/k gg G" tabindex="0" aria-label="10,000 件のコミット"><div class="vl-sp" id="vlSp"></div></div>
+    <div class="keys"><span><kbd>j/k</kbd>移動</span><span><kbd>g</kbd><span class="then">→</span><kbd>g</kbd>先頭</span><span><kbd>G</kbd>末尾</span><span><kbd>PgDn</kbd>1画面</span></div></div>
+</section>
+</main>
+<div class="statusline" role="status" aria-live="off"><span class="sl-mode pl">NORMAL</span><span class="sl-msg" id="slMsg">長いリスト</span></div>
+<script src="../virt.js"></script>
+<script src="../ledbar.js"></script>
+<script src="../kodou.js"></script>
+<script src="../icons.js"></script>
+<script>
+/* 長いリスト: 1万行。ほかのリストと同じ仕組みで、見えている行だけ描く */
+(() => {
+  const N = 10000, H = 22, vl = $('#vl');
+  const VERBS = ['直す', '足す', '消す', '揃える', '分ける', '速くする', '見直す', '軽くする'], OBJ = ['入力欄', 'ステータスライン', 'ログ', '表の並べ替え', 'トークン', 'ツリー', 'ダイアログ', 'グラフの目盛り', 'リスト', 'タグ入力'], WHO = ['aki', 'mika', 'ren', 'bot'];
+  const h32 = i => { let x = (i + 1) * 2654435761 >>> 0; x ^= x >>> 15; x = Math.imul(x, 2246822519) >>> 0; x ^= x >>> 13; return x >>> 0 };
+  const rowData = i => { const h = h32(i); return [h.toString(16).padStart(8, '0').slice(0, 7), WHO[h % 4], `${OBJ[(h >>> 3) % 10]}を${VERBS[(h >>> 7) % 8]}`, i < 24 ? `${i + 1}時間前` : `${Math.floor(i / 24)}日前`] };
+  let act = 0;
+  vl.setAttribute('role', 'listbox');
+  const v = virt(vl, {
+    H, parent: $('#vlSp'), id: 'vl-',
+    make: () => { const r = document.createElement('div'); r.className = 'vl-row'; r.setAttribute('role', 'option'); r.innerHTML = '<span class="mk"></span><span class="h"></span><span class="a"></span><span class="m"></span><span class="d"></span>'; return r },
+    fill: (r, i) => { const [h, a, m, d] = rowData(i), c = r.children; c[1].textContent = h; c[2].textContent = a; c[3].textContent = m; c[4].textContent = d },
+    mark: (r, i) => { const on = i === act; if (r.classList.contains('on') !== on) { r.classList.toggle('on', on); r.firstChild.textContent = on ? '>' : '' } },
+  });
+  v.set(N);
+  const info = () => { $('#vlInfo').textContent = `${act + 1}/${N.toLocaleString()} · 描いている行 ${v.count}` };
+  const go = i => { const p = act; act = Math.max(0, Math.min(N - 1, i)); v.mark(p); v.to(act); v.active(act); info() };
+  let lastG = 0;
+  vl.addEventListener('keydown', e => {
+    const page = Math.floor(vl.clientHeight / H);
+    if (e.key === 'j' || e.key === 'ArrowDown') { e.preventDefault(); go(act + 1) }
+    else if (e.key === 'k' || e.key === 'ArrowUp') { e.preventDefault(); go(act - 1) }
+    else if (e.key === 'PageDown') { e.preventDefault(); go(act + page) }
+    else if (e.key === 'PageUp') { e.preventDefault(); go(act - page) }
+    else if (e.key === 'G') { go(N - 1); sl.msg('末尾へ') }
+    else if (e.key === 'g') { const now = performance.now(); if (now - lastG < 500) { go(0); sl.msg('先頭へ') } lastG = now }
+    else if (e.key === 'Enter') { const [h, , m] = rowData(act); sl.msg(`${h} ${m}`) }
+  });
+  vl.addEventListener('click', e => { const i = v.index(e.target.closest('.vl-row')); if (i >= 0) { go(i); vl.focus() } });
+  v.active(act); info();
+})();
+</script>
+</body>
+</html>

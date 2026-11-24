@@ -6,7 +6,7 @@ A UI and UX design system for the tools engineers use every day. It keeps the fe
 
 ![Site](docs/img/site.png)
 
-> Status: 0.1.0. The docs and skills are written in Japanese first. Agents read them fine; this page is the English entry point.
+> Status: 0.2.0. The docs and skills are written in Japanese first. Agents read them fine; this page is the English entry point.
 
 ## Idea
 
@@ -38,7 +38,7 @@ Other agents (Codex, Cursor, and others that read [Agent Skills](https://agentsk
 npx skills add k-aoshima/kodou-ui
 ```
 
-Or copy `skills/kodou-ui-build` and `skills/kodou-ui-review` into your agent's skills folder. Install both; the build skill uses the review scripts.
+Or copy `skills/kodou-ui-build` and `skills/kodou-ui-review` into your agent's skills folder. Install both; the build skill uses the review scripts. The skills carry the components themselves: one HTML file per component (markup, CSS, JS) and 110 pixel icons, extracted from the catalog, so the agent copies working code instead of rewriting it.
 
 ## Use
 

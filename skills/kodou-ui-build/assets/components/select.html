@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kodou-ui セレクト</title>
+<!-- Kodou-ui の部品の見本: セレクト（select）。tools/build-assets.py が見本帳から書き出す（手で直さない）。
+     決まりは references/components.md の「セレクト」。作るときは、下の HTML と、最後の <script> の中の JS をそのまま写して使う。
+     共通の CSS と関数は ../tokens.css ・ ../kodou.css ・ ../virt.js ・ ../ledbar.js ・ ../kodou.js ・ ../icons.js にある（この順に読む）。 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../kodou.css">
+<style>.kd-page { max-width: 960px; margin: 0 auto; padding: 24px max(16px, env(safe-area-inset-left, 0px)) 80px }</style>
+<body>
+<main class="kd-page">
+<section class="comp" id="c-select" data-grp="入力">
+  <div class="comp-head"><h2>セレクト<span class="en">select</span></h2><span class="tag t4">うまくなる</span></div>
+  <p class="lead">開く・選ぶ・閉じるが全部キーボードでできます。閉じたまま頭の文字を打つと、その項目に切り替わります。</p>
+  <div class="box"><span class="ttl">見本</span><div class="box-in row" style="align-items:flex-start">
+    <div class="field"><span class="lb">比べるブランチ</span>
+      <button class="dd-btn" id="selBtn" data-key="Space" popovertarget="selPop" aria-haspopup="listbox" aria-expanded="false"><span class="v">main</span><span class="car">▾</span></button>
+      <div class="pop" id="selPop" popover role="listbox" aria-label="比べるブランチ"></div></div>
+    <div class="field"><span class="lb">無効</span><button class="dd-btn" disabled><span>main</span><span class="car">▾</span></button></div>
+  </div><div class="keys"><span><kbd>Space</kbd>開く</span><span><kbd>↑↓</kbd>選ぶ</span><span><kbd>⏎</kbd>決める</span><span><kbd>Esc</kbd>閉じる</span><span><kbd>a-z</kbd>頭の文字へ</span></div></div>
+</section>
+</main>
+<div class="statusline" role="status" aria-live="off"><span class="sl-mode pl">NORMAL</span><span class="sl-msg" id="slMsg">セレクト</span></div>
+<script src="../virt.js"></script>
+<script src="../ledbar.js"></script>
+<script src="../kodou.js"></script>
+<script src="../icons.js"></script>
+<script>
+/* セレクト（popover。開閉と Esc・外をクリックで閉じるのはブラウザ任せ）。候補は見えている分だけ描く（ブランチが何百本でも同じ） */
+(() => {
+  const items = ['main', 'develop', 'feat/key-cast', 'fix/log-follow', 'release/1.5', 'spike/agent-steer'];
+  const btn = $('#selBtn'), pop = $('#selPop'); let val = 0, act = 0;
+  const v = virt(pop, {
+    H: 24, id: 'sel-', owner: btn,
+    make: () => { const o = document.createElement('div'); o.className = 'opt-ln'; o.setAttribute('role', 'option'); o.innerHTML = '<span class="mk"></span><span></span><span class="mt"></span>'; return o },
+    fill: (o, i) => { o.children[1].textContent = items[i]; o.children[2].textContent = i === 0 ? '既定' : ''; o.setAttribute('aria-posinset', i + 1); o.setAttribute('aria-setsize', items.length) },
+    mark: (o, i) => { o.classList.toggle('on', i === act); o.firstChild.textContent = i === val ? '✓' : ''; o.setAttribute('aria-selected', i === val) },
+  });
+  v.set(items.length);
+  const setAct = i => { const p = act; act = i; v.mark(p); v.to(act); v.active(act) };
+  const pick = i => { val = i; btn.querySelector('.v').textContent = items[i]; if (pop.matches(':popover-open')) pop.hidePopover(); btn.focus(); sl.msg(`比べるブランチ: ${items[i]}`) };
+  pop.addEventListener('toggle', e => { const open = e.newState === 'open'; btn.setAttribute('aria-expanded', open); if (open) { act = val; place(pop, btn); v.to(act); v.active(act) } else v.active(-1) });
+  btn.addEventListener('keydown', e => {
+    const open = pop.matches(':popover-open');
+    if (!open) {
+      if (e.key === 'ArrowDown') { e.preventDefault(); pop.showPopover() }
+      else if (e.key.length === 1 && e.key !== ' ') { const j = items.findIndex(it => it.startsWith(e.key.toLowerCase())); if (j >= 0) { val = j; btn.querySelector('.v').textContent = items[j]; sl.msg(`「${e.key}」で ${items[j]} に切り替えました`) } }
+      return;
+    }
+    if (e.key === 'ArrowDown') { e.preventDefault(); setAct((act + 1) % items.length) }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); setAct((act - 1 + items.length) % items.length) }
+    else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(act) }
+    else if (e.key.length === 1) { const j = items.findIndex(it => it.startsWith(e.key.toLowerCase())); if (j >= 0) setAct(j) }
+  });
+  pop.addEventListener('click', e => { const i = v.index(e.target.closest('.opt-ln')); if (i >= 0) pick(i) });
+})();
+</script>
+</body>
+</html>

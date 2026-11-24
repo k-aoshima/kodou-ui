@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kodou-ui ツリー</title>
+<!-- Kodou-ui の部品の見本: ツリー（tree）。tools/build-assets.py が見本帳から書き出す（手で直さない）。
+     決まりは references/components.md の「ツリー」。作るときは、下の HTML と、最後の <script> の中の JS をそのまま写して使う。
+     共通の CSS と関数は ../tokens.css ・ ../kodou.css ・ ../virt.js ・ ../ledbar.js ・ ../kodou.js ・ ../icons.js にある（この順に読む）。 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../kodou.css">
+<style>.kd-page { max-width: 960px; margin: 0 auto; padding: 24px max(16px, env(safe-area-inset-left, 0px)) 80px }</style>
+<body>
+<main class="kd-page">
+<section class="comp" id="c-tree" data-grp="表示">
+  <div class="comp-head"><h2>ツリー<span class="en">tree</span></h2><span class="tag t2">中が見える</span></div>
+  <p class="lead">罫線でつながりを見せ、変更のあるファイルには印を付けます。<kbd>←</kbd><kbd>→</kbd> で開閉します。</p>
+  <div class="box"><span class="ttl">~/kodou-ui</span><span class="ttl-r"><span class="c-yellow">M</span> 変更 <span class="c-green">A</span> 追加</span><div class="tree" id="tree" data-key="↑↓ ←→" tabindex="0" aria-label="ファイルのツリー"></div>
+    <div class="keys"><span><kbd>↑↓</kbd>移動</span><span><kbd>←→</kbd>閉じる・開く</span><span><kbd>⏎</kbd>開く</span></div></div>
+</section>
+</main>
+<div class="statusline" role="status" aria-live="off"><span class="sl-mode pl">NORMAL</span><span class="sl-msg" id="slMsg">ツリー</span></div>
+<script src="../virt.js"></script>
+<script src="../ledbar.js"></script>
+<script src="../kodou.js"></script>
+<script src="../icons.js"></script>
+<script>
+/* ツリー: 開いている分を平らな並びにし、見えている行だけ描く。開閉のときだけ並びを作り直す */
+(() => {
+  const TREE = { name: 'kodou-ui', open: true, kids: [
+    { name: 'catalog', open: true, kids: [{ name: 'index.html', st: 'M', mt: '70K' }, { name: 'scenes.html', st: 'A', mt: '48K' }] },
+    { name: 'docs', open: false, kids: [{ name: 'principles.md', st: 'M', mt: '3.1K' }, { name: 'patterns', open: false, kids: [{ name: 'confirm.md', mt: '1.2K' }] }] },
+    { name: 'packages', open: false, kids: [{ name: 'tokens', open: false, kids: [{ name: 'ansi.css', st: 'A', mt: '0.8K' }] }] },
+    { name: 'README.md', mt: '1.9K' },
+  ] };
+  const el = $('#tree'); let flat = [], act = 1;
+  const flatten = (n, depth, g, last, out) => { out.push({ n, depth, guide: depth ? g + (last ? '└─' : '├─') : '' }); if (n.kids && n.open) n.kids.forEach((k, i) => flatten(k, depth + 1, depth ? g + (last ? '  ' : '│ ') : '', i === n.kids.length - 1, out)); return out };
+  el.setAttribute('role', 'tree');
+  const v = virt(el, {
+    H: 24, id: 'tree-',
+    make: () => { const r = document.createElement('div'); r.className = 'tn'; r.setAttribute('role', 'treeitem'); return r },
+    fill: (r, i) => { const x = flat[i], d = !!x.n.kids, cls = x.n.st === 'M' ? 'mod' : x.n.st === 'A' ? 'new' : ''; r.innerHTML = `<span class="guide">${x.guide}</span><span class="tw">${d ? (x.n.open ? '▾' : '▸') : ''}</span>${px(d ? (x.n.open ? 'open' : 'folder') : 'file')}<span class="${cls}">${esc(x.n.name)}${d ? '/' : ''}</span>${x.n.st ? `<span class="${cls}">${x.n.st}</span>` : ''}<span class="mt">${x.n.mt || (d ? x.n.kids.length + ' 件' : '')}</span>`; if (d) r.setAttribute('aria-expanded', x.n.open); else r.removeAttribute('aria-expanded'); r.setAttribute('aria-level', x.depth + 1) },
+    mark: (r, i) => r.classList.toggle('on', i === act),
+  });
+  function build() { flat = flatten(TREE, 0, '', true, []); act = Math.min(act, flat.length - 1); v.set(flat.length); v.active(act) }
+  const setAct = i => { const p = act; act = Math.max(0, Math.min(flat.length - 1, i)); v.mark(p); v.to(act); v.active(act) };
+  el.addEventListener('click', e => { const i = v.index(e.target.closest('.tn')); if (i < 0) return; act = i; const n = flat[act].n; if (n.kids) { n.open = !n.open; build() } else { setAct(act); sl.msg(`開いた: ${n.name}`) } el.focus() });
+  el.addEventListener('keydown', e => {
+    const n = flat[act].n;
+    if (e.key === 'ArrowDown' || e.key === 'j') { e.preventDefault(); setAct(act + 1) }
+    else if (e.key === 'ArrowUp' || e.key === 'k') { e.preventDefault(); setAct(act - 1) }
+    else if (e.key === 'ArrowRight' || e.key === 'l') { if (n.kids && !n.open) { n.open = true; build() } }
+    else if (e.key === 'ArrowLeft' || e.key === 'h') { if (n.kids && n.open) { n.open = false; build() } else { const d = flat[act].depth; for (let i = act - 1; i >= 0; i--) if (flat[i].depth < d) { setAct(i); break } } }
+    else if (e.key === 'Enter') { if (n.kids) { n.open = !n.open; build() } else sl.msg(`開いた: ${n.name}`) }
+  });
+  build();
+})();
+</script>
+</body>
+</html>

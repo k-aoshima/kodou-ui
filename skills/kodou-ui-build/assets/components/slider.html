@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kodou-ui スライダー</title>
+<!-- Kodou-ui の部品の見本: スライダー（slider）。tools/build-assets.py が見本帳から書き出す（手で直さない）。
+     決まりは references/components.md の「スライダー」。作るときは、下の HTML と、最後の <script> の中の JS をそのまま写して使う。
+     共通の CSS と関数は ../tokens.css ・ ../kodou.css ・ ../virt.js ・ ../ledbar.js ・ ../kodou.js ・ ../icons.js にある（この順に読む）。 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../kodou.css">
+<style>.kd-page { max-width: 960px; margin: 0 auto; padding: 24px max(16px, env(safe-area-inset-left, 0px)) 80px }</style>
+<body>
+<main class="kd-page">
+<section class="comp" id="c-slider" data-grp="入力">
+  <div class="comp-head"><h2>スライダー<span class="en">slider</span></h2><span class="tag t1">手応え</span></div>
+  <p class="lead">LED のようなドット絵の目盛りで量を見せ、つまみはつかんで動かせます（カーソルはつかむ形）。動かすと同時に値と、それで何が変わるかを出します。</p>
+  <div class="box"><span class="ttl">見本</span><div class="box-in grid2" style="gap:14px 16px">
+    <div class="field"><span class="lb">メモリの上限</span>
+      <div class="slider"><div class="sl"><div class="sl-rail" id="sldRail" data-key="←→ Home End"><input type="range" id="sldIn" min="1" max="16" value="6" aria-label="メモリの上限"></div><b class="sl-v" id="sldV"></b></div><div class="sl-ticks"><span style="left:6px">1G</span><span style="left:66px">6G</span><span style="left:126px">11G</span><span style="left:186px">16G</span></div></div>
+      <div class="help" id="sldHelp"></div></div>
+    <div class="field"><span class="lb">無効</span>
+      <div class="slider"><div class="sl"><div class="sl-rail dis" id="sldRailDis"><input type="range" min="1" max="16" value="9" disabled aria-label="無効のスライダー"></div><b class="sl-v faint">9G</b></div></div>
+      <div class="help">ほかの設定で決まっているため変えられません</div></div>
+  </div></div>
+</section>
+</main>
+<div class="statusline" role="status" aria-live="off"><span class="sl-mode pl">NORMAL</span><span class="sl-msg" id="slMsg">スライダー</span></div>
+<script src="../virt.js"></script>
+<script src="../ledbar.js"></script>
+<script src="../kodou.js"></script>
+<script src="../icons.js"></script>
+<script>
+/* スライダー */
+
+/* 溝: 埋まった所は 8px の四角を 4px あけて並べ（LED の目盛り）、空いた所は細い線。つまみの中心は input のつまみの中心と同じ 6 + 12i px */
+function drawRail(rail, v, min, max) {
+  const steps = max - min, i = v - min, pitch = 180 / steps; let d = '';
+  for (let k = 0; k < i; k++) { const x = Math.round(6 + k * pitch) - 4; d += `M${x} 8h8v8h-8z` }
+  const x0 = Math.round(6 + i * pitch) + 8;
+  let svg = rail.querySelector('svg.rail');
+  if (!svg) { rail.insertAdjacentHTML('afterbegin', `<svg class="rail" width="192" height="24" viewBox="0 0 192 24" aria-hidden="true"><path class="on" fill="var(--accent)"/><rect class="off" y="11" height="2" fill="var(--ui)"/></svg><span class="knob" aria-hidden="true">${px('knob')}</span>`); svg = rail.querySelector('svg.rail') }
+  svg.querySelector('.on').setAttribute('d', d);
+  const off = svg.querySelector('.off'); off.setAttribute('x', Math.min(192, x0)); off.setAttribute('width', Math.max(0, 192 - x0));
+  rail.querySelector('.knob').style.transform = `translateX(${Math.round(i * pitch)}px)`;
+}
+drawRail($('#sldRailDis'), 9, 1, 16);
+function renderSlider() {
+  const v = +$('#sldIn').value;
+  drawRail($('#sldRail'), v, 1, 16); $('#sldV').textContent = `${v}G`;
+  const models = v >= 12 ? '27B まで' : v >= 7 ? '12B まで' : v >= 4 ? '4B まで' : '小さいモデルだけ';
+  $('#sldHelp').innerHTML = `上限 <b>${v}G</b>。読み込めるローカルモデルの目安は ${models}${v > 12 ? '。<span class="c-yellow">16G の Mac では、ほかのアプリが窮屈になります</span>' : ''}`;
+}
+$('#sldIn').addEventListener('input', () => frame('sld', () => { renderSlider(); sl.msg(`メモリの上限: ${$('#sldIn').value}G`) })); renderSlider();
+</script>
+</body>
+</html>

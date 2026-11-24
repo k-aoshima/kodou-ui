@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kodou-ui ボタン</title>
+<!-- Kodou-ui の部品の見本: ボタン（button）。tools/build-assets.py が見本帳から書き出す（手で直さない）。
+     決まりは references/components.md の「ボタン」。作るときは、下の HTML と、最後の <script> の中の JS をそのまま写して使う。
+     共通の CSS と関数は ../tokens.css ・ ../kodou.css ・ ../virt.js ・ ../ledbar.js ・ ../kodou.js ・ ../icons.js にある（この順に読む）。 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../kodou.css">
+<style>.kd-page { max-width: 960px; margin: 0 auto; padding: 24px max(16px, env(safe-area-inset-left, 0px)) 80px }</style>
+<body>
+<main class="kd-page">
+<section class="comp" id="c-button" data-grp="操作">
+  <div class="comp-head"><h2>ボタン<span class="en">button</span></h2><span class="tag t1">手応え</span></div>
+  <p class="lead">押すと起きることを、そのまま名前にします。枠のあるボタンには角かっこを付けません。ホバーではボタン自身の色を濃くします。アイコンには必ず文字を添えます。時間がかかる操作は、1秒を超えたら何件目かを出し、終わったら結果を出します。</p>
+  <div class="box"><span class="ttl">種類</span><div class="box-in row">
+    <button class="btn primary">マージする <kbd>⌘⏎</kbd></button>
+    <button class="btn">ブランチを切る</button>
+    <button class="btn ghost">閉じる <kbd>Esc</kbd></button>
+    <button class="btn danger">削除する</button>
+    <button class="btn"><span data-px="copy"></span>コピー</button>
+  </div></div>
+  <div class="box"><span class="ttl">文中の操作</span><div class="box-in read" style="font-size:14px;line-height:1.8">枠の無い1行の中の操作だけ、角かっこで示します。<code>fix/log-follow</code> を削除しました。 <button class="btn link" data-key="u"><span class="t">取り消し</span></button></div></div>
+  <div class="box"><span class="ttl">大きさ</span><div class="box-in row">
+    <button class="btn sm">小 sm</button><button class="btn">中 md</button><button class="btn lg">大 lg</button>
+  </div></div>
+  <div class="box"><span class="ttl">状態</span><div class="box-in states">
+    <div class="state-cell"><span class="lb">通常</span><span><button class="btn">保存する</button></span></div>
+    <div class="state-cell"><span class="lb">ホバー</span><span><button class="btn is-hover">保存する</button></span></div>
+    <div class="state-cell"><span class="lb">フォーカス</span><span><button class="btn is-focus">保存する</button></span></div>
+    <div class="state-cell"><span class="lb">無効</span><span><button class="btn" disabled>保存する</button></span></div>
+    <div class="state-cell" style="grid-column:span 2"><span class="lb">処理中（押して試す）</span><span><button class="btn primary" id="btnLoad" data-key="⏎">5件を保存する</button></span><span class="out" id="btnLoadOut"></span></div>
+  </div></div>
+</section>
+</main>
+<div class="statusline" role="status" aria-live="off"><span class="sl-mode pl">NORMAL</span><span class="sl-msg" id="slMsg">ボタン</span></div>
+<script src="../virt.js"></script>
+<script src="../ledbar.js"></script>
+<script src="../kodou.js"></script>
+<script src="../icons.js"></script>
+<script>
+/* ボタン: 処理中 */
+$('#btnLoad').addEventListener('click', e => {
+  const b = e.currentTarget; if (b.dataset.busy) return; b.dataset.busy = 1;
+  let f = 0; const t0 = performance.now(); $('#btnLoadOut').textContent = ''; sl.msg('保存を始めました');
+  const step = () => {
+    f++; const i = Math.floor(f / 6);
+    if (i >= 5) { delete b.dataset.busy; b.textContent = '5件を保存する'; $('#btnLoadOut').innerHTML = `<span class="ok">✓ 5件を保存しました（${((performance.now() - t0) / 1000).toFixed(1)}秒）</span>`; sl.msg('5件を保存しました'); return }
+    const late = performance.now() - t0 > 1000;
+    b.textContent = late ? `${SP[f % 10]} 保存中 ${i}/5` : `保存中 ${i}/5`; setTimeout(() => requestAnimationFrame(step), 70);
+  };
+  step();
+});
+</script>
+</body>
+</html>

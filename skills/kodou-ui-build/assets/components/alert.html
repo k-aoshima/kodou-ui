@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kodou-ui 通知の帯</title>
+<!-- Kodou-ui の部品の見本: 通知の帯（alert）。tools/build-assets.py が見本帳から書き出す（手で直さない）。
+     決まりは references/components.md の「通知の帯」。作るときは、下の HTML と、最後の <script> の中の JS をそのまま写して使う。
+     共通の CSS と関数は ../tokens.css ・ ../kodou.css ・ ../virt.js ・ ../ledbar.js ・ ../kodou.js ・ ../icons.js にある（この順に読む）。 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../kodou.css">
+<style>.kd-page { max-width: 960px; margin: 0 auto; padding: 24px max(16px, env(safe-area-inset-left, 0px)) 80px }</style>
+<body>
+<main class="kd-page">
+<section class="comp" id="c-alert" data-grp="通知">
+  <div class="comp-head"><h2>通知の帯<span class="en">alert</span></h2><span class="tag t2">中が見える</span></div>
+  <p class="lead">何が起きたかと、どう直すかを文で書きます。エラーコードや生のログは消さずに、折りたたんで残します。種類は色だけでなく <code>[FAIL]</code> のような文字でも示します。</p>
+  <div id="alerts">
+    <div class="alert info"><span class="hd">[INFO]</span><div class="bd">新しい版 1.5.0 があります。変更点を確かめてから更新できます。</div><button class="x" aria-label="閉じる">×</button></div>
+    <div class="alert ok"><span class="hd">[ OK ]</span><div class="bd">12件のテストがすべて通りました（4.1秒）。</div><button class="x" aria-label="閉じる">×</button></div>
+    <div class="alert warn"><span class="hd">[WARN]</span><div class="bd">未コミットの変更が3ファイルあります。このまま切り替えると、変更は持ち越されます。<div class="acts row"><button class="btn sm">変更を見る</button><button class="btn sm">退避して切り替える</button></div></div><button class="x" aria-label="閉じる">×</button></div>
+    <div class="alert err"><span class="hd">[FAIL]</span><div class="bd">ビルドに失敗しました。<code>src/ui/Chip.tsx</code> の12行目で、<code>label</code> に数値を渡しています。文字列に直すか、<code>String(n)</code> で包むと通ります。<div class="acts row"><button class="btn sm">場所を開く</button><button class="btn sm">もう一度ビルドする</button></div>
+      <details><summary>エラーの詳細（TS2322）</summary><pre>src/ui/Chip.tsx:12:7 - error TS2322: Type 'number' is not assignable to type 'string'.
+
+12   label={count}
+           ~~~~~</pre></details></div><button class="x" aria-label="閉じる">×</button></div>
+  </div>
+</section>
+</main>
+<div class="statusline" role="status" aria-live="off"><span class="sl-mode pl">NORMAL</span><span class="sl-msg" id="slMsg">通知の帯</span></div>
+<script src="../virt.js"></script>
+<script src="../ledbar.js"></script>
+<script src="../kodou.js"></script>
+<script src="../icons.js"></script>
+<script>
+/* 通知の帯 */
+$('#alerts').addEventListener('click', e => { const x = e.target.closest('.x'); if (x) { x.parentElement.remove(); sl.msg('通知を閉じました') } });
+</script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kodou-ui テキストエリア</title>
+<!-- Kodou-ui の部品の見本: テキストエリア（textarea）。tools/build-assets.py が見本帳から書き出す（手で直さない）。
+     決まりは references/components.md の「テキストエリア」。作るときは、下の HTML と、最後の <script> の中の JS をそのまま写して使う。
+     共通の CSS と関数は ../tokens.css ・ ../kodou.css ・ ../virt.js ・ ../ledbar.js ・ ../kodou.js ・ ../icons.js にある（この順に読む）。 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../kodou.css">
+<style>.kd-page { max-width: 960px; margin: 0 auto; padding: 24px max(16px, env(safe-area-inset-left, 0px)) 80px }</style>
+<body>
+<main class="kd-page">
+<section class="comp" id="c-textarea" data-grp="入力">
+  <div class="comp-head"><h2>テキストエリア<span class="en">textarea</span></h2><span class="tag t2">中が見える</span></div>
+  <p class="lead">行番号を付け、決まりがある行（1行目は50字まで、など）は守れていない行の番号に <b>!</b> を付けて色も変えます。</p>
+  <div class="box"><span class="ttl">コミットメッセージ</span><div class="box-in field">
+    <div class="inp"><div class="ta-wrap"><div class="ta-gutter" id="taG" aria-hidden="true"></div><textarea id="ta" rows="5" spellcheck="false" aria-label="コミットメッセージ">ステータスラインに押したキーを出す
+
+モードの横に、いま押したキーを流して見せる。
+入力欄の中では出さず、モードを INSERT にする。</textarea></div></div>
+    <div class="help" id="taHelp"></div>
+  </div></div>
+</section>
+</main>
+<div class="statusline" role="status" aria-live="off"><span class="sl-mode pl">NORMAL</span><span class="sl-msg" id="slMsg">テキストエリア</span></div>
+<script src="../virt.js"></script>
+<script src="../ledbar.js"></script>
+<script src="../kodou.js"></script>
+<script src="../icons.js"></script>
+<script>
+/* テキストエリア: 行数が変わったときだけ行番号を作り直す */
+let taLines = -1;
+function renderTa() {
+  const ls = $('#ta').value.split('\n'); const f = ls[0].length;
+  const bad1 = f > 50, bad2 = ls.length > 1 && !!ls[1];
+  const key = ls.length + ':' + bad1 + bad2;
+  if (key !== taLines) { taLines = key; $('#taG').innerHTML = ls.map((l, i) => ((i === 0 && bad1) || (i === 1 && bad2)) ? `<span class="w">!${i + 1}</span>` : `<span>${i + 1}</span>`).join('\n') }
+  const h = $('#taHelp');
+  if (bad1) { h.className = 'help err'; h.innerHTML = `1行目が ${f}字です。50字までにすると一覧で切れません<span class="cnt">${f}/50</span>` }
+  else if (bad2) { h.className = 'help err'; h.textContent = '2行目は空けてください。1行目が件名として扱われます' }
+  else { h.className = 'help'; h.innerHTML = `1行目は件名で50字まで、2行目は空けます<span class="cnt">${f}/50</span>` }
+}
+$('#ta').addEventListener('input', () => frame('ta', renderTa));
+$('#ta').addEventListener('scroll', e => { $('#taG').scrollTop = e.target.scrollTop }, { passive: true });
+renderTa();
+</script>
+</body>
+</html>

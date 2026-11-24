@@ -1,6 +1,6 @@
 # アイコン
 
-Kodou-ui のアイコンは、`#`（塗る）と `.`（空ける）を並べたマス目のデータで描く。ブラウザはこのデータから、マスを行ごとにまとめた1本の SVG の path を作る。見本は `catalog/icons.html` と、見本帳 `catalog/index.html` の `PX`・`PX12`。
+Kodou-ui のアイコンは、`#`（塗る）と `.`（空ける）を並べたマス目のデータで描く。ブラウザはこのデータから、マスを行ごとにまとめた1本の SVG の path を作る。データと描く関数は `assets/icons.js` にあり、`px('gear')` で SVG の文字列を返す。HTML に `<span data-px="gear"></span>` と書いても入る。見本は Kodou-ui のリポジトリの `catalog/icons.html`。
 
 ## 画像生成を使わない理由
 
@@ -27,15 +27,15 @@ Kodou-ui のアイコンは、`#`（塗る）と `.`（空ける）を並べた�
 
 ## 今あるアイコン
 
-12×12（`PX12`、107個）: file（ファイル）、folder（フォルダ）、open（開いたフォルダ）、branch（ブランチ）、pr（プルリクエスト）、term（端末）、copy（コピー）、bell（通知）、gear（設定）、trash（削除）、alert（注意）、box（空の箱）、pkg（パッケージ）、search（検索）、check（完了）、error（エラー）、play（実行）、clock（時間）、bolt（速さ）
+12×12（`PX12`、110 個）: file（ファイル）、folder（フォルダ）、open（開いたフォルダ）、branch（ブランチ）、pr（プルリクエスト）、term（端末）、copy（コピー）、bell（通知）、gear（設定）、trash（削除）、alert（注意）、box（空の箱）、pkg（パッケージ）、search（検索）、check（完了）、error（エラー）、play（実行）、clock（時間）、bolt（速さ）
 
-Mac アプリの SF Symbols を置き換えるために足した 91 個: ring、dot、checkc、info、excl、stopc、pausec、ellc、dashed、half、filterc、x、chevR、chevL、chevD、chevU、stop、pause、plus、minus、power、chip、bubble、bubblel、bubblex、bubbleq、dashring、moon、zoomin、zoomout、refresh、ccw、undo、viewfinder、sidebar、sidebarR、photo、gauge、ellipsis、eject、collapse、expand、tray、trayfull、pulse、align、layers、sparkle、shield、shieldx、scale、globe、target、location、person、pencil、palette、pad、window、split、stack、grid、list、link、phone、hourglass、code、chart、trend、cal、bellbadge、external、arrowR、arrowU、arrowL、updown、return、swap、square、building、book、cursor、keyboard、hand、hare、tortoise、lock、wave、eraser、text、send。SF Symbols を置き換えるときは、記号の名前からこの一覧の名前への対応表を持ち、".fill" の付く記号は同じ形で内側を塗る（tone）。
+よく使う記号として足した 91 個: ring、dot、checkc、info、excl、stopc、pausec、ellc、dashed、half、filterc、x、chevR、chevL、chevD、chevU、stop、pause、plus、minus、power、chip、bubble、bubblel、bubblex、bubbleq、dashring、moon、zoomin、zoomout、refresh、ccw、undo、viewfinder、sidebar、sidebarR、photo、gauge、ellipsis、eject、collapse、expand、tray、trayfull、pulse、align、layers、sparkle、shield、shieldx、scale、globe、target、location、person、pencil、palette、pad、window、split、stack、grid、list、link、phone、hourglass、code、chart、trend、cal、bellbadge、external、arrowR、arrowU、arrowL、updown、return、swap、square、building、book、cursor、keyboard、hand、hare、tortoise、lock、wave、eraser、text、send。SF Symbols を置き換えるときは、記号の名前からこの一覧の名前への対応表を持ち、".fill" の付く記号は同じ形で内側を塗る（tone）。
 
 8×8（`PX`）: file、folder、open、branch、pr、term、copy、bell、gear、trash、alert、box、pkg、heart（ロゴと動いている印）、knob（スライダーのつまみ、6×12）
 
 ## 新しいアイコンの足し方
 
-1. 12×12 のマス目を書く。既存のアイコンと並べたときの線の太さと密度をそろえる。
+1. 12×12 のマス目を書く。既存のアイコンと並べたときの線の太さと密度をそろえる。プロジェクトに写した `icons.js` の `PX12` に足す（Kodou-ui のリポジトリでは、見本帳 `catalog/index.html` の `PX12` に足して `python3 tools/build-assets.py` を回す）。
    ```js
    gear: ['.....##.....', '..##.##.##..', '..########..', /* …12行 */ ],
    ```
@@ -48,6 +48,6 @@ Mac アプリの SF Symbols を置き換えるために足した 91 個: ring、
    python3 <kodou-ui-review>/scripts/icon.py my-icons.txt --out build/icons --tone   # SVG を書き出す
    ```
    大きさが合わないものは問題として、中心のずれと孤立したマス（斜めも含めて周りに `#` が無いマス）は注意として出る。
-4. ほかのアイコンと並べて、18px と 24px で見る。`catalog/icons.html` の「部品の中に置く」で、ボタン・一覧・状態の表示に置いた見え方も確かめる。
+4. ほかのアイコンと並べて、18px と 24px で見る。ボタン・一覧・状態の表示にも置いて見え方を確かめる。
 
 2026-11-23 時点の点検では、copy・play・bolt の3個が左右の中心のずれ（空きの差が2マス）として注意に出る。

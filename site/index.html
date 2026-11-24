@@ -299,6 +299,7 @@ svg.px { flex: none; fill: currentColor; shape-rendering: crispEdges }
 .sh { position: relative; background: var(--sel-bg); color: var(--sel-fg); padding: 16px 18px; font: 13px/1.9 var(--font); overflow-x: auto }
 .sh div { white-space: pre } .sh .p { color: #7FD3B0 }
 .copy { position: absolute; top: 10px; right: 10px; border: 1px solid currentColor; background: var(--sel-bg); color: var(--sel-fg); font: 12px var(--font); padding: 2px 10px; min-height: 28px; cursor: pointer }
+@media (max-width: 680px) { .copy { position: static; margin-top: 10px } }
 .band p { margin: 16px 0 0; color: var(--dim); max-width: 38em }
 footer { border-top: 1px solid var(--rule); font: 12.5px var(--font); color: var(--faint) }
 footer .wrap { display: flex; flex-wrap: wrap; gap: 4px 2ch; padding-block: 16px }
@@ -324,10 +325,10 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 4px 2ch; padding-block: 16px
     <p class="lead">指がキーを打つ実感。覚えたコマンドが手になじむ感覚。使いこむほど速くなる気持ちよさ。<b>CUI のあの楽しさを今のツールの画面に持ちこむ</b>ための部品とスキルです。</p>
     <div class="get" id="get">
       <div class="sh" id="sh">
-<div><span class="p">$</span> <span class="cp">git clone https://github.com/k-aoshima/kodou-ui.git</span></div>
-<div><span class="p">$</span> <span class="cp">cp -R kodou-ui/skills/kodou-ui-build kodou-ui/skills/kodou-ui-review ~/.claude/skills/</span></div>
+<div><span class="p">&gt;</span> <span class="cp">/plugin marketplace add k-aoshima/kodou-ui</span></div>
+<div><span class="p">&gt;</span> <span class="cp">/plugin install kodou-ui@kodou-ui</span></div>
 <button class="copy" id="copy" type="button">コピー</button></div>
-      <p>Claude Code に「Kodou-ui で作って」と頼むと、部品と決まりに沿って画面を作ります。「Kodou-ui で点検して」と頼むと、打っている実感やキーの覚えやすさを確かめて直し方まで指摘します。</p>
+      <p>Claude Code の中で打つと、作るスキルと点検するスキルが入ります。Codex や Cursor などでは <code>npx skills add k-aoshima/kodou-ui</code> で入れます。そのあと「Kodou-ui で作って」と頼むと部品と決まりに沿って画面を作り、「Kodou-ui で点検して」と頼むと打っている実感やキーの覚えやすさを確かめて直し方まで指摘します。</p>
     </div>
 
     <div class="three">
@@ -499,7 +500,7 @@ to type 'string'.</pre></details></div></div>
 
   <section class="band ux" id="ux">
     <h2><span class="ph">使い心地も</span><span class="ph">エージェントに渡す。</span></h2>
-    <p class="lead2">部品を配るだけだと、確認だらけの画面や待たされても理由の分からない画面も組めてしまいます。Kodou-ui はどう使ってもらうかの判断を決まりにし、スキルとしてコーディングエージェントに渡します。決まりはどれも認知や使いやすさの研究を元にしています。</p>
+    <p class="lead2">部品を配るだけだと、確認だらけの画面や待たされても理由の分からない画面も組めてしまいます。Kodou-ui は画面をどう作るかの判断を決まりにし、部品と一緒にスキルとしてコーディングエージェントに渡します。決まりはどれも認知や使いやすさの研究を元にしています。</p>
     <div class="rules">
       <div class="rl"><h3>待ち時間</h3><div><div class="ng2"><span>何にでもスピナーを出す</span></div><div class="ok2"><span>1 秒未満は何も出さない。1〜10 秒はスピナーに中身と件数、10 秒を超えたら進捗バー</span></div></div></div>
       <div class="rl"><h3>確認</h3><div><div class="ng2"><span>削除のたびに「よろしいですか？」</span></div><div class="ok2"><span>取り消せる操作はすぐ実行して取り消しを出す。戻せない操作だけその場の <code>[y/N]</code> で聞く</span></div></div></div>
@@ -524,7 +525,7 @@ to type 'string'.</pre></details></div></div>
 
   <section class="band pxs" id="pixels">
     <h2><span class="ph">アイコンも</span><span class="ph">エージェントが描く。</span></h2>
-    <p class="lead2">画像を生成するのではなく、エージェントが <code>#</code> と <code>.</code> で 12×12 のマス目を書きます。どのアイコンも同じ格子に乗るので、線の太さがそろってにじみません。下のアイコンを押すと大きさごとの見え方が出ます。</p>
+    <p class="lead2">画像生成は使わず、エージェントが <code>#</code> と <code>.</code> で 12×12 のマス目を書きます。どのアイコンも同じ格子に乗るので、線の太さがそろってにじみません。下のアイコンを押すと大きさごとの見え方が出ます。</p>
     <div class="ed">
       <div class="pv">
         <div class="sizes"><span id="pv18"></span><span id="pv36"></span><span id="pv72"></span></div>
@@ -533,7 +534,7 @@ to type 'string'.</pre></details></div></div>
       </div>
     </div>
     <div class="gal" id="gal" aria-label="見本帳のアイコン"></div>
-    <p class="more">見本帳には 110 個あります。足りないものはエージェントが同じ格子で描き足し、点検のスクリプトが大きさと中心のずれを確かめます。</p>
+    <p class="more">スキルには 110 個入っています。足りないものはエージェントが同じ格子で描き足し、点検のスクリプトが大きさと中心のずれを確かめます。</p>
   </section>
 
   <section class="band">

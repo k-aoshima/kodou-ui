@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kodou-ui スピナー</title>
+<!-- Kodou-ui の部品の見本: スピナー（spinner）。tools/build-assets.py が見本帳から書き出す（手で直さない）。
+     決まりは references/components.md の「スピナー」。作るときは、下の HTML と、最後の <script> の中の JS をそのまま写して使う。
+     共通の CSS と関数は ../tokens.css ・ ../kodou.css ・ ../virt.js ・ ../ledbar.js ・ ../kodou.js ・ ../icons.js にある（この順に読む）。 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../kodou.css">
+<style>.kd-page { max-width: 960px; margin: 0 auto; padding: 24px max(16px, env(safe-area-inset-left, 0px)) 80px }</style>
+<body>
+<main class="kd-page">
+<section class="comp" id="c-spinner" data-grp="状態">
+  <div class="comp-head"><h2>スピナー<span class="en">spinner</span></h2><span class="tag t2">中が見える</span></div>
+  <p class="lead">1秒未満で終わる処理にはスピナーを出しません（ちらつくだけのため）。1秒を超えたら、何をしているかと件数か経過時間を添えて出し、10秒を超える処理は件数か割合で進み具合を見せます。</p>
+  <div class="box" id="spinBox"><span class="ttl">見本</span><div class="box-in col sysd">
+    <div><span class="spin" data-spin>⠋</span> 依存を取得中 <span id="spN">38</span>/112</div>
+    <div><span class="spin" data-spin>⠋</span> 接続を待っています <span id="spT">0.0</span>秒（30秒で諦めます）</div>
+  </div></div>
+  <div class="box"><span class="ttl">1秒の決まり（押して試す）</span><div class="box-in col">
+    <div class="row"><button class="btn" id="spQuick">すぐ終わる操作（0.4秒）</button><span class="out" id="spQuickOut"></span></div>
+    <div class="row"><button class="btn" id="spSlow">時間のかかる操作（3秒）</button><span class="out" id="spSlowOut"></span></div>
+  </div></div>
+</section>
+</main>
+<div class="statusline" role="status" aria-live="off"><span class="sl-mode pl">NORMAL</span><span class="sl-msg" id="slMsg">スピナー</span></div>
+<script src="../virt.js"></script>
+<script src="../ledbar.js"></script>
+<script src="../kodou.js"></script>
+<script src="../icons.js"></script>
+<script>
+/* スピナー */
+(() => {
+  let f = 0, n = 38; const t0 = performance.now(); const spins = $$('[data-spin]');
+  every(null, 90, () => {
+    f++; for (const s of spins) if (onScreen.get(s.closest('.box'))) s.textContent = SP[f % 10];
+    if (onScreen.get($('#spinBox'))) { if (f % 4 === 0) { n = n >= 112 ? 38 : n + 1; $('#spN').textContent = n } $('#spT').textContent = (((performance.now() - t0) / 1000) % 30).toFixed(1) }
+  });
+  spins.forEach(s => io.observe(s.closest('.box')));
+})();
+
+/* 1秒の決まり: 1秒を超えたときだけスピナーを出す */
+function runOp(btn, out, ms, label) {
+  if (btn.dataset.busy) return; btn.dataset.busy = 1; const t0 = performance.now(); let f = 0; out.textContent = '';
+  const tick = () => {
+    const el = performance.now() - t0;
+    if (el >= ms) { delete btn.dataset.busy; out.innerHTML = `<span class="ok">✓ ${label}が終わりました（${(el / 1000).toFixed(1)}秒${el < 1000 ? '、スピナーは出していません' : ''}）</span>`; sl.msg(`${label}が終わりました`); return }
+    if (el > 1000) { f++; out.textContent = `${SP[f % 10]} ${label}中  ${(el / 1000).toFixed(1)}秒 / 約${ms / 1000}秒` }
+    setTimeout(() => requestAnimationFrame(tick), 80);
+  };
+  tick();
+}
+$('#spQuick').addEventListener('click', e => runOp(e.currentTarget, $('#spQuickOut'), 400, '読み込み'));
+$('#spSlow').addEventListener('click', e => runOp(e.currentTarget, $('#spSlowOut'), 3000, '書き出し'));
+document.addEventListener('click', e => { const l = e.target.closest('.btn.link'); if (l) sl.msg('削除を取り消しました') });
+</script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kodou-ui スパークライン</title>
+<!-- Kodou-ui の部品の見本: スパークライン（sparkline）。tools/build-assets.py が見本帳から書き出す（手で直さない）。
+     決まりは references/components.md の「スパークライン」。作るときは、下の HTML と、最後の <script> の中の JS をそのまま写して使う。
+     共通の CSS と関数は ../tokens.css ・ ../kodou.css ・ ../virt.js ・ ../ledbar.js ・ ../kodou.js ・ ../icons.js にある（この順に読む）。 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../kodou.css">
+<style>.kd-page { max-width: 960px; margin: 0 auto; padding: 24px max(16px, env(safe-area-inset-left, 0px)) 80px }</style>
+<body>
+<main class="kd-page">
+<section class="comp" id="c-spark" data-grp="グラフ">
+  <div class="comp-head"><h2>スパークライン<span class="en">sparkline</span></h2></div>
+  <p class="lead">文字だけで書く小さな推移です。高さが低く値を比べにくいので、今の値と最大を必ず数字で横に添えます。</p>
+  <div class="box"><span class="ttl">直近24時間</span><div class="box-in" id="sparks"></div></div>
+</section>
+</main>
+<div class="statusline" role="status" aria-live="off"><span class="sl-mode pl">NORMAL</span><span class="sl-msg" id="slMsg">スパークライン</span></div>
+<script src="../virt.js"></script>
+<script src="../ledbar.js"></script>
+<script src="../kodou.js"></script>
+<script src="../icons.js"></script>
+<script>
+/* グラフの共通 */
+const axis = (max, step) => { const t = []; for (let v = 0; v <= max; v += step) t.push(v); return t };
+function tipFor(host) { const t = document.createElement('div'); t.className = 'tip'; t.hidden = true; host.appendChild(t); return t }
+const showTip = (t, x, y, html) => { t.hidden = false; t.innerHTML = html; t.style.transform = `translate(calc(${x}px - 50%), calc(${y}px - 120%))` };
+
+/* スパークライン */
+(() => {
+  const S = [['CPU', [12, 14, 18, 22, 30, 41, 38, 35, 33, 52, 61, 58, 44, 40, 37, 35, 30, 28, 24, 20, 18, 15, 14, 12], '%'], ['メモリ', [9.1, 9.3, 9.2, 9.8, 10.4, 11.2, 11.0, 11.5, 12.1, 12.8, 13.2, 13.6, 13.4, 13.1, 12.9, 13.0, 13.3, 13.5, 13.6, 13.4, 13.2, 13.0, 13.5, 13.6], 'G'], ['リクエスト', [210, 190, 160, 120, 90, 80, 95, 140, 260, 410, 520, 580, 560, 540, 600, 620, 590, 500, 420, 380, 340, 300, 260, 230], '/分'], ['エラー', [0, 0, 1, 0, 0, 0, 2, 0, 0, 5, 9, 3, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0], '件']];
+  $('#sparks').innerHTML = S.map(([l, a, u]) => `<div class="spk-row"><span class="dim">${l}</span><span class="spark" title="最小 ${Math.min(...a)}${u} / 最大 ${Math.max(...a)}${u}">${spark(a)}</span><span>${a[a.length - 1]}${u} <span class="faint">最大 ${Math.max(...a)}</span></span></div>`).join('');
+})();
+</script>
+</body>
+</html>

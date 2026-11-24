@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kodou-ui 折れ線</title>
+<!-- Kodou-ui の部品の見本: 折れ線（line chart）。tools/build-assets.py が見本帳から書き出す（手で直さない）。
+     決まりは references/components.md の「折れ線」。作るときは、下の HTML と、最後の <script> の中の JS をそのまま写して使う。
+     共通の CSS と関数は ../tokens.css ・ ../kodou.css ・ ../virt.js ・ ../ledbar.js ・ ../kodou.js ・ ../icons.js にある（この順に読む）。 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../kodou.css">
+<style>.kd-page { max-width: 960px; margin: 0 auto; padding: 24px max(16px, env(safe-area-inset-left, 0px)) 80px }</style>
+<body>
+<main class="kd-page">
+<section class="comp" id="c-line" data-grp="グラフ">
+  <div class="comp-head"><h2>折れ線<span class="en">line chart</span></h2><span class="tag t2">中が見える</span></div>
+  <p class="lead">系列は色に加えて、線の種類（実線と破線）と点の形（四角とひし形）、線の端の名前でも分けます。グラフの上で動かすと、縦の線とその時刻のすべての値が出ます。</p>
+  <div class="box"><span class="ttl">応答時間 p50 / p95（ms）</span><div class="chart" id="lineChart"></div></div>
+</section>
+</main>
+<div class="statusline" role="status" aria-live="off"><span class="sl-mode pl">NORMAL</span><span class="sl-msg" id="slMsg">折れ線</span></div>
+<script src="../virt.js"></script>
+<script src="../ledbar.js"></script>
+<script src="../kodou.js"></script>
+<script src="../icons.js"></script>
+<script>
+/* グラフの共通 */
+const axis = (max, step) => { const t = []; for (let v = 0; v <= max; v += step) t.push(v); return t };
+function tipFor(host) { const t = document.createElement('div'); t.className = 'tip'; t.hidden = true; host.appendChild(t); return t }
+const showTip = (t, x, y, html) => { t.hidden = false; t.innerHTML = html; t.style.transform = `translate(calc(${x}px - 50%), calc(${y}px - 120%))` };
+
+/* 折れ線 */
+(() => {
+  const HOURS = ['09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'], P50 = [42, 45, 44, 51, 48, 46, 52, 58, 61, 55, 49, 47], P95 = [120, 128, 131, 162, 150, 138, 171, 214, 236, 190, 152, 141];
+  const MAX = 250, ticks = axis(MAX, 50), n = HOURS.length, X = i => i / (n - 1) * 100, Y = v => 100 - v / MAX * 100;
+  const S = [['p50', P50, 'var(--blue)', '', ''], ['p95', P95, 'var(--magenta)', 'dash', 'dia']];
+  $('#lineChart').innerHTML = `<div class="ch-legend">${S.map(s => `<span><span class="ln ${s[3]}" style="color:${s[2]}"></span>${s[0]}${s[4] ? '（破線・◇）' : '（実線・■）'}</span>`).join('')}<span class="faint">赤の点線は SLO 200ms</span></div>
+  <div class="plot-wrap"><div class="yax">${ticks.map(v => `<span style="bottom:${v / MAX * 100}%">${v}</span>`).join('')}</div>
+  <div class="plot" id="linePlot">${ticks.slice(1).map(v => `<div class="gl" style="bottom:${v / MAX * 100}%"></div>`).join('')}
+  <div class="thr" style="bottom:${200 / MAX * 100}%"><span>SLO 200</span></div>
+  <svg class="line-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">${S.map(s => `<polyline stroke="${s[2]}" ${s[3] ? 'stroke-dasharray="5 4"' : ''} points="${s[1].map((v, i) => `${X(i)},${Y(v)}`).join(' ')}"/>`).join('')}</svg>
+  ${S.map(s => s[1].map((v, i) => `<i class="pt ${s[4]}" style="left:${X(i)}%;bottom:${v / MAX * 100}%;background:${s[2]};color:${s[2]}"></i>`).join('')).join('')}
+  ${S.map(s => `<span class="ln-end" style="bottom:${s[1][n - 1] / MAX * 100}%;color:${s[2]}">${s[0]}</span>`).join('')}
+  <div class="cross" id="lnCross" hidden></div></div></div>
+  <div class="xax" style="justify-content:space-between;padding:4px 0 0">${HOURS.map((h, i) => `<span style="width:auto">${i % 2 ? '' : h + '時'}</span>`).join('')}</div>`;
+  const plot = $('#linePlot'), cross = $('#lnCross'), tip = tipFor(plot); let last = -1;
+  plot.addEventListener('pointermove', e => {
+    const cx = e.clientX; frame('line', () => {
+      const r = plot.getBoundingClientRect(); const i = Math.max(0, Math.min(n - 1, Math.round((cx - r.left) / r.width * (n - 1))));
+      if (i === last) return; last = i; const x = X(i) / 100 * r.width;
+      cross.hidden = false; cross.style.transform = `translateX(${x}px)`;
+      showTip(tip, Math.max(80, Math.min(r.width - 80, x)), Y(P95[i]) / 100 * r.height, `${HOURS[i]}時  <span style="color:var(--blue)">■</span> p50 ${P50[i]}  <span style="color:var(--magenta)">■</span> p95 ${P95[i]}${P95[i] > 200 ? ' 超過' : ''}`);
+      sl.msg(`${HOURS[i]}時: p50 ${P50[i]}ms, p95 ${P95[i]}ms`);
+    });
+  });
+  plot.addEventListener('pointerleave', () => { cross.hidden = true; tip.hidden = true; last = -1 });
+})();
+</script>
+</body>
+</html>

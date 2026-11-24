@@ -2,6 +2,12 @@
 
 版の番号は [Semantic Versioning](https://semver.org/lang/ja/) に従います。
 
+## 0.2.0（2026-11-24）
+
+- 部品の作りをスキルに入れた。見本帳から部品ごとに切り出した `assets/components/<名前>.html`（37 ファイル、開けばそのまま動く）と、共通の `kodou.css`・`kodou.js`、110 個のアイコンの `icons.js`。作るスキルは、部品を一から書かずにここから写す。
+- `tools/build-assets.py`: 見本帳から上のファイルを書き出す。CI が `--check` で見本帳との食い違いを見張る。
+- icons.md のアイコンの数を 110 個に直した。
+
 ## 0.1.0（2026-11-24）
 
 最初の版です。

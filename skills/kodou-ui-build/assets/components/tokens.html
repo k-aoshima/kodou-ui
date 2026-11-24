@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kodou-ui 色・文字・余白・動き</title>
+<!-- Kodou-ui の部品の見本: 色・文字・余白・動き（tokens）。tools/build-assets.py が見本帳から書き出す（手で直さない）。
+     決まりは references/components.md の「色・文字・余白・動き」。作るときは、下の HTML と、最後の <script> の中の JS をそのまま写して使う。
+     共通の CSS と関数は ../tokens.css ・ ../kodou.css ・ ../virt.js ・ ../ledbar.js ・ ../kodou.js ・ ../icons.js にある（この順に読む）。 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../kodou.css">
+<style>.kd-page { max-width: 960px; margin: 0 auto; padding: 24px max(16px, env(safe-area-inset-left, 0px)) 80px }</style>
+<body>
+<main class="kd-page">
+<section class="comp" id="c-tokens" data-grp="土台">
+  <div class="comp-head"><h2>色・文字・余白・動き<span class="en">tokens</span></h2></div>
+  <p class="lead">色は端末の ANSI の並びで持ち、色相は色覚の違いがあっても見分けやすい CUD 寄りにしています。赤と緑は明るさも変えています。各色の下の数字は、地とのコントラスト比です（文字は 4.5 以上）。文字は、データとコマンドが JetBrains Mono と BIZ UDゴシック、文が Noto Sans JP です。</p>
+  <div class="box"><span class="ttl">色</span><div class="ansi" id="ansi"></div></div>
+  <div class="box"><span class="ttl">文字</span><div class="box-in">
+    <div class="tok-row"><span class="lb">--font 13.5</span><span>git rebase -i main  48213  1.24G</span></div>
+    <div class="tok-row"><span class="lb">--font 和文</span><span>名前 メモリ 応答時間</span></div>
+    <div class="tok-row"><span class="lb">--font-read 15/1.85</span><span class="read" style="font-size:15px;line-height:1.85">文として読むところはこの書体で、1行38字までにします。</span></div>
+    <div class="tok-row"><span class="lb">見出し 16/700</span><span style="font-size:16px;font-weight:700">テキスト入力</span></div>
+  </div></div>
+  <div class="box"><span class="ttl">余白</span><div class="box-in" id="spaces"></div></div>
+  <div class="box"><span class="ttl">動き</span><span class="ttl-r"><button class="btn sm" id="motionGo">動かす</button></span><div class="box-in mot">
+    <div class="tok-row"><span class="lb">--t-fast 80ms</span><div class="track" data-t="80"><i></i></div></div>
+    <div class="tok-row"><span class="lb">--t-base 140ms</span><div class="track" data-t="140"><i></i></div></div>
+  </div></div>
+</section>
+</main>
+<div class="statusline" role="status" aria-live="off"><span class="sl-mode pl">NORMAL</span><span class="sl-msg" id="slMsg">色・文字・余白・動き</span></div>
+<script src="../virt.js"></script>
+<script src="../ledbar.js"></script>
+<script src="../kodou.js"></script>
+<script src="../icons.js"></script>
+<script>
+/* トークン */
+(() => {
+  const A = [['0', 'fg', '--fg'], ['1', 'red', '--red'], ['2', 'green', '--green'], ['3', 'yellow', '--yellow'], ['4', 'blue', '--blue'], ['5', 'magenta', '--magenta'], ['6', 'cyan', '--cyan'], ['7', 'dim', '--dim']];
+  const lum = h => { const m = h.match(/[0-9a-f]{2}/gi); if (!m) return 0; const [r, g, b] = m.slice(0, 3).map(x => { const c = parseInt(x, 16) / 255; return c <= .03928 ? c / 12.92 : ((c + .055) / 1.055) ** 2.4 }); return .2126 * r + .7152 * g + .0722 * b };
+  const ratio = (a, b) => { const x = lum(a), y = lum(b); return (Math.max(x, y) + .05) / (Math.min(x, y) + .05) };
+  const draw = () => { const bg = css('--bg'); $('#ansi').innerHTML = A.map(([n, nm, t]) => `<div style="background:var(${t})"><b>${n}</b><span>${nm}<br>${css(t)}<br>${ratio(css(t), bg).toFixed(1)}:1</span></div>`).join('') };
+  draw();
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', draw);
+  new MutationObserver(draw).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  $('#spaces').innerHTML = [1, 2, 3, 4, 5, 6].map(i => `<div class="tok-row"><span class="lb">--s${i} ${css('--s' + i)}</span><div class="space-bar" style="width:${css('--s' + i)}"></div></div>`).join('');
+  let on = false;
+  $('#motionGo').addEventListener('click', () => { on = !on; $$('.mot .track').forEach(t => { const i = t.firstElementChild, d = t.clientWidth - i.offsetWidth - 6; i.style.transition = `transform ${t.dataset.t}ms cubic-bezier(.2,.7,.2,1)`; i.style.transform = on ? `translateX(${d}px)` : 'none' }) });
+})();
+</script>
+</body>
+</html>

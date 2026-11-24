@@ -147,7 +147,7 @@ components:
 
 ## Components
 
-部品は 36 種類あります。使いどころと決まりは `kodou-ui-build` の `references/components.md` にあり、触って試せる見本は Kodou-ui のリポジトリの `catalog/index.html` にあります。
+部品は 36 種類あります。使いどころと決まりは `kodou-ui-build` の `references/components.md` に、部品ごとの作り（HTML・CSS・JS）は `assets/components/` にあります。触って試せる見本は Kodou-ui のリポジトリの `catalog/index.html` です。
 
 ## Do's and Don'ts
 

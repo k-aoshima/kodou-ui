@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kodou-ui ログの流れ</title>
+<!-- Kodou-ui の部品の見本: ログの流れ（log stream）。tools/build-assets.py が見本帳から書き出す（手で直さない）。
+     決まりは references/components.md の「ログの流れ」。作るときは、下の HTML と、最後の <script> の中の JS をそのまま写して使う。
+     共通の CSS と関数は ../tokens.css ・ ../kodou.css ・ ../virt.js ・ ../ledbar.js ・ ../kodou.js ・ ../icons.js にある（この順に読む）。 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../kodou.css">
+<style>.kd-page { max-width: 960px; margin: 0 auto; padding: 24px max(16px, env(safe-area-inset-left, 0px)) 80px }</style>
+<body>
+<main class="kd-page">
+<section class="comp" id="c-log" data-grp="表示">
+  <div class="comp-head"><h2>ログの流れ<span class="en">log stream</span></h2><span class="tag t2">中が見える</span></div>
+  <p class="lead">流れ続ける行は上限つきで持ち、古い行から捨てます。水準の絞り込みは行を作り直さず、見せ方だけを変えます。</p>
+  <div class="box"><span class="ttl">tail -f <span class="faint">server.log</span></span><span class="ttl-r" id="logInfo"></span>
+    <div class="lvl" id="lvl" role="group" aria-label="水準"><button data-lv="all" aria-pressed="true">すべて <span id="n-all">0</span></button><button data-lv="warn" aria-pressed="false">warn <span id="n-warn">0</span></button><button data-lv="error" aria-pressed="false">error <span id="n-error">0</span></button></div>
+    <div class="log" id="log" data-lv="all"></div>
+    <div class="less"><span class="mode" id="follow">-- 追いかけ中 --</span><span class="sp"></span><span class="dim" id="logRate"></span></div></div>
+</section>
+</main>
+<div class="statusline" role="status" aria-live="off"><span class="sl-mode pl">NORMAL</span><span class="sl-msg" id="slMsg">ログの流れ</span></div>
+<script src="../virt.js"></script>
+<script src="../ledbar.js"></script>
+<script src="../kodou.js"></script>
+<script src="../icons.js"></script>
+<script>
+/* ログ: 上限つきのリングバッファ。描くのは見えている行だけで、行の要素は使い回す。絞り込みは見せる行の並びだけを作り直す */
+(() => {
+  const CAP = 300, H = 20, log = $('#log');
+  const SRC = [['info', 'GET /api/session 200 12ms'], ['info', 'GET /api/usage 200 8ms'], ['info', 'ws: client connected (3)'], ['warn', 'slow query: SELECT * FROM events 412ms'], ['info', 'POST /api/run 202 4ms'], ['info', 'job 7f3a: started'], ['info', 'GET /api/session 200 11ms'], ['error', 'job 7f3a: exit 1  TypeError: cannot read "chips" of undefined'], ['info', 'GET /health 200 1ms'], ['warn', 'memory: free 2.1G (below 3G)'], ['info', 'ws: client disconnected (2)'], ['info', 'GET /api/files?q=chip 200 6ms']];
+  const n = { all: 0, warn: 0, error: 0 }; let k = 0, follow = true, recent = [], lv = 'all';
+  const ring = new Array(CAP); let head = 0, size = 0;   // 持っている行。いっぱいになったら一番古い行に上書きする
+  let vis = [], vseq = 0;                                // 見せる行（絞り込みに合う行）の並び。v は並びの中の通し番号
+  const match = l => lv === 'all' || l.lv === lv;
+  const sp = document.createElement('div'); sp.className = 'sp'; log.appendChild(sp);
+  const POOL = Math.ceil(parseFloat(getComputedStyle(log).height) / H) + 4, pool = [];  // 画面外の節は寸法が 0 になるので、CSS の高さから数える
+  for (let i = 0; i < POOL; i++) { const r = document.createElement('div'); r.className = 'ln'; r.innerHTML = '<span class="t"></span><span class="lv"></span><span class="m"></span>'; r.hidden = true; sp.appendChild(r); pool.push(r) }
+  function draw() {
+    sp.style.height = vis.length * H + 'px';
+    if (follow) log.scrollTop = log.scrollHeight;
+    const f = Math.max(0, Math.min(vis.length - POOL, Math.floor(log.scrollTop / H) - 2));
+    const used = new Set();
+    for (let i = f; i < Math.min(vis.length, f + POOL); i++) {
+      const l = vis[i], r = pool[l.v % POOL]; used.add(r);
+      if (r._l !== l) { const c = r.children; c[0].textContent = l.t; c[1].textContent = l.lv.toUpperCase(); c[2].textContent = l.m; r.className = 'ln' + (l.lv === 'error' ? ' e' : l.lv === 'warn' ? ' w' : ''); r._l = l; r.hidden = false }
+      const y = i * H; if (r._y !== y) { r.style.transform = `translateY(${y}px)`; r._y = y }
+    }
+    for (const r of pool) if (!used.has(r) && !r.hidden) { r.hidden = true; r._l = null }
+  }
+  function push(t) {
+    const [l0, m] = SRC[k++ % SRC.length], l = { t, lv: l0, m, v: 0 };
+    if (size === CAP) { const old = ring[head]; n.all--; if (old.lv !== 'info') n[old.lv]--; if (vis[0] === old) vis.shift() } else size++;
+    ring[head] = l; head = (head + 1) % CAP; n.all++; if (l0 !== 'info') n[l0]++;
+    if (match(l)) { l.v = vseq++; vis.push(l) }
+  }
+  function refilter() { vis = []; vseq = 0; for (let i = 0; i < size; i++) { const l = ring[(head - size + i + CAP) % CAP]; if (match(l)) { l.v = vseq++; vis.push(l) } } pool.forEach(r => { r._l = null; r._y = -1 }) }
+  const counts = () => { $('#n-all').textContent = n.all; $('#n-warn').textContent = n.warn; $('#n-error').textContent = n.error; $('#logInfo').textContent = `${n.all}/${CAP} 行を保持 · 描いている行 ${POOL}` };
+  const now0 = Date.now(); for (let i = 0; i < 14; i++) push(new Date(now0 - (14 - i) * 900).toTimeString().slice(0, 8));
+  counts(); draw();
+  every(log, 900, () => { push(new Date().toTimeString().slice(0, 8)); recent.push(Date.now()); counts(); frame('log', draw) });
+  every(log, 1000, () => { const t = Date.now(); recent = recent.filter(x => t - x < 5000); $('#logRate').textContent = `${(recent.length / 5).toFixed(1)} 行/秒` });
+  log.addEventListener('scroll', () => frame('logf', () => {
+    const at = log.scrollHeight - log.scrollTop - log.clientHeight < 8;
+    if (at !== follow) { follow = at; const f = $('#follow'); f.className = 'mode' + (at ? '' : ' paused-ln'); f.textContent = at ? '-- 追いかけ中 --' : ':止めています（上を読んでいるため）' }
+    draw();
+  }), { passive: true });
+  $('#lvl').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; lv = b.dataset.lv; log.dataset.lv = lv; $$('#lvl button').forEach(x => x.setAttribute('aria-pressed', x === b)); refilter(); draw(); sl.msg(`ログを ${lv === 'all' ? 'すべて' : lv} に絞りました`) });
+})();
+</script>
+</body>
+</html>

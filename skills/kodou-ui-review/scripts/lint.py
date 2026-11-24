@@ -34,7 +34,7 @@ RULES = {
                         '動かすのは transform と opacity だけにする'),
     'crt-effect':      ('軽い', '走査線やにじみで CRT を再現している。読みにくくなるだけで対話は増えない',
                         '形は古く、描画はくっきり。走査線・グロー・ちらつきを外す'),
-    'hidden-loop':     ('中', 'タイマーやアニメーションのループを、頁が隠れている間も止めていない',
+    'hidden-loop':     ('中', 'setInterval のタイマーを、頁が隠れている間も止めていない',
                         'visibilitychange で document.hidden を見て止める。画面外の部品は IntersectionObserver で止める'),
     'tiny-text':       ('軽い', '読ませる文字が 11px 未満',
                         'データは 12px 以上、文は 15px 以上にする'),
@@ -132,12 +132,8 @@ def check(path):
 
     if has_motion and css_all and 'prefers-reduced-motion' not in css_all:
         add('no-reduced-motion', segs[0][1] if segs else 0, '動きのある CSS')
-    # setInterval と、自分を呼び直す requestAnimationFrame（名前つきの関数を渡すもの）をループとみなす
+    # setInterval は頁が隠れても回る。requestAnimationFrame は隠れている間ブラウザが止めるので見ない
     loop = re.search(r'setInterval\s*\(', js_all)
-    if not loop:
-        for m in re.finditer(r'requestAnimationFrame\s*\(\s*([A-Za-z_$][\w$]*)\s*\)', js_all):
-            if re.search(r'(?:function\s+|(?:const|let|var)\s+)' + re.escape(m.group(1)) + r'\b', js_all):
-                loop = m; break
     if loop and not re.search(r'visibilitychange|document\.hidden|visibilityState|IntersectionObserver', js_all):
         first = [s for s in segs if s[0] == 'js' and loop.group(0) in s[2]]
         pos = first[0][1] + first[0][2].index(loop.group(0)) if first else 0

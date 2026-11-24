@@ -16,6 +16,8 @@ jobs:
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: '3.12'
+      # スキルの部品の作りが見本帳と合っているか
+      - run: python3 tools/build-assets.py --check
       # コントラスト・アイコン・決まりの検出（標準ライブラリだけで動く）
       - run: python3 skills/kodou-ui-review/scripts/check.py -q catalog site skills/kodou-ui-build/assets
       # SKILL.md の項目と、プラグインの定義の形を確かめる

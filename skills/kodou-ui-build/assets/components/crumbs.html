@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kodou-ui パンくず</title>
+<!-- Kodou-ui の部品の見本: パンくず（breadcrumbs）。tools/build-assets.py が見本帳から書き出す（手で直さない）。
+     決まりは references/components.md の「パンくず」。作るときは、下の HTML と、最後の <script> の中の JS をそのまま写して使う。
+     共通の CSS と関数は ../tokens.css ・ ../kodou.css ・ ../virt.js ・ ../ledbar.js ・ ../kodou.js ・ ../icons.js にある（この順に読む）。 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../kodou.css">
+<style>.kd-page { max-width: 960px; margin: 0 auto; padding: 24px max(16px, env(safe-area-inset-left, 0px)) 80px }</style>
+<body>
+<main class="kd-page">
+<section class="comp" id="c-crumbs" data-grp="移動">
+  <div class="comp-head"><h2>パンくず<span class="en">breadcrumbs</span></h2></div>
+  <p class="lead">パスと同じ形で、今いる場所までの道を見せます。どこからでも戻れます。</p>
+  <div class="box"><span class="ttl">見本</span><nav class="crumbs" id="crumbs" aria-label="パンくず"></nav></div>
+</section>
+</main>
+<div class="statusline" role="status" aria-live="off"><span class="sl-mode pl">NORMAL</span><span class="sl-msg" id="slMsg">パンくず</span></div>
+<script src="../virt.js"></script>
+<script src="../ledbar.js"></script>
+<script src="../kodou.js"></script>
+<script src="../icons.js"></script>
+<script>
+/* パンくず */
+(() => {
+  const FULL = ['~', 'Project', 'kodou-ui', 'catalog', 'index.html']; let cr = FULL;
+  const draw = () => { $('#crumbs').innerHTML = cr.map((c, i) => i === cr.length - 1 ? `<span class="cur" aria-current="page">${esc(c)}</span>` : `<a href="#" data-i="${i}">${esc(c)}</a><span class="sl">/</span>`).join('') };
+  $('#crumbs').addEventListener('click', e => { const a = e.target.closest('a'); if (!a) return; e.preventDefault(); cr = cr.slice(0, +a.dataset.i + 1); draw(); sl.msg(`${cr.join('/')} へ戻りました`); setTimeout(() => { cr = FULL; draw() }, 1600) });
+  draw();
+})();
+</script>
+</body>
+</html>

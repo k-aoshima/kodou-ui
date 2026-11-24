@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kodou-ui トースト</title>
+<!-- Kodou-ui の部品の見本: トースト（toast）。tools/build-assets.py が見本帳から書き出す（手で直さない）。
+     決まりは references/components.md の「トースト」。作るときは、下の HTML と、最後の <script> の中の JS をそのまま写して使う。
+     共通の CSS と関数は ../tokens.css ・ ../kodou.css ・ ../virt.js ・ ../ledbar.js ・ ../kodou.js ・ ../icons.js にある（この順に読む）。 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../kodou.css">
+<style>.kd-page { max-width: 960px; margin: 0 auto; padding: 24px max(16px, env(safe-area-inset-left, 0px)) 80px }</style>
+<body>
+<main class="kd-page">
+<section class="comp" id="c-toast" data-grp="通知">
+  <div class="comp-head"><h2>トースト<span class="en">toast</span></h2><span class="tag t3">ハンドルは人</span></div>
+  <p class="lead">取り消せる操作は、確認を出さずにすぐ実行し、取り消しを付けて知らせます。確認は慣れると読まれなくなるので、取り返しのつかない操作のときだけにします。消えるまでの残りは下の線で見せます。</p>
+  <div class="box"><span class="ttl">見本</span><div class="box-in row">
+    <button class="btn" id="toastA" data-key="u で戻す">ブランチを削除する</button>
+    <button class="btn" id="toastB">設定を保存する</button>
+  </div></div>
+</section>
+</main>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<div class="statusline" role="status" aria-live="off"><span class="sl-mode pl">NORMAL</span><span class="sl-msg" id="slMsg">トースト</span></div>
+<script src="../virt.js"></script>
+<script src="../ledbar.js"></script>
+<script src="../kodou.js"></script>
+<script src="../icons.js"></script>
+<script>
+/* トースト */
+function toast(html, undo) {
+  const t = document.createElement('div'); t.className = 'toast';
+  t.innerHTML = `<div class="bd"><span>${html}</span><span class="sp"></span>${undo ? '<button class="btn sm" data-u>元に戻す <kbd>u</kbd></button>' : ''}<button class="btn ghost sm" data-x aria-label="閉じる">×</button></div><div class="life"></div>`;
+  $('#toasts').appendChild(t);
+  const anim = t.querySelector('.life').animate([{ transform: 'scaleX(1)' }, { transform: 'scaleX(0)' }], { duration: 5000, easing: 'linear' });
+  const close = () => { t.remove(); document.removeEventListener('keydown', key) };
+  const key = e => { if (e.key === 'u' && undo && !e.target.matches('input, textarea')) { undo(); close() } };
+  if (undo) document.addEventListener('keydown', key);
+  t.addEventListener('click', e => { if (e.target.closest('[data-u]')) { undo(); close() } else if (e.target.closest('[data-x]')) close() });
+  anim.onfinish = close;
+}
+$('#toastA').onclick = () => { toast('<code>fix/log-follow</code> を削除しました', () => { toast('<code>fix/log-follow</code> を戻しました'); sl.msg('削除を取り消しました') }); sl.msg('ブランチを削除しました（5秒以内なら u で戻せます）') };
+$('#toastB').onclick = () => { toast('設定を保存しました'); sl.msg('設定を保存しました') };
+</script>
+</body>
+</html>

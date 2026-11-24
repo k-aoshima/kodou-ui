@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kodou-ui ページ送り</title>
+<!-- Kodou-ui の部品の見本: ページ送り（pagination）。tools/build-assets.py が見本帳から書き出す（手で直さない）。
+     決まりは references/components.md の「ページ送り」。作るときは、下の HTML と、最後の <script> の中の JS をそのまま写して使う。
+     共通の CSS と関数は ../tokens.css ・ ../kodou.css ・ ../virt.js ・ ../ledbar.js ・ ../kodou.js ・ ../icons.js にある（この順に読む）。 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../kodou.css">
+<style>.kd-page { max-width: 960px; margin: 0 auto; padding: 24px max(16px, env(safe-area-inset-left, 0px)) 80px }</style>
+<body>
+<main class="kd-page">
+<section class="comp" id="c-pager" data-grp="移動">
+  <div class="comp-head"><h2>ページ送り<span class="en">pagination</span></h2></div>
+  <p class="lead">今のページと全体の件数を一緒に出します。</p>
+  <div class="box"><span class="ttl">見本</span><nav class="pager" id="pager" aria-label="ページ送り"></nav></div>
+</section>
+</main>
+<div class="statusline" role="status" aria-live="off"><span class="sl-mode pl">NORMAL</span><span class="sl-msg" id="slMsg">ページ送り</span></div>
+<script src="../virt.js"></script>
+<script src="../ledbar.js"></script>
+<script src="../kodou.js"></script>
+<script src="../icons.js"></script>
+<script>
+/* ページ送り */
+(() => {
+  const P = { cur: 3, total: 236, per: 20 };
+  const draw = () => {
+    const last = Math.ceil(P.total / P.per), c = P.cur, arr = [...new Set([1, last, c - 1, c, c + 1].filter(p => p >= 1 && p <= last))].sort((a, b) => a - b);
+    let h = `<button data-p="${c - 1}" ${c === 1 ? 'disabled' : ''}>‹ 前</button>`, prev = 0;
+    arr.forEach(p => { if (p - prev > 1) h += '<span class="gap">…</span>'; h += `<button data-p="${p}" ${p === c ? 'aria-current="page"' : ''}>${p}</button>`; prev = p });
+    $('#pager').innerHTML = h + `<button data-p="${c + 1}" ${c === last ? 'disabled' : ''}>次 ›</button><span class="info">${(c - 1) * P.per + 1}–${Math.min(c * P.per, P.total)} / ${P.total}件</span>`;
+  };
+  $('#pager').addEventListener('click', e => { const b = e.target.closest('button'); if (!b || b.disabled) return; P.cur = +b.dataset.p; draw(); sl.msg(`${P.cur}ページ目`) });
+  draw();
+})();
+</script>
+</body>
+</html>

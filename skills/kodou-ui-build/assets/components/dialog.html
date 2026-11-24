@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kodou-ui ダイアログ</title>
+<!-- Kodou-ui の部品の見本: ダイアログ（dialog）。tools/build-assets.py が見本帳から書き出す（手で直さない）。
+     決まりは references/components.md の「ダイアログ」。作るときは、下の HTML と、最後の <script> の中の JS をそのまま写して使う。
+     共通の CSS と関数は ../tokens.css ・ ../kodou.css ・ ../virt.js ・ ../ledbar.js ・ ../kodou.js ・ ../icons.js にある（この順に読む）。 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../kodou.css">
+<style>.kd-page { max-width: 960px; margin: 0 auto; padding: 24px max(16px, env(safe-area-inset-left, 0px)) 80px }</style>
+<body>
+<main class="kd-page">
+<section class="comp" id="c-dialog" data-grp="重ね">
+  <div class="comp-head"><h2>ダイアログ<span class="en">dialog</span></h2><span class="tag t3">ハンドルは人</span></div>
+  <p class="lead">二重罫線の枠です。画面を止めるので最後の手段にし、取り消せない操作のときだけ使います。ふつうの確認はその場の1行で済ませ、既定はいつも安全な側（<code>y/N</code> の N、「やめる」）にします。何が消えて戻せないのかを具体的に書きます。</p>
+  <div class="box"><span class="ttl">見本</span><div class="box-in col">
+    <div class="dlg" style="width:auto"><div class="dlg-hd"><span data-px="alert" data-tone class="c-red"></span>ブランチを削除しますか<span class="sp"></span><span class="faint">×</span></div>
+      <div class="dlg-bd"><code>spike/agent-steer</code> を削除します。リモートにまだ送っていないコミットが2件あり、削除すると戻せません。</div>
+      <div class="dlg-ft"><span class="btn">やめる <kbd>Esc</kbd></span><span class="btn danger">削除する</span></div></div>
+    <div class="ask" role="group" aria-label="その場の確認"><span class="q">?</span><span class="read"><code>spike/agent-steer</code> を削除します。送っていないコミット2件は戻せません。</span><b>[y/N]</b><button class="btn sm danger">y 削除する</button><button class="btn sm">N やめる</button></div>
+    <div class="row"><button class="btn" id="dlgOpen" data-key="⏎ / Esc">開いて試す</button><span class="out" id="dlgOut"></span></div>
+  </div></div>
+  <dialog class="dlg" id="dlg" aria-labelledby="dlgT">
+    <form method="dialog">
+      <div class="dlg-hd"><span data-px="alert" data-tone class="c-red"></span><span id="dlgT">ブランチを削除しますか</span><span class="sp"></span><button class="btn ghost sm" value="cancel" aria-label="閉じる">×</button></div>
+      <div class="dlg-bd"><code>spike/agent-steer</code> を削除します。リモートにまだ送っていないコミットが2件あり、削除すると戻せません。</div>
+      <div class="dlg-ft"><button class="btn" value="cancel" autofocus>やめる <kbd>Esc</kbd></button><button class="btn danger" value="delete">削除する</button></div>
+    </form>
+  </dialog>
+</section>
+</main>
+<div class="statusline" role="status" aria-live="off"><span class="sl-mode pl">NORMAL</span><span class="sl-msg" id="slMsg">ダイアログ</span></div>
+<script src="../virt.js"></script>
+<script src="../ledbar.js"></script>
+<script src="../kodou.js"></script>
+<script src="../icons.js"></script>
+<script>
+/* ダイアログ（<dialog>。フォーカスと Esc はブラウザ任せ） */
+$('#dlgOpen').addEventListener('click', () => $('#dlg').showModal());
+$('#dlg').addEventListener('close', e => { const v = e.target.returnValue; $('#dlgOut').textContent = v === 'delete' ? '削除を選びました（見本なので何も消えていません）' : '削除をやめました'; sl.msg($('#dlgOut').textContent) });
+</script>
+</body>
+</html>

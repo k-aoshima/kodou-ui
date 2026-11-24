@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kodou-ui メーター</title>
+<!-- Kodou-ui の部品の見本: メーター（gauge / meter）。tools/build-assets.py が見本帳から書き出す（手で直さない）。
+     決まりは references/components.md の「メーター」。作るときは、下の HTML と、最後の <script> の中の JS をそのまま写して使う。
+     共通の CSS と関数は ../tokens.css ・ ../kodou.css ・ ../virt.js ・ ../ledbar.js ・ ../kodou.js ・ ../icons.js にある（この順に読む）。 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../kodou.css">
+<style>.kd-page { max-width: 960px; margin: 0 auto; padding: 24px max(16px, env(safe-area-inset-left, 0px)) 80px }</style>
+<body>
+<main class="kd-page">
+<section class="comp" id="c-gauge" data-grp="グラフ">
+  <div class="comp-head"><h2>メーター<span class="en">gauge / meter</span></h2><span class="tag t2">中が見える</span></div>
+  <p class="lead">使った量を LED の帯で見せ、数字は実際の値で書きます。境目を超えたことは色に加えて「注意」「危険」の文字でも出します。内訳は斜線、見込みは枠のブロックで延ばします。</p>
+  <div class="box"><span class="ttl">いま</span><span class="ttl-r"><button class="btn sm" id="gaugeGo">値を動かす</button></span><div class="gauges" id="gauges"></div></div>
+</section>
+</main>
+<div class="statusline" role="status" aria-live="off"><span class="sl-mode pl">NORMAL</span><span class="sl-msg" id="slMsg">メーター</span></div>
+<script src="../virt.js"></script>
+<script src="../ledbar.js"></script>
+<script src="../kodou.js"></script>
+<script src="../icons.js"></script>
+<script>
+/* メーター: LED の帯。境目を超えたら色に加えて「注意」「危険」の文字でも出す。使用量は内訳・見込み・止める水準・今の時点まで描く */
+(() => {
+  const G = { mem: 13.6, swp: 1.6, cpu: 38, disk: 412 };
+  const lv = r => r >= .85 ? ['var(--red)', ' <b class="c-red">危険</b>'] : r >= .6 ? ['var(--yellow)', ' <b class="c-yellow">注意</b>'] : ['var(--accent)', ''];
+  const rows = [['Mem', () => G.mem / 16, () => `${G.mem}/16G`], ['Swp', () => G.swp / 4, () => `${G.swp}/4G`], ['CPU', () => G.cpu / 100, () => `${G.cpu}%`], ['Disk', () => G.disk / 512, () => `${G.disk}/512G`]];
+  $('#gauges').innerHTML = rows.map(([l], k) => `<div class="meter"><span class="lb">${l}</span><canvas class="ledc" data-g="${k}" aria-hidden="true"></canvas><span class="v" data-v="${k}"></span></div>`).join('')
+    + `<div class="meter wide"><span class="lb">週</span><canvas class="ledc" id="useLed" aria-hidden="true"></canvas><span class="v">62%</span><span class="note">今週の使用量。斜線はキャッシュの分、枠のブロックはこの調子で進んだときの見込み、▼が今の時点、赤い線が止める水準（85%）です。</span></div>`;
+  const draw = () => {
+    rows.forEach(([l, r, v], k) => { const x = r(), [c, w] = lv(x); ledBar($(`[data-g="${k}"]`), { segs: [{ value: x, color: c }] }); $(`[data-v="${k}"]`).innerHTML = v() + w });
+    ledBar($('#useLed'), { segs: [{ value: .48 }, { value: .14, hatch: true }], projected: .85, stopAt: .85, elapsed: .62 });
+  };
+  draw();
+  new ResizeObserver(() => draw()).observe($('#gauges'));
+  $('#gaugeGo').addEventListener('click', () => { G.mem = +(8 + Math.random() * 8).toFixed(1); G.swp = +(Math.random() * 3).toFixed(1); G.cpu = Math.round(Math.random() * 100); G.disk = Math.round(200 + Math.random() * 300); frame('g', draw); sl.msg(`Mem ${G.mem}G  CPU ${G.cpu}%`) });
+})();
+</script>
+</body>
+</html>

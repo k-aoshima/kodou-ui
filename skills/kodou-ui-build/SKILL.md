@@ -1,9 +1,9 @@
 ---
 name: kodou-ui-build
-description: エンジニアが毎日使うツール（開発ツール、ランチャー、コマンドパレット、ログやプロセスの画面、AI エージェントの画面など）の UI を、Kodou-ui の考え方と部品で作るときに使う。見た目は CLI/TUI の懐かしい形（等幅の格子、罫線の枠、反転表示、ステータスライン、ドット絵のアイコン）を残し、操作の手応え・中の見え方・速さと読みやすさは今の水準にする。「Kodou-ui で」「TUI っぽく」「CLI みたいに速い画面を」と頼まれたとき、エンジニア向けのツールの画面を新しく作る・作り直すときに読む。家族向けや一般向けのアプリには使わない。
+description: エンジニアが毎日使うツール（開発ツール、ランチャー、コマンドパレット、ログやプロセスの画面、AI エージェントの画面など）の UI を、Kodou-ui の考え方と部品で作るときに使う。見た目は CLI/TUI の懐かしい形（等幅の格子、罫線の枠、反転表示、ステータスライン、ドット絵のアイコン）を残し、操作の手応え・中の見え方・速さと読みやすさは今の水準にする。「Kodou-ui で」「TUI っぽく」「CLI みたいに速い画面を」と頼まれたとき、エンジニア向けのツールの画面を新しく作る・作り直すときに読む。エンジニア向けでない一般のアプリには使わない。
 license: MIT
 metadata:
-  version: "0.1.0"
+  version: "0.2.0"
   homepage: https://github.com/k-aoshima/kodou-ui
 ---
 
@@ -36,7 +36,11 @@ metadata:
 0. **プロジェクトの前提を読む**: プロジェクトの根に `DESIGN.md` があれば先に読み、「このプロジェクトの前提」（元にする手触り、主な流れ、アクセント）に従う。無ければ `assets/DESIGN.md` を根に写し、分かる所を埋め、分からない所は【　】のまま人に聞く。トークンの値を変えたら `DESIGN.md` と CSS の両方を直す。
 1. **元にする手触りを決める**: fzf のように絞る、htop のように詰めて並べる、Vim のようにモードとステータスラインを持つ、のように、元になる CLI/TUI のツールを1〜2個に決める。
 2. **キーボードで最後まで通る流れを作る**: 見た目は仮のまま、開く→打つ→選ぶ→実行→閉じるがキーだけでできるようにし、キーを押してから描き終わるまでの時間を測る（`performance.now()` と `requestAnimationFrame` で測って画面に出す）。目標は 16ms（1フレーム）以内。届くまで見た目に進まない。
-3. **部品で組む**: 下の早見表から部品を選び、`references/components.md` の決まりに従って置く。トークンは `assets/tokens.css`、一覧の描き方は `assets/virt.js`、進捗とメーターの帯は `assets/ledbar.js` をそのまま使う。アイコンは `references/icons.md`、確認・エラー・待ち時間・文の書き方・速さの作り・React などの土台で使うときは `references/patterns.md` に従う。
+3. **部品で組む**: 部品を一から書き直さず、用意した作りを写して使う。
+   - 下の早見表から部品を選び、`references/components.md` でその部品の決まりを読む。
+   - 作りは `assets/components/<名前>.html` にある（一覧は `assets/components/README.md`）。使う部品のファイルだけを開き、HTML と JS を写す。
+   - 共通の CSS と関数（`tokens.css`・`kodou.css`・`virt.js`・`ledbar.js`・`kodou.js`・`icons.js`）は `assets/` からプロジェクトに写し、この順に読む。
+   - アイコンは `references/icons.md` に従う。確認・エラー・待ち時間・文の書き方・速さの作り・React などの土台で使うときは `references/patterns.md` に従う。
 4. **点検する**: `kodou-ui-review` スキルで点検し、指摘を直す。まず同じスキルの `scripts/check.py` を回す（コントラスト、アイコン、決まりの検出を 1 回で。`--measure` で軽さも測る）。比較のため、直す前と後の画面を撮って並べる。
 
 ## トークン
@@ -106,11 +110,15 @@ metadata:
 - `assets/tokens.css`: トークン（明るい地と暗い地）
 - `assets/virt.js`: 見えている分だけ描く仕組み（依存なし）
 - `assets/ledbar.js`: 進捗バーとメーターの LED の帯（依存なし）
+- `assets/kodou.css`: 部品の CSS（tokens.css の後に読む）
+- `assets/kodou.js`: 共通の関数（frame・every・place・sl.msg・⌥ のキーの札）
+- `assets/icons.js`: 110 個のドット絵のアイコンと `px()`
+- `assets/components/`: 部品ごとの作り（37 ファイル）。開けばそのまま動く
 - `assets/DESIGN.md`: トークンと決まりを DESIGN.md の形（google-labs-code/design.md）で書いたもの。プロジェクトの根に写して前提を書き足す
 - `references/components.md`: 36 部品と土台（トークン、速さと軽さ、根拠）ごとの使いどころ、状態、決まり、使わない場面
 - `references/icons.md`: マス目でアイコンを描く決まりと、今あるアイコンの一覧
 - `references/patterns.md`: 確認と取り消し、待ち時間、エラー、文の書き方、色、キーの学習、速さと軽さ、React などの土台で使うとき
-- 見本帳 `catalog/index.html`: すべての部品を触って試せる。迷ったらここにある作りをそのまま使う
+- 見本帳 `catalog/index.html`（Kodou-ui のリポジトリ）: すべての部品を 1 頁で触って試せる。`assets/` の CSS・JS・部品のファイルは、ここから `tools/build-assets.py` で書き出したもの
 - 原則 `docs/principles.md`、根拠 `docs/research/retro-vs-modern.md`
 
-`assets/` と `references/` はこのスキルのフォルダの中にあり、スキルだけを入れても使える。`catalog/`・`docs/`・`bench/` は Kodou-ui のリポジトリにあり、無くても作れる（見て確かめたいときに使う）。点検のスクリプトは `kodou-ui-review` スキルの `scripts/` にあるので、2 つのスキルは一緒に入れる。
+`assets/` と `references/` はこのスキルのフォルダの中にあり、スキルだけを入れても使える。部品の作りもアイコンも `assets/` に入っているので、見本帳が無くても同じ物を作れる。`catalog/`・`docs/`・`bench/` は Kodou-ui のリポジトリにあり、人が見て確かめるためのもの。点検のスクリプトは `kodou-ui-review` スキルの `scripts/` にあるので、2 つのスキルは一緒に入れる。

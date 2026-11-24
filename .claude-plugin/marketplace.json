@@ -7,7 +7,7 @@
       "name": "kodou-ui",
       "source": "./",
       "description": "エンジニア向けツールの画面を Kodou-ui の部品と決まりで作るスキル（kodou-ui-build）と、点検するスキル（kodou-ui-review）",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "license": "MIT",
       "homepage": "https://github.com/k-aoshima/kodou-ui",
       "repository": "https://github.com/k-aoshima/kodou-ui",

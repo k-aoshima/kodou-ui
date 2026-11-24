@@ -6,7 +6,7 @@
 
 ![紹介ページ](docs/img/site.png)
 
-> 状態: 0.1.0。部品は見本帳（`catalog/index.html`）にあり、作るスキルと点検するスキルがあります。部品をパッケージとして切り出す作業はまだです。
+> 状態: 0.2.0。作るスキルと点検するスキルがあり、36 の部品の作りと 110 個のアイコンはスキルの中に入っています。npm のパッケージとしての配布はまだです。変わったことは [CHANGELOG.md](CHANGELOG.md) に書きます。
 
 ## 考え方
 
@@ -16,11 +16,11 @@
 
 大事にするのは**操作するよろこび**と**機械との対話**です。詳しくは [docs/principles.md](docs/principles.md) にあります。
 
-部品だけでは、手応えも透明さもない画面を組めてしまいます。そのため Kodou-ui は、判断の部分をスキルとしてエージェントに渡し、UX まで一緒に届けます。見た目の CSS を配るのではなく、作る手順と点検の基準を配ります。
+部品だけでは、手応えも中の見え方もない画面を組めてしまいます。そのため Kodou-ui は、部品と一緒に、作る手順と点検の基準をスキルとしてエージェントに渡します。
 
 ## 作れる画面
 
-キーだけで最後まで動く、変更したファイルを選んでコミットする小さなツールです（紹介ページのサンプル）。
+紹介ページのサンプルで、変更したファイルを選んでコミットする小さなツールです。キーだけで最後まで動きます。
 
 ![commit のサンプル](docs/img/commit.png)
 
@@ -58,7 +58,7 @@ cp -R skills/kodou-ui-build skills/kodou-ui-review ~/.claude/skills/   # すべ�
 cp -R skills/kodou-ui-build skills/kodou-ui-review .claude/skills/     # このプロジェクトだけで使う
 ```
 
-2 つのスキルは一緒に入れてください（作る側のスキルが、点検のスクリプトを使います）。トークンの CSS、一覧の描き方、DESIGN.md、点検のスクリプトはスキルの中に入っているので、スキルだけで使えます。
+2 つのスキルは一緒に入れてください（作る側のスキルが、点検のスクリプトを使います）。部品の作り、アイコン、トークン、DESIGN.md、点検のスクリプトはスキルの中に入っているので、スキルだけで使えます。
 
 ## 使い方
 
@@ -78,10 +78,10 @@ python3 $S/lint.py --rules                # 規則の一覧
 python3 $S/contrast.py page.html          # 文字と地のコントラスト比
 python3 $S/icon.py page.html              # 12×12 のアイコンを点検
 python3 $S/icon.py page.html --out build/icons --tone   # SVG を書き出す
-node $S/measure.mjs page.html             # 要素の数、JS のヒープ、隠れている間の忙しさ（puppeteer-core と Chrome が要る）
+node $S/measure.mjs page.html             # 要素の数、JS のヒープ、隠れている間の忙しさ（メインスレッドが動いていた割合。puppeteer-core と Chrome が要る）
 ```
 
-`check.py`、`lint.py`、`contrast.py`、`icon.py` は Python 3 の標準ライブラリだけで動きます。このリポジトリでは、push のたびに GitHub Actions が見本帳と紹介ページに `check.py` を回します。
+`check.py`、`lint.py`、`contrast.py`、`icon.py` は Python 3 の標準ライブラリだけで動きます。このリポジトリでは、push のたびに GitHub Actions が見本帳と紹介ページに `check.py` を回し、スキルの部品の作りが見本帳と合っているかも確かめます。
 
 ## 構成
 
@@ -94,15 +94,15 @@ node $S/measure.mjs page.html             # 要素の数、JS のヒープ、隠
 | アイコン見本 | マス目で描いたアイコンの3案の比較 | `catalog/icons.html` |
 | 場面の見本 | fzf・htop・AI の作業など、部品を組んだ場面 | `catalog/scenes.html` |
 | スキル（作る） | エージェントが画面を作るときの手順、部品・アイコン・パターンの決まり、トークン、DESIGN.md | `skills/kodou-ui-build/` |
+| 部品の作り | 見本帳から部品ごとに切り出した HTML・CSS・JS と、110 個のアイコン。エージェントはここから写して使う | `skills/kodou-ui-build/assets/` |
+| 書き出し | 見本帳から部品の作りを書き出すスクリプト。見本帳との食い違いは CI が確かめる | `tools/build-assets.py` |
 | スキル（点検） | できた画面の点検手順、チェックリスト、点検のスクリプト | `skills/kodou-ui-review/` |
 | 比較 | 同じ画面を Kodou-ui と React で作り、メモリと描画の重さを比べた結果 | `bench/` |
 | プラグイン | Claude Code のプラグインとして入れるための定義 | `.claude-plugin/marketplace.json` |
 
 ## まだのこと
 
-- 見本帳の部品を、CSS と JS のパッケージとして切り出す（`packages/` に置く予定）。
-
-変わったことは [CHANGELOG.md](CHANGELOG.md) に書きます。
+- 部品を npm のパッケージとしても配る。
 
 ## 方針
 

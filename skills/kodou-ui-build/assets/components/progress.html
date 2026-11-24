@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kodou-ui 進捗バー</title>
+<!-- Kodou-ui の部品の見本: 進捗バー（progress）。tools/build-assets.py が見本帳から書き出す（手で直さない）。
+     決まりは references/components.md の「進捗バー」。作るときは、下の HTML と、最後の <script> の中の JS をそのまま写して使う。
+     共通の CSS と関数は ../tokens.css ・ ../kodou.css ・ ../virt.js ・ ../ledbar.js ・ ../kodou.js ・ ../icons.js にある（この順に読む）。 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../kodou.css">
+<style>.kd-page { max-width: 960px; margin: 0 auto; padding: 24px max(16px, env(safe-area-inset-left, 0px)) 80px }</style>
+<body>
+<main class="kd-page">
+<section class="comp" id="c-progress" data-grp="状態">
+  <div class="comp-head"><h2>進捗バー<span class="en">progress</span></h2><span class="tag t2">中が見える</span></div>
+  <p class="lead">割合だけでなく、件数・かかった時間・今の対象を出します。手順があるものは今どこかを並べます。</p>
+  <div class="box" id="progBox"><span class="ttl">見本</span><span class="ttl-r"><button class="btn sm" id="progGo">もう一度</button></span><div class="box-in col">
+    <div class="prog"><div class="line"><span>ビルド</span><span id="pgPct"></span></div><canvas class="ledc" id="pgLed" aria-hidden="true"></canvas><div class="meta" id="pgMeta"></div></div>
+    <div class="steps" id="pgSteps"></div>
+  </div></div>
+</section>
+</main>
+<div class="statusline" role="status" aria-live="off"><span class="sl-mode pl">NORMAL</span><span class="sl-msg" id="slMsg">進捗バー</span></div>
+<script src="../virt.js"></script>
+<script src="../ledbar.js"></script>
+<script src="../kodou.js"></script>
+<script src="../icons.js"></script>
+<script>
+/* 進捗 */
+(() => {
+  const STEPS = ['取得', '依存', 'ビルド', 'テスト', '配置'], N = 50; let i = 28, t0 = performance.now() - 28 * 60, lastStep = -1;
+  const stepsEl = $('#pgSteps');
+  stepsEl.innerHTML = STEPS.map((x, j) => `<span data-j="${j}"></span>${j < STEPS.length - 1 ? '<span class="faint">─</span>' : ''}`).join('');
+  const draw = () => {
+    const done = i >= N;
+    ledBar($('#pgLed'), { segs: [{ value: i / N }] });
+    $('#pgPct').textContent = `${Math.round(i / N * 100)}%`;
+    $('#pgMeta').textContent = done ? `${N}/${N} ファイル  ${((performance.now() - t0) / 1000).toFixed(1)}秒  終わりました` : `${i}/${N} ファイル  ${((performance.now() - t0) / 1000).toFixed(1)}秒  いま: src/ui/part-${String(i + 1).padStart(2, '0')}.tsx`;
+    const s = done ? STEPS.length : Math.min(STEPS.length - 1, Math.floor(i / N * STEPS.length));
+    if (s !== lastStep) { lastStep = s; $$('[data-j]', stepsEl).forEach((el, j) => { el.className = j < s ? 'done' : j === s ? 'now' : 'todo'; el.textContent = `${j < s ? '✓' : j === s ? '▶' : '·'} ${STEPS[j]}` }) }
+  };
+  draw();
+  new ResizeObserver(() => draw()).observe($('#pgLed'));
+  every($('#progBox'), 60, () => { if (i < N) { i++; draw() } });
+  $('#progGo').addEventListener('click', () => { i = 0; t0 = performance.now(); lastStep = -1; draw(); sl.msg('ビルドを始めました') });
+})();
+</script>
+</body>
+</html>
