@@ -86,6 +86,8 @@ section.part { padding-block: 34px 6px }
 .box:focus-within, .box:focus { border-color: var(--fg); outline: none }
 .box-in { padding: 14px 14px 10px }
 .scroll-x { overflow-x: auto }
+/* 見えている分だけ描く一覧の、上下の空白（全体の高さを保つだけ） */
+.v-pad { padding: 0 !important; border: 0 !important; background: none !important }
 
 /* nano のキーの帯 */
 .keys { display: flex; flex-wrap: wrap; gap: 4px 16px; padding: 7px 14px; border-top: 1px solid var(--rule-soft); font-size: 12px; color: var(--dim) }
@@ -132,7 +134,9 @@ kbd.soft { background: transparent; color: var(--fg); border: 1px solid var(--ru
 .meter .br { flex: 1; min-width: 0; overflow: hidden }
 .meter .br .on-g { color: var(--green) } .meter .br .on-y { color: var(--yellow) } .meter .br .on-r { color: var(--red) } .meter .br .off { color: var(--faint) }
 table.top { width: 100%; border-collapse: collapse; font-size: 13px }
-table.top th { text-align: left; font-weight: 700; background: var(--green); color: #fff; padding: 1px 10px; white-space: nowrap }
+#procPanel .scroll-x { max-height: 380px; overflow: auto }  /* 何千件でも箱の高さは決まっていて、描くのは見えている行だけ */
+table.top th { text-align: left; font-weight: 700; background: var(--green); color: #fff; padding: 1px 10px; white-space: nowrap; position: sticky; top: 0; z-index: 1 }
+table.top td.v-gap { padding: 0; border: 0 }
 table.top td { padding: 1px 10px; white-space: nowrap }
 table.top .num { text-align: right }
 table.top tbody tr { cursor: pointer; transition: background var(--t-fast), color var(--t-fast) }
@@ -151,7 +155,8 @@ table.top tbody tr.on.gone td { color: var(--sel-fg); opacity: .6 }
 
 /* 3 AI */
 .tr { padding: 12px 14px 6px; font-size: 13px }
-.tr .st { animation: pop var(--t-base) ease-out; margin-bottom: 4px }
+.tr .st { animation: pop var(--t-base) ease-out; margin-bottom: 4px; content-visibility: auto; contain-intrinsic-size: auto 44px }  /* 高さがそろわない記録は、画面外の分を描かない。履歴は上限つき */
+.tr .st:has(> .diff:last-child) { margin-bottom: 0 }  /* content-visibility で差分の下の余白が外へ重ならなくなるので、前と同じ 8px にそろえる */
 .tr .bul { color: var(--green) }
 .tr .bul.ai { color: var(--magenta) }
 .tr .bul.me { color: var(--blue) }
@@ -204,7 +209,7 @@ table.top tbody tr.on.gone td { color: var(--sel-fg); opacity: .6 }
 .less input::placeholder { color: var(--faint) }
 
 /* 5 pytest */
-.pt { padding: 12px 14px; font-size: 12.5px; line-height: 1.65; overflow-x: auto }
+.pt { padding: 12px 14px; font-size: 12.5px; line-height: 1.65; overflow-x: auto; max-height: 420px; overflow-y: auto }  /* テストのファイルが何千あっても、描くのは見えている行だけ */
 .pt div { white-space: pre }
 .pt .bar { color: var(--green) }
 .pt .barf { color: var(--red) }
@@ -368,7 +373,7 @@ table.top tbody tr.on.gone td { color: var(--sel-fg); opacity: .6 }
         <button data-lv="error" aria-pressed="false">error <span class="n" id="n-error">0</span></button>
       </div>
       <div class="log" id="log"></div>
-      <div class="less"><span class="mode" id="followState">-- 追いかけ中 --</span><span class="sp"></span><input id="logQ" placeholder="/絞り込み" aria-label="ログの絞り込み"></div>
+      <div class="less"><span class="mode" id="followState">-- 追いかけ中 --</span><span class="sp"></span><span class="dim" id="logDrawn"></span><input id="logQ" placeholder="/絞り込み" aria-label="ログの絞り込み"></div>
     </div>
   </section>
 
@@ -457,6 +462,83 @@ const ico = id => px(id);
 document.querySelectorAll('[data-px]').forEach(el => { el.innerHTML = px(el.dataset.px, +el.dataset.cell || 2) });
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
+/* 見えている分だけ描く（Kodou-ui の virt。skills/kodou-ui-build/assets/virt.js と同じもの）。依存なし。
+   行の高さがそろう集まり（リスト、ツリー、表、候補、ログ、プロセス）は、件数が少なくてもこれで描く。
+   - 行の要素は「窓の行数＋上下の数行」だけ作り、スクロールしたら中身を差し替えて使い回す。何千件でも要素の数は変わらない。
+   - 行はふつうの並びのまま置き（DOM の順＝見た目の順なので読み上げが崩れない）、上下の空白の高さで全体の高さを保つ。
+   - 行の中身（fill）は、その行に出す番号が変わったときか、データが変わったときだけ書き換える。選択などの印（mark）は毎回 class を切り替えるだけ。
+   - フォーカスは箱（owner）に置いたままにし、選んでいる行は aria-activedescendant で示す。行の要素は使い回されるので、行にフォーカスを置かない。
+   - 窓の高さは CSS の max-height か height から読む（画面外の節では寸法が 0 になるため）。
+
+   使い方:
+     const v = virt(box, {
+       H: 24,                                   // 行の高さ（px）。省くと中身を入れた行で 1 度だけ測る
+       make: () => { const r = document.createElement('div'); r.className = 'row'; return r },
+       fill: (r, i) => { r.textContent = items[i].name },          // i 番目の中身を入れる
+       mark: (r, i) => r.classList.toggle('on', i === act),         // 印だけ付け直す
+       id: 'files-',                            // 行の id の頭（aria-activedescendant に使う）
+     });
+     v.set(items.length);       // 数か中身が変わったら
+     v.mark(prev); v.to(act); v.active(act);   // 選択を動かしたら
+     box.addEventListener('click', e => { const i = v.index(e.target); ... });  // イベントは箱で 1 つだけ受ける
+*/
+function virt(box, {
+  H = 0, parent = box, make, fill, mark = () => {},
+  gap = () => document.createElement('div'),       // 上下の空白を作る（表なら <tr><td colspan>）
+  gapH = (el, px) => { el.style.height = px },     // 空白の高さを付ける
+  stick = () => 0,                                 // 上に貼りつく見出しの高さ（to で隠れないように）
+  id = '', owner = box, pad = 3, onScroll,
+} = {}) {
+  const cs = getComputedStyle(box), view = parseFloat(cs.maxHeight) || parseFloat(cs.height) || 300;
+  const top = gap(), bot = gap(), pool = [];
+  for (const g of [top, bot]) { g.classList.add('v-gap'); g.setAttribute('aria-hidden', 'true') }
+  parent.append(top, bot);
+  let n = 0, f = 0, act = -1, raf = 0;
+  const h = () => H || 24;
+  const offset = () => top.getBoundingClientRect().top - box.getBoundingClientRect().top + box.scrollTop;  // 箱の上端から行の始まりまで（見出しや余白）
+  const setGap = (el, px) => { const v = px + 'px'; if (el._h !== v) { gapH(el, v); el._h = v } };
+  function draw() {
+    const rows = Math.ceil(view / h()) + pad * 2, m = Math.min(rows, n);
+    while (pool.length < m) { const r = make(); r._i = -1; parent.insertBefore(r, bot); pool.push(r) }  // 要る数まで作り足す
+    while (pool.length > m) pool.pop().remove();                                                          // 減ったら外す
+    f = Math.max(0, Math.min(n - m, Math.floor((box.scrollTop - offset()) / h()) - pad));
+    setGap(top, f * h()); setGap(bot, (n - f - m) * h());
+    for (let k = 0; k < m; k++) {
+      const r = pool[k], i = f + k;
+      if (r._i !== i) { fill(r, i); r._i = i; if (id) r.id = id + i }
+      mark(r, i);
+    }
+    if (!H && pool[0]) { const mh = pool[0].getBoundingClientRect().height; if (mh) { H = mh; draw(); return } }  // 行の高さを 1 度だけ測る
+    if (id) { const r = row(act); r ? owner.setAttribute('aria-activedescendant', r.id) : owner.removeAttribute('aria-activedescendant') }
+  }
+  const row = i => (i >= f && i < f + pool.length && pool[i - f]._i === i ? pool[i - f] : null);
+  box.addEventListener('scroll', () => { if (onScroll) onScroll(); if (!raf) raf = requestAnimationFrame(() => { raf = 0; draw() }) }, { passive: true });
+  return {
+    draw, row,
+    get size() { return n },
+    /** いま作っている行の要素の数 */
+    get count() { return pool.length },
+    /** 数か中身が変わったとき。dirty を false にすると、番号が変わった行だけ書き直す */
+    set(count, dirty = true) { n = count; if (dirty) pool.forEach(r => { r._i = -1 }); draw() },
+    /** i 番目の行だけ書き直す（見えていなければ何もしない） */
+    refill(i) { const r = row(i); if (r) { fill(r, i); mark(r, i) } },
+    /** i 番目の行の印だけ付け直す */
+    mark(i) { const r = row(i); if (r) mark(r, i) },
+    /** i 番目の行が窓に入るようにスクロールする（描いていない行でも番号から位置が分かる） */
+    to(i) {
+      const y = offset() + i * h(), st = box.scrollTop, s = stick(), vh = box.clientHeight || view;
+      if (y < st + s) box.scrollTop = y - s; else if (y + h() > st + vh) box.scrollTop = y + h() - vh;
+      draw();
+    },
+    /** 選んでいる行を読み上げに伝える（aria-activedescendant）。id を渡したときだけ効く */
+    active(i) { act = i; if (id) draw() },
+    /** クリックされた要素から行の番号を引く */
+    index(el) { const r = el && pool.find(p => p === el || p.contains(el)); return r ? r._i : -1 },
+  };
+}
+const divSpacer = () => { const d = document.createElement('div'); d.className = 'v-pad'; d.setAttribute('aria-hidden', 'true'); return d };
+const divSetH = (el, v) => { el.style.height = v };
+
 /* 時計と tmux */
 function tick() { const d = new Date(); $('#clock').textContent = d.toTimeString().slice(0, 5) }
 tick(); setInterval(tick, 10000);
@@ -508,6 +590,13 @@ const FILTERS = [
 const ALIAS = { 'ブランチ': ['kind', 'branch'], 'ファイル': ['kind', 'file'], 'コマンド': ['kind', 'cmd'], 'pr': ['kind', 'pr'], 'プルリク': ['kind', 'pr'], '今日': ['date', 'today'], '今週': ['date', 'week'], '先月': ['date', 'month'] };
 const cmd = { chips: [], sel: 0, suggSel: 0, list: [], suggList: [], lastAlias: null };
 const q = $('#q');
+/* 結果: 見えている行だけ描く。打つたびに並びが変わるので、描いている行だけ中身を書き換える */
+const resEl = $('#results');
+const resV = virt(resEl, { parent: resEl, gap: divSpacer, gapH: divSetH,
+  make() { const d = document.createElement('div'); d.className = 'ln'; d.setAttribute('role', 'option'); d.innerHTML = '<span class="mk">&gt;</span><span class="ic"></span><span class="nm"></span><span class="mt"></span>'; return d },
+  fill(d, i) { const it = cmd.list[i], c = d.children; d.dataset.i = i; c[1].innerHTML = ico(KIND_ICON[it.k]); c[2].innerHTML = cmd.hl(it.name); c[3].textContent = it.meta },
+  mark(d, i) { const on = i === cmd.sel; if (d.classList.contains('on') !== on) d.classList.toggle('on', on); d.setAttribute('aria-selected', on) } });
+resEl.insertAdjacentHTML('beforeend', '<div class="empty" id="resEmpty" hidden>当てはまるものはありません。チップを外すか、言葉を短くしてください。</div>');
 function matchChip(it, c) {
   if (c.key === 'kind') return it.k === c.val;
   if (c.key === 'date') return c.val === 'week' ? it.d !== 'month' : it.d === c.val;
@@ -533,14 +622,15 @@ function renderCmd() {
   cmd.list = ITEMS.filter(it => cmd.chips.every(c => matchChip(it, c)) && (!words || it.name.toLowerCase().includes(words)));
   cmd.sel = Math.min(cmd.sel, Math.max(0, cmd.list.length - 1));
   const hl = s => { if (!words) return esc(s); const i = s.toLowerCase().indexOf(words); if (i < 0) return esc(s); return esc(s.slice(0, i)) + '<mark>' + esc(s.slice(i, i + words.length)) + '</mark>' + esc(s.slice(i + words.length)) };
-  $('#results').innerHTML = cmd.list.length ? cmd.list.map((it, i) => `<div class="ln${i === cmd.sel ? ' on' : ''}" role="option" aria-selected="${i === cmd.sel}" data-i="${i}"><span class="mk">&gt;</span><span class="ic">${ico(KIND_ICON[it.k])}</span><span class="nm">${hl(it.name)}</span><span class="mt">${esc(it.meta)}</span></div>`).join('')
-    : `<div class="empty">当てはまるものはありません。チップを外すか、言葉を短くしてください。</div>`;
-  $('#count').textContent = `${cmd.list.length}/${ITEMS.length}`;
+  cmd.hl = hl;
+  resV.set(cmd.list.length, true);
+  $('#resEmpty').hidden = cmd.list.length > 0;
+  $('#count').textContent = `${cmd.list.length}/${ITEMS.length} · 描いている行 ${resV.count}`;
   $('#took').textContent = `${(performance.now() - t0).toFixed(1)}ms`;
   const ex = $('#explain');
   if (cmd.lastAlias) { ex.hidden = false; ex.innerHTML = `✓ 「${esc(cmd.lastAlias.word)}」を <code>#${cmd.lastAlias.key}:${cmd.lastAlias.val}</code> として絞りました。次からはこう打てます。` }
   else ex.hidden = true;
-  const sel = $('#results .ln.on'); if (sel) sel.scrollIntoView({ block: 'nearest' });
+  if (cmd.list.length) resV.to(cmd.sel);
 }
 function addChip(key, val, word) {
   cmd.chips = cmd.chips.filter(c => c.key !== key);
@@ -584,7 +674,15 @@ const PROCS = [
   { pid: 43007, name: 'tsc', cmd: 'tsc -w -p tsconfig.json', mem: 0.58, cpu: 22.5 },
 ];
 const TOTAL = 16;
-const pr = { sel: 0, armed: null, timer: null, gone: new Set(), left: 0 };
+const pr = { sel: 0, armed: null, timer: null, gone: new Set(), left: 0, max: 1, ver: -1 };
+/* 一覧: 見えている行だけ描く。中身を書き換えるのは止めたプロセスが増えたときだけで、選択は class の切り替えだけ */
+const procBox = $('#procPanel .scroll-x'), procBody = $('#procRows');
+const trSpacer = () => { const tr = document.createElement('tr'); tr.className = 'v-pad'; tr.setAttribute('aria-hidden', 'true'); tr.innerHTML = '<td class="v-gap" colspan="5"></td>'; return tr };
+const procV = virt(procBox, { parent: procBody, gap: trSpacer, gapH: (el, v) => { el.firstChild.style.height = v; el.hidden = v === '0px' },
+  stick: () => procBox.querySelector('thead').getBoundingClientRect().height,
+  make() { const tr = document.createElement('tr'); tr.innerHTML = '<td class="num"></td><td></td><td></td><td class="num"></td><td class="dim"></td>'; return tr },
+  fill(tr, i) { const p = PROCS[i], gone = pr.gone.has(p.pid), c = tr.children; tr.dataset.i = i; tr.classList.toggle('gone', gone); c[0].textContent = p.pid; c[1].textContent = p.name; c[2].innerHTML = memCol(p, pr.max); c[3].textContent = gone ? '-' : p.cpu.toFixed(1); c[4].textContent = gone ? '(停止済み)' : p.cmd },
+  mark(tr, i) { const on = i === pr.sel; if (tr.classList.contains('on') !== on) tr.classList.toggle('on', on) } });
 function meterHTML(used, total, w = 34) {
   const n = Math.round(used / total * w); let s = '';
   for (let i = 0; i < w; i++) { const cls = i >= n ? 'off' : i < w * .5 ? 'on-g' : i < w * .8 ? 'on-y' : 'on-r'; s += `<span class="${cls}">${i < n ? '|' : ' '}</span>` }
@@ -596,11 +694,8 @@ function renderProcs() {
   const used = 4.1 + live.reduce((a, p) => a + p.mem, 0);
   $('#memBar').innerHTML = meterHTML(used, TOTAL);
   $('#swpBar').innerHTML = meterHTML(used > 12 ? 1.6 : 0.2, 4);
-  const max = Math.max(...PROCS.map(p => p.mem));
-  $('#procRows').innerHTML = PROCS.map((p, i) => {
-    const gone = pr.gone.has(p.pid);
-    return `<tr class="${i === pr.sel ? 'on' : ''}${gone ? ' gone' : ''}" data-i="${i}"><td class="num">${p.pid}</td><td>${esc(p.name)}</td><td>${memCol(p, max)}</td><td class="num">${gone ? '-' : p.cpu.toFixed(1)}</td><td class="dim">${gone ? '(停止済み)' : esc(p.cmd)}</td></tr>`;
-  }).join('');
+  pr.max = PROCS.reduce((a, p) => Math.max(a, p.mem), 0);
+  procV.set(PROCS.length, pr.gone.size !== pr.ver); pr.ver = pr.gone.size;
   const m = $('#msgline'); const p = PROCS.find(x => x.pid === pr.armed);
   if (p) { m.className = 'msgline ask'; m.innerHTML = `<span class="q">?</span><span><code>kill -TERM ${p.pid}</code> を送りますか（${esc(p.name)}・${p.mem.toFixed(2)}G 空きます）<b> [y/N]</b></span><span class="cd">${'█'.repeat(pr.left)}${'░'.repeat(6 - pr.left)}</span><button class="btn" data-y>送る</button><button class="btn" data-n>やめる</button>` }
   else if (!m.dataset.keep) { m.className = 'msgline'; m.innerHTML = `<span class="dim">${live.length} 件のプロセス。行を選んで x で停止できます</span>` }
@@ -628,8 +723,8 @@ $('#procPanel').addEventListener('click', e => {
 $('#procPanel').addEventListener('keydown', e => {
   if (e.target.matches('button')) return;
   if (pr.armed) { if (e.key === 'y' || e.key === 'x') confirmStop(); else if (e.key === 'n' || e.key === 'Escape' || e.key === 'Enter') disarm('停止をやめました'); return }
-  if (e.key === 'j' || e.key === 'ArrowDown') { e.preventDefault(); pr.sel = Math.min(PROCS.length - 1, pr.sel + 1); renderProcs() }
-  else if (e.key === 'k' || e.key === 'ArrowUp') { e.preventDefault(); pr.sel = Math.max(0, pr.sel - 1); renderProcs() }
+  if (e.key === 'j' || e.key === 'ArrowDown') { e.preventDefault(); pr.sel = Math.min(PROCS.length - 1, pr.sel + 1); renderProcs(); procV.to(pr.sel) }
+  else if (e.key === 'k' || e.key === 'ArrowUp') { e.preventDefault(); pr.sel = Math.max(0, pr.sel - 1); renderProcs(); procV.to(pr.sel) }
   else if (e.key === 'x') arm(pr.sel);
 });
 renderProcs();
@@ -650,6 +745,8 @@ function stepHTML(s) {
   if (s[0] === 'diff') return `<div class="st"><span class="bul">●</span> <span class="tool">Update</span>(src/ui/CommandInput.tsx)<div class="sub">⎿  +4 -1</div><div class="diff">${DIFF.map(([n, k, t]) => `<div class="${k === '+' ? 'add' : k === '-' ? 'del' : ''}"><span class="n">${n}</span><span>${k}</span><span>${esc(t)}</span></div>`).join('')}</div></div>`;
 }
 const ag = { timer: null, opt: 0, open: false };
+const STEP_CAP = 200;  // 記録は上限つき。古いものから捨てる（高さがそろわないので、画面外は content-visibility で描かない）
+const addStep = h => { const s = $('#steps'); s.insertAdjacentHTML('beforeend', h); while (s.childElementCount > STEP_CAP) s.firstElementChild.remove() };
 function agentState(kind) {
   const m = { live: '<span class="c-red"><span class="dot">●</span> 作業中</span>', wait: '<span class="c-yellow">◆ 確認待ち</span>', ok: '<span class="c-green">✓ 適用済み</span>', no: '<span class="dim">✗ 却下</span>' };
   $('#agentState').innerHTML = m[kind];
@@ -662,7 +759,7 @@ function renderChoice() {
 function agentFull() { $('#steps').innerHTML = STEPS.map(stepHTML).join(''); ag.opt = 0; renderChoice() }
 function agentPlay() {
   clearTimeout(ag.timer); $('#steps').innerHTML = ''; $('#decideBox').innerHTML = ''; ag.open = false; agentState('live'); sl.msg('エージェントが作業を始めました');
-  let i = 0; const next = () => { if (i >= STEPS.length) { ag.opt = 0; renderChoice(); sl.msg('エージェントの変更が確認待ちです'); return } $('#steps').insertAdjacentHTML('beforeend', stepHTML(STEPS[i++])); ag.timer = setTimeout(next, 650) }; next();
+  let i = 0; const next = () => { if (i >= STEPS.length) { ag.opt = 0; renderChoice(); sl.msg('エージェントの変更が確認待ちです'); return } addStep(stepHTML(STEPS[i++])); ag.timer = setTimeout(next, 650) }; next();
 }
 function decide(ok) {
   if (!ag.open) return; ag.open = false;
@@ -682,9 +779,9 @@ $('#agentPanel').addEventListener('keydown', e => {
 $('#steer').addEventListener('submit', e => {
   e.preventDefault(); const v = $('#steerIn').value.trim(); if (!v) return;
   clearTimeout(ag.timer); ag.open = false; $('#decideBox').innerHTML = '';
-  $('#steps').insertAdjacentHTML('beforeend', stepHTML(['me', v])); $('#steerIn').value = '';
+  addStep(stepHTML(['me', v])); $('#steerIn').value = '';
   agentState('live'); sl.msg('指示を送りました。エージェントは今の作業を止めて考え直します');
-  ag.timer = setTimeout(() => { $('#steps').insertAdjacentHTML('beforeend', stepHTML(['ai', '指示を受けて、方針を見直します。'])); ag.opt = 0; renderChoice() }, 900);
+  ag.timer = setTimeout(() => { addStep(stepHTML(['ai', '指示を受けて、方針を見直します。'])); ag.opt = 0; renderChoice() }, 900);
 });
 agentFull();
 
@@ -703,20 +800,28 @@ const LOGS = [
   ['info', 'GET /health 200 1ms'], ['warn', 'memory: free 2.1G (below 3G)'], ['info', 'ws: client disconnected (2)'],
   ['info', 'GET /api/files?q=chip 200 6ms'],
 ];
-const lg = { lines: [], lv: 'all', q: '', follow: true, i: 0, sec: [] };
+const LCAP = 400;  // 持つ行の上限。いっぱいになったら一番古い行に上書きする
+const lg = { ring: new Array(LCAP), head: 0, size: 0, vis: [], n: { all: 0, warn: 0, error: 0 }, lv: 'all', q: '', follow: true, i: 0, sec: [] };
 const logEl = $('#log');
 const fmtT = d => d.toTimeString().slice(0, 8);
 const lineOk = l => (lg.lv === 'all' || l.lv === lg.lv) && (!lg.q || l.m.toLowerCase().includes(lg.q));
-const lineHTML = l => `<div class="${l.lv === 'error' ? 'e' : ''}"><span class="t">${l.t}</span><span class="lv-${l.lv}">${l.lv.toUpperCase()}</span><span class="m">${esc(l.m)}</span></div>`;
-function renderLog() { logEl.innerHTML = lg.lines.filter(lineOk).map(lineHTML).join(''); if (lg.follow) logEl.scrollTop = logEl.scrollHeight }
-function counts() { $('#n-all').textContent = lg.lines.length; $('#n-warn').textContent = lg.lines.filter(l => l.lv === 'warn').length; $('#n-error').textContent = lg.lines.filter(l => l.lv === 'error').length }
-function pushLog() {
-  const [lv, m] = LOGS[lg.i++ % LOGS.length]; const l = { t: fmtT(new Date()), lv, m };
-  lg.lines.push(l); if (lg.lines.length > 400) lg.lines.shift(); lg.sec.push(Date.now());
-  if (lineOk(l)) { logEl.insertAdjacentHTML('beforeend', lineHTML(l)); if (lg.follow) logEl.scrollTop = logEl.scrollHeight }
-  counts();
+const lineAt = i => lg.ring[(lg.head - lg.size + i + LCAP) % LCAP];  // i 番目に古い行
+/* 描くのは見えている行だけ。絞り込みは見せる行の並び（lg.vis）だけを作り直す */
+const logV = virt(logEl, { parent: logEl, gap: divSpacer, gapH: divSetH, onScroll: () => setFollow(logEl.scrollHeight - logEl.scrollTop - logEl.clientHeight < 8),
+  make() { const d = document.createElement('div'); d.innerHTML = '<span class="t"></span><span></span><span class="m"></span>'; return d },
+  fill(d, i) { const l = lg.vis[i], c = d.children; d.className = l.lv === 'error' ? 'e' : ''; c[0].textContent = l.t; c[1].className = 'lv-' + l.lv; c[1].textContent = l.lv.toUpperCase(); c[2].textContent = l.m } });
+function drawLog(dirty) { logV.set(lg.vis.length, dirty); if (lg.follow) { logEl.scrollTop = logEl.scrollHeight; logV.draw() } $('#logDrawn').textContent = `描いている行 ${logV.count}` }
+function renderLog() { lg.vis = []; for (let i = 0; i < lg.size; i++) { const l = lineAt(i); if (lineOk(l)) lg.vis.push(l) } drawLog(true) }
+function counts() { $('#n-all').textContent = lg.n.all; $('#n-warn').textContent = lg.n.warn; $('#n-error').textContent = lg.n.error }
+function addLine(l) {  // 古い行を捨てて見せる並びの番号がずれたら true
+  let shifted = false;
+  if (lg.size === LCAP) { const old = lg.ring[lg.head]; lg.n.all--; if (old.lv !== 'info') lg.n[old.lv]--; if (lg.vis[0] === old) { lg.vis.shift(); shifted = true } } else lg.size++;
+  lg.ring[lg.head] = l; lg.head = (lg.head + 1) % LCAP; lg.n.all++; if (l.lv !== 'info') lg.n[l.lv]++;
+  if (lineOk(l)) lg.vis.push(l);
+  return shifted;
 }
-for (let k = 0; k < 14; k++) { const [lv, m] = LOGS[k % LOGS.length]; lg.lines.push({ t: fmtT(new Date(Date.now() - (14 - k) * 900)), lv, m }); lg.i++ }
+function pushLog() { const [lv, m] = LOGS[lg.i++ % LOGS.length]; const shifted = addLine({ t: fmtT(new Date()), lv, m }); lg.sec.push(Date.now()); drawLog(shifted); counts() }
+for (let k = 0; k < 14; k++) { const [lv, m] = LOGS[k % LOGS.length]; addLine({ t: fmtT(new Date(Date.now() - (14 - k) * 900)), lv, m }); lg.i++ }
 counts(); renderLog(); setInterval(pushLog, 900);
 setInterval(() => { const now = Date.now(); lg.sec = lg.sec.filter(t => now - t < 5000); const r = (lg.sec.length / 5).toFixed(1); $('#logRate').textContent = `${r} 行/秒`; $('#slLiveTxt').textContent = `${r} 行/秒` }, 1000);
 function setFollow(on) {
@@ -725,7 +830,6 @@ function setFollow(on) {
   f.className = 'mode' + (on ? '' : ' paused');
   f.textContent = on ? '-- 追いかけ中 --' : ':止めています（上を読んでいるため）  G で最新へ';
 }
-logEl.addEventListener('scroll', () => setFollow(logEl.scrollHeight - logEl.scrollTop - logEl.clientHeight < 8));
 $('#logBox').addEventListener('keydown', e => {
   if (e.target.matches('input')) { if (e.key === 'Escape') { e.target.value = ''; lg.q = ''; renderLog(); $('#logBox').focus() } return }
   if (e.key === 'G') { logEl.scrollTop = logEl.scrollHeight; setFollow(true); sl.msg('最新へ移りました') }
@@ -739,9 +843,14 @@ $('#logQ').addEventListener('input', e => { lg.q = e.target.value.replace(/^\//,
 const FILES = [['tests/test_parse_filter.py', 24], ['tests/test_alias.py', 18], ['tests/test_chip.py', 16], ['tests/test_statusline.py', 20], ['tests/test_log_stream.py', 22], ['tests/test_confirm.py', 12]];
 const TOTALT = FILES.reduce((a, f) => a + f[1], 0), FAILT = 47;
 const pg = { timer: null };
+/* 出力: 行は [class, 中身] で持ち、描くのは見えている行だけ。中身が変わった行だけ書き換える */
+const ptEl = $('#pt'); let ptLines = [];
+const ptV = virt(ptEl, { parent: ptEl, gap: divSpacer, gapH: divSetH,
+  make() { return document.createElement('div') },
+  fill(d, i) { const [c, h] = ptLines[i]; if (d._c !== c) { d.className = c; d._c = c } if (d._x !== h) { d.innerHTML = h; d._x = h } } });
 function renderPt(done, secs) {
   const fail = done > FAILT ? 1 : 0;
-  const out = [`<div class="h">=================== test session starts ===================</div>`, `<div>collected ${TOTALT} items</div>`, `<div> </div>`];
+  const out = [['h', '=================== test session starts ==================='], ['', `collected ${TOTALT} items`], ['', ' ']];
   let start = 0;
   for (const [f, c] of FILES) {
     if (start > done || (start === done && done >= TOTALT)) break;
@@ -752,14 +861,16 @@ function renderPt(done, secs) {
       else { if (g === done) { s += '<span class="run">_</span>'; shown++ } break }
     }
     const pct = Math.round(Math.min(start + c, done) / TOTALT * 100);
-    out.push(`<div>${f.padEnd(28)} ${s}${' '.repeat(Math.max(1, 26 - shown))}<span class="pct">[${String(pct).padStart(3)}%]</span></div>`);
+    out.push(['', `${f.padEnd(28)} ${s}${' '.repeat(Math.max(1, 26 - shown))}<span class="pct">[${String(pct).padStart(3)}%]</span>`]);
     start += c;
   }
   if (done >= TOTALT) {
-    out.push(`<div> </div>`, `<div class="barf">========================= FAILURES ========================</div>`, `<div class="F">_____ test_backspace_on_empty_removes_one_chip _____</div>`, `<div>    assert len(chips) == 1</div>`, `<div class="F">E   assert 0 == 1</div>`);
-    out.push(`<div class="${fail ? 'sum-f' : 'sum-ok'}">=========== ${fail} failed, ${TOTALT - fail} passed in ${secs.toFixed(2)}s ===========</div>`);
-  } else out.push(`<div> </div>`, `<div class="dim">${done}/${TOTALT}  ${secs.toFixed(1)}s  失敗 ${fail}</div>`);
-  $('#pt').innerHTML = out.join('');
+    out.push(['', ' '], ['barf', '========================= FAILURES ========================'], ['F', '_____ test_backspace_on_empty_removes_one_chip _____'], ['', '    assert len(chips) == 1'], ['F', 'E   assert 0 == 1']);
+    out.push([fail ? 'sum-f' : 'sum-ok', `=========== ${fail} failed, ${TOTALT - fail} passed in ${secs.toFixed(2)}s ===========`]);
+  } else out.push(['', ' '], ['dim', `${done}/${TOTALT}  ${secs.toFixed(1)}s  失敗 ${fail}`]);
+  const atEnd = ptEl.scrollHeight - ptEl.scrollTop - ptEl.clientHeight < 8;  // 下を見ていたら、伸びても下についていく
+  ptLines = out; ptV.set(out.length, true);
+  if (atEnd) { ptEl.scrollTop = ptEl.scrollHeight; ptV.draw() }
 }
 function runTests(startAt) {
   clearInterval(pg.timer); let d = startAt; const t0 = performance.now() - startAt * 37;

@@ -170,7 +170,7 @@ kbd { font: 700 11.5px var(--font); background: var(--sel-bg); color: var(--sel-
 .pop { background: var(--panel); color: var(--fg); border: 1px solid var(--fg); box-shadow: 4px 4px 0 var(--rule-soft); padding: 4px 0; max-height: 260px; overflow: auto; font: 13.5px/1.6 var(--font) }
 .pop[popover] { position: fixed; inset: auto; margin: 0 }
 .pop:popover-open { animation: pop var(--t-base) ease-out }
-.opt-ln { display: grid; grid-template-columns: 2ch minmax(0,1fr) auto; gap: 0 6px; min-height: 24px; padding: 1px 10px 1px 8px; cursor: pointer; white-space: nowrap; align-items: center }
+.opt-ln { display: grid; grid-template-columns: 2ch minmax(0,1fr) auto; gap: 0 6px; height: 24px; padding: 1px 10px 1px 8px; cursor: pointer; white-space: nowrap; align-items: center }
 .opt-ln .mk { color: var(--blue); font-weight: 700 }
 .opt-ln .mt { color: var(--faint); font-size: 12px; padding-left: 2ch }
 .opt-ln:hover:not(.on):not(.dis) { background: var(--rule-soft) }
@@ -238,8 +238,10 @@ kbd.ol { background: transparent; color: inherit; border: 1px solid var(--rule);
 .tags-in input { flex: 1; min-width: 12ch; border: 0; outline: 0; background: transparent; padding: 2px; caret-shape: block }
 
 /* リスト・ツリー */
+/* 数が増えうる集まりは、窓の高さを決めて見えている分だけ描く（virt） */
+.list, .tree { max-height: 312px; overflow: auto; overscroll-behavior: contain }
 .list { padding: 12px 0 4px }
-.li { display: grid; grid-template-columns: 2ch 2.4ch minmax(0,1fr) auto; gap: 0 6px; align-items: center; min-height: 24px; padding: 1px 12px; white-space: nowrap; cursor: pointer }
+.li { display: grid; grid-template-columns: 2ch 2.4ch minmax(0,1fr) auto; gap: 0 6px; align-items: center; height: 24px; padding: 1px 12px; white-space: nowrap; cursor: pointer }
 .li .mk { color: var(--blue); font-weight: 700 }
 .li .nm { overflow: hidden; text-overflow: ellipsis; min-width: 0 }
 .li .sub { display: block; font: 12px/1.5 var(--font-read); color: var(--dim); overflow: hidden; text-overflow: ellipsis }
@@ -249,10 +251,10 @@ kbd.ol { background: transparent; color: inherit; border: 1px solid var(--rule);
 .li.on .mt, .li.on .sub, .li.on .mk { color: inherit }
 .li.picked:not(.on) { background: var(--blue-bg) }
 .list.simple .li { grid-template-columns: 2ch minmax(0,1fr) }
-.list.meta .li { padding-block: 4px }
+.list.meta .li { padding-block: 4px; height: 48px }
 .vlist { margin-top: 12px; height: 264px; overflow: auto; position: relative; overscroll-behavior: contain }
 .vl-sp { position: relative }
-.vl-row { position: absolute; top: 0; left: 0; right: 0; height: 22px; display: grid; grid-template-columns: 2ch 8ch 8ch minmax(0,1fr) auto; gap: 0 1ch; align-items: center; padding: 0 12px; white-space: nowrap; cursor: pointer; will-change: transform }
+.vl-row { height: 22px; display: grid; grid-template-columns: 2ch 8ch 8ch minmax(0,1fr) auto; gap: 0 1ch; align-items: center; padding: 0 12px; white-space: nowrap; cursor: pointer }
 .vl-row .h { color: var(--yellow) } .vl-row .a { color: var(--cyan) } .vl-row .d { color: var(--faint); font-size: 12px }
 .vl-row .m { overflow: hidden; text-overflow: ellipsis; min-width: 0 }
 .vl-row .mk { color: var(--blue); font-weight: 700 }
@@ -260,7 +262,7 @@ kbd.ol { background: transparent; color: inherit; border: 1px solid var(--rule);
 .vl-row.on { background: var(--sel-bg); color: var(--sel-fg) }
 .vl-row.on .h, .vl-row.on .a, .vl-row.on .d, .vl-row.on .mk { color: inherit }
 .tree { padding: 12px 0 4px; font-size: 13px }
-.tn { display: flex; align-items: center; gap: 6px; min-height: 24px; padding: 0 12px; white-space: nowrap; cursor: pointer }
+.tn { display: flex; align-items: center; gap: 6px; height: 24px; padding: 0 12px; white-space: nowrap; cursor: pointer }
 .tn .tw { width: 1.5ch; color: var(--dim) }
 .tn .guide { color: var(--deco); white-space: pre }
 .tn.on { background: var(--sel-bg); color: var(--sel-fg) }
@@ -286,8 +288,12 @@ table.t th button { border: 0; background: transparent; color: inherit; font-wei
 table.t th .ar { opacity: .5 } table.t th[aria-sort] .ar { opacity: 1 }
 table.t td { padding: 1px 10px; white-space: nowrap; border-bottom: 1px solid var(--rule-soft) }
 table.t .num { text-align: right }
-table.t tbody tr { cursor: pointer }
-table.t tbody tr:hover:not(.on) { background: var(--rule-soft) }
+table.t tbody tr { cursor: pointer; height: 24px }
+.tbl-scroll { max-height: 312px; overflow: auto; overscroll-behavior: contain }
+table.t thead th { position: sticky; top: 0; z-index: 1 }
+table.t tbody tr.v-gap { cursor: default; height: auto }
+table.t tbody tr.v-gap td { padding: 0; border: 0 }
+table.t tbody tr:hover:not(.on):not(.v-gap) { background: var(--rule-soft) }
 table.t tbody tr.on { background: var(--sel-bg); color: var(--sel-fg) }
 table.t tbody tr.on .dim, table.t tbody tr.on .spark, table.t tbody tr.on .ck { color: inherit }
 table.t tbody tr.picked:not(.on) { background: var(--blue-bg) }
@@ -301,13 +307,12 @@ table.t tr.picked td.ck::before { content: "[x]" }
 .lvl button { border: 0; background: transparent; color: var(--dim); padding: 0 8px; cursor: pointer; line-height: 24px }
 .lvl button[aria-pressed="true"] { background: var(--sel-bg); color: var(--sel-fg); font-weight: 700 }
 .log { height: 210px; overflow: auto; font-size: 12.5px; line-height: 1.6; padding: 2px 0 6px; overscroll-behavior: contain }
-.log div { display: grid; grid-template-columns: 9ch 6ch minmax(0,1fr); gap: 0 1ch; padding: 0 14px; white-space: nowrap }
+.log .sp { position: relative }
+.log .ln { position: absolute; left: 0; right: 0; height: 20px; line-height: 20px; display: grid; grid-template-columns: 9ch 6ch minmax(0,1fr); gap: 0 1ch; padding: 0 14px; white-space: nowrap }
 .log .t { color: var(--faint) }
 .log .lv { color: var(--cyan) } .log .w .lv { color: var(--yellow) } .log .e .lv { color: var(--red); font-weight: 700 }
-.log div.e { background: var(--red-bg) }
+.log .ln.e { background: var(--red-bg) }
 .log .m { overflow: hidden; text-overflow: ellipsis }
-.log[data-lv="warn"] div:not(.w) { display: none }
-.log[data-lv="error"] div:not(.e) { display: none }
 .less { display: flex; align-items: center; gap: 10px; padding: 3px 14px; border-top: 1px solid var(--rule-soft); font-size: 12.5px; min-height: 30px }
 .less .mode { font-weight: 700 }
 .less .mode.paused-ln { background: var(--yellow); color: var(--panel); padding: 0 6px }
@@ -696,9 +701,9 @@ dialog.dlg[open] { animation: pop var(--t-base) ease-out }
 
 <section class="comp" id="c-table" data-grp="表示">
   <div class="comp-head"><h2>表<span class="en">table</span></h2><span class="tag t4">うまくなる</span></div>
-  <p class="lead">見出しで並べ替え、行を選べます。数字は右にそろえ、桁を合わせます。並べ替えても行は作り直さず、並びだけ動かします。</p>
+  <p class="lead">見出しで並べ替え、行を選べます。数字は右にそろえ、桁を合わせます。描くのは見えている行だけで、並べ替えても行は作り直さず、並びだけ動かします。</p>
   <div class="box" id="tblBox" data-key="j/k Space s" tabindex="0"><span class="ttl">依存パッケージ</span><span class="ttl-r" id="tbN"></span>
-    <div class="scroll-x"><table class="t" id="tbl"><thead></thead><tbody></tbody></table></div>
+    <div class="scroll-x tbl-scroll" id="tblScroll"><table class="t" id="tbl"><thead></thead><tbody></tbody></table></div>
     <div class="keys"><span><kbd>j/k</kbd>移動</span><span><kbd>Space</kbd>選ぶ</span><span><kbd>s</kbd>並べ替え</span></div></div>
 </section>
 
@@ -999,6 +1004,80 @@ function loop(now) { loopId = requestAnimationFrame(loop); for (const t of tasks
 const startLoop = () => { if (!loopId) loopId = requestAnimationFrame(loop); document.body.classList.remove('paused') };
 const stopLoop = () => { cancelAnimationFrame(loopId); loopId = 0; document.body.classList.add('paused') };
 document.addEventListener('visibilitychange', () => document.hidden ? stopLoop() : startLoop());
+/* 見えている分だけ描く（Kodou-ui の virt。skills/kodou-ui-build/assets/virt.js と同じもの）。依存なし。
+   行の高さがそろう集まり（リスト、ツリー、表、候補、ログ、プロセス）は、件数が少なくてもこれで描く。
+   - 行の要素は「窓の行数＋上下の数行」だけ作り、スクロールしたら中身を差し替えて使い回す。何千件でも要素の数は変わらない。
+   - 行はふつうの並びのまま置き（DOM の順＝見た目の順なので読み上げが崩れない）、上下の空白の高さで全体の高さを保つ。
+   - 行の中身（fill）は、その行に出す番号が変わったときか、データが変わったときだけ書き換える。選択などの印（mark）は毎回 class を切り替えるだけ。
+   - フォーカスは箱（owner）に置いたままにし、選んでいる行は aria-activedescendant で示す。行の要素は使い回されるので、行にフォーカスを置かない。
+   - 窓の高さは CSS の max-height か height から読む（画面外の節では寸法が 0 になるため）。
+
+   使い方:
+     const v = virt(box, {
+       H: 24,                                   // 行の高さ（px）。省くと中身を入れた行で 1 度だけ測る
+       make: () => { const r = document.createElement('div'); r.className = 'row'; return r },
+       fill: (r, i) => { r.textContent = items[i].name },          // i 番目の中身を入れる
+       mark: (r, i) => r.classList.toggle('on', i === act),         // 印だけ付け直す
+       id: 'files-',                            // 行の id の頭（aria-activedescendant に使う）
+     });
+     v.set(items.length);       // 数か中身が変わったら
+     v.mark(prev); v.to(act); v.active(act);   // 選択を動かしたら
+     box.addEventListener('click', e => { const i = v.index(e.target); ... });  // イベントは箱で 1 つだけ受ける
+*/
+function virt(box, {
+  H = 0, parent = box, make, fill, mark = () => {},
+  gap = () => document.createElement('div'),       // 上下の空白を作る（表なら <tr><td colspan>）
+  gapH = (el, px) => { el.style.height = px },     // 空白の高さを付ける
+  stick = () => 0,                                 // 上に貼りつく見出しの高さ（to で隠れないように）
+  id = '', owner = box, pad = 3, onScroll,
+} = {}) {
+  const cs = getComputedStyle(box), view = parseFloat(cs.maxHeight) || parseFloat(cs.height) || 300;
+  const top = gap(), bot = gap(), pool = [];
+  for (const g of [top, bot]) { g.classList.add('v-gap'); g.setAttribute('aria-hidden', 'true') }
+  parent.append(top, bot);
+  let n = 0, f = 0, act = -1, raf = 0;
+  const h = () => H || 24;
+  const offset = () => top.getBoundingClientRect().top - box.getBoundingClientRect().top + box.scrollTop;  // 箱の上端から行の始まりまで（見出しや余白）
+  const setGap = (el, px) => { const v = px + 'px'; if (el._h !== v) { gapH(el, v); el._h = v } };
+  function draw() {
+    const rows = Math.ceil(view / h()) + pad * 2, m = Math.min(rows, n);
+    while (pool.length < m) { const r = make(); r._i = -1; parent.insertBefore(r, bot); pool.push(r) }  // 要る数まで作り足す
+    while (pool.length > m) pool.pop().remove();                                                          // 減ったら外す
+    f = Math.max(0, Math.min(n - m, Math.floor((box.scrollTop - offset()) / h()) - pad));
+    setGap(top, f * h()); setGap(bot, (n - f - m) * h());
+    for (let k = 0; k < m; k++) {
+      const r = pool[k], i = f + k;
+      if (r._i !== i) { fill(r, i); r._i = i; if (id) r.id = id + i }
+      mark(r, i);
+    }
+    if (!H && pool[0]) { const mh = pool[0].getBoundingClientRect().height; if (mh) { H = mh; draw(); return } }  // 行の高さを 1 度だけ測る
+    if (id) { const r = row(act); r ? owner.setAttribute('aria-activedescendant', r.id) : owner.removeAttribute('aria-activedescendant') }
+  }
+  const row = i => (i >= f && i < f + pool.length && pool[i - f]._i === i ? pool[i - f] : null);
+  box.addEventListener('scroll', () => { if (onScroll) onScroll(); if (!raf) raf = requestAnimationFrame(() => { raf = 0; draw() }) }, { passive: true });
+  return {
+    draw, row,
+    get size() { return n },
+    /** いま作っている行の要素の数 */
+    get count() { return pool.length },
+    /** 数か中身が変わったとき。dirty を false にすると、番号が変わった行だけ書き直す */
+    set(count, dirty = true) { n = count; if (dirty) pool.forEach(r => { r._i = -1 }); draw() },
+    /** i 番目の行だけ書き直す（見えていなければ何もしない） */
+    refill(i) { const r = row(i); if (r) { fill(r, i); mark(r, i) } },
+    /** i 番目の行の印だけ付け直す */
+    mark(i) { const r = row(i); if (r) mark(r, i) },
+    /** i 番目の行が窓に入るようにスクロールする（描いていない行でも番号から位置が分かる） */
+    to(i) {
+      const y = offset() + i * h(), st = box.scrollTop, s = stick(), vh = box.clientHeight || view;
+      if (y < st + s) box.scrollTop = y - s; else if (y + h() > st + vh) box.scrollTop = y + h() - vh;
+      draw();
+    },
+    /** 選んでいる行を読み上げに伝える（aria-activedescendant）。id を渡したときだけ効く */
+    active(i) { act = i; if (id) draw() },
+    /** クリックされた要素から行の番号を引く */
+    index(el) { const r = el && pool.find(p => p === el || p.contains(el)); return r ? r._i : -1 },
+  };
+}
 
 /* ドット絵のアイコン: 8×8（PX）と 12×12（PX12）の格子。マスは行ごとにまとめた path */
 const PX = {
@@ -1280,16 +1359,20 @@ $('#step').addEventListener('keydown', e => {
 $('#stVal').addEventListener('change', e => setStep(parseInt(e.target.value, 10) || ST.min, 1));
 setStep(4);
 
-/* セレクト（popover。開閉と Esc・外をクリックで閉じるのはブラウザ任せ） */
+/* セレクト（popover。開閉と Esc・外をクリックで閉じるのはブラウザ任せ）。候補は見えている分だけ描く（ブランチが何百本でも同じ） */
 (() => {
   const items = ['main', 'develop', 'feat/command-chips', 'fix/log-follow', 'release/1.5', 'spike/agent-steer'];
   const btn = $('#selBtn'), pop = $('#selPop'); let val = 0, act = 0;
-  pop.innerHTML = items.map((it, i) => `<div class="opt-ln" role="option" data-i="${i}"><span class="mk"></span><span>${esc(it)}</span><span class="mt">${i === 0 ? '既定' : ''}</span></div>`).join('');
-  const opts = pop.children;
-  const mark = () => { for (let i = 0; i < opts.length; i++) { opts[i].classList.toggle('on', i === act); opts[i].firstChild.textContent = i === val ? '✓' : ''; opts[i].setAttribute('aria-selected', i === val) } };
-  const setAct = i => { opts[act].classList.remove('on'); act = i; opts[act].classList.add('on'); opts[act].scrollIntoView({ block: 'nearest' }) };
+  const v = virt(pop, {
+    H: 24, id: 'sel-', owner: btn,
+    make: () => { const o = document.createElement('div'); o.className = 'opt-ln'; o.setAttribute('role', 'option'); o.innerHTML = '<span class="mk"></span><span></span><span class="mt"></span>'; return o },
+    fill: (o, i) => { o.children[1].textContent = items[i]; o.children[2].textContent = i === 0 ? '既定' : ''; o.setAttribute('aria-posinset', i + 1); o.setAttribute('aria-setsize', items.length) },
+    mark: (o, i) => { o.classList.toggle('on', i === act); o.firstChild.textContent = i === val ? '✓' : ''; o.setAttribute('aria-selected', i === val) },
+  });
+  v.set(items.length);
+  const setAct = i => { const p = act; act = i; v.mark(p); v.to(act); v.active(act) };
   const pick = i => { val = i; btn.querySelector('.v').textContent = items[i]; if (pop.matches(':popover-open')) pop.hidePopover(); btn.focus(); sl.msg(`比べるブランチ: ${items[i]}`) };
-  pop.addEventListener('toggle', e => { const open = e.newState === 'open'; btn.setAttribute('aria-expanded', open); if (open) { act = val; mark(); place(pop, btn) } });
+  pop.addEventListener('toggle', e => { const open = e.newState === 'open'; btn.setAttribute('aria-expanded', open); if (open) { act = val; place(pop, btn); v.to(act); v.active(act) } else v.active(-1) });
   btn.addEventListener('keydown', e => {
     const open = pop.matches(':popover-open');
     if (!open) {
@@ -1302,39 +1385,43 @@ setStep(4);
     else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(act) }
     else if (e.key.length === 1) { const j = items.findIndex(it => it.startsWith(e.key.toLowerCase())); if (j >= 0) setAct(j) }
   });
-  pop.addEventListener('click', e => { const o = e.target.closest('.opt-ln'); if (o) pick(+o.dataset.i) });
+  pop.addEventListener('click', e => { const i = v.index(e.target.closest('.opt-ln')); if (i >= 0) pick(i) });
 })();
 
-/* コンボボックス: 候補は1度だけ作り、絞り込みは hidden の切り替え */
+/* コンボボックス: 候補は見えている分だけ描く。絞り込みは当たった番号の並びを作り直すだけ */
 (() => {
   const PKGS = [['react', '18.3.1'], ['react-dom', '18.3.1'], ['typescript', '5.4.5'], ['vite', '5.2.11'], ['vitest', '1.6.0'], ['zod', '3.23.8'], ['prettier', '3.2.5'], ['eslint', '8.57.0'], ['date-fns', '3.6.0'], ['zustand', '4.5.2'], ['chalk', '5.3.0'], ['commander', '12.0.0']];
   const inp = $('#cbIn'), box = $('#cbInp'), pop = $('#cbPop');
-  pop.innerHTML = `<div class="hd" id="cbCount"></div>` + PKGS.map((p, i) => `<div class="opt-ln" role="option" data-i="${i}"><span class="mk">${px('pkg', 2, false, true)}</span><span class="nm">${p[0]}</span><span class="mt">${p[1]}</span></div>`).join('') + `<div class="empty-ln" id="cbNone" hidden></div>`;
-  const rows = $$('.opt-ln', pop); let vis = [], act = 0, lastQ = null;
+  pop.innerHTML = `<div class="hd" id="cbCount"></div><div id="cbRows"></div><div class="empty-ln" id="cbNone" hidden></div>`;
+  let vis = [], act = 0, lastQ = null, q = '';
+  const v = virt(pop, {
+    H: 24, parent: $('#cbRows'), id: 'cb-', owner: inp,
+    make: () => { const o = document.createElement('div'); o.className = 'opt-ln'; o.setAttribute('role', 'option'); o.innerHTML = `<span class="mk">${px('pkg', 2, false, true)}</span><span class="nm"></span><span class="mt"></span>`; return o },
+    fill: (o, j) => { const [n, ver] = PKGS[vis[j]], k = q ? n.indexOf(q) : -1; o.children[1].innerHTML = k >= 0 ? esc(n.slice(0, k)) + '<mark>' + esc(n.slice(k, k + q.length)) + '</mark>' + esc(n.slice(k + q.length)) : esc(n); o.children[2].textContent = ver; o.setAttribute('aria-posinset', j + 1); o.setAttribute('aria-setsize', vis.length) },
+    mark: (o, j) => { o.classList.toggle('on', j === act); o.setAttribute('aria-selected', j === act) },
+  });
   const open = () => { if (!pop.matches(':popover-open')) { pop.showPopover(); inp.setAttribute('aria-expanded', true) } place(pop, box) };
   const close = () => { if (pop.matches(':popover-open')) pop.hidePopover(); inp.setAttribute('aria-expanded', false) };
   function filter() {
-    const q = inp.value.trim().toLowerCase();
-    if (q !== lastQ) {
-      lastQ = q; vis = [];
-      rows.forEach((r, i) => { const n = PKGS[i][0], k = n.indexOf(q), hit = k >= 0; r.hidden = !hit; if (hit) { vis.push(i); r.children[1].innerHTML = q ? esc(n.slice(0, k)) + '<mark>' + esc(n.slice(k, k + q.length)) + '</mark>' + esc(n.slice(k + q.length)) : n } });
-      $('#cbCount').textContent = `${vis.length}/${PKGS.length} 件`;
-      const none = $('#cbNone'); none.hidden = vis.length > 0; none.textContent = `「${q}」に当てはまるものはありません`;
-      act = 0;
-    }
-    rows.forEach(r => r.classList.remove('on')); if (vis.length) rows[vis[act]].classList.add('on');
+    q = inp.value.trim().toLowerCase();
+    if (q === lastQ) return;
+    lastQ = q; vis = []; PKGS.forEach((p, i) => { if (p[0].includes(q)) vis.push(i) }); act = 0;
+    $('#cbCount').textContent = `${vis.length}/${PKGS.length} 件`;
+    const none = $('#cbNone'); none.hidden = vis.length > 0; none.textContent = `「${q}」に当てはまるものはありません`;
+    pop.scrollTop = 0; v.set(vis.length); v.active(act);
   }
+  const move = d => { if (!vis.length) return; const p = act; act = (act + d + vis.length) % vis.length; v.mark(p); v.to(act); v.active(act) };
   const pick = () => { const i = vis[act]; if (i == null) return; inp.value = PKGS[i][0]; close(); $('#cbHelp').innerHTML = `<span class="c-green">✓</span> npm i ${esc(PKGS[i][0])}@${PKGS[i][1]} を追加します`; sl.msg(`${PKGS[i][0]} を選びました`) };
   inp.addEventListener('focus', () => { filter(); open() });
   inp.addEventListener('input', () => frame('cb', () => { filter(); open() }));
   inp.addEventListener('keydown', e => {
-    if (e.key === 'ArrowDown') { e.preventDefault(); open(); if (vis.length) { act = (act + 1) % vis.length; filter(); rows[vis[act]].scrollIntoView({ block: 'nearest' }) } }
-    else if (e.key === 'ArrowUp') { e.preventDefault(); if (vis.length) { act = (act - 1 + vis.length) % vis.length; filter(); rows[vis[act]].scrollIntoView({ block: 'nearest' }) } }
+    if (e.key === 'ArrowDown') { e.preventDefault(); open(); move(1) }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); move(-1) }
     else if (e.key === 'Enter') { e.preventDefault(); pick() }
     else if (e.key === 'Escape') close();
   });
   inp.addEventListener('blur', () => setTimeout(close, 120));
-  pop.addEventListener('mousedown', e => { const o = e.target.closest('.opt-ln'); if (o) { e.preventDefault(); act = vis.indexOf(+o.dataset.i); pick() } });
+  pop.addEventListener('mousedown', e => { const j = v.index(e.target.closest('.opt-ln')); if (j >= 0) { e.preventDefault(); act = j; pick() } });
 })();
 
 /* チェック・ラジオ・スイッチ: 印は CSS。JS は「すべて」の中間と、いまの値の表示だけ */
@@ -1392,27 +1479,33 @@ $('#sldIn').addEventListener('input', () => frame('sld', () => { renderSlider();
   add('ui'); add('tui');
 })();
 
-/* リスト: 移動したら変わった2行だけ書き換える */
+/* リスト: 見えている分だけ描く。移動したら変わった2行の印だけ付け直す */
 function makeList(el, items, opts = {}) {
   let act = 0; const picked = new Set();
-  el.innerHTML = items.map((it, i) => opts.simple
-    ? `<div class="li" data-i="${i}"><span class="mk"></span><span class="nm">${esc(it)}</span></div>`
-    : `<div class="li" data-i="${i}"><span class="mk"></span><span class="ic">${px(it.ic)}</span><span class="nm">${esc(it.nm)}${it.sub ? `<span class="sub">${esc(it.sub)}</span>` : ''}</span><span class="mt">${esc(it.mt || '')}</span></div>`).join('');
-  const rows = el.children;
-  const upd = i => { const r = rows[i]; if (!r) return; r.classList.toggle('on', i === act); r.classList.toggle('picked', picked.has(i)); r.firstChild.textContent = opts.multi ? (picked.has(i) ? '✓' : '') : (i === act ? '>' : '') };
-  const setAct = i => { const p = act; act = Math.max(0, Math.min(items.length - 1, i)); upd(p); upd(act); rows[act].scrollIntoView({ block: 'nearest' }) };
-  const toggle = i => { picked.has(i) ? picked.delete(i) : picked.add(i); upd(i); opts.onPick && opts.onPick(picked.size) };
+  el.setAttribute('role', 'listbox'); if (opts.multi) el.setAttribute('aria-multiselectable', 'true');
+  const v = virt(el, {
+    H: opts.H || 24, id: el.id + '-',
+    make: () => { const r = document.createElement('div'); r.className = 'li'; r.setAttribute('role', 'option'); r.innerHTML = opts.simple ? '<span class="mk"></span><span class="nm"></span>' : '<span class="mk"></span><span class="ic"></span><span class="nm"></span><span class="mt"></span>'; return r },
+    fill: (r, i) => {
+      const it = items[i], c = r.children;
+      if (opts.simple) { c[1].textContent = it; return }
+      c[1].innerHTML = px(it.ic); c[2].innerHTML = esc(it.nm) + (it.sub ? `<span class="sub">${esc(it.sub)}</span>` : ''); c[3].textContent = it.mt || '';
+    },
+    mark: (r, i) => { r.classList.toggle('on', i === act); r.classList.toggle('picked', picked.has(i)); r.firstChild.textContent = opts.multi ? (picked.has(i) ? '✓' : '') : (i === act ? '>' : ''); r.setAttribute('aria-selected', opts.multi ? picked.has(i) : i === act) },
+  });
+  v.set(items.length); v.active(act);
+  const setAct = i => { const p = act; act = Math.max(0, Math.min(items.length - 1, i)); v.mark(p); v.to(act); v.active(act) };
+  const toggle = i => { picked.has(i) ? picked.delete(i) : picked.add(i); v.mark(i); opts.onPick && opts.onPick(picked.size) };
   const name = i => opts.simple ? items[i] : items[i].nm;
-  el.addEventListener('click', e => { const r = e.target.closest('.li'); if (!r) return; const i = +r.dataset.i; setAct(i); if (opts.multi) toggle(i); el.focus(); sl.msg(`${name(i)} を選びました`) });
+  el.addEventListener('click', e => { const i = v.index(e.target.closest('.li')); if (i < 0) return; setAct(i); if (opts.multi) toggle(i); el.focus(); sl.msg(`${name(i)} を選びました`) });
   el.addEventListener('keydown', e => {
     if (e.key === 'j' || e.key === 'ArrowDown') { e.preventDefault(); frame(el.id, () => setAct(act + 1)) }
     else if (e.key === 'k' || e.key === 'ArrowUp') { e.preventDefault(); frame(el.id, () => setAct(act - 1)) }
     else if (e.key === ' ' && opts.multi) { e.preventDefault(); toggle(act) }
-    else if (e.key === 'a' && opts.multi) { items.forEach((_, i) => { picked.add(i); upd(i) }); opts.onPick(picked.size) }
-    else if (e.key === 'Escape' && opts.multi) { const was = [...picked]; picked.clear(); was.forEach(upd); opts.onPick(0) }
+    else if (e.key === 'a' && opts.multi) { items.forEach((_, i) => picked.add(i)); v.draw(); opts.onPick(picked.size) }
+    else if (e.key === 'Escape' && opts.multi) { picked.clear(); v.draw(); opts.onPick(0) }
     else if (e.key === 'Enter') sl.msg(`開いた: ${name(act)}`);
   });
-  for (let i = 0; i < items.length; i++) upd(i);
 }
 makeList($('#lsSimple'), ['main', 'develop', 'feat/command-chips', 'fix/log-follow', 'release/1.5'], { simple: true });
 makeList($('#lsIcon'), [{ ic: 'file', nm: 'session.ts', mt: '+42 -8' }, { ic: 'file', nm: 'StatusLine.tsx', mt: '+3 -3' }, { ic: 'folder', nm: 'tokens/', mt: '4 files' }, { ic: 'term', nm: 'release.sh', mt: '実行可能' }, { ic: 'pr', nm: '#128', mt: 'レビュー待ち' }]);
@@ -1421,29 +1514,25 @@ makeList($('#lsMulti'), [
   { ic: 'pr', nm: '#127 ログの追いかけを止められるようにする', sub: 'fix/log-follow → main  昨日', mt: '+40 -6' },
   { ic: 'pr', nm: '#125 ステータスラインの区切りを揃える', sub: 'chore/statusline → main  3日前', mt: '+12 -12' },
   { ic: 'branch', nm: 'spike/agent-steer', sub: '24日 更新なし。リモートに無いコミット 2件', mt: 'stale' },
-], { multi: true, onPick: n => { $('#lsPickN').textContent = `${n}件 選択` } });
+], { multi: true, H: 48, onPick: n => { $('#lsPickN').textContent = `${n}件 選択` } });
 
-/* 長いリスト: 見えている行だけ描き、行の要素は使い回す */
+/* 長いリスト: 1万行。ほかのリストと同じ仕組みで、見えている行だけ描く */
 (() => {
-  const N = 10000, H = 22, vl = $('#vl'), sp = $('#vlSp');
-  sp.style.height = N * H + 'px';
+  const N = 10000, H = 22, vl = $('#vl');
   const VERBS = ['直す', '足す', '消す', '揃える', '分ける', '速くする', '見直す', '軽くする'], OBJ = ['入力欄', 'ステータスライン', 'ログ', '表の並べ替え', 'トークン', 'ツリー', 'ダイアログ', 'グラフの目盛り', 'リスト', 'タグ入力'], WHO = ['aki', 'mika', 'ren', 'bot'];
   const h32 = i => { let x = (i + 1) * 2654435761 >>> 0; x ^= x >>> 15; x = Math.imul(x, 2246822519) >>> 0; x ^= x >>> 13; return x >>> 0 };
   const rowData = i => { const h = h32(i); return [h.toString(16).padStart(8, '0').slice(0, 7), WHO[h % 4], `${OBJ[(h >>> 3) % 10]}を${VERBS[(h >>> 7) % 8]}`, i < 24 ? `${i + 1}時間前` : `${Math.floor(i / 24)}日前`] };
-  const POOL = Math.ceil(264 / H) + 6; const pool = []; let act = 0, first = -1;
-  for (let k = 0; k < POOL; k++) { const r = document.createElement('div'); r.className = 'vl-row'; r.innerHTML = '<span class="mk"></span><span class="h"></span><span class="a"></span><span class="m"></span><span class="d"></span>'; r.dataset.i = -1; sp.appendChild(r); pool.push(r) }
-  function draw() {
-    const f = Math.max(0, Math.min(N - POOL, Math.floor(vl.scrollTop / H) - 3));
-    for (let k = 0; k < POOL; k++) {
-      const i = f + k, r = pool[(i % POOL)];
-      if (+r.dataset.i !== i) { const [h, a, m, d] = rowData(i); const c = r.children; c[1].textContent = h; c[2].textContent = a; c[3].textContent = m; c[4].textContent = d; r.dataset.i = i; r.style.transform = `translateY(${i * H}px)` }
-      const on = i === act; if (r.classList.contains('on') !== on) { r.classList.toggle('on', on); r.firstChild.textContent = on ? '>' : '' }
-    }
-    first = f;
-    $('#vlInfo').textContent = `${act + 1}/${N.toLocaleString()} · 描いている行 ${POOL}`;
-  }
-  const go = i => { act = Math.max(0, Math.min(N - 1, i)); const top = act * H, vh = vl.clientHeight; if (top < vl.scrollTop) vl.scrollTop = top; else if (top + H > vl.scrollTop + vh) vl.scrollTop = top + H - vh; frame('vl', draw) };
-  vl.addEventListener('scroll', () => frame('vl', draw), { passive: true });
+  let act = 0;
+  vl.setAttribute('role', 'listbox');
+  const v = virt(vl, {
+    H, parent: $('#vlSp'), id: 'vl-',
+    make: () => { const r = document.createElement('div'); r.className = 'vl-row'; r.setAttribute('role', 'option'); r.innerHTML = '<span class="mk"></span><span class="h"></span><span class="a"></span><span class="m"></span><span class="d"></span>'; return r },
+    fill: (r, i) => { const [h, a, m, d] = rowData(i), c = r.children; c[1].textContent = h; c[2].textContent = a; c[3].textContent = m; c[4].textContent = d },
+    mark: (r, i) => { const on = i === act; if (r.classList.contains('on') !== on) { r.classList.toggle('on', on); r.firstChild.textContent = on ? '>' : '' } },
+  });
+  v.set(N);
+  const info = () => { $('#vlInfo').textContent = `${act + 1}/${N.toLocaleString()} · 描いている行 ${v.count}` };
+  const go = i => { const p = act; act = Math.max(0, Math.min(N - 1, i)); v.mark(p); v.to(act); v.active(act); info() };
   let lastG = 0;
   vl.addEventListener('keydown', e => {
     const page = Math.floor(vl.clientHeight / H);
@@ -1455,11 +1544,11 @@ makeList($('#lsMulti'), [
     else if (e.key === 'g') { const now = performance.now(); if (now - lastG < 500) { go(0); sl.msg('先頭へ') } lastG = now }
     else if (e.key === 'Enter') { const [h, , m] = rowData(act); sl.msg(`${h} ${m}`) }
   });
-  vl.addEventListener('click', e => { const r = e.target.closest('.vl-row'); if (r) { go(+r.dataset.i); vl.focus() } });
-  draw();
+  vl.addEventListener('click', e => { const i = v.index(e.target.closest('.vl-row')); if (i >= 0) { go(i); vl.focus() } });
+  v.active(act); info();
 })();
 
-/* ツリー: 開閉のときだけ組み直し、移動は2行だけ書き換える */
+/* ツリー: 開いている分を平らな並びにし、見えている行だけ描く。開閉のときだけ並びを作り直す */
 (() => {
   const TREE = { name: 'kodou-ui', open: true, kids: [
     { name: 'catalog', open: true, kids: [{ name: 'index.html', st: 'M', mt: '70K' }, { name: 'scenes.html', st: 'A', mt: '48K' }] },
@@ -1469,12 +1558,16 @@ makeList($('#lsMulti'), [
   ] };
   const el = $('#tree'); let flat = [], act = 1;
   const flatten = (n, depth, g, last, out) => { out.push({ n, depth, guide: depth ? g + (last ? '└─' : '├─') : '' }); if (n.kids && n.open) n.kids.forEach((k, i) => flatten(k, depth + 1, depth ? g + (last ? '  ' : '│ ') : '', i === n.kids.length - 1, out)); return out };
-  function build() {
-    flat = flatten(TREE, 0, '', true, []); act = Math.min(act, flat.length - 1);
-    el.innerHTML = flat.map((r, i) => { const d = !!r.n.kids, cls = r.n.st === 'M' ? 'mod' : r.n.st === 'A' ? 'new' : ''; return `<div class="tn${i === act ? ' on' : ''}" data-i="${i}"><span class="guide">${r.guide}</span><span class="tw">${d ? (r.n.open ? '▾' : '▸') : ''}</span>${px(d ? (r.n.open ? 'open' : 'folder') : 'file')}<span class="${cls}">${esc(r.n.name)}${d ? '/' : ''}</span>${r.n.st ? `<span class="${cls}">${r.n.st}</span>` : ''}<span class="mt">${r.n.mt || (d ? r.n.kids.length + ' 件' : '')}</span></div>` }).join('');
-  }
-  const setAct = i => { el.children[act]?.classList.remove('on'); act = Math.max(0, Math.min(flat.length - 1, i)); el.children[act].classList.add('on'); el.children[act].scrollIntoView({ block: 'nearest' }) };
-  el.addEventListener('click', e => { const r = e.target.closest('.tn'); if (!r) return; act = +r.dataset.i; const n = flat[act].n; if (n.kids) { n.open = !n.open; build() } else { setAct(act); sl.msg(`開いた: ${n.name}`) } el.focus() });
+  el.setAttribute('role', 'tree');
+  const v = virt(el, {
+    H: 24, id: 'tree-',
+    make: () => { const r = document.createElement('div'); r.className = 'tn'; r.setAttribute('role', 'treeitem'); return r },
+    fill: (r, i) => { const x = flat[i], d = !!x.n.kids, cls = x.n.st === 'M' ? 'mod' : x.n.st === 'A' ? 'new' : ''; r.innerHTML = `<span class="guide">${x.guide}</span><span class="tw">${d ? (x.n.open ? '▾' : '▸') : ''}</span>${px(d ? (x.n.open ? 'open' : 'folder') : 'file')}<span class="${cls}">${esc(x.n.name)}${d ? '/' : ''}</span>${x.n.st ? `<span class="${cls}">${x.n.st}</span>` : ''}<span class="mt">${x.n.mt || (d ? x.n.kids.length + ' 件' : '')}</span>`; if (d) r.setAttribute('aria-expanded', x.n.open); else r.removeAttribute('aria-expanded'); r.setAttribute('aria-level', x.depth + 1) },
+    mark: (r, i) => r.classList.toggle('on', i === act),
+  });
+  function build() { flat = flatten(TREE, 0, '', true, []); act = Math.min(act, flat.length - 1); v.set(flat.length); v.active(act) }
+  const setAct = i => { const p = act; act = Math.max(0, Math.min(flat.length - 1, i)); v.mark(p); v.to(act); v.active(act) };
+  el.addEventListener('click', e => { const i = v.index(e.target.closest('.tn')); if (i < 0) return; act = i; const n = flat[act].n; if (n.kids) { n.open = !n.open; build() } else { setAct(act); sl.msg(`開いた: ${n.name}`) } el.focus() });
   el.addEventListener('keydown', e => {
     const n = flat[act].n;
     if (e.key === 'ArrowDown' || e.key === 'j') { e.preventDefault(); setAct(act + 1) }
@@ -1496,7 +1589,7 @@ makeList($('#lsMulti'), [
   });
 })();
 
-/* 表: 並べ替えは行の要素を動かすだけ */
+/* 表: 見えている行だけ描く。並べ替えは番号の並びを並べ直して描き直すだけ。並びが変わるときだけ短く動かす */
 const SPK = '▁▂▃▄▅▆▇█';
 const spark = a => { const mx = Math.max(...a), mn = Math.min(...a); return a.map(v => SPK[Math.round((v - mn) / Math.max(1e-9, mx - mn) * 7)]).join('') };
 (() => {
@@ -1511,62 +1604,89 @@ const spark = a => { const mx = Math.max(...a), mn = Math.min(...a); return a.ma
   const COLS = [['n', '名前'], ['v', '版'], ['s', '大きさ', 1], ['u', '更新', 1], ['t', '週の取得数']];
   const st = { key: 's', dir: -1, act: 0 };
   const size = kb => kb >= 1000 ? (kb / 1000).toFixed(1) + 'M' : kb + 'K';
-  const tbody = $('#tbl tbody');
-  tbody.innerHTML = TB.map(r => `<tr data-n="${r.n}"><td class="ck"></td><td>${r.n}</td><td class="dim">${r.v}</td><td class="num">${size(r.s)}</td><td class="num">${r.u}日前</td><td><span class="spark">${spark(r.t)}</span> <span class="dim">${r.t[0]}→${r.t[r.t.length - 1]}</span></td></tr>`).join('');
-  const rowOf = new Map($$('tr', tbody).map(tr => [tr.dataset.n, tr]));
-  rowOf.get('vite').classList.add('picked');
-  let order = [];
-  const count = () => { $('#tbN').textContent = `${TB.length}件 / ${$$('tr.picked', tbody).length}件 選択` };
+  const picked = new Set(['vite']);
+  let order = TB.slice();
+  const v = virt($('#tblScroll'), {
+    H: 24, parent: $('#tbl tbody'), id: 'tb-', owner: $('#tblBox'), stick: () => $('#tbl thead').offsetHeight,
+    gap: () => { const tr = document.createElement('tr'), td = document.createElement('td'); td.colSpan = COLS.length + 1; tr.append(td); return tr },
+    make: () => { const tr = document.createElement('tr'); tr.innerHTML = '<td class="ck"></td><td></td><td class="dim"></td><td class="num"></td><td class="num"></td><td><span class="spark"></span> <span class="dim"></span></td>'; return tr },
+    fill: (tr, i) => { const r = order[i], c = tr.children; tr.dataset.n = r.n; c[1].textContent = r.n; c[2].textContent = r.v; c[3].textContent = size(r.s); c[4].textContent = `${r.u}日前`; c[5].firstChild.textContent = spark(r.t); c[5].lastChild.textContent = `${r.t[0]}→${r.t[r.t.length - 1]}` },
+    mark: (tr, i) => { tr.classList.toggle('on', i === st.act); tr.classList.toggle('picked', picked.has(order[i].n)) },
+  });
+  const count = () => { $('#tbN').textContent = `${TB.length}件 / ${picked.size}件 選択` };
   function sort() {
-    const rows = [...TB].sort((a, b) => { const x = a[st.key], y = b[st.key]; return (typeof x === 'string' ? x.localeCompare(y) : x - y) * st.dir });
-    const before = new Map(order.map(tr => [tr, tr.getBoundingClientRect().top]));
-    order = rows.map(r => rowOf.get(r.n)); tbody.append(...order);
+    const rowsNow = [...$('#tbl tbody').children].filter(tr => !tr.hidden && !tr.classList.contains('v-gap'));
+    const before = new Map(rowsNow.map(tr => [tr.dataset.n, tr.getBoundingClientRect().top]));
+    order = TB.slice().sort((a, b) => { const x = a[st.key], y = b[st.key]; return (typeof x === 'string' ? x.localeCompare(y) : x - y) * st.dir });
+    v.set(order.length); v.active(st.act);
+    // 並びが変わるときだけ短く動かす: 前に見えていた行は、前の位置から今の位置へ滑らせる
     if (before.size && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      for (const tr of order) { const d = before.get(tr) - tr.getBoundingClientRect().top; if (d) { tr.classList.remove('flip'); tr.style.transform = `translateY(${d}px)` } }
-      requestAnimationFrame(() => { for (const tr of order) if (tr.style.transform) { tr.classList.add('flip'); tr.style.transform = '' } });
+      const moved = [];
+      for (const tr of $('#tbl tbody').children) { if (tr.hidden || tr.classList.contains('v-gap')) continue; const b = before.get(tr.dataset.n); if (b == null) continue; const d = b - tr.getBoundingClientRect().top; if (d) { tr.classList.remove('flip'); tr.style.transform = `translateY(${d}px)`; moved.push(tr) } }
+      requestAnimationFrame(() => { for (const tr of moved) { tr.classList.add('flip'); tr.style.transform = '' } });
     }
     $('#tbl thead').innerHTML = `<tr><th class="ck" aria-label="選択"></th>${COLS.map(([k, l, num]) => `<th class="${num ? 'num' : ''}" ${st.key === k ? `aria-sort="${st.dir > 0 ? 'ascending' : 'descending'}"` : ''}>${k === 't' ? l : `<button data-k="${k}">${l}<span class="ar">${st.key === k ? (st.dir > 0 ? '▲' : '▼') : '△'}</span></button>`}</th>`).join('')}</tr>`;
-    $$('tr.on', tbody).forEach(r => r.classList.remove('on')); order[st.act].classList.add('on');
   }
-  const setAct = i => { order[st.act].classList.remove('on'); st.act = Math.max(0, Math.min(order.length - 1, i)); order[st.act].classList.add('on') };
+  const setAct = i => { const p = st.act; st.act = Math.max(0, Math.min(order.length - 1, i)); v.mark(p); v.to(st.act); v.active(st.act) };
+  const pick = i => { const n = order[i].n; picked.has(n) ? picked.delete(n) : picked.add(n); v.mark(i); count() };
   const label = k => COLS.find(c => c[0] === k)[1];
   $('#tbl').addEventListener('click', e => {
     const b = e.target.closest('th button');
     if (b) { const k = b.dataset.k; st.dir = st.key === k ? -st.dir : (k === 'n' || k === 'v' ? 1 : -1); st.key = k; sort(); sl.msg(`${label(k)} で${st.dir > 0 ? '小さい順' : '大きい順'}に並べました`); return }
-    const r = e.target.closest('tbody tr'); if (!r) return;
-    setAct(order.indexOf(r)); if (e.target.closest('.ck')) { r.classList.toggle('picked'); count() }
+    const i = v.index(e.target.closest('tbody tr')); if (i < 0) return;
+    setAct(i); if (e.target.closest('.ck')) pick(i);
   });
   $('#tblBox').addEventListener('keydown', e => {
     if (e.target.matches('button')) return;
     if (e.key === 'j' || e.key === 'ArrowDown') { e.preventDefault(); setAct(st.act + 1) }
     else if (e.key === 'k' || e.key === 'ArrowUp') { e.preventDefault(); setAct(st.act - 1) }
-    else if (e.key === ' ') { e.preventDefault(); order[st.act].classList.toggle('picked'); count() }
+    else if (e.key === ' ') { e.preventDefault(); pick(st.act) }
     else if (e.key === 's') { const ks = ['n', 'v', 's', 'u']; st.key = ks[(ks.indexOf(st.key) + 1) % ks.length]; st.dir = st.key === 'n' || st.key === 'v' ? 1 : -1; sort(); sl.msg(`${label(st.key)} で並べました`) }
   });
   sort(); count();
 })();
 
-/* ログ: 上限つき。足すのは1行、捨てるのは先頭の1行。絞り込みは CSS */
+/* ログ: 上限つきのリングバッファ。描くのは見えている行だけで、行の要素は使い回す。絞り込みは見せる行の並びだけを作り直す */
 (() => {
-  const CAP = 300, log = $('#log');
+  const CAP = 300, H = 20, log = $('#log');
   const SRC = [['info', 'GET /api/session 200 12ms'], ['info', 'GET /api/usage 200 8ms'], ['info', 'ws: client connected (3)'], ['warn', 'slow query: SELECT * FROM events 412ms'], ['info', 'POST /api/run 202 4ms'], ['info', 'job 7f3a: started'], ['info', 'GET /api/session 200 11ms'], ['error', 'job 7f3a: exit 1  TypeError: cannot read "chips" of undefined'], ['info', 'GET /health 200 1ms'], ['warn', 'memory: free 2.1G (below 3G)'], ['info', 'ws: client disconnected (2)'], ['info', 'GET /api/files?q=chip 200 6ms']];
-  const n = { all: 0, warn: 0, error: 0 }; let k = 0, follow = true, recent = [];
-  const line = (lv, m, t) => { const d = document.createElement('div'); d.className = lv === 'error' ? 'e' : lv === 'warn' ? 'w' : ''; d.dataset.lv = lv; d.innerHTML = `<span class="t">${t}</span><span class="lv">${lv.toUpperCase()}</span><span class="m">${esc(m)}</span>`; return d };
-  function push(t) {
-    const [lv, m] = SRC[k++ % SRC.length];
-    log.appendChild(line(lv, m, t)); n.all++; if (lv !== 'info') n[lv]++;
-    if (log.childElementCount > CAP) { const old = log.firstElementChild; const ol = old.dataset.lv; old.remove(); n.all--; if (ol !== 'info') n[ol]-- }
+  const n = { all: 0, warn: 0, error: 0 }; let k = 0, follow = true, recent = [], lv = 'all';
+  const ring = new Array(CAP); let head = 0, size = 0;   // 持っている行。いっぱいになったら一番古い行に上書きする
+  let vis = [], vseq = 0;                                // 見せる行（絞り込みに合う行）の並び。v は並びの中の通し番号
+  const match = l => lv === 'all' || l.lv === lv;
+  const sp = document.createElement('div'); sp.className = 'sp'; log.appendChild(sp);
+  const POOL = Math.ceil(parseFloat(getComputedStyle(log).height) / H) + 4, pool = [];  // 画面外の節は寸法が 0 になるので、CSS の高さから数える
+  for (let i = 0; i < POOL; i++) { const r = document.createElement('div'); r.className = 'ln'; r.innerHTML = '<span class="t"></span><span class="lv"></span><span class="m"></span>'; r.hidden = true; sp.appendChild(r); pool.push(r) }
+  function draw() {
+    sp.style.height = vis.length * H + 'px';
+    if (follow) log.scrollTop = log.scrollHeight;
+    const f = Math.max(0, Math.min(vis.length - POOL, Math.floor(log.scrollTop / H) - 2));
+    const used = new Set();
+    for (let i = f; i < Math.min(vis.length, f + POOL); i++) {
+      const l = vis[i], r = pool[l.v % POOL]; used.add(r);
+      if (r._l !== l) { const c = r.children; c[0].textContent = l.t; c[1].textContent = l.lv.toUpperCase(); c[2].textContent = l.m; r.className = 'ln' + (l.lv === 'error' ? ' e' : l.lv === 'warn' ? ' w' : ''); r._l = l; r.hidden = false }
+      const y = i * H; if (r._y !== y) { r.style.transform = `translateY(${y}px)`; r._y = y }
+    }
+    for (const r of pool) if (!used.has(r) && !r.hidden) { r.hidden = true; r._l = null }
   }
-  const counts = () => { $('#n-all').textContent = n.all; $('#n-warn').textContent = n.warn; $('#n-error').textContent = n.error; $('#logInfo').textContent = `${n.all}/${CAP} 行を保持` };
+  function push(t) {
+    const [l0, m] = SRC[k++ % SRC.length], l = { t, lv: l0, m, v: 0 };
+    if (size === CAP) { const old = ring[head]; n.all--; if (old.lv !== 'info') n[old.lv]--; if (vis[0] === old) vis.shift() } else size++;
+    ring[head] = l; head = (head + 1) % CAP; n.all++; if (l0 !== 'info') n[l0]++;
+    if (match(l)) { l.v = vseq++; vis.push(l) }
+  }
+  function refilter() { vis = []; vseq = 0; for (let i = 0; i < size; i++) { const l = ring[(head - size + i + CAP) % CAP]; if (match(l)) { l.v = vseq++; vis.push(l) } } pool.forEach(r => { r._l = null; r._y = -1 }) }
+  const counts = () => { $('#n-all').textContent = n.all; $('#n-warn').textContent = n.warn; $('#n-error').textContent = n.error; $('#logInfo').textContent = `${n.all}/${CAP} 行を保持 · 描いている行 ${POOL}` };
   const now0 = Date.now(); for (let i = 0; i < 14; i++) push(new Date(now0 - (14 - i) * 900).toTimeString().slice(0, 8));
-  counts(); log.scrollTop = log.scrollHeight;
-  every(log, 900, () => { push(new Date().toTimeString().slice(0, 8)); recent.push(Date.now()); counts(); if (follow) log.scrollTop = log.scrollHeight });
+  counts(); draw();
+  every(log, 900, () => { push(new Date().toTimeString().slice(0, 8)); recent.push(Date.now()); counts(); frame('log', draw) });
   every(log, 1000, () => { const t = Date.now(); recent = recent.filter(x => t - x < 5000); $('#logRate').textContent = `${(recent.length / 5).toFixed(1)} 行/秒` });
   log.addEventListener('scroll', () => frame('logf', () => {
-    const at = log.scrollHeight - log.scrollTop - log.clientHeight < 8; if (at === follow) return; follow = at;
-    const f = $('#follow'); f.className = 'mode' + (at ? '' : ' paused-ln'); f.textContent = at ? '-- 追いかけ中 --' : ':止めています（上を読んでいるため）';
+    const at = log.scrollHeight - log.scrollTop - log.clientHeight < 8;
+    if (at !== follow) { follow = at; const f = $('#follow'); f.className = 'mode' + (at ? '' : ' paused-ln'); f.textContent = at ? '-- 追いかけ中 --' : ':止めています（上を読んでいるため）' }
+    draw();
   }), { passive: true });
-  $('#lvl').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; log.dataset.lv = b.dataset.lv; $$('#lvl button').forEach(x => x.setAttribute('aria-pressed', x === b)); if (follow) log.scrollTop = log.scrollHeight; sl.msg(`ログを ${b.dataset.lv === 'all' ? 'すべて' : b.dataset.lv} に絞りました`) });
+  $('#lvl').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; lv = b.dataset.lv; log.dataset.lv = lv; $$('#lvl button').forEach(x => x.setAttribute('aria-pressed', x === b)); refilter(); draw(); sl.msg(`ログを ${lv === 'all' ? 'すべて' : lv} に絞りました`) });
 })();
 
 /* グラフの共通 */

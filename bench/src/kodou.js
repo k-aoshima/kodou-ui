@@ -39,15 +39,25 @@ every(SCN.rowEveryMs, () => {
 });
 window.__select = i => { act = i; const top = i * H; if (top < vl.scrollTop || top + H > vl.scrollTop + vl.clientHeight) vl.scrollTop = top; draw() };
 
-/* ログ: 上限つき。足すのは 1 行、捨てるのは先頭の 1 行 */
-const log = $('#log'); let k = 0;
-const lineEl = l => { const d = document.createElement('div'); d.className = l.lv; d.innerHTML = `<span class="t">${l.t}</span><span class="lv">${l.lv.toUpperCase()}</span><span class="m"></span>`; d.lastChild.textContent = l.m; return d };
-let pending = [];
-every(SCN.logEveryMs, () => { pending.push(logLine(k++)); frame('log', () => {
-  const frag = document.createDocumentFragment(); pending.forEach(l => frag.appendChild(lineEl(l))); pending = [];
-  log.appendChild(frag); while (log.childElementCount > SCN.logCap) log.firstElementChild.remove();
-  log.scrollTop = log.scrollHeight;
-}) });
+/* ログ: 上限つきのリングバッファ。描くのは見えている行だけで、行の要素は使い回す */
+const log = $('#log'), lsp = document.createElement('div'), LH = 19; let k = 0; log.appendChild(lsp); lsp.style.position = 'relative';
+const ring = new Array(SCN.logCap); let lhead = 0, lsize = 0;
+const at = i => ring[(lhead - lsize + i + SCN.logCap) % SCN.logCap];  // i 番目に古い行
+const LPOOL = Math.ceil(log.clientHeight / LH) + 4, lpool = [];
+for (let i = 0; i < LPOOL; i++) { const r = document.createElement('div'); r.className = 'ln'; r.innerHTML = '<span class="t"></span><span class="lv"></span><span class="m"></span>'; r.hidden = true; lsp.appendChild(r); lpool.push(r) }
+let follow = true;
+function drawLog() {
+  lsp.style.height = lsize * LH + 'px';
+  if (follow) log.scrollTop = log.scrollHeight;
+  const f = Math.max(0, Math.min(lsize - LPOOL, Math.floor(log.scrollTop / LH) - 2));
+  for (let i = f; i < Math.min(lsize, f + LPOOL); i++) {
+    const l = at(i), r = lpool[l.k % LPOOL];
+    if (r._l !== l) { const c = r.children; c[0].textContent = l.t; c[1].textContent = l.lv.toUpperCase(); c[2].textContent = l.m; r.className = 'ln ' + l.lv; r._l = l; r.hidden = false }
+    const y = i * LH; if (r._y !== y) { r.style.transform = `translateY(${y}px)`; r._y = y }
+  }
+}
+log.addEventListener('scroll', () => frame('logf', () => { follow = log.scrollHeight - log.scrollTop - log.clientHeight < 8; drawLog() }), { passive: true });
+every(SCN.logEveryMs, () => { const l = logLine(k++); ring[lhead] = l; lhead = (lhead + 1) % SCN.logCap; if (lsize < SCN.logCap) lsize++; frame('log', drawLog) });
 
 /* グラフ: canvas、描く幅の 1 列に 1 点（列ごとの最小と最大） */
 const r2 = rng(7), N = SCN.points; let pts = series(N, r2), head = 0;  // pts はリングバッファ。head が一番古い点
