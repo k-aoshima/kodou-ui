@@ -4,7 +4,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=BIZ+UDGothic:wght@400;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap">
 <style>
-/* 配置: 主張（CUI の楽しさを今の画面に）→ 3 つの楽しさ → キーで触れる見本 12 個 → 入れ方。下のステータスラインに、押したキーが流れる。明るい地だけ */
+/* 配置: 主張（CUI の楽しさを今の画面に）→ 入れ方 → 3 つの楽しさ → サンプル → 部品の見本。見本とサンプルは押すとモーダルで開いて触れる。明るい地だけ */
 :root {
   color-scheme: light;
   --bg: #FBFBF8; --panel: #FFFFFF; --fg: #20242B; --dim: #575B63; --faint: #6E727A; --deco: #B9BBBF; --ui: #84878D; --rule: rgba(32,36,43,.22); --rule-soft: rgba(32,36,43,.07);
@@ -14,7 +14,7 @@
   --font-read: "Noto Sans JP", "Hiragino Sans", system-ui, sans-serif;
 }
 * { box-sizing: border-box }
-body { background: var(--bg); color: var(--fg); font: 15px/1.85 var(--font-read); -webkit-font-smoothing: antialiased; font-variant-numeric: tabular-nums; padding-bottom: 40px }
+body { background: var(--bg); color: var(--fg); font: 15px/1.85 var(--font-read); -webkit-font-smoothing: antialiased; font-variant-numeric: tabular-nums }
 a { color: var(--accent) }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
 .wrap { max-width: 1120px; margin: 0 auto; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)) }
@@ -33,7 +33,7 @@ kbd { font: 12px var(--font); border: 1px solid var(--rule); border-bottom-width
 h1 { margin: 0; font: 800 clamp(52px, 10vw, 112px)/1 var(--font); letter-spacing: -.03em }
 .sub { margin: 18px 0 0; font: 900 clamp(26px, 4.4vw, 44px)/1.3 var(--font-read); letter-spacing: -.01em }
 
-/* タイトルの左のハート: キーを押すたびに打ち、打っていない間は静かに打つ */
+/* タイトルの左のハート: 静かに打つ */
 h1 { display: flex; align-items: center; gap: .28em }
 h1 .heart { flex: none; width: .78em; height: .78em; color: var(--red); transition: transform 90ms ease-out }
 h1 .heart.on { transform: scale(1.22) }
@@ -49,9 +49,73 @@ h1 .heart.soft { transform: scale(1.08) }
 .three > div + div { border-left: 1px solid var(--rule) }
 .three .no { font: 13px var(--font); color: var(--faint) }
 .three h2 { margin: 6px 0 10px; font: 900 26px/1.4 var(--font-read) }
-.three p { margin: 0; color: var(--dim); font-size: 14.5px }
-.three ul { margin: 14px 0 0; padding: 0; list-style: none; font: 13px/1.9 var(--font) }
+.three ul { margin: 4px 0 0; padding: 0; list-style: none; font: 13px/1.9 var(--font) }
 .three li::before { content: "> "; color: var(--faint) }
+
+/* 入れ方（タイトルの下） */
+.get { margin-top: 30px; max-width: 760px }
+.get p { margin: 12px 0 0; font-size: 14px; color: var(--dim) }
+
+/* 見本のツール: 変更したファイルを選んでコミットする */
+.tool { background: var(--panel); font: 13.5px/1.7 var(--font); outline: none }
+.tl-hd { display: flex; align-items: center; gap: 2ch; padding: 6px 1ch; border-bottom: 1px solid var(--rule); white-space: nowrap; overflow: hidden }
+.tl-hd > span, .tl-hd > b { display: inline-flex; align-items: center; gap: .8ch }
+.tl-x { border: 1px solid var(--rule); background: var(--panel); color: var(--dim); font: 12px var(--font); padding: 0 8px; min-height: 26px; cursor: pointer; display: inline-flex; align-items: center; gap: .8ch }
+.tl-x:hover { color: var(--fg); border-color: var(--fg) }
+.tl-hd b { font-weight: 800 } .tl-hd .sp { flex: 1 } .tl-hd .dim { color: var(--faint) }
+.tl-body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); height: 340px }
+.tl-list { border-right: 1px solid var(--rule); overflow: auto; padding: 4px 0 }
+.tl-row { display: grid; grid-template-columns: 3ch 2ch 12px minmax(0, 1fr) auto; gap: 0 1ch; padding: 0 1ch; white-space: nowrap; cursor: pointer; min-height: 24px; align-items: center }
+.tl-row > span:nth-child(4) { overflow: hidden; text-overflow: ellipsis }
+.tl-row .fi { display: flex; color: var(--dim) } .tl-row.on .fi { color: inherit }
+.tl-row:hover:not(.on) { background: var(--rule-soft) }
+.tl-row.on { background: var(--sel-bg); color: var(--sel-fg) }
+.tl-row .ck { color: var(--faint) } .tl-row .ck.x { color: var(--green); font-weight: 800 }
+.tl-row .st { font-weight: 800 } .st.M { color: var(--yellow) } .st.A { color: var(--green) } .st.D { color: var(--red) }
+.tl-row .nm { font-size: 12px; color: var(--faint) }
+.tl-row.on .ck, .tl-row.on .st, .tl-row.on .nm { color: inherit }
+.tl-diff { margin: 0; padding: 6px 1ch; overflow: auto; font: 12.5px/1.7 var(--font); white-space: pre; font-variant-ligatures: none }
+.tl-diff .a { color: var(--green) } .tl-diff .d { color: var(--red) } .tl-diff .h { color: var(--cyan) } .tl-diff .c { color: var(--faint) }
+.tl-cmd { display: none; align-items: center; gap: 1ch; padding: 4px 1ch; border-top: 1px solid var(--rule) }
+.tl-cmd.open { display: flex }
+.tl-cmd input { flex: 1; min-width: 0; border: 0; outline: none; background: transparent; font: inherit; color: var(--fg) }
+.tl-sl { display: flex; align-items: center; background: var(--sel-bg); color: var(--sel-fg); font-size: 12.5px; min-height: 28px; white-space: nowrap; overflow: hidden }
+.tl-sl .md { background: var(--accent); color: var(--on); font-weight: 800; padding: 4px 1ch } .tl-sl .md.ins { background: var(--green) }
+.tl-sl .msg2 { flex: 1; min-width: 0; padding: 0 1ch; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: .8ch }
+.tl-sl .msg2 .ok { color: #7FD3B0 } .tl-sl .msg2 .ng { color: #F2A27E }
+.tl-sl .ky { padding: 0 1ch; opacity: .75 }
+.tl-keys { padding: 8px 1ch; border-top: 1px dashed var(--rule); display: flex; flex-wrap: wrap; gap: 4px 2ch; font: 12px var(--font); color: var(--faint) }
+@media (max-width: 680px) { .tl-hd .dim { display: none } .tl-body { grid-template-columns: minmax(0, 1fr); height: auto } .tl-list { border-right: 0; border-bottom: 1px solid var(--rule); max-height: 170px } .tl-diff { height: 200px } .tl-sl .ky { display: none } }
+
+/* ツールの起動: 枠を押すとモーダルで開く */
+.launch { display: grid; grid-template-columns: minmax(0, 560px); gap: 22px }
+.lc { border: 1px solid var(--ui); background: var(--panel); padding: 18px 16px 14px; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 14px; text-align: left; font: 13.5px/1.65 var(--font-read); color: var(--fg); cursor: pointer }
+.lc:hover, .lc:focus-visible { border-color: var(--fg) }
+.lc .lic { grid-row: span 2; width: 48px; height: 48px; display: grid; place-items: center; background: var(--sel-bg); color: var(--sel-fg) }
+.lc .lnm { font: 800 15px var(--font); display: flex; align-items: center; gap: 1ch }
+.lc .lnm kbd { margin-left: auto }
+.lc .lds { color: var(--dim); font-size: 13.5px }
+.lc .lmt { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 4px 2ch; margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--rule); font: 12px var(--font); color: var(--faint) }
+.lc .lmt span { display: inline-flex; align-items: center; gap: .6ch }
+.tdlg { border: 1px solid var(--fg); padding: 0; width: min(980px, calc(100vw - 32px)); max-width: none; background: var(--panel); color: var(--fg); box-shadow: 6px 6px 0 rgba(32,36,43,.18) }
+.tdlg::backdrop { background: rgba(32,36,43,.4) }
+
+@media (prefers-reduced-motion: reduce) { .kb .tag { transition: none } }
+
+/* 見本はページの上では見るだけ。枠を押すとモーダルで開いて触れる */
+.grid > .s { cursor: pointer }
+.grid > .s:hover { border-color: var(--fg) }
+.s-open { position: absolute; inset: 0; z-index: 2; border: 0; background: transparent; cursor: pointer; display: flex; align-items: flex-end; justify-content: flex-end; padding: 6px 8px; font: 11.5px var(--font); color: var(--faint) }
+.s-open span { background: var(--panel); padding: 0 4px; opacity: 0; transition: opacity 120ms }
+.s:hover .s-open span, .s-open:focus-visible span { opacity: 1; color: var(--fg) }
+.s-ph { border-style: dashed; display: grid; place-items: center; color: var(--faint); font: 12.5px var(--font); cursor: default }
+.sdlg { border: 1px solid var(--fg); padding: 0; width: min(560px, calc(100vw - 32px)); max-width: none; background: var(--panel); color: var(--fg); box-shadow: 6px 6px 0 rgba(32,36,43,.18) }
+.sdlg::backdrop { background: rgba(32,36,43,.4) }
+.sd-hd { display: flex; align-items: center; justify-content: flex-end; padding: 6px 1ch; border-bottom: 1px solid var(--rule); font: 13px var(--font) }
+.sd-body { padding: 26px 18px 18px }
+.sd-body > .s { min-height: 300px; border-color: var(--fg) }
+.sd-body > .s .s-open { display: none }
+@media (prefers-reduced-motion: reduce) { .s-open span { transition: none } }
 
 /* 見本 */
 .samples { padding-block: 72px 24px }
@@ -205,9 +269,7 @@ tr.on td { background: var(--sel-bg); color: var(--sel-fg) }
 /* ドット絵 */
 .pxs .lead2 { margin: 0 0 28px; color: var(--dim); max-width: 40em }
 .pxs .lead2 code { font: 13px var(--font); background: var(--rule-soft); padding: 0 4px }
-.ed { display: grid; grid-template-columns: max-content auto; justify-content: start; gap: 40px; align-items: start }
-.code { margin: 0; font: 12.5px/1.55 var(--font); background: var(--sel-bg); color: var(--sel-fg); padding: 12px 14px; white-space: pre; overflow-x: auto; min-width: 0 }
-.code .q { color: #7FD3B0 }
+.ed { display: grid; justify-content: start }
 .pv { display: grid; gap: 14px; justify-items: start; font: 13px var(--font) }
 .pv .sizes { display: flex; gap: 14px; align-items: end }
 .pv .sizes span { display: grid; justify-items: center; gap: 4px; color: var(--faint); font-size: 11px }
@@ -221,7 +283,6 @@ svg.px { flex: none; fill: currentColor; shape-rendering: crispEdges }
 .gal button { display: grid; justify-items: center; gap: 6px; border: 1px solid var(--rule); background: var(--panel); color: var(--fg); padding: 12px 4px 8px; font: 11.5px var(--font); cursor: pointer }
 .gal button:hover { border-color: var(--fg) }
 .gal button[aria-pressed="true"] { background: var(--sel-bg); color: var(--sel-fg); border-color: var(--sel-bg) }
-@media (max-width: 680px) { .ed { grid-template-columns: minmax(0, 1fr) } }
 
 /* 形と中身・軽さ・入れ方 */
 .band { padding-block: 64px; border-top: 1px solid var(--rule) }
@@ -242,53 +303,60 @@ svg.px { flex: none; fill: currentColor; shape-rendering: crispEdges }
 footer { border-top: 1px solid var(--rule); font: 12.5px var(--font); color: var(--faint) }
 footer .wrap { display: flex; flex-wrap: wrap; gap: 4px 2ch; padding-block: 16px }
 
-/* 押したキーが流れるステータスライン */
-.cast { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; background: var(--sel-bg); color: var(--sel-fg); font: 12.5px var(--font); padding-bottom: env(safe-area-inset-bottom, 0px) }
-.cast .wrap { display: flex; align-items: center; min-height: 32px; gap: 0 }
-.cast .md { background: var(--accent); color: var(--on); font-weight: 800; padding: 6px 1ch; white-space: nowrap }
-.cast .md.ins { background: var(--green) }
-.cast .ks { flex: 1; min-width: 0; display: flex; gap: 4px; padding: 0 1ch; overflow: hidden; white-space: nowrap; align-items: center }
-.cast .ks span { border: 1px solid rgba(251,251,248,.5); padding: 0 6px; line-height: 20px; animation: in 120ms ease-out }
-.cast .ks span:last-child { background: var(--sel-fg); color: var(--sel-bg) }
-.cast .ks .hint { border: 0; opacity: .6; animation: none; background: none !important; color: inherit !important }
-.cast .ct { white-space: nowrap; opacity: .75; padding: 0 1ch }
-@keyframes in { from { transform: translateY(4px); opacity: 0 } }
-@media (prefers-reduced-motion: reduce) { .cast .ks span { animation: none } .kb .tag { transition: none } }
-
 @media (max-width: 920px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)) } }
 @media (max-width: 680px) {
   .three { grid-template-columns: minmax(0, 1fr) } .three > div + div { border-left: 0; border-top: 1px solid var(--rule) }
   .grid { grid-template-columns: minmax(0, 1fr) }
   .vs { grid-template-columns: minmax(0, 1fr) } .vs > div + div { border-left: 0; border-top: 1px solid var(--fg) }
-  .cast .ct { display: none }
 }
 </style>
 
 <header class="top"><div class="wrap">
   <span class="name">Kodou-ui</span><span class="sp"></span>
-  <a href="#samples">部品</a><a href="#only">Kodou ならでは</a><a href="#ux">使い心地</a><a href="#pixels">ドット絵</a><a href="#get">入れ方</a><a href="https://github.com/k-aoshima/kodou-ui">GitHub</a>
+  <a href="#get">入れ方</a><a href="#tool">サンプル</a><a href="#samples">部品</a><a href="#only">Kodou ならでは</a><a href="#ux">使い心地</a><a href="#pixels">ドット絵</a><a href="https://github.com/k-aoshima/kodou-ui">GitHub</a>
 </div></header>
 
 <main class="wrap">
   <section class="hero">
-    <p class="eyebrow">エンジニアの道具のための UI とスキル</p>
+    <p class="eyebrow">エンジニアのツールのための UI とスキル</p>
     <h1><span class="heart" id="heart" aria-hidden="true"></span>Kodou-ui</h1>
-    <p class="sub"><span class="ph">打つのが、</span><span class="ph">楽しい UI。</span></p>
-    <p class="lead">指がキーを打つ実感。覚えたコマンドが手になじむ感覚。使いこむほど速くなる気持ちよさ。<b>CUI のあの楽しさを今の道具の画面に持ちこむ</b>ための部品とスキルです。</p>
+    <p class="sub"><span class="ph">打つのが</span><span class="ph">楽しい UI。</span></p>
+    <p class="lead">指がキーを打つ実感。覚えたコマンドが手になじむ感覚。使いこむほど速くなる気持ちよさ。<b>CUI のあの楽しさを今のツールの画面に持ちこむ</b>ための部品とスキルです。</p>
+    <div class="get" id="get">
+      <div class="sh" id="sh">
+<div><span class="p">$</span> <span class="cp">git clone https://github.com/k-aoshima/kodou-ui.git</span></div>
+<div><span class="p">$</span> <span class="cp">cp -R kodou-ui/skills/kodou-ui-build kodou-ui/skills/kodou-ui-review ~/.claude/skills/</span></div>
+<button class="copy" id="copy" type="button">コピー</button></div>
+      <p>Claude Code に「Kodou-ui で作って」と頼むと、部品と決まりに沿って画面を作ります。「Kodou-ui で点検して」と頼むと、打っている実感やキーの覚えやすさを確かめて直し方まで指摘します。</p>
+    </div>
 
     <div class="three">
-      <div><span class="no">01</span><h2>打っている実感</h2><p>1 文字ごとに画面が応えます。押したキー、今のモード、何が起きたかがいつもステータスラインに見えます。</p>
-        <ul><li>1 文字ごとに絞り込む</li><li>キーから描画まで 16ms 以内</li><li>モードと押したキーを常に出す</li></ul></div>
-      <div><span class="no">02</span><h2>覚える楽しさ</h2><p>キーはメニューとツールチップに書き、<kbd>⌥</kbd> で画面に重ねて見せます。並びも結果も毎回同じなので手が覚えます。</p>
-        <ul><li><kbd>⌥</kbd> でキーの札が出る</li><li>同じ入力に同じ順の結果</li><li>実行したら次からのキーを一言で</li></ul></div>
-      <div><span class="no">03</span><h2>使いこなす気持ちよさ</h2><p>はじめはマウスと一覧で使え、慣れるほど打つ量が減ります。前に選んだものが上に来て、キーを覚えればメニューを開かずに済みます。</p>
-        <ul><li>前に選んだものを上に出す</li><li>キーだけで最後まで通る</li><li>確認はその場の [y/N]</li></ul></div>
+      <div><span class="no">01</span><h2>打っている実感</h2><ul><li>1 文字ごとに絞り込む</li><li>キーから描画まで 16ms 以内</li><li>押した結果をその場に出す</li></ul></div>
+      <div><span class="no">02</span><h2>覚える楽しさ</h2><ul><li><kbd>⌥</kbd> でキーの札が出る</li><li>同じ入力に同じ順の結果</li><li>実行したら次からのキーを一言で</li></ul></div>
+      <div><span class="no">03</span><h2>使いこなす気持ちよさ</h2><ul><li>前に選んだものを上に出す</li><li>キーだけで最後まで通る</li><li>確認はその場の [y/N]</li></ul></div>
     </div>
+  </section>
+
+  <section class="samples" id="tool">
+    <h2>サンプル</h2>
+    <p>変更したファイルを選んでコミットする小さなツールです。枠を押すとモーダルで開き、キーだけで動かせます。</p>
+    <div class="launch">
+      <button class="lc" type="button" id="tlOpen"><span class="lic" data-ic="branch"></span><span class="lnm">commit</span><span class="lds">変更したファイルを選び、差分を見てコミットします。直前のコミットは u で戻せます。</span><span class="lmt"><span data-ic="file">6 ファイル</span><span data-ic="keyboard">キーだけで最後まで</span><span data-ic="undo">取り消せる</span></span></button>
+    </div>
+    <dialog class="tdlg" id="tlDlg" aria-label="commit">
+      <div class="tool" id="tool-box" tabindex="0" aria-label="コミットのツール。j と k で動き、スペースで選び、c でコミット">
+        <div class="tl-hd"><b id="tlT"></b><span id="tlB"></span><span class="sp"></span><span class="dim" id="tlCount"></span><button class="tl-x" type="button" id="tlX">Esc 閉じる</button></div>
+        <div class="tl-body"><div class="tl-list" id="tlList" role="listbox" aria-label="変更したファイル"></div><pre class="tl-diff" id="tlDiff" aria-label="差分"></pre></div>
+        <div class="tl-cmd" id="tlCmd"><span>メッセージ&gt;</span><input type="text" id="tlIn" autocomplete="off" spellcheck="false" aria-label="コミットのメッセージ"></div>
+        <div class="tl-sl"><span class="md" id="tlMd">NORMAL</span><span class="msg2" id="tlMsg">スペースでファイルを選び、c でコミットします</span><span class="ky">j/k 動く  Space 選ぶ  a 全部  c コミット  u 戻す</span></div>
+        <div class="tl-keys"><span><kbd>j</kbd><kbd>k</kbd> 動く</span><span><kbd>Space</kbd> 選ぶ・外す</span><span><kbd>a</kbd> 全部</span><span><kbd>c</kbd> コミット</span><span><kbd>⏎</kbd> 確定</span><span><kbd>Esc</kbd> やめる</span><span><kbd>u</kbd> 直前のコミットを戻す</span></div>
+      </div>
+    </dialog>
   </section>
 
   <section class="samples" id="samples">
     <h2>いつもの部品を Kodou で</h2>
-    <p>どの UI キットにもある部品を Kodou-ui の形で作りました。ほかのライブラリと見比べてください。どれもキーだけで最後まで動きます。</p>
+    <p>どの UI キットにもある部品を Kodou-ui の形で作りました。ほかのライブラリと見比べてください。枠を押すとモーダルで開き、キーだけでも最後まで動かせます。</p>
     <div class="grid">
       <div class="s" id="g-btn"><span class="ttl">ボタン</span>
         <div><div class="row" style="margin-top:0"><button class="kb2 p" type="button" data-say="マージしました">マージする</button><button class="kb2" type="button" data-say="ブランチを切りました">ブランチを切る</button></div>
@@ -312,7 +380,7 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 4px 2ch; padding-block: 16px
           <button class="opt sw" type="button" role="switch" aria-checked="false" data-t="s">自動で取りこむ</button>
           <div class="msg" id="swMsg">入れると 5 分ごとに main を取りこみます（既定は切）</div>
         </div>
-        <div class="keys"><span><kbd>Space</kbd> 切り替え</span><span>印は文字で</span></div></div>
+        <div class="keys"><span><kbd>↑</kbd><kbd>↓</kbd> 選ぶ</span><span><kbd>Space</kbd> 切り替え</span><span><kbd>←</kbd><kbd>→</kbd> ラジオ</span></div></div>
 
       <div class="s" id="g-sl"><span class="ttl">スライダー</span>
         <div><div class="lab">メモリの上限</div>
@@ -399,9 +467,9 @@ to type 'string'.</pre></details></div></div>
 
   <section class="samples" id="only">
     <h2>Kodou ならでは</h2>
-    <p>CUI の楽しさを持ちこむための部品です。枠をクリックしてから下に書いたキーを押してください。</p>
+    <p>CUI の楽しさを持ちこむための部品です。枠を押すとモーダルで開くので、下に書いたキーで触ってください。</p>
     <div class="grid">
-      <div class="s" id="s-pal"><span class="ttl">コマンドパレット</span><span class="ttl-r">⌘K</span>
+      <div class="s" id="s-pal"><span class="ttl">コマンドパレット</span>
         <div><input type="text" id="palIn" placeholder="> コマンドを打つ" autocomplete="off" spellcheck="false" aria-label="コマンド"><div class="list" id="palList" role="listbox"></div><div class="msg" id="palMsg"></div></div>
         <div class="keys"><span><kbd>↑</kbd><kbd>↓</kbd> 選ぶ</span><span><kbd>⏎</kbd> 実行</span></div></div>
 
@@ -437,6 +505,7 @@ to type 'string'.</pre></details></div></div>
       <div class="rl"><h3>確認</h3><div><div class="ng2"><span>削除のたびに「よろしいですか？」</span></div><div class="ok2"><span>取り消せる操作はすぐ実行して取り消しを出す。戻せない操作だけその場の <code>[y/N]</code> で聞く</span></div></div></div>
       <div class="rl"><h3>エラー</h3><div><div class="ng2"><span><code>エラーが発生しました</code></span></div><div class="ok2"><span>何が起きたかと直し方を文で書く。生のエラーは消さずに畳む</span></div></div></div>
       <div class="rl"><h3>色</h3><div><div class="ng2"><span>失敗を赤い文字だけで示す</span></div><div class="ok2"><span><code>[FAILED]</code> の文字や ▲ を添え、色が見分けにくい人にも伝わるようにする</span></div></div></div>
+      <!-- 悪い例として書いている。kodou-lint: ignore vague-status -->
       <div class="rl"><h3>中が見える</h3><div><div class="ng2"><span><code>処理中…</code> <code>完了しました</code></span></div><div class="ok2"><span><code>24/40 ファイル 1.7 秒 いま: src/ui/Table.ts</code> のように対象と実際の値を出す</span></div></div></div>
       <div class="rl"><h3>ハンドルは人</h3><div><div class="ng2"><span>気を利かせて自動で実行・自動で直す</span></div><div class="ok2"><span>機械は提案まで。自動で動くものは既定を切にし、入れると何が起きるかを横に書く</span></div></div></div>
       <div class="rl"><h3>読みやすさ</h3><div><div class="ng2"><span>説明の文まで等幅で薄い灰色</span></div><div class="ok2"><span>文は読みやすい書体で 1 行 38 字、行間 1.85。文字は地に対して 4.5:1 以上</span></div></div></div>
@@ -455,9 +524,8 @@ to type 'string'.</pre></details></div></div>
 
   <section class="band pxs" id="pixels">
     <h2><span class="ph">アイコンも</span><span class="ph">エージェントが描く。</span></h2>
-    <p class="lead2">画像を生成するのではなく、エージェントが <code>#</code> と <code>.</code> で 12×12 のマス目を書きます。どのアイコンも同じ格子に乗るので、線の太さがそろってにじみません。下のアイコンを押すとそのマス目が出ます。</p>
+    <p class="lead2">画像を生成するのではなく、エージェントが <code>#</code> と <code>.</code> で 12×12 のマス目を書きます。どのアイコンも同じ格子に乗るので、線の太さがそろってにじみません。下のアイコンを押すと大きさごとの見え方が出ます。</p>
     <div class="ed">
-      <pre class="code" id="pxCode"></pre>
       <div class="pv">
         <div class="sizes"><span id="pv18"></span><span id="pv36"></span><span id="pv72"></span></div>
         <span class="inbtn" id="pvBtn"></span>
@@ -477,20 +545,9 @@ to type 'string'.</pre></details></div></div>
     <p class="light">同じ画面を作ると、Kodou-ui は <b>57 MB</b>、見えている分だけ描くなどの手当てをした React は 128 MB でした。<small>一覧 1 万行、50 行/秒のログ、2 万点のグラフ。ページの使用メモリ、headless Chrome で 3 回の中央値。</small></p>
   </section>
 
-  <section class="band" id="get">
-    <h2>入れ方</h2>
-    <div class="sh" id="sh">
-<div><span class="p">$</span> <span class="cp">git clone https://github.com/k-aoshima/kodou-ui.git</span></div>
-<div><span class="p">$</span> <span class="cp">cp -R kodou-ui/skills/kodou-ui-build kodou-ui/skills/kodou-ui-review ~/.claude/skills/</span></div>
-<button class="copy" id="copy" type="button">コピー</button></div>
-    <p>Claude Code に「Kodou-ui で作って」と頼むと、部品と決まりに沿って画面を作ります。「Kodou-ui で点検して」と頼むと、打っている実感やキーの覚えやすさを確かめて直し方まで指摘します。React の画面にも使えます。</p>
-  </section>
 </main>
 <footer><div class="wrap"><span>Kodou-ui</span><span>MIT License · Xami</span></div></footer>
 
-<div class="cast" aria-hidden="true"><div class="wrap">
-  <span class="md" id="castMd">NORMAL</span><span class="ks" id="castKs"><span class="hint">どこでも打ってみてください</span></span><span class="ct" id="castCt">0 キー</span>
-</div></div>
 
 <script>
 const $ = s => document.querySelector(s);
@@ -498,23 +555,15 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;',
 const hl = (s, q) => { if (!q) return esc(s); const k = s.toLowerCase().indexOf(q); return k < 0 ? esc(s) : esc(s.slice(0, k)) + '<mark>' + esc(s.slice(k, k + q.length)) + '</mark>' + esc(s.slice(k + q.length)) };
 const typing = e => e.target.matches('input, textarea') || e.metaKey || e.ctrlKey;
 
-/* 押したキーが流れるステータスライン */
-(() => {
-  const ks = $('#castKs'), md = $('#castMd'), ct = $('#castCt'); let n = 0;
-  const NAME = { ' ': 'Space', Enter: '⏎', Escape: 'Esc', Backspace: '⌫', ArrowUp: '↑', ArrowDown: '↓', ArrowLeft: '←', ArrowRight: '→', Tab: 'Tab', Alt: '⌥', Meta: '⌘', Shift: '⇧', Control: '⌃' };
-  addEventListener('keydown', e => {
-    if (e.repeat && e.key.length > 1) return;
-    const hint = ks.querySelector('.hint'); if (hint) hint.remove();
-    const mods = (e.metaKey && e.key !== 'Meta' ? '⌘' : '') + (e.ctrlKey && e.key !== 'Control' ? '⌃' : '') + (e.altKey && e.key !== 'Alt' ? '⌥' : '');
-    const s = document.createElement('span'); s.textContent = mods + (NAME[e.key] || e.key); ks.append(s);
-    while (ks.childElementCount > 24) ks.firstElementChild.remove();
-    ct.textContent = `${++n} キー`;
-  }, true);
-  addEventListener('focusin', e => { const ins = e.target.matches('input'); md.textContent = ins ? 'INSERT' : 'NORMAL'; md.classList.toggle('ins', ins) });
-  addEventListener('focusout', () => { md.textContent = 'NORMAL'; md.classList.remove('ins') });
-})();
+/* キーはモーダルを開いている間だけ受ける。ページの上ではブラウザのふつうの動き（Tab など）だけ */
+['keydown', 'keyup'].forEach(t => addEventListener(t, e => { if (!document.querySelector('dialog[open]')) e.stopImmediatePropagation() }, true));
 
-/* タイトルの左のハート: キーを押すたびに打つ。打っていない間は静かに打ち、隠れている間は止める */
+/* ドット絵のアイコン（12×12）。ic(名前, 大きさ) で SVG を返す */
+const ICONS = {"search": ["..####......", ".#....#.....", "#......#....", "#......#....", "#......#....", "#......#....", ".#....#.....", "..####.#....", ".......##...", "........##..", ".........##.", "..........#."], "branch": [".##......##.", "#..#....#..#", "#..#....#..#", ".##......##.", "..#.......#.", "..#......#..", "..#....##...", "..#..##.....", ".##.#.......", "#..#........", "#..#........", ".##........."], "pr": [".##....#....", "#..#..##....", "#..#.#####..", ".##...##..#.", "..#....#..#.", "..#.......#.", "..#.......#.", "..#.......#.", ".##......##.", "#..#....#..#", "#..#....#..#", ".##......##."], "term": ["............", "############", "#..........#", "#.#........#", "#..#.......#", "#...#......#", "#..#.......#", "#.#..####..#", "#..........#", "############", "............", "............"], "gear": [".....##.....", "..##.##.##..", "..########..", ".###....###.", "..#..##..#..", "###.#..#.###", "###.#..#.###", "..#..##..#..", ".###....###.", "..########..", "..##.##.##..", ".....##....."], "bell": [".....##.....", "....####....", "...#....#...", "..#......#..", "..#......#..", "..#......#..", "..#......#..", ".#........#.", "#..........#", "############", "............", ".....##....."], "trash": ["....####....", "############", "............", ".##########.", ".#..#..#..#.", ".#..#..#..#.", ".#..#..#..#.", ".#..#..#..#.", ".#..#..#..#.", ".#..#..#..#.", ".#........#.", ".##########."], "check": ["............", "............", "..........##", ".........##.", "........##..", ".......##...", "##....##....", ".##..##.....", "..####......", "...##.......", "............", "............"], "error": ["...######...", "..#......#..", ".#........#.", "#..#....#..#", "#...#..#...#", "#....##....#", "#....##....#", "#...#..#...#", "#..#....#..#", ".#........#.", "..#......#..", "...######..."], "play": ["..#.........", "..##........", "..#.#.......", "..#..#......", "..#...#.....", "..#....#....", "..#....#....", "..#...#.....", "..#..#......", "..#.#.......", "..##........", "..#........."], "clock": ["...######...", "..#......#..", ".#...#....#.", "#....#.....#", "#....#.....#", "#....####..#", "#..........#", "#..........#", "#..........#", ".#........#.", "..#......#..", "...######..."], "bolt": ["......####..", ".....####...", "....####....", "...####.....", "..#######...", ".....####...", "....####....", "...####.....", "..###.......", ".##.........", "#...........", "............"], "folder": ["............", ".####.......", ".#..#.......", ".#...######.", ".#........#.", ".##########.", ".#........#.", ".#........#.", ".#........#.", ".#........#.", ".##########.", "............"], "file": [".#######....", ".#.....##...", ".#.....#.#..", ".#.....####.", ".#........#.", ".#.######.#.", ".#........#.", ".#.######.#.", ".#........#.", ".#.####...#.", ".#........#.", ".##########."], "copy": ["............", "#######.....", "#.....#.....", "#..#######..", "#..#.....#..", "#..#.....#..", "#..#.....#..", "####.....#..", "...#.....#..", "...#.....#..", "...#######..", "............"], "pkg": [".....##.....", "...##..##...", ".##......##.", "#.##....##.#", "#...#..#...#", "#....##....#", "#....##....#", "#....##....#", "#....##....#", ".##..##..##.", "...######...", "............"], "chip": ["..#.#..#.#..", ".##########.", "##........##", ".#.######.#.", "##.#....#.##", ".#.#....#.#.", "##.#....#.##", ".#.######.#.", "##........##", ".##########.", "..#.#..#.#..", "............"], "power": [".....##.....", ".....##.....", "..#..##..#..", ".#...##...#.", "#....##....#", "#..........#", "#..........#", "#..........#", ".#........#.", "..#......#..", "...######...", "............"], "refresh": ["....####.#..", "..##....##..", ".#.....###..", ".#..........", "#...........", "#...........", "#...........", "#..........#", ".#........#.", ".#........#.", "..##....##..", "....####...."], "undo": ["............", "...#........", "..##........", ".#######....", "..##....##..", "...#.....#..", ".........#..", ".........#..", "........#...", ".....###....", "............", "............"], "lock": ["....####....", "...#....#...", "..#......#..", "..#......#..", "############", "#..........#", "#....##....#", "#....##....#", "#.....#....#", "#..........#", "############", "............"], "keyboard": ["............", "............", "############", "#.##.##.##.#", "#..........#", "#.##.##.##.#", "#..........#", "#..######..#", "############", "............", "............", "............"], "hand": ["...#.#......", "..#.#.#.#...", "..#.#.#.#...", "..#.#.#.#...", "..#.#.#.#.#.", "..#.......#.", "#.#.......#.", "##........#.", ".#.......#..", "..#......#..", "...#.....#..", "....######.."], "chart": ["............", "........##..", "........##..", "....##..##..", "....##..##..", "##..##..##..", "##..##..##..", "##..##..##..", "##..##..##..", "............", "############", "............"], "trend": ["#...........", "#.........##", "#........#.#", "#.......#...", "#......#....", "#..#..#.....", "#.#.##......", "##..........", "#...........", "#...........", "############", "............"], "book": ["............", "............", ".####..####.", "#....##....#", "#....##....#", "#....##....#", "#....##....#", "#....##....#", "#....##....#", ".####..####.", "............", "............"], "link": ["............", "......####..", ".....#....#.", "....#..#..#.", "....#.#..#..", "...#.#..#...", "..#..#.#....", "..#.#..#....", ".#..#..#....", ".#....#.....", "..####......", "............"], "globe": ["...######...", "..##....##..", ".#.#....#.#.", "#..#....#..#", "#..#....#..#", "############", "############", "#..#....#..#", "#..#....#..#", ".#.#....#.#.", "..##....##..", "...######..."], "person": ["....####....", "...#....#...", "...#....#...", "...#....#...", "....####....", "............", "..########..", ".#........#.", "#..........#", "#..........#", "############", "............"], "pencil": [".........##.", "........#..#", ".......#..#.", "......#..#..", ".....#..#...", "....#..#....", "...#..#.....", "..#..#......", ".#..#.......", ".###........", "##..........", "............"], "layers": [".....##.....", "...##..##...", ".##......##.", "#..........#", ".##......##.", "#..##..##..#", ".##..##..##.", "#...#..#...#", ".##..##..##.", "...##..##...", ".....##.....", "............"], "shield": ["..########..", ".#........#.", "#..........#", "#..........#", "#..........#", "#..........#", ".#........#.", ".#........#.", "..#......#..", "...#....#...", "....#..#....", ".....##....."], "sparkle": [".....##.....", ".....##.....", "....#..#....", "...#....#...", ".##......##.", "#..........#", "#..........#", ".##......##.", "...#....#...", "....#..#....", ".....##.....", ".....##....."], "target": ["...######...", "..#......#..", ".#........#.", "#..........#", "#....##....#", "#...####...#", "#...####...#", "#....##....#", "#..........#", ".#........#.", "..#......#..", "...######..."], "cal": ["..#......#..", "############", "#..........#", "############", "#..........#", "#.##.##.##.#", "#..........#", "#.##.##.##.#", "#..........#", "#.##.##....#", "#..........#", "############"], "hourglass": ["############", ".#........#.", ".#........#.", "..#......#..", "...#....#...", "....#..#....", "....#..#....", "...#....#...", "..#..##..#..", ".#..####..#.", ".#.######.#.", "############"]};
+const runs = rows => { let d = ''; rows.forEach((r, y) => { for (let x = 0; x < r.length;) { if (r[x] !== '#') { x++; continue } let e = x; while (e < r.length && r[e] === '#') e++; d += `M${x} ${y}h${e - x}v1h-${e - x}z`; x = e } }); return d };
+const ic = (n, z = 12) => `<svg class="px ic" width="${z}" height="${z}" viewBox="0 0 12 12" aria-hidden="true"><path d="${runs(ICONS[n])}"/></svg>`;
+
+/* タイトルの左のハート: 静かに打ち、隠れている間は止める */
 (() => {
   const HEART = ['............', '.###....###.', '#####..#####', '############', '############', '############', '.##########.', '..########..', '...######...', '....####....', '.....##.....', '............'];
   let d = ''; HEART.forEach((r, y) => { for (let x = 0; x < 12;) { if (r[x] !== '#') { x++; continue } let e = x; while (e < 12 && r[e] === '#') e++; d += `M${x} ${y}h${e - x}v1h-${e - x}z`; x = e } });
@@ -522,7 +571,6 @@ const typing = e => e.target.matches('input, textarea') || e.metaKey || e.ctrlKe
   let off = 0, idle = 0;
   const beat = cls => { heart.classList.remove('on', 'soft'); void heart.offsetWidth; heart.classList.add(cls); clearTimeout(off); off = setTimeout(() => heart.classList.remove(cls), 120) };
   const startIdle = () => { clearInterval(idle); idle = setInterval(() => beat('soft'), 1100) };
-  addEventListener('keydown', e => { if (['Shift', 'Meta', 'Control', 'Alt'].includes(e.key) || e.repeat) return; beat('on'); startIdle() }, true);
   document.addEventListener('visibilitychange', () => document.hidden ? clearInterval(idle) : startIdle());
   if (!matchMedia('(prefers-reduced-motion: reduce)').matches) startIdle();
 })();
@@ -536,6 +584,75 @@ function picker(listEl, items, render, onPick) {
   return { draw: () => { act = 0; draw() }, move, pick: () => { const it = items()[act]; if (it) onPick(it) } };
 }
 
+/* 見本のツール: 変更したファイルを選んでコミットする。コミットは u で戻せる */
+(() => {
+  const box = $('#tool-box'), list = $('#tlList'), diff = $('#tlDiff'), cmd = $('#tlCmd'), inp = $('#tlIn'), msg = $('#tlMsg'), md = $('#tlMd');
+  let files = [
+    { st: 'M', p: 'src/cli/args.ts', add: 6, del: 2, d: ['@@ -18,7 +18,11 @@ export function parse(argv)', '   const opts = defaults();', '-  if (argv.includes("-v")) opts.verbose = true;', '+  for (const a of argv) {', '+    if (a === "-v" || a === "--verbose") opts.verbose = true;', '+    else if (a === "-q") opts.quiet = true;', '+    else if (a.startsWith("--")) unknown.push(a);', '+  }', '   return opts;'] },
+    { st: 'M', p: 'src/ui/StatusLine.tsx', add: 4, del: 1, d: ['@@ -40,6 +40,9 @@ export function StatusLine()', '   return (', '     <footer className="sl">', '-      <Mode value={mode} />', '+      <Mode value={mode} />', '+      <Keys recent={keys} />', '+      <span className="sp" />', '+      <Clock />'] },
+    { st: 'A', p: 'src/core/cache.ts', add: 9, del: 0, d: ['@@ -0,0 +1,9 @@', '+// 同じ引数の結果を 30 秒だけ覚える', '+const memo = new Map();', '+export function cached(key, fn) {', '+  const hit = memo.get(key);', '+  if (hit && Date.now() - hit.t < 30_000) return hit.v;', '+  const v = fn();', '+  memo.set(key, { v, t: Date.now() });', '+  return v;', '+}'] },
+    { st: 'M', p: 'test/args.test.ts', add: 5, del: 0, d: ['@@ -12,3 +12,8 @@ describe("parse")', '   it("reads -v", () => {', '     expect(parse(["-v"]).verbose).toBe(true);', '   });', '+  it("reads --verbose", () => {', '+    expect(parse(["--verbose"]).verbose).toBe(true);', '+  });', '+', '+  it("keeps unknown flags", () => { /* ... */ });'] },
+    { st: 'M', p: 'README.md', add: 2, del: 1, d: ['@@ -8,4 +8,5 @@', ' ## 使い方', ' ', '-    tool run', '+    tool run --verbose', '+    tool run -q    # 結果だけ出す'] },
+    { st: 'D', p: 'scripts/old-build.sh', add: 0, del: 12, d: ['@@ -1,12 +0,0 @@', '-#!/bin/sh', '-set -e', '-rm -rf dist', '-mkdir dist', '-cp -R src dist/', '-# ...（ほか 7 行）'] },
+  ].map(f => ({ ...f, on: false }));
+  let act = 0, last = null;
+  const say = (t, k) => { msg.innerHTML = (k ? `<span class="${k === 'check' || k === 'undo' ? 'ok' : 'ng'}">${ic(k)}</span>` : '') + `<span>${esc(t)}</span>` };
+  const kind = p => p.startsWith('test/') ? 'check' : p.endsWith('.md') ? 'book' : p.endsWith('.sh') ? 'term' : 'file';
+  const mode = ins => { md.textContent = ins ? 'INSERT' : 'NORMAL'; md.classList.toggle('ins', ins) };
+  const draw = () => {
+    if (!files.length) { list.innerHTML = '<div style="padding:0 1ch;color:var(--faint)">変更はありません</div>'; diff.textContent = ''; $('#tlCount').textContent = '0 件'; return }
+    act = Math.min(act, files.length - 1);
+    list.innerHTML = files.map((f, i) => `<div class="tl-row${i === act ? ' on' : ''}" role="option" aria-selected="${i === act}" data-i="${i}"><span class="ck${f.on ? ' x' : ''}">${f.on ? '[x]' : '[ ]'}</span><span class="st ${f.st}">${f.st}</span><span class="fi">${ic(kind(f.p))}</span><span>${esc(f.p)}</span><span class="nm">+${f.add} -${f.del}</span></div>`).join('');
+    list.children[act].scrollIntoView({ block: 'nearest' });
+    diff.innerHTML = files[act].d.map(l => `<span class="${l[0] === '+' ? 'a' : l[0] === '-' ? 'd' : l.startsWith('@@') ? 'h' : 'c'}">${esc(l)}</span>`).join('\n');
+    const n = files.filter(f => f.on).length;
+    $('#tlCount').textContent = `${n}/${files.length} 件を選択`;
+  };
+  const openCmd = () => {
+    const sel = files.filter(f => f.on);
+    if (!sel.length) { say('先にスペースでファイルを選んでください', 'error'); return }
+    cmd.classList.add('open'); inp.value = ''; inp.focus(); mode(true); say(`${sel.length} 件をコミットします。⏎ で確定、Esc でやめる`);
+  };
+  const closeCmd = () => { cmd.classList.remove('open'); mode(false); box.focus() };
+  const commit = () => {
+    const m = inp.value.trim();
+    if (!m) { say('メッセージを書いてください', 'error'); return }
+    const sel = files.filter(f => f.on), sha = Math.random().toString(16).slice(2, 9);
+    last = { files: files.map(f => ({ ...f })), sha };
+    files = files.filter(f => !f.on);
+    closeCmd(); draw(); say(`${sha} ${m}（${sel.length} 件）  u で戻せます`, 'check');
+  };
+  box.addEventListener('keydown', e => {
+    if (e.target === inp) {
+      if (e.key === 'Enter') { e.preventDefault(); commit() } else if (e.key === 'Escape') { e.preventDefault(); closeCmd(); say('コミットをやめました') }
+      return;
+    }
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    const k = e.key, n = files.length;
+    if ((k === 'j' || k === 'ArrowDown') && n) act = (act + 1) % n;
+    else if ((k === 'k' || k === 'ArrowUp') && n) act = (act - 1 + n) % n;
+    else if (k === ' ' && n) { files[act].on = !files[act].on; if (files[act].on && act < n - 1) act++ }
+    else if (k === 'a' && n) { const all = files.every(f => f.on); files.forEach(f => f.on = !all) }
+    else if (k === 'c') { e.preventDefault(); openCmd(); return }
+    else if (k === 'u') { if (last) { files = last.files; say(`${last.sha} を戻しました。ファイルは選んだままです`, 'undo'); last = null } else say('戻せるコミットはありません', 'error') }
+    else return;
+    e.preventDefault(); draw();
+  });
+  /* モーダル: 開いたら一覧に焦点を置く。Esc は打っている途中ならその欄だけ閉じる */
+  const dlg = $('#tlDlg');
+  $('#tlT').innerHTML = ic('term') + 'commit'; $('#tlB').innerHTML = ic('branch') + 'main';
+  document.querySelectorAll('[data-ic]').forEach(n => n.insertAdjacentHTML('afterbegin', ic(n.dataset.ic, n.classList.contains('lic') ? 24 : 12)));
+  window.openTool = () => { if (dlg.open) return; document.documentElement.style.overflow = 'hidden'; dlg.showModal(); box.focus() };
+  dlg.addEventListener('close', () => { document.documentElement.style.overflow = '' });
+  dlg.addEventListener('click', e => { if (e.target !== dlg && !e.target.closest('input, button')) box.focus() });
+  $('#tlOpen').addEventListener('click', openTool);
+  $('#tlX').addEventListener('click', () => dlg.close());
+  dlg.addEventListener('cancel', e => { if (cmd.classList.contains('open')) { e.preventDefault(); closeCmd(); say('コミットをやめました') } });
+  dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close() });
+  list.addEventListener('click', e => { const r = e.target.closest('.tl-row'); if (!r) return; const i = +r.dataset.i; if (e.target.closest('.ck') || i === act) files[i].on = !files[i].on; act = i; draw(); box.focus() });
+  draw();
+})();
+
 /* コマンドパレット */
 (() => {
   const CMDS = [['ブランチを切り替える', 'g b'], ['プルリクエストを開く', 'g p'], ['ログを追いかける', 'g l'], ['最後のコマンドをもう一度', '.'], ['設定を開く', ','], ['キーの一覧', '?'], ['プロセスを止める', 'x'], ['窓を分ける', '⌃w v']];
@@ -544,7 +661,6 @@ function picker(listEl, items, render, onPick) {
   const p = picker($('#palList'), items, c => `<span>›</span><span>${hl(c[0], q)}</span><span class="k">${c[1]}</span>`, c => { $('#palMsg').innerHTML = `実行: ${esc(c[0])}。次からは <kbd>${esc(c[1])}</kbd> だけで呼べます`; });
   inp.addEventListener('input', () => { q = inp.value.trim(); p.draw(); $('#palMsg').textContent = items().length ? '' : `「${q}」に合うコマンドはありません` });
   inp.addEventListener('keydown', e => { if (e.key === 'ArrowDown') { e.preventDefault(); p.move(1) } else if (e.key === 'ArrowUp') { e.preventDefault(); p.move(-1) } else if (e.key === 'Enter') { e.preventDefault(); p.pick() } });
-  addEventListener('keydown', e => { if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); inp.focus(); inp.scrollIntoView({ block: 'center' }) } });
   p.draw();
 })();
 
@@ -738,14 +854,11 @@ function ledBar(cv, { segs = [], projected = null, stopAt = null, elapsed = null
   draw();
 })();
 
-/* ドット絵: 押したアイコンの、文字のマス目と各大きさの見え方を出す */
+/* ドット絵: 押したアイコンの各大きさの見え方を出す */
 (() => {
-  const ICONS = {"search": ["..####......", ".#....#.....", "#......#....", "#......#....", "#......#....", "#......#....", ".#....#.....", "..####.#....", ".......##...", "........##..", ".........##.", "..........#."], "branch": [".##......##.", "#..#....#..#", "#..#....#..#", ".##......##.", "..#.......#.", "..#......#..", "..#....##...", "..#..##.....", ".##.#.......", "#..#........", "#..#........", ".##........."], "pr": [".##....#....", "#..#..##....", "#..#.#####..", ".##...##..#.", "..#....#..#.", "..#.......#.", "..#.......#.", "..#.......#.", ".##......##.", "#..#....#..#", "#..#....#..#", ".##......##."], "term": ["............", "############", "#..........#", "#.#........#", "#..#.......#", "#...#......#", "#..#.......#", "#.#..####..#", "#..........#", "############", "............", "............"], "gear": [".....##.....", "..##.##.##..", "..########..", ".###....###.", "..#..##..#..", "###.#..#.###", "###.#..#.###", "..#..##..#..", ".###....###.", "..########..", "..##.##.##..", ".....##....."], "bell": [".....##.....", "....####....", "...#....#...", "..#......#..", "..#......#..", "..#......#..", "..#......#..", ".#........#.", "#..........#", "############", "............", ".....##....."], "trash": ["....####....", "############", "............", ".##########.", ".#..#..#..#.", ".#..#..#..#.", ".#..#..#..#.", ".#..#..#..#.", ".#..#..#..#.", ".#..#..#..#.", ".#........#.", ".##########."], "check": ["............", "............", "..........##", ".........##.", "........##..", ".......##...", "##....##....", ".##..##.....", "..####......", "...##.......", "............", "............"], "error": ["...######...", "..#......#..", ".#........#.", "#..#....#..#", "#...#..#...#", "#....##....#", "#....##....#", "#...#..#...#", "#..#....#..#", ".#........#.", "..#......#..", "...######..."], "play": ["..#.........", "..##........", "..#.#.......", "..#..#......", "..#...#.....", "..#....#....", "..#....#....", "..#...#.....", "..#..#......", "..#.#.......", "..##........", "..#........."], "clock": ["...######...", "..#......#..", ".#...#....#.", "#....#.....#", "#....#.....#", "#....####..#", "#..........#", "#..........#", "#..........#", ".#........#.", "..#......#..", "...######..."], "bolt": ["......####..", ".....####...", "....####....", "...####.....", "..#######...", ".....####...", "....####....", "...####.....", "..###.......", ".##.........", "#...........", "............"], "folder": ["............", ".####.......", ".#..#.......", ".#...######.", ".#........#.", ".##########.", ".#........#.", ".#........#.", ".#........#.", ".#........#.", ".##########.", "............"], "file": [".#######....", ".#.....##...", ".#.....#.#..", ".#.....####.", ".#........#.", ".#.######.#.", ".#........#.", ".#.######.#.", ".#........#.", ".#.####...#.", ".#........#.", ".##########."], "copy": ["............", "#######.....", "#.....#.....", "#..#######..", "#..#.....#..", "#..#.....#..", "#..#.....#..", "####.....#..", "...#.....#..", "...#.....#..", "...#######..", "............"], "pkg": [".....##.....", "...##..##...", ".##......##.", "#.##....##.#", "#...#..#...#", "#....##....#", "#....##....#", "#....##....#", "#....##....#", ".##..##..##.", "...######...", "............"], "chip": ["..#.#..#.#..", ".##########.", "##........##", ".#.######.#.", "##.#....#.##", ".#.#....#.#.", "##.#....#.##", ".#.######.#.", "##........##", ".##########.", "..#.#..#.#..", "............"], "power": [".....##.....", ".....##.....", "..#..##..#..", ".#...##...#.", "#....##....#", "#..........#", "#..........#", "#..........#", ".#........#.", "..#......#..", "...######...", "............"], "refresh": ["....####.#..", "..##....##..", ".#.....###..", ".#..........", "#...........", "#...........", "#...........", "#..........#", ".#........#.", ".#........#.", "..##....##..", "....####...."], "undo": ["............", "...#........", "..##........", ".#######....", "..##....##..", "...#.....#..", ".........#..", ".........#..", "........#...", ".....###....", "............", "............"], "lock": ["....####....", "...#....#...", "..#......#..", "..#......#..", "############", "#..........#", "#....##....#", "#....##....#", "#.....#....#", "#..........#", "############", "............"], "keyboard": ["............", "............", "############", "#.##.##.##.#", "#..........#", "#.##.##.##.#", "#..........#", "#..######..#", "############", "............", "............", "............"], "hand": ["...#.#......", "..#.#.#.#...", "..#.#.#.#...", "..#.#.#.#...", "..#.#.#.#.#.", "..#.......#.", "#.#.......#.", "##........#.", ".#.......#..", "..#......#..", "...#.....#..", "....######.."], "chart": ["............", "........##..", "........##..", "....##..##..", "....##..##..", "##..##..##..", "##..##..##..", "##..##..##..", "##..##..##..", "............", "############", "............"], "trend": ["#...........", "#.........##", "#........#.#", "#.......#...", "#......#....", "#..#..#.....", "#.#.##......", "##..........", "#...........", "#...........", "############", "............"], "book": ["............", "............", ".####..####.", "#....##....#", "#....##....#", "#....##....#", "#....##....#", "#....##....#", "#....##....#", ".####..####.", "............", "............"], "link": ["............", "......####..", ".....#....#.", "....#..#..#.", "....#.#..#..", "...#.#..#...", "..#..#.#....", "..#.#..#....", ".#..#..#....", ".#....#.....", "..####......", "............"], "globe": ["...######...", "..##....##..", ".#.#....#.#.", "#..#....#..#", "#..#....#..#", "############", "############", "#..#....#..#", "#..#....#..#", ".#.#....#.#.", "..##....##..", "...######..."], "person": ["....####....", "...#....#...", "...#....#...", "...#....#...", "....####....", "............", "..########..", ".#........#.", "#..........#", "#..........#", "############", "............"], "pencil": [".........##.", "........#..#", ".......#..#.", "......#..#..", ".....#..#...", "....#..#....", "...#..#.....", "..#..#......", ".#..#.......", ".###........", "##..........", "............"], "layers": [".....##.....", "...##..##...", ".##......##.", "#..........#", ".##......##.", "#..##..##..#", ".##..##..##.", "#...#..#...#", ".##..##..##.", "...##..##...", ".....##.....", "............"], "shield": ["..########..", ".#........#.", "#..........#", "#..........#", "#..........#", "#..........#", ".#........#.", ".#........#.", "..#......#..", "...#....#...", "....#..#....", ".....##....."], "sparkle": [".....##.....", ".....##.....", "....#..#....", "...#....#...", ".##......##.", "#..........#", "#..........#", ".##......##.", "...#....#...", "....#..#....", ".....##.....", ".....##....."], "target": ["...######...", "..#......#..", ".#........#.", "#..........#", "#....##....#", "#...####...#", "#...####...#", "#....##....#", "#..........#", ".#........#.", "..#......#..", "...######..."], "cal": ["..#......#..", "############", "#..........#", "############", "#..........#", "#.##.##.##.#", "#..........#", "#.##.##.##.#", "#..........#", "#.##.##....#", "#..........#", "############"], "hourglass": ["############", ".#........#.", ".#........#.", "..#......#..", "...#....#...", "....#..#....", "....#..#....", "...#....#...", "..#..##..#..", ".#..####..#.", ".#.######.#.", "############"]};
-  const runs = rows => { let d = ''; rows.forEach((r, y) => { for (let x = 0; x < r.length;) { if (r[x] !== '#') { x++; continue } let e = x; while (e < r.length && r[e] === '#') e++; d += `M${x} ${y}h${e - x}v1h-${e - x}z`; x = e } }); return d };
   const svg = (rows, cell) => `<svg class="px" width="${12 * cell}" height="${12 * cell}" viewBox="0 0 12 12" aria-hidden="true"><path d="${runs(rows)}"/></svg>`;
   const show = n => {
     const r = ICONS[n];
-    $('#pxCode').innerHTML = `${n}: [\n` + r.map(x => `  <span class="q">'${x}'</span>,`).join('\n') + '\n]';
     $('#pv18').innerHTML = svg(r, 1.5) + '18px'; $('#pv36').innerHTML = svg(r, 3) + '36px'; $('#pv72').innerHTML = svg(r, 6) + '72px';
     $('#pvBtn').innerHTML = svg(r, 1.5) + esc(n); $('#pvRow').innerHTML = svg(r, 1.5) + '一覧の行に置いたとき';
     document.querySelectorAll('#gal button').forEach(b => b.setAttribute('aria-pressed', b.dataset.n === n));
@@ -786,6 +899,15 @@ function ledBar(cv, { segs = [], projected = null, stopAt = null, elapsed = null
   ddb.addEventListener('blur', () => setTimeout(() => openDD(false), 100));
 
   /* チェック・ラジオ・スイッチ */
+  /* ↑↓（j/k）で項目を移り、Space で切り替える。ラジオは ←→ でも選べる */
+  $('#g-chk').addEventListener('keydown', e => {
+    const all = [...$('#g-chk').querySelectorAll('.opt')], k = all.indexOf(document.activeElement);
+    if (k < 0) return;
+    const d = e.key === 'ArrowDown' || e.key === 'j' ? 1 : e.key === 'ArrowUp' || e.key === 'k' ? -1 : 0;
+    if (d) { e.preventDefault(); all[(k + d + all.length) % all.length].focus(); return }
+    const o = all[k];
+    if (o.dataset.t === 'r' && (e.key === 'ArrowRight' || e.key === 'ArrowLeft')) { e.preventDefault(); const g = [...o.parentElement.querySelectorAll('.opt')], n = g[(g.indexOf(o) + (e.key === 'ArrowRight' ? 1 : -1) + g.length) % g.length]; n.focus(); n.click() }
+  });
   $('#g-chk').addEventListener('click', e => { const o = e.target.closest('.opt'); if (!o) return;
     if (o.dataset.t === 'r') o.parentElement.querySelectorAll('.opt').forEach(x => x.setAttribute('aria-checked', x === o)); else o.setAttribute('aria-checked', o.getAttribute('aria-checked') !== 'true');
     if (o.dataset.t === 's') $('#swMsg').innerHTML = o.getAttribute('aria-checked') === 'true' ? '<span class="ok">入</span> 5 分ごとに main を取りこみます。次は 10:40 です' : '切。自分で取りこむまで main はそのままです' });
@@ -849,9 +971,44 @@ function ledBar(cv, { segs = [], projected = null, stopAt = null, elapsed = null
   const si = $('#stIn'), sm = $('#stMsg');
   const setSt = v => { const n = Math.max(0, Math.min(10, v)); si.value = n; sm.innerHTML = v > 10 ? '<span class="wn">▲</span> 10 回までです' : v < 0 ? '<span class="wn">▲</span> 0 回より少なくはできません' : n === 0 ? '失敗したらすぐ止めます' : `失敗したら最大 ${n} 回まで、${n * 2} 秒ずつ空けて試します` };
   $('#g-st').addEventListener('click', e => { const b = e.target.closest('[data-d]'); if (b) setSt(+si.value + +b.dataset.d) });
-  si.addEventListener('keydown', e => { if (e.key === 'ArrowUp') { e.preventDefault(); setSt(+si.value + 1) } else if (e.key === 'ArrowDown') { e.preventDefault(); setSt(+si.value - 1) } });
+  $('#g-st').addEventListener('keydown', e => { if (e.key === 'ArrowUp' || e.key === 'k') { e.preventDefault(); setSt(+si.value + 1) } else if (e.key === 'ArrowDown' || e.key === 'j') { e.preventDefault(); setSt(+si.value - 1) } });
   si.addEventListener('input', () => { const n = parseInt(si.value, 10); if (!isNaN(n)) setSt(n) });
   setSt(3);
+})();
+
+/* 見本: 枠を押すとモーダルに移して触れるようにする。閉じたら元の場所に戻す（つないだ処理はそのまま動く） */
+(() => {
+  const dlg = document.createElement('dialog');
+  dlg.className = 'sdlg';
+  dlg.innerHTML = '<div class="sd-hd"><button class="tl-x" type="button">Esc 閉じる</button></div><div class="sd-body"></div>';
+  document.body.append(dlg);
+  const body = dlg.querySelector('.sd-body');
+  let card = null, ph = null, main = null;
+  const lock = (c, on) => [...c.children].forEach(n => { if (!n.classList.contains('s-open')) n.inert = on });
+  const open = c => {
+    if (dlg.open) return;
+    card = c; ph = document.createElement('div'); ph.className = 's s-ph'; ph.style.height = c.offsetHeight + 'px'; ph.textContent = '開いています';
+    c.replaceWith(ph); lock(c, false); body.append(c);
+    dlg.setAttribute('aria-label', c.querySelector('.ttl').textContent);
+    document.documentElement.style.overflow = 'hidden';
+    dlg.showModal();
+    /* キーを受ける先: 入力欄とスライダーを先に、なければ枠、なければ最初のボタン */
+    main = c.querySelector('input[type=text], input:not([type]), input[type=range]') || (c.matches('[tabindex]') ? c : null) || c.querySelector('[tabindex], button:not([disabled])') || c;
+    if (!main.matches('[tabindex], input, button, select, textarea')) main.tabIndex = -1;
+    main.focus();
+    window.dispatchEvent(new Event('resize'));
+  };
+  dlg.addEventListener('close', () => { if (!card) return; main = null; lock(card, true); ph.replaceWith(card); card = ph = null; document.documentElement.style.overflow = '' });
+  dlg.querySelector('.tl-x').addEventListener('click', () => dlg.close());
+  /* 枠の中の何もない所を押してもキーが効くように、受け先に戻す */
+  dlg.addEventListener('click', e => { if (e.target === dlg) { dlg.close(); return } if (card && !card.contains(document.activeElement)) main.focus() });
+  document.querySelectorAll('.grid > .s').forEach(c => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 's-open'; b.innerHTML = '<span>押して触る ▸</span>';
+    b.setAttribute('aria-label', c.querySelector('.ttl').textContent + 'を開いて触る');
+    b.addEventListener('click', () => open(c));
+    c.append(b); lock(c, true);
+  });
 })();
 
 /* 入れ方: コピー */
@@ -862,12 +1019,4 @@ $('#copy').addEventListener('click', async () => {
   setTimeout(() => { $('#copy').textContent = 'コピー' }, 2000);
 });
 
-/* ページ全体: / で絞り込み、? でキーの札、j/k でページを送る（入力中は打った字のまま） */
-addEventListener('keydown', e => {
-  if (typing(e) || e.target.closest('.s')) return;
-  if (e.key === '/') { e.preventDefault(); $('#fzIn').focus(); $('#fzIn').scrollIntoView({ block: 'center' }) }
-  else if (e.key === '?') { $('#altBtn').click(); $('#s-alt').scrollIntoView({ block: 'center' }) }
-  else if (e.key === 'j') scrollBy({ top: 120 });
-  else if (e.key === 'k') scrollBy({ top: -120 });
-});
 </script>
