@@ -180,6 +180,28 @@ tr.on td { background: var(--sel-bg); color: var(--sel-fg) }
 .stp { display: flex; gap: 0 }
 .stp input { width: 6ch !important; text-align: center; border-left: 0 !important; border-right: 0 !important }
 
+/* UX: やりがちと Kodou-ui の決まりを並べる */
+.ux .lead2 { margin: 0 0 30px; color: var(--dim); max-width: 40em }
+.rules { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--fg) }
+.rl { display: grid; grid-template-columns: 11ch minmax(0, 1fr); gap: 0 2ch; padding: 16px 4px; border-bottom: 1px solid var(--rule) }
+.rules .rl:nth-child(odd) { padding-right: 24px; border-right: 1px solid var(--rule) } .rules .rl:nth-child(even) { padding-left: 24px }
+.rl h3 { margin: 0; font: 800 14px/1.6 var(--font-read) }
+.rl .ng2, .rl .ok2 { display: grid; grid-template-columns: 2ch minmax(0, 1fr); gap: 0 .5ch; font-size: 14px; line-height: 1.75 }
+.rl .ng2 { color: var(--faint) } .rl .ng2::before { content: "✗"; color: var(--red); font-family: var(--font) }
+.rl .ok2 { margin-top: 4px } .rl .ok2::before { content: "✓"; color: var(--green); font-family: var(--font) }
+.rl code { font: 12.5px var(--font); background: var(--rule-soft); padding: 0 4px; color: var(--fg) }
+.rl .ng2 code { text-decoration: line-through; text-decoration-color: rgba(190,63,14,.5) }
+.flow { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 20px; align-items: stretch; margin-top: 40px }
+.flow .arrow { align-self: center; font: 700 18px var(--font); color: var(--faint) }
+.fl { border: 1px solid var(--ui); background: var(--panel); position: relative; padding: 22px 16px 14px; min-width: 0 }
+.fl .ttl { position: absolute; top: -0.8em; left: 10px; padding: 0 6px; background: var(--panel); font: 700 12.5px var(--font) }
+.fl p { margin: 0 0 10px; font-size: 14px; color: var(--dim) }
+.fl .say { font: 12.5px/1.7 var(--font); background: var(--rule-soft); padding: 8px 10px; white-space: pre-wrap }
+.fl .say .y { color: var(--accent); font-weight: 700 }
+.fl .say .h { color: var(--red); font-weight: 700 } .fl .say .md { color: var(--yellow); font-weight: 700 } .fl .say .li { color: var(--faint); font-weight: 700 }
+@media (max-width: 760px) { .rules { grid-template-columns: minmax(0, 1fr) } .rules .rl:nth-child(odd) { padding-right: 4px; border-right: 0 } .rules .rl:nth-child(even) { padding-left: 4px } .flow { grid-template-columns: minmax(0, 1fr) } .flow .arrow { transform: rotate(90deg); justify-self: center } }
+@media (max-width: 460px) { .rl { grid-template-columns: minmax(0, 1fr) } }
+
 /* ドット絵 */
 .pxs .lead2 { margin: 0 0 28px; color: var(--dim); max-width: 40em }
 .pxs .lead2 code { font: 13px var(--font); background: var(--rule-soft); padding: 0 4px }
@@ -244,7 +266,7 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 4px 2ch; padding-block: 16px
 
 <header class="top"><div class="wrap">
   <span class="name">Kodou-ui</span><span class="sp"></span>
-  <a href="#samples">部品</a><a href="#only">Kodou ならでは</a><a href="#pixels">ドット絵</a><a href="#get">入れ方</a><a href="https://github.com/k-aoshima/kodou-ui">GitHub</a>
+  <a href="#samples">部品</a><a href="#only">Kodou ならでは</a><a href="#ux">使い心地</a><a href="#pixels">ドット絵</a><a href="#get">入れ方</a><a href="https://github.com/k-aoshima/kodou-ui">GitHub</a>
 </div></header>
 
 <main class="wrap">
@@ -252,26 +274,26 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 4px 2ch; padding-block: 16px
     <p class="eyebrow">エンジニアの道具のための UI とスキル</p>
     <h1><span class="heart" id="heart" aria-hidden="true"></span>Kodou-ui</h1>
     <p class="sub"><span class="ph">打つのが、</span><span class="ph">楽しい UI。</span></p>
-    <p class="lead">指がキーを打つ実感。覚えたコマンドが手になじむ感覚。使いこむほど速くなる気持ちよさ。<b>CUI のあの楽しさを、今の道具の画面に持ちこむ</b>ための部品とスキルです。</p>
+    <p class="lead">指がキーを打つ実感。覚えたコマンドが手になじむ感覚。使いこむほど速くなる気持ちよさ。<b>CUI のあの楽しさを今の道具の画面に持ちこむ</b>ための部品とスキルです。</p>
 
     <div class="three">
-      <div><span class="no">01</span><h2>打っている実感</h2><p>1 文字ごとに画面が応えます。押したキー、今のモード、何が起きたかが、いつもステータスラインに見えます。</p>
+      <div><span class="no">01</span><h2>打っている実感</h2><p>1 文字ごとに画面が応えます。押したキー、今のモード、何が起きたかがいつもステータスラインに見えます。</p>
         <ul><li>1 文字ごとに絞り込む</li><li>キーから描画まで 16ms 以内</li><li>モードと押したキーを常に出す</li></ul></div>
-      <div><span class="no">02</span><h2>覚える楽しさ</h2><p>キーはメニューとツールチップに書き、<kbd>⌥</kbd> で画面に重ねて見せます。並びも結果も毎回同じなので、手が覚えます。</p>
-        <ul><li><kbd>⌥</kbd> でキーの札が出る</li><li>同じ入力に同じ順の結果</li><li>実行したら、次からのキーを一言で</li></ul></div>
+      <div><span class="no">02</span><h2>覚える楽しさ</h2><p>キーはメニューとツールチップに書き、<kbd>⌥</kbd> で画面に重ねて見せます。並びも結果も毎回同じなので手が覚えます。</p>
+        <ul><li><kbd>⌥</kbd> でキーの札が出る</li><li>同じ入力に同じ順の結果</li><li>実行したら次からのキーを一言で</li></ul></div>
       <div><span class="no">03</span><h2>使いこなす気持ちよさ</h2><p>はじめはマウスと一覧で使え、慣れるほど打つ量が減ります。前に選んだものが上に来て、キーを覚えればメニューを開かずに済みます。</p>
         <ul><li>前に選んだものを上に出す</li><li>キーだけで最後まで通る</li><li>確認はその場の [y/N]</li></ul></div>
     </div>
   </section>
 
   <section class="samples" id="samples">
-    <h2>いつもの部品を、Kodou で</h2>
-    <p>どの UI キットにもある部品を、同じ並びで作りました。ほかのライブラリと見比べてください。どれもキーだけで最後まで動きます。</p>
+    <h2>いつもの部品を Kodou で</h2>
+    <p>どの UI キットにもある部品を Kodou-ui の形で作りました。ほかのライブラリと見比べてください。どれもキーだけで最後まで動きます。</p>
     <div class="grid">
       <div class="s" id="g-btn"><span class="ttl">ボタン</span>
         <div><div class="row" style="margin-top:0"><button class="kb2 p" type="button" data-say="マージしました">マージする</button><button class="kb2" type="button" data-say="ブランチを切りました">ブランチを切る</button></div>
           <div class="row"><button class="kb2 d" type="button" data-say="停止しました">停止</button><button class="kb2" type="button" disabled>デプロイ</button><button class="kb2" type="button" id="runBtn">テストを実行</button></div>
-          <div class="msg" id="btnMsg">デプロイは、テストが通るまで押せません</div></div>
+          <div class="msg" id="btnMsg">デプロイはテストが通るまで押せません</div></div>
         <div class="keys"><span>ホバーはその色を濃く</span><span>処理中は件数を出す</span></div></div>
 
       <div class="s" id="g-in"><span class="ttl">テキスト入力</span>
@@ -288,7 +310,7 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 4px 2ch; padding-block: 16px
           <button class="opt" type="button" role="checkbox" aria-checked="false" data-t="c">テストも走らせる</button>
           <div class="rg" role="radiogroup" aria-label="改行コード"><button class="opt" type="button" role="radio" aria-checked="true" data-t="r">LF</button><button class="opt" type="button" role="radio" aria-checked="false" data-t="r">CRLF</button></div>
           <button class="opt sw" type="button" role="switch" aria-checked="false" data-t="s">自動で取りこむ</button>
-          <div class="msg" id="swMsg">入れると、5 分ごとに main を取りこみます（既定は切）</div>
+          <div class="msg" id="swMsg">入れると 5 分ごとに main を取りこみます（既定は切）</div>
         </div>
         <div class="keys"><span><kbd>Space</kbd> 切り替え</span><span>印は文字で</span></div></div>
 
@@ -310,7 +332,7 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 4px 2ch; padding-block: 16px
           <div><span class="ok">[  OK  ]</span> キャッシュを温めました（1.2 秒）</div>
           <div><span class="wn">[ WARN ]</span> メモリの空きが 2.1 GB です</div>
           <div><span class="ng">[FAILED]</span> ポート 8080 は vite が使っています</div>
-          <div style="white-space:normal;font:12.5px/1.6 var(--font-read);color:var(--dim);margin-top:6px">失敗したら、何が起きたかと直し方を文で書きます。別のポートを入れるか、vite を止めてください。</div>
+          <div style="white-space:normal;font:12.5px/1.6 var(--font-read);color:var(--dim);margin-top:6px">失敗したら何が起きたかと直し方を文で書きます。別のポートを入れるか、vite を止めてください。</div>
         </div>
         <div class="keys"><span>状態は色と文字の両方で</span></div></div>
 
@@ -321,17 +343,17 @@ to type 'string'.</pre></details></div></div>
         <div class="keys"><span>何が起きたかと直し方を文で</span><span>生のエラーは畳む</span></div></div>
 
       <div class="s" id="s-toast" tabindex="0"><span class="ttl">取り消せる操作</span>
-        <div><div style="font:13px/1.7 var(--font-read);color:var(--dim)">取り消せる操作には確認を出しません。すぐ実行して、取り消しを出します。</div>
+        <div><div style="font:13px/1.7 var(--font-read);color:var(--dim)">取り消せる操作には確認を出しません。すぐ実行して取り消しを出します。</div>
           <div class="row"><button class="btn" id="tsGo" type="button">3 件を削除</button></div><div id="tsOut"></div></div>
         <div class="keys"><span><kbd>d</kbd> 削除</span><span><kbd>u</kbd> 取り消し</span></div></div>
 
       <div class="s" id="g-dlg"><span class="ttl">ダイアログ</span>
         <div><div style="font:13px/1.7 var(--font-read);color:var(--dim)">画面を止めるので最後の手段にし、取り消せない操作だけに使います。</div><div class="row"><button class="kb2 d" type="button" id="dlgOpen">リポジトリを削除…</button></div><div class="msg" id="dlgMsg"></div>
-          <dialog class="dlg" id="dlg"><div class="dt">リポジトリを削除しますか</div><p>kodou-ui を削除すると、issue 14 件と PR 3 件も消え、戻せません。</p><div class="row" style="justify-content:flex-end"><button class="kb2" type="button" value="no" id="dlgNo" autofocus>やめる</button><button class="kb2 d" type="button" id="dlgYes">削除する</button></div></dialog></div>
+          <dialog class="dlg" id="dlg"><div class="dt">リポジトリを削除しますか</div><p>kodou-ui を削除すると issue 14 件と PR 3 件も消え、戻せません。</p><div class="row" style="justify-content:flex-end"><button class="kb2" type="button" value="no" id="dlgNo" autofocus>やめる</button><button class="kb2 d" type="button" id="dlgYes">削除する</button></div></dialog></div>
         <div class="keys"><span><kbd>Esc</kbd> 閉じる</span><span>既定は「やめる」</span></div></div>
 
       <div class="s" id="g-menu"><span class="ttl">メニュー</span>
-        <div><div class="dd"><button class="ddb" type="button" id="mnb" aria-haspopup="menu" aria-expanded="false" style="min-width:12ch">操作<span class="car">▾</span></button><div class="ddl" id="mnl" role="menu" hidden></div></div><div class="msg" id="mnMsg">キーを横に書くので、次からはメニューを開かずに使えます</div></div>
+        <div><div class="dd"><button class="ddb" type="button" id="mnb" aria-haspopup="menu" aria-expanded="false" style="min-width:12ch">操作<span class="car">▾</span></button><div class="ddl" id="mnl" role="menu" hidden></div></div><div class="msg" id="mnMsg">キーを横に書くので次からはメニューを開かずに使えます</div></div>
         <div class="keys"><span><kbd>⏎</kbd> 開く</span><span><kbd>↑</kbd><kbd>↓</kbd></span><span>壊す操作は最後に</span></div></div>
 
       <div class="s" id="g-tip"><span class="ttl">ツールチップ</span>
@@ -339,7 +361,7 @@ to type 'string'.</pre></details></div></div>
           <button class="kb2 tipb" type="button" aria-label="探す">探す<span class="tip" role="tooltip">探す <kbd>/</kbd></span></button>
           <button class="kb2 tipb" type="button" aria-label="分ける">分ける<span class="tip" role="tooltip">窓を分ける <kbd>⌃w v</kbd></span></button>
           <button class="kb2 tipb" type="button" aria-label="設定">設定<span class="tip" role="tooltip">設定を開く <kbd>,</kbd></span></button></div>
-          <div class="msg">ホバーかフォーカスで、名前とキーを出します。CSS だけで動きます</div></div>
+          <div class="msg">ホバーかフォーカスで名前とキーを出します。CSS だけで動きます</div></div>
         <div class="keys"><span><kbd>Tab</kbd> で順に</span></div></div>
 
       <div class="s" id="s-tb" tabindex="0"><span class="ttl">表</span><span class="ttl-r" id="tbKey">大きさ ▼</span>
@@ -372,12 +394,12 @@ to type 'string'.</pre></details></div></div>
         <div><div class="lab">リトライの回数</div><div class="stp"><button class="kb2" type="button" data-d="-1" aria-label="1 減らす">−</button><input type="text" id="stIn" value="3" inputmode="numeric" aria-label="リトライの回数"><button class="kb2" type="button" data-d="1" aria-label="1 増やす">＋</button></div><div class="msg" id="stMsg"></div></div>
         <div class="keys"><span><kbd>↑</kbd><kbd>↓</kbd> 1 ずつ</span><span>0〜10</span></div></div>
     </div>
-    <p class="more">ほかに、メーター、棒グラフ、折れ線、点の多いグラフ、スパークライン、ヒストグラム、空の状態、パンくず、キーと値、ドット絵のアイコン 110 個など、部品は全部で 36 あります。</p>
+    <p class="more">ほかにもメーター、棒グラフ、折れ線、点の多いグラフ、スパークライン、ヒストグラム、空の状態、パンくず、キーと値、ドット絵のアイコン 110 個など、部品は全部で 36 あります。</p>
   </section>
 
   <section class="samples" id="only">
     <h2>Kodou ならでは</h2>
-    <p>CUI の楽しさを持ちこむための部品です。枠をクリックしてから、下に書いたキーを押してください。</p>
+    <p>CUI の楽しさを持ちこむための部品です。枠をクリックしてから下に書いたキーを押してください。</p>
     <div class="grid">
       <div class="s" id="s-pal"><span class="ttl">コマンドパレット</span><span class="ttl-r">⌘K</span>
         <div><input type="text" id="palIn" placeholder="> コマンドを打つ" autocomplete="off" spellcheck="false" aria-label="コマンド"><div class="list" id="palList" role="listbox"></div><div class="msg" id="palMsg"></div></div>
@@ -407,9 +429,33 @@ to type 'string'.</pre></details></div></div>
     </div>
   </section>
 
+  <section class="band ux" id="ux">
+    <h2><span class="ph">使い心地も</span><span class="ph">エージェントに渡す。</span></h2>
+    <p class="lead2">部品を配るだけだと、確認だらけの画面や待たされても理由の分からない画面も組めてしまいます。Kodou-ui はどう使ってもらうかの判断を決まりにし、スキルとしてコーディングエージェントに渡します。決まりはどれも認知や使いやすさの研究を元にしています。</p>
+    <div class="rules">
+      <div class="rl"><h3>待ち時間</h3><div><div class="ng2"><span>何にでもスピナーを出す</span></div><div class="ok2"><span>1 秒未満は何も出さない。1〜10 秒はスピナーに中身と件数、10 秒を超えたら進捗バー</span></div></div></div>
+      <div class="rl"><h3>確認</h3><div><div class="ng2"><span>削除のたびに「よろしいですか？」</span></div><div class="ok2"><span>取り消せる操作はすぐ実行して取り消しを出す。戻せない操作だけその場の <code>[y/N]</code> で聞く</span></div></div></div>
+      <div class="rl"><h3>エラー</h3><div><div class="ng2"><span><code>エラーが発生しました</code></span></div><div class="ok2"><span>何が起きたかと直し方を文で書く。生のエラーは消さずに畳む</span></div></div></div>
+      <div class="rl"><h3>色</h3><div><div class="ng2"><span>失敗を赤い文字だけで示す</span></div><div class="ok2"><span><code>[FAILED]</code> の文字や ▲ を添え、色が見分けにくい人にも伝わるようにする</span></div></div></div>
+      <div class="rl"><h3>中が見える</h3><div><div class="ng2"><span><code>処理中…</code> <code>完了しました</code></span></div><div class="ok2"><span><code>24/40 ファイル 1.7 秒 いま: src/ui/Table.ts</code> のように対象と実際の値を出す</span></div></div></div>
+      <div class="rl"><h3>ハンドルは人</h3><div><div class="ng2"><span>気を利かせて自動で実行・自動で直す</span></div><div class="ok2"><span>機械は提案まで。自動で動くものは既定を切にし、入れると何が起きるかを横に書く</span></div></div></div>
+      <div class="rl"><h3>読みやすさ</h3><div><div class="ng2"><span>説明の文まで等幅で薄い灰色</span></div><div class="ok2"><span>文は読みやすい書体で 1 行 38 字、行間 1.85。文字は地に対して 4.5:1 以上</span></div></div></div>
+      <div class="rl"><h3>速さと軽さ</h3><div><div class="ng2"><span>1 万行を全部描く、隠れても動き続ける</span></div><div class="ok2"><span>見えている分だけ描き、隠れたら止める。キーから描画まで 16ms 以内</span></div></div></div>
+    </div>
+    <div class="flow">
+      <div class="fl"><span class="ttl">kodou-ui-build</span><p>作るとき。部品の選び方と上の決まりに沿って画面を組みます。</p><div class="say">&gt; Kodou-ui でログの画面を作って</div></div>
+      <div class="arrow" aria-hidden="true">→</div>
+      <div class="fl"><span class="ttl">kodou-ui-review</span><p>作ったあと。決まりに照らして点検し、場所・問題・直し方を出します。</p><div class="say"><span class="h">[重い]</span> ログ: error の行を赤だけで示している
+       → 行頭に [ERROR] を付ける
+<span class="md">[中]</span>   トースト: 削除のたびに確認が出る
+       → 確認をやめ、取り消しを出す
+<span class="li">[軽い]</span> 要素 4,210 個（目安 3,000 以下）</div></div>
+    </div>
+  </section>
+
   <section class="band pxs" id="pixels">
-    <h2><span class="ph">アイコンも、</span><span class="ph">エージェントが描く。</span></h2>
-    <p class="lead2">画像を生成するのではなく、エージェントが <code>#</code> と <code>.</code> で 12×12 のマス目を書きます。どのアイコンも同じ格子に乗るので、線の太さがそろい、にじみません。下のアイコンを押すと、そのマス目が出ます。</p>
+    <h2><span class="ph">アイコンも</span><span class="ph">エージェントが描く。</span></h2>
+    <p class="lead2">画像を生成するのではなく、エージェントが <code>#</code> と <code>.</code> で 12×12 のマス目を書きます。どのアイコンも同じ格子に乗るので、線の太さがそろってにじみません。下のアイコンを押すとそのマス目が出ます。</p>
     <div class="ed">
       <pre class="code" id="pxCode"></pre>
       <div class="pv">
@@ -419,16 +465,16 @@ to type 'string'.</pre></details></div></div>
       </div>
     </div>
     <div class="gal" id="gal" aria-label="見本帳のアイコン"></div>
-    <p class="more">見本帳には 110 個あります。足りないものは、エージェントが同じ格子で描き足し、点検のスクリプトが大きさと中心のずれを確かめます。</p>
+    <p class="more">見本帳には 110 個あります。足りないものはエージェントが同じ格子で描き足し、点検のスクリプトが大きさと中心のずれを確かめます。</p>
   </section>
 
   <section class="band">
     <h2><span class="ph">形は昔のまま。</span><span class="ph">中身は今の質。</span></h2>
     <div class="vs">
-      <div class="o"><h3>残すもの</h3><ul><li>等幅の格子と、罫線で囲んだ枠</li><li>選んだ行は反転表示</li><li><code>[  OK  ]</code> と <code>y/N</code> の言い回し</li><li>キーだけで最後まで通る操作</li></ul></div>
-      <div class="n"><h3>今に替えるもの</h3><ul><li>文は読みやすい書体で、1 行 38 字</li><li>色だけで状態を伝えない</li><li>エラーは直し方まで文で書く</li><li>見えている分だけ描き、隠れたら止める</li></ul></div>
+      <div class="o"><h3>残すもの</h3><ul><li>等幅の格子と罫線で囲んだ枠</li><li>選んだ行は反転表示</li><li><code>[  OK  ]</code> と <code>y/N</code> の言い回し</li><li>キーだけで最後まで通る操作</li></ul></div>
+      <div class="n"><h3>今に替えるもの</h3><ul><li>文は読みやすい書体で 1 行 38 字</li><li>色だけで状態を伝えない</li><li>エラーは直し方まで文で書く</li><li>見えている分だけ描き、隠れたら止める</li></ul></div>
     </div>
-    <p class="light">同じ画面を作って、Kodou-ui は <b>57 MB</b>。手当てした React は 128 MB でした。<small>一覧 1 万行、50 行/秒のログ、2 万点のグラフ。ページの使用メモリ、headless Chrome で 3 回の中央値。</small></p>
+    <p class="light">同じ画面を作ると、Kodou-ui は <b>57 MB</b>、見えている分だけ描くなどの手当てをした React は 128 MB でした。<small>一覧 1 万行、50 行/秒のログ、2 万点のグラフ。ページの使用メモリ、headless Chrome で 3 回の中央値。</small></p>
   </section>
 
   <section class="band" id="get">
@@ -437,7 +483,7 @@ to type 'string'.</pre></details></div></div>
 <div><span class="p">$</span> <span class="cp">git clone https://github.com/k-aoshima/kodou-ui.git</span></div>
 <div><span class="p">$</span> <span class="cp">cp -R kodou-ui/skills/kodou-ui-build kodou-ui/skills/kodou-ui-review ~/.claude/skills/</span></div>
 <button class="copy" id="copy" type="button">コピー</button></div>
-    <p>Claude Code に「Kodou-ui で作って」と頼むと、部品と決まりに沿って画面を作ります。「Kodou-ui で点検して」と頼むと、打っている実感やキーの覚えやすさを点検して、直し方まで指摘します。React の画面にも使えます。</p>
+    <p>Claude Code に「Kodou-ui で作って」と頼むと、部品と決まりに沿って画面を作ります。「Kodou-ui で点検して」と頼むと、打っている実感やキーの覚えやすさを確かめて直し方まで指摘します。React の画面にも使えます。</p>
   </section>
 </main>
 <footer><div class="wrap"><span>Kodou-ui</span><span>MIT License · Xami</span></div></footer>
@@ -662,7 +708,7 @@ function ledBar(cv, { segs = [], projected = null, stopAt = null, elapsed = null
 
 /* モード */
 (() => {
-  const box = $('#s-vim'); let text = '打つ楽しさを、今の画面に。', pos = 0, ins = false;
+  const box = $('#s-vim'); let text = '打つ楽しさを今の画面に。', pos = 0, ins = false;
   const draw = () => {
     const c = text[pos] || ' ';
     $('#vimTxt').innerHTML = esc(text.slice(0, pos)) + `<span class="cur">${esc(c)}</span>` + esc(text.slice(pos + 1));
@@ -742,7 +788,7 @@ function ledBar(cv, { segs = [], projected = null, stopAt = null, elapsed = null
   /* チェック・ラジオ・スイッチ */
   $('#g-chk').addEventListener('click', e => { const o = e.target.closest('.opt'); if (!o) return;
     if (o.dataset.t === 'r') o.parentElement.querySelectorAll('.opt').forEach(x => x.setAttribute('aria-checked', x === o)); else o.setAttribute('aria-checked', o.getAttribute('aria-checked') !== 'true');
-    if (o.dataset.t === 's') $('#swMsg').innerHTML = o.getAttribute('aria-checked') === 'true' ? '<span class="ok">入</span> 5 分ごとに main を取りこみます。次は 10:40 です' : '切。自分で取りこむまで、main はそのままです' });
+    if (o.dataset.t === 's') $('#swMsg').innerHTML = o.getAttribute('aria-checked') === 'true' ? '<span class="ok">入</span> 5 分ごとに main を取りこみます。次は 10:40 です' : '切。自分で取りこむまで main はそのままです' });
 
   /* スライダー（見本帳と同じ作り。つまみの中心は input のつまみの中心と同じ 6 + 12i px） */
   const KNOB = ['######', '######', '######', '######', '#....#', '######', '######', '#....#', '######', '######', '######', '######'];
@@ -761,7 +807,7 @@ function ledBar(cv, { segs = [], projected = null, stopAt = null, elapsed = null
   const slIn = $('#slIn');
   const renderSl = () => { const v = +slIn.value; drawRail($('#rail'), v, 1, 16); $('#slV').textContent = `${v}G`;
     const m = v >= 12 ? '27B まで' : v >= 7 ? '12B まで' : v >= 4 ? '4B まで' : '小さいモデルだけ';
-    $('#ledMsg').innerHTML = `読み込めるローカルモデルの目安は ${m}${v > 12 ? '。<span class="wn">16G の Mac では、ほかのアプリが窮屈になります</span>' : ''}` };
+    $('#ledMsg').innerHTML = `読み込めるローカルモデルの目安は ${m}${v > 12 ? '。<span class="wn">16G の Mac ではほかのアプリが窮屈になります</span>' : ''}` };
   slIn.addEventListener('input', renderSl); renderSl();
 
   /* タブ */
@@ -776,7 +822,7 @@ function ledBar(cv, { segs = [], projected = null, stopAt = null, elapsed = null
   const dlg = $('#dlg');
   $('#dlgOpen').addEventListener('click', () => dlg.showModal());
   $('#dlgNo').addEventListener('click', () => { dlg.close(); $('#dlgMsg').textContent = 'やめました。kodou-ui はそのままです' });
-  $('#dlgYes').addEventListener('click', () => { dlg.close(); $('#dlgMsg').innerHTML = '<span class="ok">[  OK  ]</span> 削除しました（見本なので、実際には何も消えていません）' });
+  $('#dlgYes').addEventListener('click', () => { dlg.close(); $('#dlgMsg').innerHTML = '<span class="ok">[  OK  ]</span> 削除しました（見本なので実際には何も消えていません）' });
   dlg.addEventListener('cancel', () => { $('#dlgMsg').textContent = 'Esc で閉じました。何も変えていません' });
 
   /* メニュー */
@@ -801,7 +847,7 @@ function ledBar(cv, { segs = [], projected = null, stopAt = null, elapsed = null
 
   /* 数値 */
   const si = $('#stIn'), sm = $('#stMsg');
-  const setSt = v => { const n = Math.max(0, Math.min(10, v)); si.value = n; sm.innerHTML = v > 10 ? '<span class="wn">▲</span> 10 回までです' : v < 0 ? '<span class="wn">▲</span> 0 回より少なくはできません' : n === 0 ? '失敗したらすぐ止めます' : `失敗したら、最大 ${n} 回まで、${n * 2} 秒ずつ空けて試します` };
+  const setSt = v => { const n = Math.max(0, Math.min(10, v)); si.value = n; sm.innerHTML = v > 10 ? '<span class="wn">▲</span> 10 回までです' : v < 0 ? '<span class="wn">▲</span> 0 回より少なくはできません' : n === 0 ? '失敗したらすぐ止めます' : `失敗したら最大 ${n} 回まで、${n * 2} 秒ずつ空けて試します` };
   $('#g-st').addEventListener('click', e => { const b = e.target.closest('[data-d]'); if (b) setSt(+si.value + +b.dataset.d) });
   si.addEventListener('keydown', e => { if (e.key === 'ArrowUp') { e.preventDefault(); setSt(+si.value + 1) } else if (e.key === 'ArrowDown') { e.preventDefault(); setSt(+si.value - 1) } });
   si.addEventListener('input', () => { const n = parseInt(si.value, 10); if (!isNaN(n)) setSt(n) });
