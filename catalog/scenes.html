@@ -346,7 +346,7 @@ table.top tbody tr.on.gone td { color: var(--sel-fg); opacity: .6 }
     <div class="part-title"><h2><span class="no">3.</span> AI の作業</h2><span class="tag t2">中が見える</span><span class="tag t3">ハンドルは人</span></div>
     <p class="part-desc">AI が読んだファイル、探したもの、変えようとしている差分を、端末の記録の形で流します。変更は提案で止まり、決めるのは人です。下の <kbd class="soft">&gt;</kbd> からいつでも割り込めます。</p>
     <div class="box" id="agentPanel" tabindex="0" aria-label="AI の作業">
-      <span class="ttl">agent <span class="dim">feat/command-chips</span></span><span class="ttl-r state" id="agentState"></span>
+      <span class="ttl">agent <span class="dim">feat/key-cast</span></span><span class="ttl-r state" id="agentState"></span>
       <div class="tr" id="steps"></div>
       <div id="decideBox"></div>
       <form class="steer" id="steer"><span class="pr">&gt;</span><input id="steerIn" placeholder="割り込んで指示する（例: テストも直して）" aria-label="AI への指示"><button class="btn" type="button" id="replay">もう一度</button></form>
@@ -354,7 +354,7 @@ table.top tbody tr.on.gone td { color: var(--sel-fg); opacity: .6 }
     </div>
     <div class="box" style="margin-top:22px">
       <span class="ttl">zsh <span class="dim">補完</span></span>
-      <div class="shell"><span class="ps1">~/kodou-ui <b>(feat/command-chips)</b> $</span>
+      <div class="shell"><span class="ps1">~/kodou-ui <b>(feat/key-cast)</b> $</span>
         <div class="ghost-wrap"><div class="gh" aria-hidden="true"><span class="typed" id="ghTyped"></span><span id="ghRest"></span></div><input id="ghostIn" value="git push origin " spellcheck="false" autocomplete="off" aria-label="補完つきの入力"></div>
       </div>
       <div class="keys"><span><kbd>Tab</kbd>候補を確定</span><span>候補は提案で、打ち続ければ消えます</span></div>
@@ -434,7 +434,7 @@ table.top tbody tr.on.gone td { color: var(--sel-fg); opacity: .6 }
 
 <div class="statusline" role="status" aria-live="off">
   <span class="sl-mode pl" id="slMode">NORMAL</span>
-  <span class="sl-br pl sl-hide"><span data-px="branch" data-cell="2"></span> feat/command-chips</span>
+  <span class="sl-br pl sl-hide"><span data-px="branch" data-cell="2"></span> feat/key-cast</span>
   <span class="sl-where" id="slWhere">kodou-ui</span>
   <span class="sl-msg" id="slMsg">キーを押すと、ここに出ます</span>
   <span class="sl-key" id="slKey"></span>
@@ -568,8 +568,8 @@ document.addEventListener('focusin', e => {
 const ITEMS = [
   { k: 'cmd', name: 'npm run test -- --watch', meta: '今日 9回', d: 'today' },
   { k: 'file', name: 'src/server/session.ts', meta: '12分前 +42 -8', d: 'today' },
-  { k: 'branch', name: 'feat/command-chips', meta: '3 ahead', d: 'today' },
-  { k: 'pr', name: '#128 入力の解釈をチップで見せる', meta: 'レビュー待ち', d: 'today' },
+  { k: 'branch', name: 'feat/key-cast', meta: '3 ahead', d: 'today' },
+  { k: 'pr', name: '#128 ステータスラインに押したキーを出す', meta: 'レビュー待ち', d: 'today' },
   { k: 'file', name: 'src/ui/StatusLine.tsx', meta: '1時間前', d: 'today' },
   { k: 'cmd', name: 'git rebase -i main', meta: '今週 4回', d: 'week' },
   { k: 'file', name: 'packages/tokens/ansi.css', meta: '昨日', d: 'week' },
@@ -785,7 +785,7 @@ $('#steer').addEventListener('submit', e => {
 });
 agentFull();
 
-const GHOST_FULL = 'git push origin feat/command-chips';
+const GHOST_FULL = 'git push origin feat/key-cast';
 const gi = $('#ghostIn');
 function renderGhost() { const v = gi.value; $('#ghTyped').textContent = v; $('#ghRest').textContent = GHOST_FULL.startsWith(v) && v.length < GHOST_FULL.length ? GHOST_FULL.slice(v.length) : '' }
 gi.addEventListener('input', renderGhost);
