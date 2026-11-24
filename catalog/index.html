@@ -357,7 +357,10 @@ table.t tr.picked td.ck::before { content: "[x]" }
 .spk-row { display: grid; grid-template-columns: 12ch minmax(0,1fr) auto; gap: 0 1ch; align-items: center; padding: 1px 0; font-size: 13px }
 .spk-row .spark { font-size: 15px; white-space: nowrap; overflow: hidden }
 .gauges { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px 24px; padding: 14px }
-.meter { display: flex; gap: 6px; white-space: nowrap; font-size: 13px; min-width: 0 }
+.meter { display: grid; grid-template-columns: 4ch minmax(0, 1fr) auto; gap: 0 1ch; align-items: center; white-space: nowrap; font-size: 13px; min-width: 0 }
+.meter .v { text-align: right; min-width: 9ch }
+.meter.wide { grid-column: 1 / -1 }
+.meter .note { grid-column: 2 / -1; font: 12px/1.6 var(--font-read); color: var(--dim); white-space: normal }
 .meter .lb { color: var(--cyan); font-weight: 700; width: 4ch; flex: none }
 .meter .br { min-width: 0; overflow: hidden }
 .seg-g { font-size: 15px; letter-spacing: 1px; white-space: nowrap }
@@ -365,7 +368,9 @@ table.t tr.picked td.ck::before { content: "[x]" }
 /* 進捗・スピナー・状態 */
 .prog { display: grid; gap: 2px; font-size: 13px; min-width: 0 }
 .prog .line { display: flex; gap: 1ch; white-space: nowrap; overflow: hidden }
-.prog .bar-t { color: var(--blue) } .prog .bar-t .off { color: var(--faint) }
+.prog .line span:first-child { color: var(--dim) } .prog .line span:last-child { font-weight: 700 }
+.prog .line { justify-content: space-between }
+.ledc { display: block; width: 100%; height: 8px }
 .prog .meta { color: var(--dim); font-size: 12.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
 .steps { display: flex; flex-wrap: wrap; gap: 0 1ch; font-size: 13px }
 .steps .done { color: var(--green) } .steps .now { color: var(--blue); font-weight: 700 } .steps .todo { color: var(--faint) }
@@ -580,10 +585,10 @@ dialog.dlg[open] { animation: pop var(--t-base) ease-out }
   <div class="comp-head"><h2>テキストエリア<span class="en">textarea</span></h2><span class="tag t2">中が見える</span></div>
   <p class="lead">行番号を付け、決まりがある行（1行目は50字まで、など）は守れていない行の番号に <b>!</b> を付けて色も変えます。</p>
   <div class="box"><span class="ttl">コミットメッセージ</span><div class="box-in field">
-    <div class="inp"><div class="ta-wrap"><div class="ta-gutter" id="taG" aria-hidden="true"></div><textarea id="ta" rows="5" spellcheck="false" aria-label="コミットメッセージ">入力の解釈をチップで見せる
+    <div class="inp"><div class="ta-wrap"><div class="ta-gutter" id="taG" aria-hidden="true"></div><textarea id="ta" rows="5" spellcheck="false" aria-label="コミットメッセージ">ステータスラインに押したキーを出す
 
-「ブランチ」のような言い方を #kind:branch に置き換え、
-置き換えたことを緑の行で知らせる。</textarea></div></div>
+モードの横に、いま押したキーを流して見せる。
+入力欄の中では出さず、モードを INSERT にする。</textarea></div></div>
     <div class="help" id="taHelp"></div>
   </div></div>
 </section>
@@ -748,7 +753,7 @@ dialog.dlg[open] { animation: pop var(--t-base) ease-out }
 
 <section class="comp" id="c-gauge" data-grp="グラフ">
   <div class="comp-head"><h2>メーター<span class="en">gauge / meter</span></h2><span class="tag t2">中が見える</span></div>
-  <p class="lead">使った量を目盛りで見せ、数字は実際の値で書きます。境目を超えたことは色に加えて「注意」「危険」の文字でも出します。</p>
+  <p class="lead">使った量を LED の帯で見せ、数字は実際の値で書きます。境目を超えたことは色に加えて「注意」「危険」の文字でも出します。内訳は斜線、見込みは枠のブロックで延ばします。</p>
   <div class="box"><span class="ttl">いま</span><span class="ttl-r"><button class="btn sm" id="gaugeGo">値を動かす</button></span><div class="gauges" id="gauges"></div></div>
 </section>
 
@@ -756,7 +761,7 @@ dialog.dlg[open] { animation: pop var(--t-base) ease-out }
   <div class="comp-head"><h2>進捗バー<span class="en">progress</span></h2><span class="tag t2">中が見える</span></div>
   <p class="lead">割合だけでなく、件数・かかった時間・今の対象を出します。手順があるものは今どこかを並べます。</p>
   <div class="box" id="progBox"><span class="ttl">見本</span><span class="ttl-r"><button class="btn sm" id="progGo">もう一度</button></span><div class="box-in col">
-    <div class="prog"><div class="line"><span class="bar-t" id="pgBar"></span><span id="pgPct"></span></div><div class="meta" id="pgMeta"></div></div>
+    <div class="prog"><div class="line"><span>ビルド</span><span id="pgPct"></span></div><canvas class="ledc" id="pgLed" aria-hidden="true"></canvas><div class="meta" id="pgMeta"></div></div>
     <div class="steps" id="pgSteps"></div>
   </div></div>
 </section>
@@ -1079,6 +1084,42 @@ function virt(box, {
   };
 }
 
+/* LED の帯（Kodou-ui の ledBar。skills/kodou-ui-build/assets/ledbar.js と同じもの）。依存なし。進捗バーとメーターはこれで描く。
+   - 4px のブロックを 2px あけて並べる（高さ 8px）。埋まった所は色、残りは薄い溝。割合はブロックの数で見せ、数字も横に出す。
+   - 内訳（キャッシュ、眠っている分など）は同じ色の斜線で、色だけでなく形でも分ける。
+   - projected: この調子で進んだときの見込み。中を抜いた枠のブロックで延ばす。
+   - stopAt: 止める水準。そこから右は地を薄い赤にし、超えて使った分は赤の斜線。1px の赤い縦線も引く。
+   - elapsed: 時間の経過。上に小さな ▼ を置く。
+   1 枚の canvas に、整数の位置で、にじまないように描く。色はトークン（CSS 変数）から読むので、明るい地と暗い地の両方で使える。
+
+   使い方:
+     ledBar(canvas, { segs: [{ value: 0.48 }, { value: 0.14, hatch: true }], projected: 0.85, stopAt: 0.85, elapsed: 0.62 });
+     ledBar(canvas, { segs: [{ value: done / total }] });          // 進捗
+     ledBar(canvas, { segs: [{ value: used / max, color: 'var(--yellow)' }] });   // 境目を超えたメーター（色に加えて「注意」の文字も横に出す）
+   大きさが変わったら描き直す: new ResizeObserver(() => ledBar(canvas, opts)).observe(canvas)
+*/
+function ledBar(cv, { segs = [], projected = null, stopAt = null, elapsed = null, cell = 4, gap = 2, height = 8 } = {}) {
+  const css = getComputedStyle(cv);
+  const tok = (v, fb) => { const m = /^var\((--[\w-]+)\)$/.exec(v || ''); return m ? (css.getPropertyValue(m[1]).trim() || fb) : (v || fb) };
+  const accent = tok('var(--accent)', '#0058A0'), red = tok('var(--red)', '#BE3F0E'), fg = tok('var(--fg)', '#20242B'), track = tok('var(--rule-soft)', 'rgba(32,36,43,.10)');
+  const w = cv.clientWidth, top = elapsed != null ? 6 : (stopAt != null ? 2 : 0), H = top + height + (stopAt != null ? 2 : 0), dpr = Math.min(2, devicePixelRatio || 1);
+  cv.style.height = H + 'px'; cv.width = Math.round(w * dpr); cv.height = Math.round(H * dpr);
+  const ctx = cv.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.imageSmoothingEnabled = false; ctx.clearRect(0, 0, w, H);
+  const pitch = cell + gap, n = Math.max(1, Math.floor((w + gap) / pitch));
+  let acc = 0; const ends = segs.filter(x => x.value > 0).map(x => (acc += x.value, [acc, x]));
+  const hatch = (x, y, ww, hh, c) => { ctx.fillStyle = c; for (let yy = 0; yy < hh; yy++) for (let xx = yy % 3; xx < ww; xx += 3) ctx.fillRect(x + xx, y + yy, 1, 1) };
+  for (let i = 0; i < n; i++) {
+    const x = Math.round(i * pitch), mid = (i + .5) / n, over = stopAt != null && mid > stopAt;
+    ctx.fillStyle = track; ctx.fillRect(x, top, cell, height);
+    if (over) { ctx.globalAlpha = .14; ctx.fillStyle = red; ctx.fillRect(x, top, cell, height); ctx.globalAlpha = 1 }
+    const hit = mid <= acc ? ends.find(e => mid <= e[0]) : null;
+    if (hit) { const c = tok(hit[1].color, accent); if (over || hit[1].hatch) hatch(x, top, cell, height, over ? red : c); else { ctx.fillStyle = c; ctx.fillRect(x, top, cell, height) } }
+    else if (projected != null && mid <= projected) { ctx.globalAlpha = .8; ctx.strokeStyle = accent; ctx.lineWidth = 1; ctx.strokeRect(x + .5, top + .5, cell - 1, height - 1); ctx.globalAlpha = 1 }
+  }
+  if (stopAt != null) { ctx.fillStyle = red; ctx.fillRect(Math.round(w * Math.min(1, stopAt)), top - 2, 1, height + 4) }
+  if (elapsed != null) { ctx.fillStyle = fg; const cx = Math.round(w * Math.min(1, Math.max(0, elapsed))); for (let k = 0; k < 4; k++) ctx.fillRect(cx - (3 - k), k, 7 - 2 * k, 1) }
+}
+
 /* ドット絵のアイコン: 8×8（PX）と 12×12（PX12）の格子。マスは行ごとにまとめた path */
 const PX = {
   knob: ['######', '######', '######', '######', '#....#', '######', '######', '#....#', '######', '######', '######', '######'],
@@ -1305,7 +1346,7 @@ $('#btnLoad').addEventListener('click', e => {
 });
 
 /* テキスト入力 */
-const TAKEN = ['main', 'command-chips', 'log-follow'];
+const TAKEN = ['main', 'key-cast', 'log-follow'];
 function checkBranch() {
   const v = $('#brName').value; let err = '';
   if (!v) err = '名前を入れてください';
@@ -1361,7 +1402,7 @@ setStep(4);
 
 /* セレクト（popover。開閉と Esc・外をクリックで閉じるのはブラウザ任せ）。候補は見えている分だけ描く（ブランチが何百本でも同じ） */
 (() => {
-  const items = ['main', 'develop', 'feat/command-chips', 'fix/log-follow', 'release/1.5', 'spike/agent-steer'];
+  const items = ['main', 'develop', 'feat/key-cast', 'fix/log-follow', 'release/1.5', 'spike/agent-steer'];
   const btn = $('#selBtn'), pop = $('#selPop'); let val = 0, act = 0;
   const v = virt(pop, {
     H: 24, id: 'sel-', owner: btn,
@@ -1507,10 +1548,10 @@ function makeList(el, items, opts = {}) {
     else if (e.key === 'Enter') sl.msg(`開いた: ${name(act)}`);
   });
 }
-makeList($('#lsSimple'), ['main', 'develop', 'feat/command-chips', 'fix/log-follow', 'release/1.5'], { simple: true });
+makeList($('#lsSimple'), ['main', 'develop', 'feat/key-cast', 'fix/log-follow', 'release/1.5'], { simple: true });
 makeList($('#lsIcon'), [{ ic: 'file', nm: 'session.ts', mt: '+42 -8' }, { ic: 'file', nm: 'StatusLine.tsx', mt: '+3 -3' }, { ic: 'folder', nm: 'tokens/', mt: '4 files' }, { ic: 'term', nm: 'release.sh', mt: '実行可能' }, { ic: 'pr', nm: '#128', mt: 'レビュー待ち' }]);
 makeList($('#lsMulti'), [
-  { ic: 'pr', nm: '#128 入力の解釈をチップで見せる', sub: 'feat/command-chips → main  2時間前', mt: '+124 -18' },
+  { ic: 'pr', nm: '#128 ステータスラインに押したキーを出す', sub: 'feat/key-cast → main  2時間前', mt: '+124 -18' },
   { ic: 'pr', nm: '#127 ログの追いかけを止められるようにする', sub: 'fix/log-follow → main  昨日', mt: '+40 -6' },
   { ic: 'pr', nm: '#125 ステータスラインの区切りを揃える', sub: 'chore/statusline → main  3日前', mt: '+12 -12' },
   { ic: 'branch', nm: 'spike/agent-steer', sub: '24日 更新なし。リモートに無いコミット 2件', mt: 'stale' },
@@ -1581,7 +1622,7 @@ makeList($('#lsMulti'), [
 
 /* キーと値 */
 (() => {
-  const KV = [['node', 'v20.12.2'], ['npm', '10.5.0'], ['リポジトリ', 'github.com/example/kodou-ui'], ['ブランチ', 'feat/command-chips'], ['最後のコミット', 'a1b2c3d  入力の解釈をチップで見せる'], ['ポート', '8080'], ['環境', 'development']];
+  const KV = [['node', 'v20.12.2'], ['npm', '10.5.0'], ['リポジトリ', 'github.com/example/kodou-ui'], ['ブランチ', 'feat/key-cast'], ['最後のコミット', 'a1b2c3d  ステータスラインに押したキーを出す'], ['ポート', '8080'], ['環境', 'development']];
   $('#kv').innerHTML = KV.map(([k, v], i) => `<dt>${esc(k)}</dt><dd title="${esc(v)}">${esc(v)}</dd><button class="cp" data-i="${i}" aria-label="${esc(k)} をコピー">${px('copy', 0, false, true)}</button>`).join('');
   $('#kv').addEventListener('click', async e => {
     const b = e.target.closest('.cp'); if (!b) return; const [k, v] = KV[+b.dataset.i];
@@ -1776,31 +1817,37 @@ const showTip = (t, x, y, html) => { t.hidden = false; t.innerHTML = html; t.sty
   $('#hist').innerHTML = H.map(([l, n], i) => `<span class="lb">${l}</span><span class="b${i >= 4 ? ' hot' : ''}" title="${l}: ${n}件">${bar(n)}</span><span class="n">${n}${i >= 4 ? ' ▲' : '  '}</span>`).join('') + `<span></span><span class="scale"><span>0</span><span>30</span><span>60</span><span>90</span><span>120件</span></span><span></span><span></span><span class="faint" style="font-size:12px">▲ 100ms 以上（遅い）</span><span></span>`;
 })();
 
-/* メーター */
+/* メーター: LED の帯。境目を超えたら色に加えて「注意」「危険」の文字でも出す。使用量は内訳・見込み・止める水準・今の時点まで描く */
 (() => {
   const G = { mem: 13.6, swp: 1.6, cpu: 38, disk: 412 };
-  const meter = (used, total, w, unit) => { const n = Math.round(used / total * w); let s = ''; for (let i = 0; i < w; i++) { const c = i >= n ? 'faint' : i < w * .6 ? 'c-green' : i < w * .85 ? 'c-yellow' : 'c-red'; s += `<span class="${c}">${i < n ? '|' : ' '}</span>` } return `[${s}<span class="dim"> ${used}${unit}/${total}${unit}</span>]` };
-  const seg = p => { const n = Math.round(p / 10); return Array.from({ length: 10 }, (_, i) => `<span class="${i >= n ? 'faint' : i < 6 ? 'c-green' : i < 8 ? 'c-yellow' : 'c-red'}">${i < n ? '▮' : '▯'}</span>`).join('') };
-  const word = r => r >= .85 ? ' <b class="c-red">危険</b>' : r >= .6 ? ' <b class="c-yellow">注意</b>' : '';
-  const draw = () => { $('#gauges').innerHTML = `<div class="meter"><span class="lb">Mem</span><span class="br">${meter(G.mem, 16, 16, 'G')}${word(G.mem / 16)}</span></div><div class="meter"><span class="lb">Swp</span><span class="br">${meter(G.swp, 4, 16, 'G')}${word(G.swp / 4)}</span></div><div class="meter"><span class="lb">CPU</span><span class="seg-g">${seg(G.cpu)}</span><span>${G.cpu}%${word(G.cpu / 100)}</span></div><div class="meter"><span class="lb">Disk</span><span class="seg-g">${seg(G.disk / 512 * 100)}</span><span>${G.disk}/512G${word(G.disk / 512)}</span></div>` };
+  const lv = r => r >= .85 ? ['var(--red)', ' <b class="c-red">危険</b>'] : r >= .6 ? ['var(--yellow)', ' <b class="c-yellow">注意</b>'] : ['var(--accent)', ''];
+  const rows = [['Mem', () => G.mem / 16, () => `${G.mem}/16G`], ['Swp', () => G.swp / 4, () => `${G.swp}/4G`], ['CPU', () => G.cpu / 100, () => `${G.cpu}%`], ['Disk', () => G.disk / 512, () => `${G.disk}/512G`]];
+  $('#gauges').innerHTML = rows.map(([l], k) => `<div class="meter"><span class="lb">${l}</span><canvas class="ledc" data-g="${k}" aria-hidden="true"></canvas><span class="v" data-v="${k}"></span></div>`).join('')
+    + `<div class="meter wide"><span class="lb">週</span><canvas class="ledc" id="useLed" aria-hidden="true"></canvas><span class="v">62%</span><span class="note">今週の使用量。斜線はキャッシュの分、枠のブロックはこの調子で進んだときの見込み、▼が今の時点、赤い線が止める水準（85%）です。</span></div>`;
+  const draw = () => {
+    rows.forEach(([l, r, v], k) => { const x = r(), [c, w] = lv(x); ledBar($(`[data-g="${k}"]`), { segs: [{ value: x, color: c }] }); $(`[data-v="${k}"]`).innerHTML = v() + w });
+    ledBar($('#useLed'), { segs: [{ value: .48 }, { value: .14, hatch: true }], projected: .85, stopAt: .85, elapsed: .62 });
+  };
   draw();
-  $('#gaugeGo').addEventListener('click', () => { G.mem = +(8 + Math.random() * 8).toFixed(1); G.swp = +(Math.random() * 3).toFixed(1); G.cpu = Math.round(Math.random() * 100); G.disk = Math.round(200 + Math.random() * 300); frame('g', draw); sl.msg(`メモリ ${G.mem}G / CPU ${G.cpu}%`) });
+  new ResizeObserver(() => draw()).observe($('#gauges'));
+  $('#gaugeGo').addEventListener('click', () => { G.mem = +(8 + Math.random() * 8).toFixed(1); G.swp = +(Math.random() * 3).toFixed(1); G.cpu = Math.round(Math.random() * 100); G.disk = Math.round(200 + Math.random() * 300); frame('g', draw); sl.msg(`Mem ${G.mem}G  CPU ${G.cpu}%`) });
 })();
 
 /* 進捗 */
 (() => {
-  const STEPS = ['取得', '依存', 'ビルド', 'テスト', '配置'], N = 50, W = 32; let i = 28, t0 = performance.now() - 28 * 60, lastStep = -1;
+  const STEPS = ['取得', '依存', 'ビルド', 'テスト', '配置'], N = 50; let i = 28, t0 = performance.now() - 28 * 60, lastStep = -1;
   const stepsEl = $('#pgSteps');
   stepsEl.innerHTML = STEPS.map((x, j) => `<span data-j="${j}"></span>${j < STEPS.length - 1 ? '<span class="faint">─</span>' : ''}`).join('');
   const draw = () => {
-    const f = Math.round(i / N * W), done = i >= N;
-    $('#pgBar').innerHTML = `[${'█'.repeat(f)}<span class="off">${'░'.repeat(W - f)}</span>]`;
+    const done = i >= N;
+    ledBar($('#pgLed'), { segs: [{ value: i / N }] });
     $('#pgPct').textContent = `${Math.round(i / N * 100)}%`;
     $('#pgMeta').textContent = done ? `${N}/${N} ファイル  ${((performance.now() - t0) / 1000).toFixed(1)}秒  終わりました` : `${i}/${N} ファイル  ${((performance.now() - t0) / 1000).toFixed(1)}秒  いま: src/ui/part-${String(i + 1).padStart(2, '0')}.tsx`;
     const s = done ? STEPS.length : Math.min(STEPS.length - 1, Math.floor(i / N * STEPS.length));
     if (s !== lastStep) { lastStep = s; $$('[data-j]', stepsEl).forEach((el, j) => { el.className = j < s ? 'done' : j === s ? 'now' : 'todo'; el.textContent = `${j < s ? '✓' : j === s ? '▶' : '·'} ${STEPS[j]}` }) }
   };
   draw();
+  new ResizeObserver(() => draw()).observe($('#pgLed'));
   every($('#progBox'), 60, () => { if (i < N) { i++; draw() } });
   $('#progGo').addEventListener('click', () => { i = 0; t0 = performance.now(); lastStep = -1; draw(); sl.msg('ビルドを始めました') });
 })();
