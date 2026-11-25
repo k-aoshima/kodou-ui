@@ -2,7 +2,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=BIZ+UDGothic:wght@400;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=BIZ+UDGothic:wght@400;700&display=swap">
 <style>
 /* 配置: 主張（CUI の楽しさを今の画面に）→ 入れ方 → 3 つの楽しさ → サンプル → 部品の見本。見本とサンプルは押すとモーダルで開いて触れる。明るい地だけ */
 :root {
@@ -11,7 +11,7 @@
   --sel-bg: #20242B; --sel-fg: #FBFBF8; --on: #FFFFFF;
   --accent: #0058A0; --green: #00654A; --red: #BE3F0E; --yellow: #8A5800; --cyan: #006A8C;
   --font: "JetBrains Mono", "BIZ UDGothic", ui-monospace, Menlo, monospace;
-  --font-read: "Noto Sans JP", "Hiragino Sans", system-ui, sans-serif;
+  --font-read: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", Meiryo, system-ui, "BIZ UDGothic", sans-serif;
 }
 * { box-sizing: border-box }
 body { background: var(--bg); color: var(--fg); font: 15px/1.85 var(--font-read); -webkit-font-smoothing: antialiased; font-variant-numeric: tabular-nums }
@@ -105,7 +105,7 @@ h1 .heart.soft { transform: scale(1.08) }
 /* 見本はページの上では見るだけ。枠を押すとモーダルで開いて触れる */
 .grid > .s { cursor: pointer }
 .grid > .s:hover { border-color: var(--fg) }
-.s-open { position: absolute; inset: 0; z-index: 2; border: 0; background: transparent; cursor: pointer; display: flex; align-items: flex-end; justify-content: flex-end; padding: 6px 8px; font: 11.5px var(--font); color: var(--faint) }
+.s-open { position: absolute; inset: 0; z-index: 2; border: 0; background: transparent; cursor: pointer; display: flex; align-items: flex-end; justify-content: flex-end; padding: 6px 8px; font: 12px var(--font); color: var(--faint) }
 .s-open span { background: var(--panel); padding: 0 4px; opacity: 0; transition: opacity 120ms }
 .s:hover .s-open span, .s-open:focus-visible span { opacity: 1; color: var(--fg) }
 .s-ph { border-style: dashed; display: grid; place-items: center; color: var(--faint); font: 12.5px var(--font); cursor: default }
@@ -125,9 +125,9 @@ h1 .heart.soft { transform: scale(1.08) }
 .s { border: 1px solid var(--ui); background: var(--panel); position: relative; padding: 22px 14px 12px; font: 13.5px/1.65 var(--font); min-width: 0; display: grid; grid-template-rows: minmax(0, 1fr) auto; min-height: 236px }
 .s:focus-within, .s:focus { border-color: var(--fg) }
 .s .ttl { position: absolute; top: -0.8em; left: 10px; padding: 0 6px; background: var(--panel); font-weight: 700; font-size: 12.5px }
-.s .ttl-r { position: absolute; top: -0.8em; right: 10px; padding: 0 6px; background: var(--panel); color: var(--faint); font-size: 11.5px }
-.s .keys { margin-top: 10px; padding-top: 8px; border-top: 1px dashed var(--rule); color: var(--faint); font-size: 11.5px; display: flex; flex-wrap: wrap; gap: 2px 1.5ch }
-.s .keys kbd { font-size: 11px; padding: 0 4px }
+.s .ttl-r { position: absolute; top: -0.8em; right: 10px; padding: 0 6px; background: var(--panel); color: var(--faint); font-size: 12px }
+.s .keys { margin-top: 10px; padding-top: 8px; border-top: 1px dashed var(--rule); color: var(--faint); font-size: 12px; display: flex; flex-wrap: wrap; gap: 2px 1.5ch }
+.s .keys kbd { font-size: 12px; padding: 0 4px }
 .s input[type=text] { width: 100%; border: 1px solid var(--ui); background: var(--panel); font: 13.5px var(--font); color: var(--fg); padding: 4px 8px; outline: none }
 .s input[type=text]:focus { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) }
 .ln { display: grid; grid-template-columns: 2ch minmax(0, 1fr) auto; gap: 0 1ch; padding: 0 6px; white-space: nowrap; cursor: pointer; min-height: 22px; align-items: center }
@@ -154,9 +154,9 @@ mark { background: transparent; color: var(--green); font-weight: 700; text-deco
 .ledc { display: block; width: 100%; height: 14px; margin-top: 2px }
 .pgl { display: flex; justify-content: space-between; font-size: 12.5px; color: var(--dim) } .pgl b { color: var(--fg) }
 .pgm { font-size: 12px; color: var(--dim); margin-top: 2px; font-family: var(--font-read); line-height: 1.6 }
-.stp2 { display: flex; gap: 0 .4ch; font-size: 11.5px; margin-top: 4px; white-space: nowrap; overflow: hidden }
+.stp2 { display: flex; gap: 0 .4ch; font-size: 12px; margin-top: 4px; white-space: nowrap; overflow: hidden }
 .stp2 .done { color: var(--green) } .stp2 .now { color: var(--accent); font-weight: 700 } .stp2 .todo { color: var(--faint) } .stp2 .sep { color: var(--deco) }
-.help .ln { cursor: default } .help kbd { font-size: 11px }
+.help .ln { cursor: default } .help kbd { font-size: 12px }
 .boot div { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 12.5px }
 table { width: 100%; border-collapse: collapse; font-size: 12.5px }
 th { text-align: left; background: var(--sel-bg); color: var(--sel-fg); padding: 1px 6px; font-weight: 700; cursor: pointer; white-space: nowrap }
@@ -171,11 +171,11 @@ tr.on td { background: var(--sel-bg); color: var(--sel-fg) }
 .toast .left { position: absolute; left: 0; bottom: 0; height: 2px; background: var(--fg); transform-origin: left; width: 100% }
 .kbs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 6px }
 .kb { position: relative; border: 1px solid var(--ui); background: var(--panel); font: 600 12.5px var(--font); padding: 8px 6px; cursor: pointer; min-height: 38px; color: var(--fg) }
-.kb .tag { position: absolute; top: -9px; right: -6px; background: var(--yellow); color: var(--on); font: 700 11px var(--font); padding: 0 5px; opacity: 0; transition: opacity 80ms }
+.kb .tag { position: absolute; top: -9px; right: -6px; background: var(--yellow); color: var(--on); font: 700 12px var(--font); padding: 0 5px; opacity: 0; transition: opacity 80ms }
 .alt .kb .tag { opacity: 1 }
 .vim { border: 1px solid var(--rule); padding: 6px 8px; min-height: 92px; white-space: pre-wrap; font-size: 13px; outline: none; cursor: text }
 .vim .cur { background: var(--fg); color: var(--panel) }
-.vsl { display: flex; font-size: 11.5px; margin-top: 6px; background: var(--rule-soft) }
+.vsl { display: flex; font-size: 12px; margin-top: 6px; background: var(--rule-soft) }
 .vsl span { padding: 0 1ch } .vsl .md { background: var(--accent); color: var(--on); font-weight: 700 } .vsl .md.ins { background: var(--green) }
 .led { display: flex; gap: 3px; margin-top: 10px; outline: none }
 .led i { width: 10px; height: 18px; background: var(--rule-soft); border: 1px solid var(--rule) }
@@ -220,7 +220,7 @@ tr.on td { background: var(--sel-bg); color: var(--sel-fg) }
 .rail:has(input:focus-visible) .knob { color: var(--accent); outline: 2px solid var(--accent); outline-offset: 2px }
 .rail.dis { opacity: .45 } .rail.dis input { cursor: not-allowed }
 .slv { font: 700 13.5px var(--font); min-width: 4ch }
-.ticks { position: relative; height: 1.4em; font-size: 11px; color: var(--faint); width: 192px }
+.ticks { position: relative; height: 1.4em; font-size: 12px; color: var(--faint); width: 192px }
 .ticks span { position: absolute; transform: translateX(-50%) }
 .tabs { display: flex; gap: 0; border-bottom: 1px solid var(--fg) }
 .tabs button { border: 0; background: none; color: var(--fg); font: 600 12.5px var(--font); padding: 3px 10px; cursor: pointer; min-height: 28px }
@@ -230,7 +230,7 @@ tr.on td { background: var(--sel-bg); color: var(--sel-fg) }
 .al { border: 1px solid var(--red); background: rgba(190,63,14,.07); padding: 8px 10px; font: 13px/1.7 var(--font-read) }
 .al code { font: 12px var(--font) }
 .al summary { cursor: pointer; font: 12px var(--font); color: var(--dim); margin-top: 4px }
-.al pre { margin: 4px 0 0; font: 11.5px/1.5 var(--font); color: var(--dim); white-space: pre-wrap }
+.al pre { margin: 4px 0 0; font: 12px/1.5 var(--font); color: var(--dim); white-space: pre-wrap }
 .dlg { border: 3px double var(--fg); padding: 16px 18px; max-width: min(420px, calc(100vw - 32px)); background: var(--panel); color: var(--fg); font: 14px/1.75 var(--font-read) }
 .dlg::backdrop { background: rgba(32,36,43,.35) }
 .dlg .dt { font: 700 14px var(--font) } .dlg p { margin: 8px 0 0; color: var(--dim) }
@@ -272,7 +272,7 @@ tr.on td { background: var(--sel-bg); color: var(--sel-fg) }
 .ed { display: grid; justify-content: start }
 .pv { display: grid; gap: 14px; justify-items: start; font: 13px var(--font) }
 .pv .sizes { display: flex; gap: 14px; align-items: end }
-.pv .sizes span { display: grid; justify-items: center; gap: 4px; color: var(--faint); font-size: 11px }
+.pv .sizes span { display: grid; justify-items: center; gap: 4px; color: var(--faint); font-size: 12px }
 .pv .sizes svg { color: var(--fg) }
 .pv .inbtn { display: inline-flex; align-items: center; gap: 1ch; border: 1px solid var(--ui); background: var(--panel); padding: 4px 12px; font: 600 12.5px var(--font) }
 .pv .inrow { display: flex; align-items: center; gap: 1ch; background: var(--sel-bg); color: var(--sel-fg); padding: 2px 10px; min-width: 22ch }
@@ -280,7 +280,7 @@ svg.px { flex: none; fill: currentColor; shape-rendering: crispEdges }
 .gal { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 6px; margin-top: 28px }
 @media (max-width: 1000px) { .gal { grid-template-columns: repeat(6, minmax(0, 1fr)) } }
 @media (max-width: 520px) { .gal { grid-template-columns: repeat(4, minmax(0, 1fr)) } }
-.gal button { display: grid; justify-items: center; gap: 6px; border: 1px solid var(--rule); background: var(--panel); color: var(--fg); padding: 12px 4px 8px; font: 11.5px var(--font); cursor: pointer }
+.gal button { display: grid; justify-items: center; gap: 6px; border: 1px solid var(--rule); background: var(--panel); color: var(--fg); padding: 12px 4px 8px; font: 12px var(--font); cursor: pointer }
 .gal button:hover { border-color: var(--fg) }
 .gal button[aria-pressed="true"] { background: var(--sel-bg); color: var(--sel-fg); border-color: var(--sel-bg) }
 

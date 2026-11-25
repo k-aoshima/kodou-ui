@@ -8,7 +8,7 @@
      共通の CSS と関数は ../tokens.css ・ ../kodou.css ・ ../virt.js ・ ../ledbar.js ・ ../kodou.js ・ ../icons.js にある（この順に読む）。 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
 <link rel="stylesheet" href="../tokens.css">
 <link rel="stylesheet" href="../kodou.css">
 <style>.kd-page { max-width: 960px; margin: 0 auto; padding: 24px max(16px, env(safe-area-inset-left, 0px)) 80px }</style>
@@ -29,7 +29,7 @@
 <script>
 /* 長いリスト: 1万行。ほかのリストと同じ仕組みで、見えている行だけ描く */
 (() => {
-  const N = 10000, H = 22, vl = $('#vl');
+  const N = 10000, H = 24, vl = $('#vl');
   const VERBS = ['直す', '足す', '消す', '揃える', '分ける', '速くする', '見直す', '軽くする'], OBJ = ['入力欄', 'ステータスライン', 'ログ', '表の並べ替え', 'トークン', 'ツリー', 'ダイアログ', 'グラフの目盛り', 'リスト', 'タグ入力'], WHO = ['aki', 'mika', 'ren', 'bot'];
   const h32 = i => { let x = (i + 1) * 2654435761 >>> 0; x ^= x >>> 15; x = Math.imul(x, 2246822519) >>> 0; x ^= x >>> 13; return x >>> 0 };
   const rowData = i => { const h = h32(i); return [h.toString(16).padStart(8, '0').slice(0, 7), WHO[h % 4], `${OBJ[(h >>> 3) % 10]}を${VERBS[(h >>> 7) % 8]}`, i < 24 ? `${i + 1}時間前` : `${Math.floor(i / 24)}日前`] };
@@ -38,7 +38,7 @@
   const v = virt(vl, {
     H, parent: $('#vlSp'), id: 'vl-',
     make: () => { const r = document.createElement('div'); r.className = 'vl-row'; r.setAttribute('role', 'option'); r.innerHTML = '<span class="mk"></span><span class="h"></span><span class="a"></span><span class="m"></span><span class="d"></span>'; return r },
-    fill: (r, i) => { const [h, a, m, d] = rowData(i), c = r.children; c[1].textContent = h; c[2].textContent = a; c[3].textContent = m; c[4].textContent = d },
+    fill: (r, i) => { const [h, a, m, d] = rowData(i), c = r.children; r.setAttribute('aria-posinset', i + 1); r.setAttribute('aria-setsize', N); c[1].textContent = h; c[2].textContent = a; c[3].textContent = m; c[4].textContent = d },
     mark: (r, i) => { const on = i === act; if (r.classList.contains('on') !== on) { r.classList.toggle('on', on); r.firstChild.textContent = on ? '>' : '' } },
   });
   v.set(N);

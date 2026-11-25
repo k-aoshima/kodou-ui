@@ -36,7 +36,7 @@ RULES = {
                         '形は古く、描画はくっきり。走査線・グロー・ちらつきを外す'),
     'hidden-loop':     ('中', 'setInterval のタイマーを、頁が隠れている間も止めていない',
                         'visibilitychange で document.hidden を見て止める。画面外の部品は IntersectionObserver で止める'),
-    'tiny-text':       ('軽い', '読ませる文字が 11px 未満',
+    'tiny-text':       ('軽い', '読ませる文字が 12px 未満',
                         'データは 12px 以上、文は 15px 以上にする'),
 }
 
@@ -112,9 +112,9 @@ def check(path):
                     has_motion = True
                 if re.search(r'scan-?line', sel, re.I) or re.search(r'text-shadow\s*:\s*0\s+0\s+(?:[4-9]|\d{2,})px', decl):
                     add('crt-effect', pos, sel)
-                fs = re.search(r'font-size\s*:\s*(\d+(?:\.\d+)?)px', decl)
-                if fs and float(fs.group(1)) < 11:
-                    add('tiny-text', pos, f'{sel} {{ font-size: {fs.group(1)}px }}')
+                fs = re.search(r'font-size\s*:\s*(\d*\.?\d+)(px|rem)\b', decl) or re.search(r'(?<![-\w])font\s*:[^;]*?(\d*\.?\d+)(px|rem)\b', decl)
+                if fs and float(fs.group(1)) * (16 if fs.group(2) == 'rem' else 1) < 12:   # rem は既定の 16px で換算する
+                    add('tiny-text', pos, f'{sel} {{ font-size: {fs.group(1)}{fs.group(2)} }}')
         elif kind == 'js':
             for m in re.finditer(r'(?<![\w.$])(?:window\.)?(confirm|alert|prompt)\s*\(', body):
                 add('blocking-dialog', base + m.start(), m.group(0))

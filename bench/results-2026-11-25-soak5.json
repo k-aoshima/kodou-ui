@@ -1,0 +1,131 @@
+{
+  "date": "2026-11-25T15:42:53.480Z",
+  "chrome": "Google Chrome 158.0.8127.38",
+  "runs": 1,
+  "cpu": 1,
+  "streamMs": 300000,
+  "summary": {
+    "kodou": {
+      "ready": 36.8,
+      "heapMB": 1.8,
+      "heapGrowMB": 0.08,
+      "nodes": 467,
+      "rendererMB": 54,
+      "gpuMB": 90,
+      "busyPct": 4.55,
+      "scriptPct": 1.19,
+      "layoutPerSec": 38.76,
+      "styleRecalcPerSec": 38.76,
+      "frameP95": 16.8,
+      "frameMax": 16.8,
+      "longFrames": 0,
+      "frames": 18039,
+      "selectMs": 33.3,
+      "hiddenBusyPct": 0.08,
+      "hidden": true
+    },
+    "react-tuned": {
+      "ready": 81.4,
+      "heapMB": 37.24,
+      "heapGrowMB": 4.72,
+      "nodes": 507,
+      "rendererMB": 126,
+      "gpuMB": 106,
+      "busyPct": 34.37,
+      "scriptPct": 28.06,
+      "layoutPerSec": 101.07,
+      "styleRecalcPerSec": 101.07,
+      "frameP95": 16.8,
+      "frameMax": 16.8,
+      "longFrames": 0,
+      "frames": 18038,
+      "selectMs": 33.3,
+      "hiddenBusyPct": 36.94,
+      "hidden": true
+    },
+    "react-plain": {
+      "ready": 459.8,
+      "heapMB": 283.99,
+      "heapGrowMB": 13.49,
+      "nodes": 95718,
+      "rendererMB": 766,
+      "gpuMB": 126,
+      "busyPct": 99.99,
+      "scriptPct": 96.61,
+      "layoutPerSec": 5.13,
+      "styleRecalcPerSec": 5.09,
+      "frameP95": 233.4,
+      "frameMax": 283.3,
+      "longFrames": 1467,
+      "frames": 1528,
+      "selectMs": 409.4,
+      "hiddenBusyPct": 100.02,
+      "hidden": true
+    }
+  },
+  "raw": {
+    "kodou": [
+      {
+        "ready": 36.80000001192093,
+        "heapMB": 1.8030433654785156,
+        "heapGrowMB": 0.07570266723632812,
+        "nodes": 467,
+        "rendererMB": 54,
+        "gpuMB": 90,
+        "busyPct": 4.554437666666667,
+        "scriptPct": 1.189062,
+        "layoutPerSec": 38.76,
+        "styleRecalcPerSec": 38.76,
+        "frameP95": 16.799999999999272,
+        "frameMax": 16.800000000046566,
+        "longFrames": 0,
+        "frames": 18039,
+        "selectMs": 33.30000001192093,
+        "hidden": true,
+        "hiddenBusyPct": 0.08372999999998854
+      }
+    ],
+    "react-tuned": [
+      {
+        "ready": 81.40000000596046,
+        "heapMB": 37.244449615478516,
+        "heapGrowMB": 4.720344543457031,
+        "nodes": 507,
+        "rendererMB": 126,
+        "gpuMB": 106,
+        "busyPct": 34.36789733333333,
+        "scriptPct": 28.060034666666667,
+        "layoutPerSec": 101.06666666666666,
+        "styleRecalcPerSec": 101.06666666666666,
+        "frameP95": 16.799999999999272,
+        "frameMax": 16.800000000046566,
+        "longFrames": 0,
+        "frames": 18038,
+        "selectMs": 33.30000001192093,
+        "hidden": true,
+        "hiddenBusyPct": 36.93556000000001
+      }
+    ],
+    "react-plain": [
+      {
+        "ready": 459.80000001192093,
+        "heapMB": 283.987361907959,
+        "heapGrowMB": 13.493919372558594,
+        "nodes": 95718,
+        "rendererMB": 766,
+        "gpuMB": 126,
+        "busyPct": 99.994698,
+        "scriptPct": 96.60621966666668,
+        "layoutPerSec": 5.13,
+        "styleRecalcPerSec": 5.09,
+        "frameP95": 233.40000000002328,
+        "frameMax": 283.29999999998836,
+        "longFrames": 1467,
+        "frames": 1528,
+        "selectMs": 409.40000000596046,
+        "hidden": true,
+        "hiddenBusyPct": 100.02099000000044
+      }
+    ]
+  }
+}

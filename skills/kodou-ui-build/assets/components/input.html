@@ -8,7 +8,7 @@
      共通の CSS と関数は ../tokens.css ・ ../kodou.css ・ ../virt.js ・ ../ledbar.js ・ ../kodou.js ・ ../icons.js にある（この順に読む）。 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
 <link rel="stylesheet" href="../tokens.css">
 <link rel="stylesheet" href="../kodou.css">
 <style>.kd-page { max-width: 960px; margin: 0 auto; padding: 24px max(16px, env(safe-area-inset-left, 0px)) 80px }</style>
@@ -16,7 +16,7 @@
 <main class="kd-page">
 <section class="comp" id="c-input" data-grp="入力">
   <div class="comp-head"><h2>テキスト入力<span class="en">text input</span></h2><span class="tag t1">手応え</span><span class="tag t2">中が見える</span></div>
-  <p class="lead">打つたびに確かめ、何が駄目でどう直せばよいかをその場で出します。送るまで待たせません。</p>
+  <p class="lead">合っていることと、誤りが直ったことは打つたびに出します。形の誤りは、打っている途中に責めず、欄を離れたときに何が駄目でどう直せばよいかを出します。名前がもう使われているかのように、打ちながら知りたいことはすぐ出します。送るまで待たせません。</p>
   <div class="box"><span class="ttl">見本</span><div class="box-in grid2" style="gap:14px 16px">
     <div class="field"><label for="brName">ブランチ名</label>
       <div class="inp" id="brInp"><span class="fx">feat/</span><input id="brName" value="status-colors" spellcheck="false" autocomplete="off"></div>
@@ -39,25 +39,37 @@
 <script src="../kodou.js"></script>
 <script src="../icons.js"></script>
 <script>
-/* テキスト入力 */
-const TAKEN = ['main', 'key-cast', 'log-follow'];
-function checkBranch() {
-  const v = $('#brName').value; let err = '';
-  if (!v) err = '名前を入れてください';
-  else if (/\s/.test(v)) err = '空白は使えません。ハイフンでつないでください';
-  else if (/[A-Z]/.test(v)) err = `大文字は使えません。「${v.toLowerCase()}」にしますか`;
-  else if (/[^a-z0-9-]/.test(v)) err = '英小文字・数字・ハイフンだけが使えます';
-  else if (TAKEN.includes(v)) err = `feat/${v} はもうあります`;
-  $('#brInp').classList.toggle('is-error', !!err);
-  const h = $('#brHelp'); h.className = 'help ' + (err ? 'err' : 'ok');
-  h.innerHTML = err ? esc(err) : `✓ feat/${esc(v)} は使えます<span class="cnt">${v.length}/40</span>`;
+/* テキスト入力: 合っていること・直ったことは打つたびに出し、形の誤りは欄を離れてから出す。
+   打っている途中の「まだ足りない」を誤りとして見せると、かえって遅くなる（Wroblewski 2009: 離れてから確かめる方が 7〜10 秒速い）。
+   一度出した誤りは、打つたびに出し直して、直った瞬間に消す。名前の重なりのように打ちながら知りたいものは、すぐ出す */
+function lateCheck(input, wrap, help, check, hint) {
+  let shown = false;
+  input.setAttribute('aria-describedby', help.id);
+  const run = blur => {
+    const r = check(input.value), late = r.err && !r.now && !shown && !blur;   // まだ出していない形の誤りは、離れるまで待つ
+    if (late) { wrap.classList.remove('is-error'); input.removeAttribute('aria-invalid'); help.className = 'help'; help.textContent = hint; return }
+    shown = !!r.err;
+    wrap && wrap.classList.toggle('is-error', !!r.err); input.toggleAttribute('aria-invalid', !!r.err);
+    help.className = 'help' + (r.err ? ' err' : r.ok ? ' ok' : ''); help.innerHTML = r.err ? esc(r.err) : r.ok || esc(hint);
+  };
+  input.addEventListener('input', () => frame(input.id, () => run(false)));
+  input.addEventListener('blur', () => run(true));
+  run(false);
 }
-$('#brName').addEventListener('input', () => frame('br', checkBranch)); checkBranch();
-$('#host').addEventListener('input', e => frame('host', () => {
-  const v = e.target.value.trim(), h = $('#hostHelp'), ok = /^[a-z0-9-]+$/.test(v);
-  h.className = 'help' + (v ? ok ? ' ok' : ' err' : '');
-  h.textContent = !v ? '空のままなら公開しません' : ok ? `https://${v}.dev で公開します` : '英小文字・数字・ハイフンだけが使えます';
-}));
+const TAKEN = ['main', 'key-cast', 'log-follow'];
+lateCheck($('#brName'), $('#brInp'), $('#brHelp'), v => {
+  if (TAKEN.includes(v)) return { err: `feat/${v} はもうあります`, now: true };
+  if (!v) return { err: '名前を入れてください' };
+  if (/\s/.test(v)) return { err: '空白は使えません。ハイフンでつないでください' };
+  if (/[A-Z]/.test(v)) return { err: `大文字は使えません。「${v.toLowerCase()}」にしますか` };
+  if (/[^a-z0-9-]/.test(v)) return { err: '英小文字・数字・ハイフンだけが使えます' };
+  return { ok: `✓ feat/${esc(v)} は使えます<span class="cnt">${v.length}/40</span>` };
+}, '英小文字・数字・ハイフンが使えます');
+lateCheck($('#host'), $('#host').closest('.inp'), $('#hostHelp'), raw => {
+  const v = raw.trim();
+  if (!v) return {};
+  return /^[a-z0-9-]+$/.test(v) ? { ok: `https://${esc(v)}.dev で公開します` } : { err: '英小文字・数字・ハイフンだけが使えます' };
+}, '空のままなら公開しません');
 </script>
 </body>
 </html>

@@ -8,7 +8,7 @@
      共通の CSS と関数は ../tokens.css ・ ../kodou.css ・ ../virt.js ・ ../ledbar.js ・ ../kodou.js ・ ../icons.js にある（この順に読む）。 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
 <link rel="stylesheet" href="../tokens.css">
 <link rel="stylesheet" href="../kodou.css">
 <style>.kd-page { max-width: 960px; margin: 0 auto; padding: 24px max(16px, env(safe-area-inset-left, 0px)) 80px }</style>
@@ -39,7 +39,7 @@ function makeList(el, items, opts = {}) {
     H: opts.H || 24, id: el.id + '-',
     make: () => { const r = document.createElement('div'); r.className = 'li'; r.setAttribute('role', 'option'); r.innerHTML = opts.simple ? '<span class="mk"></span><span class="nm"></span>' : '<span class="mk"></span><span class="ic"></span><span class="nm"></span><span class="mt"></span>'; return r },
     fill: (r, i) => {
-      const it = items[i], c = r.children;
+      const it = items[i], c = r.children; r.setAttribute('aria-posinset', i + 1); r.setAttribute('aria-setsize', items.length);  /* 描いていない行があっても全体の件数を読み上げに渡す */
       if (opts.simple) { c[1].textContent = it; return }
       c[1].innerHTML = px(it.ic); c[2].innerHTML = esc(it.nm) + (it.sub ? `<span class="sub">${esc(it.sub)}</span>` : ''); c[3].textContent = it.mt || '';
     },

@@ -2,7 +2,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=JetBrains+Mono:wght@400;700&display=swap">
 <style>
 /* 配置: 案ごとに罫線の枠。12 個のアイコンを同じ並びで比べ、最後に部品の中に置いた見え方 */
 :root {
@@ -10,7 +10,7 @@
   --sel-bg: #20242B; --sel-fg: #F4F4EF;
   --blue: #0058A0; --tint: rgba(31,95,168,.18); --red: #BE3F0E; --green: #00654A; --yellow: #8A5800;
   --font: "JetBrains Mono", "BIZ UDGothic", ui-monospace, Menlo, monospace;
-  --font-read: "Noto Sans JP", "Hiragino Sans", system-ui, sans-serif;
+  --font-read: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", Meiryo, system-ui, "BIZ UDGothic", sans-serif;
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
   --bg: #15171C; --panel: #1A1D23; --fg: #D9DCE3; --dim: #A7ACB6; --faint: #9196A1; --ui: #707684; --deco: #4B505B;
@@ -34,11 +34,11 @@ h1 { margin: 0; font-size: 22px }
 .cell { display: grid; justify-items: center; gap: 6px; padding: 12px 4px 8px; cursor: default }
 .cell:hover { background: var(--sel-bg); color: var(--sel-fg) }
 .cell:hover svg .tone { fill: var(--sel-fg); opacity: .35 }
-.cell span { font-size: 11.5px; color: var(--faint) }
+.cell span { font-size: 12px; color: var(--faint) }
 .cell:hover span { color: inherit }
 svg.px { display: block; fill: currentColor; shape-rendering: crispEdges }
 svg.px .tone { fill: var(--blue); opacity: .45 }
-.sizes { display: flex; flex-wrap: wrap; gap: 14px 22px; align-items: end; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--deco); font-size: 11.5px; color: var(--faint) }
+.sizes { display: flex; flex-wrap: wrap; gap: 14px 22px; align-items: end; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--deco); font-size: 12px; color: var(--faint) }
 .sizes div { display: grid; justify-items: center; gap: 4px }
 
 /* 部品の中 */

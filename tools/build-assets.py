@@ -75,6 +75,7 @@ JS_RULES = [
     ('ページ送り', ['pager']),
     ('メニュー', ['menu']),
     ('ダイアログ', ['dialog']),
+    ('ツールチップ', ['tooltip']),
     ('トークン', ['tokens']),
 ]
 SKIP_SECTIONS = {'perf', 'refs'}   # 見本帳が自分を測る節と、文献の節
@@ -85,7 +86,8 @@ KODOU_HEAD = """/* Kodou-ui の共通の関数。tools/build-assets.py が見本
    読む順: tokens.css → kodou.css →（body の最後で）virt.js・ledbar.js・kodou.js・icons.js → 部品の JS
    - $ / $$ / esc / css: 要素を取る、HTML に入れる文字を逃がす、CSS 変数を読む
    - frame(key, fn): 描き直しを 1 フレームに 1 回へまとめる
-   - every(el, ms, fn): タイマーは 1 本。頁が隠れている間と el が画面外の間は止まる
+   - every(el, ms, fn): タイマーは 1 本。頁が隠れている間と el（要素か要素の配列）が画面外の間は止まる。
+     動かす部品が画面に1つもなければ、フレームも取らない
    - place(pop, anchor): 重ねるもの（popover）を基準の要素の下に置く
    - sl.msg(text): ステータスライン（#slMsg）に一言出す。無ければ何もしない
    - ⌥ を押している間、[data-key] を持つ要素の上にキーの札を出す
@@ -191,7 +193,7 @@ def build():
      共通の CSS と関数は ../tokens.css ・ ../kodou.css ・ ../virt.js ・ ../ledbar.js ・ ../kodou.js ・ ../icons.js にある（この順に読む）。 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
 <link rel="stylesheet" href="../tokens.css">
 <link rel="stylesheet" href="../kodou.css">
 <style>.kd-page {{ max-width: 960px; margin: 0 auto; padding: 24px max(16px, env(safe-area-inset-left, 0px)) 80px }}</style>
