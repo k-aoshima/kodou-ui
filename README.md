@@ -1,6 +1,6 @@
 # Kodou-ui
 
-エンジニアが毎日使うツールのための、UI と UX のデザインシステム。CLI の手触りを残したまま、見た目と分かりやすさを今のものにする。
+エンジニアが毎日使うツールのための、UI と UX のデザインシステム。CLI の手触りを残したまま、分かりやすさを今のものにする。
 
 [紹介ページ](https://k-aoshima.github.io/kodou-ui/) ・ [見本帳](https://k-aoshima.github.io/kodou-ui/catalog/) ・ [English](README.en.md)
 
