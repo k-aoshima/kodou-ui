@@ -3,7 +3,7 @@ name: kodou-ui-build
 description: エンジニアが毎日使うツール（開発ツール、ランチャー、コマンドパレット、ログやプロセスの画面、AI エージェントの画面など）の UI を、Kodou-ui の考え方と部品で作るときに使う。見た目は CLI/TUI の懐かしい形（等幅の格子、罫線の枠、反転表示、ステータスライン、ドット絵のアイコン）を残し、操作の手応え・中の見え方・速さと読みやすさは今の水準にする。「Kodou-ui で」「TUI っぽく」「CLI みたいに速い画面を」と頼まれたとき、エンジニア向けのツールの画面を新しく作る・作り直すときに読む。エンジニア向けでない一般のアプリには使わない。
 license: MIT
 metadata:
-  version: "0.2.0"
+  version: "0.3.0"
   homepage: https://github.com/k-aoshima/kodou-ui
 ---
 
