@@ -8,7 +8,7 @@
      共通の CSS と関数は ../tokens.css ・ ../kodou.css ・ ../virt.js ・ ../ledbar.js ・ ../kodou.js ・ ../icons.js にある（この順に読む）。 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
 <link rel="stylesheet" href="../tokens.css">
 <link rel="stylesheet" href="../kodou.css">
 <style>.kd-page { max-width: 960px; margin: 0 auto; padding: 24px max(16px, env(safe-area-inset-left, 0px)) 80px }</style>
@@ -47,7 +47,7 @@
     H: 24, parent: $('#tbl tbody'), id: 'tb-', owner: $('#tblBox'), stick: () => $('#tbl thead').offsetHeight,
     gap: () => { const tr = document.createElement('tr'), td = document.createElement('td'); td.colSpan = COLS.length + 1; tr.append(td); return tr },
     make: () => { const tr = document.createElement('tr'); tr.innerHTML = '<td class="ck"></td><td></td><td class="dim"></td><td class="num"></td><td class="num"></td><td><span class="spark"></span> <span class="dim"></span></td>'; return tr },
-    fill: (tr, i) => { const r = order[i], c = tr.children; tr.dataset.n = r.n; c[1].textContent = r.n; c[2].textContent = r.v; c[3].textContent = size(r.s); c[4].textContent = `${r.u}日前`; c[5].firstChild.textContent = spark(r.t); c[5].lastChild.textContent = `${r.t[0]}→${r.t[r.t.length - 1]}` },
+    fill: (tr, i) => { const r = order[i], c = tr.children; tr.dataset.n = r.n; tr.setAttribute('aria-rowindex', i + 2);  /* 見出しの行が 1 */ c[1].textContent = r.n; c[2].textContent = r.v; c[3].textContent = size(r.s); c[4].textContent = `${r.u}日前`; c[5].firstChild.textContent = spark(r.t); c[5].lastChild.textContent = `${r.t[0]}→${r.t[r.t.length - 1]}` },
     mark: (tr, i) => { tr.classList.toggle('on', i === st.act); tr.classList.toggle('picked', picked.has(order[i].n)) },
   });
   const count = () => { $('#tbN').textContent = `${TB.length}件 / ${picked.size}件 選択` };
@@ -62,7 +62,7 @@
       for (const tr of $('#tbl tbody').children) { if (tr.hidden || tr.classList.contains('v-gap')) continue; const b = before.get(tr.dataset.n); if (b == null) continue; const d = b - tr.getBoundingClientRect().top; if (d) { tr.classList.remove('flip'); tr.style.transform = `translateY(${d}px)`; moved.push(tr) } }
       requestAnimationFrame(() => { for (const tr of moved) { tr.classList.add('flip'); tr.style.transform = '' } });
     }
-    $('#tbl thead').innerHTML = `<tr><th class="ck" aria-label="選択"></th>${COLS.map(([k, l, num]) => `<th class="${num ? 'num' : ''}" ${st.key === k ? `aria-sort="${st.dir > 0 ? 'ascending' : 'descending'}"` : ''}>${k === 't' ? l : `<button data-k="${k}">${l}<span class="ar">${st.key === k ? (st.dir > 0 ? '▲' : '▼') : '△'}</span></button>`}</th>`).join('')}</tr>`;
+    $('#tbl').setAttribute('aria-rowcount', TB.length + 1); $('#tbl thead').innerHTML = `<tr aria-rowindex="1"><th class="ck" aria-label="選択"></th>${COLS.map(([k, l, num]) => `<th class="${num ? 'num' : ''}" ${st.key === k ? `aria-sort="${st.dir > 0 ? 'ascending' : 'descending'}"` : ''}>${k === 't' ? l : `<button data-k="${k}">${l}<span class="ar">${st.key === k ? (st.dir > 0 ? '▲' : '▼') : '△'}</span></button>`}</th>`).join('')}</tr>`;
   }
   const setAct = i => { const p = st.act; st.act = Math.max(0, Math.min(order.length - 1, i)); v.mark(p); v.to(st.act); v.active(st.act) };
   const pick = i => { const n = order[i].n; picked.has(n) ? picked.delete(n) : picked.add(n); v.mark(i); count() };

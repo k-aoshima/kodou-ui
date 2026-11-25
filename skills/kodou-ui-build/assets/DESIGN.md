@@ -52,12 +52,12 @@ typography:
     fontWeight: 400
     lineHeight: 1.6
   body:
-    fontFamily: Noto Sans JP, Hiragino Sans, system-ui, sans-serif
+    fontFamily: Hiragino Sans, Hiragino Kaku Gothic ProN, Yu Gothic UI, Meiryo, system-ui, BIZ UDGothic, sans-serif
     fontSize: 15px
     fontWeight: 400
     lineHeight: 1.75
   heading:
-    fontFamily: Noto Sans JP, Hiragino Sans, system-ui, sans-serif
+    fontFamily: Hiragino Sans, Hiragino Kaku Gothic ProN, Yu Gothic UI, Meiryo, system-ui, BIZ UDGothic, sans-serif
     fontSize: 20px
     fontWeight: 800
     lineHeight: 1.4
@@ -127,7 +127,7 @@ components:
 
 ## Typography
 
-データとコマンドは等幅（JetBrains Mono と BIZ UDゴシック）、説明の文はプロポーショナル体（Noto Sans JP）です。文は 15px 以上、行間 1.75 以上、1 行 40 字までにします。データは 12px 以上にします。
+データとコマンドは等幅（JetBrains Mono と BIZ UDゴシック）、説明の文はプロポーショナル体（OS の和文ゴシック）です。文は 15px 以上、行間 1.75 以上、1 行 40 字までにします。データは 12px 以上にします。
 
 ## Layout
 

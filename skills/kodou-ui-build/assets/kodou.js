@@ -2,7 +2,8 @@
    読む順: tokens.css → kodou.css →（body の最後で）virt.js・ledbar.js・kodou.js・icons.js → 部品の JS
    - $ / $$ / esc / css: 要素を取る、HTML に入れる文字を逃がす、CSS 変数を読む
    - frame(key, fn): 描き直しを 1 フレームに 1 回へまとめる
-   - every(el, ms, fn): タイマーは 1 本。頁が隠れている間と el が画面外の間は止まる
+   - every(el, ms, fn): タイマーは 1 本。頁が隠れている間と el（要素か要素の配列）が画面外の間は止まる。
+     動かす部品が画面に1つもなければ、フレームも取らない
    - place(pop, anchor): 重ねるもの（popover）を基準の要素の下に置く
    - sl.msg(text): ステータスライン（#slMsg）に一言出す。無ければ何もしない
    - ⌥ を押している間、[data-key] を持つ要素の上にキーの札を出す
@@ -17,14 +18,22 @@ const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).
 const jobs = new Map(); let rafId = 0;
 function frame(key, fn) { jobs.set(key, fn); if (!rafId) rafId = requestAnimationFrame(() => { rafId = 0; const js = [...jobs.values()]; jobs.clear(); js.forEach(f => f()) }) }
 
-/* タイマーは1本。頁が隠れている間と、部品が画面外の間は止める */
+/* タイマーは1本。頁が隠れている間と、部品が画面外の間は止める。
+   動かす部品が画面に1つもなければ、次のフレームも取らない（何もしない rAF のループでも電気を使うため）。
+   次に動かす時刻まで setTimeout で眠り、起きたら rAF を1回だけ取って描く。部品が画面に入ったら起こす */
 const tasks = []; const onScreen = new WeakMap();
-const io = new IntersectionObserver(es => es.forEach(e => onScreen.set(e.target, e.isIntersecting)), { rootMargin: '80px' });
-function every(el, ms, fn) { tasks.push({ el, ms, fn, last: 0 }); if (el) io.observe(el) }
-let loopId = 0;
-function loop(now) { loopId = requestAnimationFrame(loop); for (const t of tasks) { if (t.el && !onScreen.get(t.el)) continue; if (now - t.last >= t.ms) { t.last = now; t.fn(now) } } }
-const startLoop = () => { if (!loopId) loopId = requestAnimationFrame(loop); document.body.classList.remove('paused') };
-const stopLoop = () => { cancelAnimationFrame(loopId); loopId = 0; document.body.classList.add('paused') };
+const io = new IntersectionObserver(es => { es.forEach(e => onScreen.set(e.target, e.isIntersecting)); if (es.some(e => e.isIntersecting)) plan(0) }, { rootMargin: '80px' });
+function every(el, ms, fn) { const els = el == null ? null : [].concat(el); tasks.push({ els, ms, fn, last: 0 }); if (els) els.forEach(e => io.observe(e)); plan(0) }
+let loopTimer = 0, loopRaf = 0;
+const live = t => !t.els || t.els.some(e => onScreen.get(e));
+function loop(now) {
+  loopRaf = 0; let wait = Infinity;
+  for (const t of tasks) { if (!live(t)) continue; if (now - t.last >= t.ms) { t.last = now; t.fn(now) } wait = Math.min(wait, t.last + t.ms - now) }
+  if (wait < Infinity) plan(wait);
+}
+function plan(ms) { if (loopTimer || loopRaf || document.hidden || !document.body || document.body.classList.contains('paused')) return; loopTimer = setTimeout(() => { loopTimer = 0; loopRaf = requestAnimationFrame(loop) }, Math.max(0, ms - 8)) }
+const startLoop = () => { document.body.classList.remove('paused'); plan(0) };
+const stopLoop = () => { clearTimeout(loopTimer); cancelAnimationFrame(loopRaf); loopTimer = loopRaf = 0; document.body.classList.add('paused') };
 document.addEventListener('visibilitychange', () => document.hidden ? stopLoop() : startLoop());
 
 /* 重ねるもの（popover）を基準の要素の下に置く。スクロールしたら閉じる */

@@ -8,7 +8,7 @@
      共通の CSS と関数は ../tokens.css ・ ../kodou.css ・ ../virt.js ・ ../ledbar.js ・ ../kodou.js ・ ../icons.js にある（この順に読む）。 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
 <link rel="stylesheet" href="../tokens.css">
 <link rel="stylesheet" href="../kodou.css">
 <style>.kd-page { max-width: 960px; margin: 0 auto; padding: 24px max(16px, env(safe-area-inset-left, 0px)) 80px }</style>
@@ -36,12 +36,12 @@
     { name: 'README.md', mt: '1.9K' },
   ] };
   const el = $('#tree'); let flat = [], act = 1;
-  const flatten = (n, depth, g, last, out) => { out.push({ n, depth, guide: depth ? g + (last ? '└─' : '├─') : '' }); if (n.kids && n.open) n.kids.forEach((k, i) => flatten(k, depth + 1, depth ? g + (last ? '  ' : '│ ') : '', i === n.kids.length - 1, out)); return out };
+  const flatten = (n, depth, g, last, out, pos = 1, size = 1) => { out.push({ n, depth, pos, size, guide: depth ? g + (last ? '└─' : '├─') : '' }); if (n.kids && n.open) n.kids.forEach((k, i) => flatten(k, depth + 1, depth ? g + (last ? '  ' : '│ ') : '', i === n.kids.length - 1, out, i + 1, n.kids.length)); return out };
   el.setAttribute('role', 'tree');
   const v = virt(el, {
     H: 24, id: 'tree-',
     make: () => { const r = document.createElement('div'); r.className = 'tn'; r.setAttribute('role', 'treeitem'); return r },
-    fill: (r, i) => { const x = flat[i], d = !!x.n.kids, cls = x.n.st === 'M' ? 'mod' : x.n.st === 'A' ? 'new' : ''; r.innerHTML = `<span class="guide">${x.guide}</span><span class="tw">${d ? (x.n.open ? '▾' : '▸') : ''}</span>${px(d ? (x.n.open ? 'open' : 'folder') : 'file')}<span class="${cls}">${esc(x.n.name)}${d ? '/' : ''}</span>${x.n.st ? `<span class="${cls}">${x.n.st}</span>` : ''}<span class="mt">${x.n.mt || (d ? x.n.kids.length + ' 件' : '')}</span>`; if (d) r.setAttribute('aria-expanded', x.n.open); else r.removeAttribute('aria-expanded'); r.setAttribute('aria-level', x.depth + 1) },
+    fill: (r, i) => { const x = flat[i], d = !!x.n.kids; r.setAttribute('aria-posinset', x.pos); r.setAttribute('aria-setsize', x.size); const cls = x.n.st === 'M' ? 'mod' : x.n.st === 'A' ? 'new' : ''; r.innerHTML = `<span class="guide">${x.guide}</span><span class="tw">${d ? (x.n.open ? '▾' : '▸') : ''}</span>${px(d ? (x.n.open ? 'open' : 'folder') : 'file')}<span class="${cls}">${esc(x.n.name)}${d ? '/' : ''}</span>${x.n.st ? `<span class="${cls}">${x.n.st}</span>` : ''}<span class="mt">${x.n.mt || (d ? x.n.kids.length + ' 件' : '')}</span>`; if (d) r.setAttribute('aria-expanded', x.n.open); else r.removeAttribute('aria-expanded'); r.setAttribute('aria-level', x.depth + 1) },
     mark: (r, i) => r.classList.toggle('on', i === act),
   });
   function build() { flat = flatten(TREE, 0, '', true, []); act = Math.min(act, flat.length - 1); v.set(flat.length); v.active(act) }

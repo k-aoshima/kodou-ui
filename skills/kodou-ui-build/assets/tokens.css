@@ -7,7 +7,7 @@
   --accent: var(--blue); --blue-hover: #00477F;
   --red-bg: rgba(190,63,14,.10); --green-bg: rgba(0,101,74,.10); --yellow-bg: rgba(138,88,0,.11); --blue-bg: rgba(0,88,160,.10);
   --font: "JetBrains Mono", "BIZ UDGothic", ui-monospace, Menlo, monospace;
-  --font-read: "Noto Sans JP", "Hiragino Sans", system-ui, sans-serif;
+  --font-read: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", Meiryo, system-ui, "BIZ UDGothic", sans-serif;
   --measure: 38em;
   --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px;
   --t-fast: 80ms; --t-base: 140ms;
@@ -22,3 +22,9 @@
   --sel-bg: #D9DCE3; --sel-fg: #15171C; --on: var(--panel);
   --red: #FF9670; --green: #2FAA80; --yellow: #EDBE4F; --blue: #72B2FF; --magenta: #E58EC6; --cyan: #5CC6EE;
   --red-bg: rgba(255,150,112,.13); --green-bg: rgba(47,170,128,.13); --yellow-bg: rgba(237,190,79,.12); --blue-bg: rgba(114,178,255,.13); --blue-hover: #9CC8FF; color-scheme: dark }
+@media (prefers-contrast: more) { :root {  /* 高いコントラストを求める設定では、補足の文字と罫線を濃くする。色の並びと役割は変えない */
+  --dim: #3A3E45; --faint: #464A52; --ui: #5C5F65; --deco: #84878D; --rule: rgba(32,36,43,.55); --rule-soft: rgba(32,36,43,.25) } }
+@media (prefers-contrast: more) and (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --dim: #C6CAD2; --faint: #B8BDC7; --ui: #8D93A0; --deco: #707684; --rule: rgba(217,220,227,.5); --rule-soft: rgba(217,220,227,.22) } }
+@media (prefers-contrast: more) { :root[data-theme="dark"] {
+  --dim: #C6CAD2; --faint: #B8BDC7; --ui: #8D93A0; --deco: #707684; --rule: rgba(217,220,227,.5); --rule-soft: rgba(217,220,227,.22) } }

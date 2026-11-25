@@ -2,7 +2,7 @@
 * { box-sizing: border-box }
 [hidden] { display: none !important }
 html { scroll-padding-top: 40px }
-body { background: var(--bg); color: var(--fg); font: 13.5px/1.6 var(--font); font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased; font-feature-settings: "calt" 0 }
+body { background: var(--bg); color: var(--fg); font: 0.84375rem/1.6 var(--font); font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased; font-feature-settings: "calt" 0 }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important } }
 button, input, textarea { font: inherit; color: inherit }
@@ -14,23 +14,23 @@ svg.px .tone { fill: var(--accent); opacity: .3 }
 .c-red { color: var(--red) } .c-green { color: var(--green) } .c-yellow { color: var(--yellow) } .c-blue { color: var(--blue) } .c-magenta { color: var(--magenta) } .c-cyan { color: var(--cyan) }
 b, strong { font-weight: 700 }
 .read { font-family: var(--font-read); letter-spacing: .02em }
-code { font-family: var(--font); font-size: .92em }
+code { font-family: var(--font); font-size: max(0.75rem, .92em) }
 @keyframes beat { 0%, 100% { transform: scale(1) } 12% { transform: scale(1.3) } 24% { transform: scale(1) } 36% { transform: scale(1.18) } }
 @keyframes blink { 50% { opacity: 0 } }
 @keyframes pop { from { opacity: .2; transform: translateY(2px) } to { opacity: 1; transform: none } }
 /* 部品。画面外の節は描かない */
 .comp-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin-bottom: 4px }
-.comp-head h2 { margin: 0; font-size: 16px; font-weight: 700 }
-.comp-head h2 .en { color: var(--faint); font-weight: 400; font-size: 12.5px; margin-left: 8px }
-.lead { margin: 0 0 14px; color: var(--dim); max-width: var(--measure); font: 15px/1.85 var(--font-read); letter-spacing: .02em }
-.tag { font-size: 12px; white-space: nowrap }
+.comp-head h2 { margin: 0; font-size: 1rem; font-weight: 700 }
+.comp-head h2 .en { color: var(--faint); font-weight: 400; font-size: 0.78125rem; margin-left: 8px }
+.lead { margin: 0 0 14px; color: var(--dim); max-width: var(--measure); font: 0.9375rem/1.85 var(--font-read); letter-spacing: .02em }
+.tag { font-size: 0.75rem; white-space: nowrap }
 .tag::before { content: "["; color: var(--deco) } .tag::after { content: "]"; color: var(--deco) }
 .t1 { color: var(--blue) } .t2 { color: var(--green) } .t3 { color: var(--yellow) } .t4 { color: var(--magenta) }
 
 .box { position: relative; border: 1px solid var(--rule); background: var(--panel); margin-top: 14px; min-width: 0 }
 .box > :not(.ttl):not(.ttl-r) { contain: content }
-.box > .ttl { position: absolute; top: -.8em; left: 10px; padding: 0 6px; background: var(--panel); font-size: 12px; line-height: 1.5; color: var(--dim); white-space: nowrap; max-width: calc(100% - 20px); overflow: hidden; text-overflow: ellipsis }
-.box > .ttl-r { position: absolute; top: -.8em; right: 10px; padding: 0 6px; background: var(--panel); font-size: 12px; color: var(--dim); white-space: nowrap }
+.box > .ttl { position: absolute; top: -.8em; left: 10px; padding: 0 6px; background: var(--panel); font-size: 0.75rem; line-height: 1.5; color: var(--dim); white-space: nowrap; max-width: calc(100% - 20px); overflow: hidden; text-overflow: ellipsis }
+.box > .ttl-r { position: absolute; top: -.8em; right: 10px; padding: 0 6px; background: var(--panel); font-size: 0.75rem; color: var(--dim); white-space: nowrap }
 .box-in { padding: 16px 14px 12px }
 .box:focus-within { border-color: var(--fg) }
 .row { display: flex; flex-wrap: wrap; gap: 10px 12px; align-items: center }
@@ -38,15 +38,15 @@ code { font-family: var(--font); font-size: .92em }
 .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 0 16px }
 .states { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px 16px }
 .state-cell { display: grid; gap: 6px; align-content: start; min-width: 0 }
-.state-cell > .lb { font-size: 11.5px; color: var(--faint) }
-.keys { display: flex; flex-wrap: wrap; gap: 4px 14px; padding: 6px 14px; border-top: 1px solid var(--rule-soft); font-size: 12px; color: var(--dim) }
+.state-cell > .lb { font-size: 0.75rem; color: var(--faint) }
+.keys { display: flex; flex-wrap: wrap; gap: 4px 14px; padding: 6px 14px; border-top: 1px solid var(--rule-soft); font-size: 0.75rem; color: var(--dim) }
 .keys span { white-space: nowrap }
-kbd { font: 700 11.5px var(--font); background: var(--sel-bg); color: var(--sel-fg); padding: 0 4px; white-space: nowrap }
+kbd { font: 700 0.75rem var(--font); background: var(--sel-bg); color: var(--sel-fg); padding: 0 4px; white-space: nowrap }
 .keys kbd { margin-right: 4px }
-.out { font: 13px/1.6 var(--font-read); color: var(--dim); min-height: 1.6em }
+.out { font: 0.8125rem/1.6 var(--font-read); color: var(--dim); min-height: 1.6em }
 .out .ok { color: var(--green) }
 /* ボタン（色は即時に切り替え、動きは transform だけ） */
-.btn { position: relative; display: inline-flex; align-items: center; gap: 1ch; border: 1px solid var(--ui); background: var(--panel); color: var(--fg); padding: 2px 10px; cursor: pointer; white-space: nowrap; font-size: 13px; line-height: 1.6; transition: transform var(--t-fast) }
+.btn { position: relative; display: inline-flex; align-items: center; gap: 1ch; border: 1px solid var(--ui); background: var(--panel); color: var(--fg); padding: 2px 10px; cursor: pointer; white-space: nowrap; font-size: 0.8125rem; line-height: 1.6; transition: transform var(--t-fast) }
 /* 枠のあるボタンには角かっこを付けない（枠と二重になり幅も取る）。角かっこは枠の無い文中の操作 .link だけ */
 /* ホバーではボタン自身の色を濃くする（黒で反転しない）。色の切り替えにトランジションは付けない */
 .btn:hover:not(:disabled), .btn.is-hover { background: var(--rule-soft); border-color: var(--fg) }
@@ -59,36 +59,36 @@ kbd { font: 700 11.5px var(--font); background: var(--sel-bg); color: var(--sel-
 .btn.danger { color: var(--red); border-color: var(--red) }
 .btn.danger:hover:not(:disabled), .btn.danger.is-hover { background: var(--red); color: var(--on) }
 .btn:disabled { color: var(--faint); border-style: dashed; cursor: not-allowed; background: transparent; font-weight: 400 }
-.btn.sm { font-size: 12px; padding: 0 7px; line-height: 1.5 }
+.btn.sm { font-size: 0.75rem; padding: 0 7px; line-height: 1.5 }
 /* 見た目は小さいまま、押せる範囲は 24px 以上に広げる */
 .btn.sm::after, .btn.icon::after, .btn.link::after { content: ""; position: absolute; inset: -3px -2px }
 .btn.link { border: 0; background: transparent; padding: 0 1px; color: var(--blue); gap: 0; font-size: inherit }
 .btn.link::before { content: "["; color: var(--deco) }
 .btn.link .t::after { content: "]"; color: var(--deco) }
 .btn.link:hover { background: var(--blue-bg); color: var(--blue); text-decoration: underline; text-underline-offset: 3px }
-.btn.lg { font-size: 14.5px; padding: 5px 14px }
+.btn.lg { font-size: 0.90625rem; padding: 5px 14px }
 .btn.icon { padding: 2px 6px }
 .btn kbd { background: transparent; color: inherit; opacity: .7; padding: 0; font-weight: 400 }
 /* 入力 */
 .field { display: grid; gap: 4px; min-width: 0; align-content: start }
-.field > label, .field > .lb { font: 700 13px var(--font-read); letter-spacing: .02em }
+.field > label, .field > .lb { font: 700 0.8125rem var(--font-read); letter-spacing: .02em }
 .field .opt { font-weight: 400; color: var(--dim) }
 .inp { display: flex; align-items: center; min-width: 0; border: 1px solid var(--ui); background: var(--panel) }
 .inp:focus-within, .inp.is-focus { border-color: var(--fg); box-shadow: inset 0 -2px 0 var(--fg) }
 .inp:hover:not(.is-disabled) { border-color: var(--fg) }
-.inp input, .inp textarea { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; padding: 4px 8px; font: 13.5px var(--font); caret-shape: block }
+.inp input, .inp textarea { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; padding: 4px 8px; font: 0.84375rem var(--font); caret-shape: block }
 .inp input::placeholder, .inp textarea::placeholder { color: var(--faint) }
-.inp .fx { padding: 0 8px; color: var(--dim); background: var(--rule-soft); align-self: stretch; display: flex; align-items: center; font-size: 12.5px; white-space: nowrap }
+.inp .fx { padding: 0 8px; color: var(--dim); background: var(--rule-soft); align-self: stretch; display: flex; align-items: center; font-size: 0.78125rem; white-space: nowrap }
 .inp.is-disabled { border-style: dashed; color: var(--faint) }
 .inp.is-error, .inp:has(input:user-invalid) { border-color: var(--red) }
 .inp.is-error:focus-within { box-shadow: inset 0 -2px 0 var(--red) }
-.help { font: 12.5px/1.65 var(--font-read); color: var(--dim); letter-spacing: .02em }
+.help { font: 0.78125rem/1.65 var(--font-read); color: var(--dim); letter-spacing: .02em }
 .help.err { color: var(--red) }
 .help.ok { color: var(--green) }
 .help .cnt { font-family: var(--font); float: right; color: var(--faint) }
 .inp textarea { resize: vertical; min-height: 6.5em; line-height: 1.6 }
 .ta-wrap { display: grid; grid-template-columns: 4ch minmax(0,1fr); flex: 1; min-width: 0 }
-.ta-gutter { padding: 4px 6px 4px 0; text-align: right; color: var(--faint); font-size: 13.5px; line-height: 1.6; border-right: 1px solid var(--rule-soft); white-space: pre; overflow: hidden; user-select: none }
+.ta-gutter { padding: 4px 6px 4px 0; text-align: right; color: var(--faint); font-size: 0.84375rem; line-height: 1.6; border-right: 1px solid var(--rule-soft); white-space: pre; overflow: hidden; user-select: none }
 .ta-gutter .w { color: var(--yellow); font-weight: 700 }
 .stepper { display: inline-flex; align-items: stretch; border: 1px solid var(--ui); justify-self: start }
 .stepper button { border: 0; background: transparent; padding: 0 10px; cursor: pointer; font-weight: 700 }
@@ -101,12 +101,12 @@ kbd { font: 700 11.5px var(--font); background: var(--sel-bg); color: var(--sel-
 .dd-btn:hover, .dd-btn[aria-expanded="true"] { border-color: var(--fg) }
 .dd-btn:disabled { color: var(--faint); border-style: dashed; cursor: not-allowed }
 .dd-btn .car { color: var(--dim) }
-.pop { background: var(--panel); color: var(--fg); border: 1px solid var(--fg); box-shadow: 4px 4px 0 var(--rule-soft); padding: 4px 0; max-height: 260px; overflow: auto; font: 13.5px/1.6 var(--font) }
+.pop { background: var(--panel); color: var(--fg); border: 1px solid var(--fg); box-shadow: 4px 4px 0 var(--rule-soft); padding: 4px 0; max-height: 260px; overflow: auto; font: 0.84375rem/1.6 var(--font) }
 .pop[popover] { position: fixed; inset: auto; margin: 0 }
 .pop:popover-open { animation: pop var(--t-base) ease-out }
 .opt-ln { display: grid; grid-template-columns: 2ch minmax(0,1fr) auto; gap: 0 6px; height: 24px; padding: 1px 10px 1px 8px; cursor: pointer; white-space: nowrap; align-items: center }
 .opt-ln .mk { color: var(--blue); font-weight: 700 }
-.opt-ln .mt { color: var(--faint); font-size: 12px; padding-left: 2ch }
+.opt-ln .mt { color: var(--faint); font-size: 0.75rem; padding-left: 2ch }
 .opt-ln:hover:not(.on):not(.dis) { background: var(--rule-soft) }
 .opt-ln.on { background: var(--sel-bg); color: var(--sel-fg) }
 .opt-ln.on .mk, .opt-ln.on .mt { color: inherit }
@@ -116,11 +116,11 @@ kbd { font: 700 11.5px var(--font); background: var(--sel-bg); color: var(--sel-
 .opt-ln mark { background: transparent; color: var(--green); font-weight: 700; text-decoration: underline }
 .opt-ln.on mark { color: inherit }
 .pop .sep { border-top: 1px solid var(--rule-soft); margin: 4px 0 }
-.pop .hd { padding: 2px 10px; font-size: 11.5px; color: var(--faint) }
-.pop .empty-ln { padding: 4px 10px; color: var(--dim); font: 13px var(--font-read) }
+.pop .hd { padding: 2px 10px; font-size: 0.75rem; color: var(--faint) }
+.pop .empty-ln { padding: 4px 10px; color: var(--dim); font: 0.8125rem var(--font-read) }
 kbd.ol { background: transparent; color: inherit; border: 1px solid var(--rule); border-bottom-width: 2px; padding: 0 5px; font-weight: 500 }
 /* チェック・ラジオ・スイッチ（印は CSS の :checked で出す） */
-.cb { display: flex; gap: 1ch; align-items: baseline; cursor: pointer; padding: 2px 0; min-height: 24px; font: 13.5px/1.6 var(--font-read) }
+.cb { display: flex; gap: 1ch; align-items: baseline; cursor: pointer; padding: 2px 0; min-height: 24px; font: 0.84375rem/1.6 var(--font-read) }
 .cb input { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none }
 .cb .mk { font-family: var(--font); color: var(--blue); font-weight: 700; white-space: pre }
 .cb .mk::before { content: "[ ]" }
@@ -131,8 +131,8 @@ kbd.ol { background: transparent; color: inherit; border: 1px solid var(--rule);
 .cb input:focus-visible ~ .mk { outline: 2px solid var(--accent); outline-offset: 2px }
 .cb:has(input:disabled) { color: var(--faint); cursor: not-allowed }
 .cb:has(input:disabled) .mk { color: var(--faint) }
-.cb .v { font-family: var(--font); color: var(--faint); margin-left: auto; padding-left: 2ch; font-size: 12.5px }
-.sw .mk { display: inline-block; width: 6ch; text-align: center; border: 1px solid var(--ui); font-size: 12px; line-height: 1.5; color: var(--dim) }
+.cb .v { font-family: var(--font); color: var(--faint); margin-left: auto; padding-left: 2ch; font-size: 0.78125rem }
+.sw .mk { display: inline-block; width: 6ch; text-align: center; border: 1px solid var(--ui); font-size: 0.75rem; line-height: 1.5; color: var(--dim) }
 .sw .mk::before { content: "OFF" }
 .sw input:checked ~ .mk { background: var(--green); color: var(--on); border-color: var(--green) }
 .sw input:checked ~ .mk::before { content: "ON" }
@@ -157,12 +157,12 @@ kbd.ol { background: transparent; color: inherit; border: 1px solid var(--rule);
 .sl-rail.dis input::-webkit-slider-thumb { cursor: not-allowed }
 .sl-v { font-family: var(--font); font-weight: 700; min-width: 4ch }
 .slider:focus-within .knob { color: var(--blue) }
-.sl-ticks { position: relative; height: 1.4em; font-size: 11.5px; color: var(--faint); width: 192px }
+.sl-ticks { position: relative; height: 1.4em; font-size: 0.75rem; color: var(--faint); width: 192px }
 .sl-ticks span { position: absolute; transform: translateX(-50%) }
 /* タグ入力 */
 .tags-in { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; border: 1px solid var(--ui); padding: 4px 6px; background: var(--panel) }
 .tags-in:focus-within { border-color: var(--fg) }
-.chip { display: inline-flex; align-items: center; background: var(--sel-bg); color: var(--sel-fg); font-size: 12.5px; line-height: 22px; padding: 0 2px 0 6px; animation: pop var(--t-base) ease-out }
+.chip { display: inline-flex; align-items: center; background: var(--sel-bg); color: var(--sel-fg); font-size: 0.78125rem; line-height: 22px; padding: 0 2px 0 6px; animation: pop var(--t-base) ease-out }
 .chip button { border: 0; background: transparent; color: inherit; cursor: pointer; padding: 0 5px; opacity: .7; min-width: 24px; min-height: 24px; margin: -1px -2px -1px 0 }
 .chip button:hover { opacity: 1 }
 .chip.warn { background: var(--yellow); color: var(--panel) }
@@ -174,8 +174,8 @@ kbd.ol { background: transparent; color: inherit; border: 1px solid var(--rule);
 .li { display: grid; grid-template-columns: 2ch 2.4ch minmax(0,1fr) auto; gap: 0 6px; align-items: center; height: 24px; padding: 1px 12px; white-space: nowrap; cursor: pointer }
 .li .mk { color: var(--blue); font-weight: 700 }
 .li .nm { overflow: hidden; text-overflow: ellipsis; min-width: 0 }
-.li .sub { display: block; font: 12px/1.5 var(--font-read); color: var(--dim); overflow: hidden; text-overflow: ellipsis }
-.li .mt { color: var(--faint); font-size: 12px; text-align: right }
+.li .sub { display: block; font: 0.75rem/1.5 var(--font-read); color: var(--dim); overflow: hidden; text-overflow: ellipsis }
+.li .mt { color: var(--faint); font-size: 0.75rem; text-align: right }
 .li:hover:not(.on) { background: var(--rule-soft) }
 .li.on { background: var(--sel-bg); color: var(--sel-fg) }
 .li.on .mt, .li.on .sub, .li.on .mk { color: inherit }
@@ -184,24 +184,24 @@ kbd.ol { background: transparent; color: inherit; border: 1px solid var(--rule);
 .list.meta .li { padding-block: 4px; height: 48px }
 .vlist { margin-top: 12px; height: 264px; overflow: auto; position: relative; overscroll-behavior: contain }
 .vl-sp { position: relative }
-.vl-row { height: 22px; display: grid; grid-template-columns: 2ch 8ch 8ch minmax(0,1fr) auto; gap: 0 1ch; align-items: center; padding: 0 12px; white-space: nowrap; cursor: pointer }
-.vl-row .h { color: var(--yellow) } .vl-row .a { color: var(--cyan) } .vl-row .d { color: var(--faint); font-size: 12px }
+.vl-row { height: 24px; display: grid; grid-template-columns: 2ch 8ch 8ch minmax(0,1fr) auto; gap: 0 1ch; align-items: center; padding: 0 12px; white-space: nowrap; cursor: pointer }
+.vl-row .h { color: var(--yellow) } .vl-row .a { color: var(--cyan) } .vl-row .d { color: var(--faint); font-size: 0.75rem }
 .vl-row .m { overflow: hidden; text-overflow: ellipsis; min-width: 0 }
 .vl-row .mk { color: var(--blue); font-weight: 700 }
 .vl-row:hover:not(.on) { background: var(--rule-soft) }
 .vl-row.on { background: var(--sel-bg); color: var(--sel-fg) }
 .vl-row.on .h, .vl-row.on .a, .vl-row.on .d, .vl-row.on .mk { color: inherit }
-.tree { padding: 12px 0 4px; font-size: 13px }
+.tree { padding: 12px 0 4px; font-size: 0.8125rem }
 .tn { display: flex; align-items: center; gap: 6px; height: 24px; padding: 0 12px; white-space: nowrap; cursor: pointer }
 .tn .tw { width: 1.5ch; color: var(--dim) }
 .tn .guide { color: var(--deco); white-space: pre }
 .tn.on { background: var(--sel-bg); color: var(--sel-fg) }
 .tn.on .guide, .tn.on .tw, .tn.on .mt, .tn.on .mod, .tn.on .new { color: inherit }
-.tn .mt { margin-left: auto; padding-left: 2ch; color: var(--faint); font-size: 12px }
+.tn .mt { margin-left: auto; padding-left: 2ch; color: var(--faint); font-size: 0.75rem }
 .tn:hover:not(.on) { background: var(--rule-soft) }
 .tn .mod { color: var(--yellow) } .tn .new { color: var(--green) }
 /* キーと値 */
-.kv { display: grid; grid-template-columns: max-content minmax(0,1fr) auto; gap: 2px 0; padding: 12px 14px; font-size: 13px; margin: 0 }
+.kv { display: grid; grid-template-columns: max-content minmax(0,1fr) auto; gap: 2px 0; padding: 12px 14px; font-size: 0.8125rem; margin: 0 }
 .kv dt { color: var(--dim); white-space: nowrap; display: flex }
 .kv dt::after { content: ""; flex: 1; min-width: 2ch; margin: 0 1ch .35em; border-bottom: 1px dotted var(--rule) }
 .kv dd { margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
@@ -210,7 +210,7 @@ kbd.ol { background: transparent; color: inherit; border: 1px solid var(--rule);
 /* 表 */
 .scroll-x { overflow-x: auto }
 .box > .scroll-x { padding-top: 12px }
-table.t { width: 100%; border-collapse: collapse; font-size: 13px }
+table.t { width: 100%; border-collapse: collapse; font-size: 0.8125rem }
 table.t th { text-align: left; font-weight: 700; background: var(--sel-bg); color: var(--sel-fg); padding: 1px 10px; white-space: nowrap }
 table.t th button { border: 0; background: transparent; color: inherit; font-weight: 700; cursor: pointer; padding: 0; display: inline-flex; gap: 1ch; min-height: 24px; align-items: center }
 table.t th .ar { opacity: .5 } table.t th[aria-sort] .ar { opacity: 1 }
@@ -230,26 +230,26 @@ table.t td.ck::before { content: "[ ]" }
 table.t tr.picked td.ck::before { content: "[x]" }
 .spark { color: var(--blue); letter-spacing: -.02em }
 /* ログ（水準の絞り込みは CSS だけで行う） */
-.lvl { display: flex; flex-wrap: wrap; padding: 10px 14px 6px; font-size: 12.5px }
+.lvl { display: flex; flex-wrap: wrap; padding: 10px 14px 6px; font-size: 0.78125rem }
 .lvl button { border: 0; background: transparent; color: var(--dim); padding: 0 8px; cursor: pointer; line-height: 24px }
 .lvl button[aria-pressed="true"] { background: var(--sel-bg); color: var(--sel-fg); font-weight: 700 }
-.log { height: 210px; overflow: auto; font-size: 12.5px; line-height: 1.6; padding: 2px 0 6px; overscroll-behavior: contain }
+.log { height: 210px; overflow: auto; font-size: 0.78125rem; line-height: 1.6; padding: 2px 0 6px; overscroll-behavior: contain }
 .log .sp { position: relative }
 .log .ln { position: absolute; left: 0; right: 0; height: 20px; line-height: 20px; display: grid; grid-template-columns: 9ch 6ch minmax(0,1fr); gap: 0 1ch; padding: 0 14px; white-space: nowrap }
 .log .t { color: var(--faint) }
 .log .lv { color: var(--cyan) } .log .w .lv { color: var(--yellow) } .log .e .lv { color: var(--red); font-weight: 700 }
 .log .ln.e { background: var(--red-bg) }
 .log .m { overflow: hidden; text-overflow: ellipsis }
-.less { display: flex; align-items: center; gap: 10px; padding: 3px 14px; border-top: 1px solid var(--rule-soft); font-size: 12.5px; min-height: 30px }
+.less { display: flex; align-items: center; gap: 10px; padding: 3px 14px; border-top: 1px solid var(--rule-soft); font-size: 0.78125rem; min-height: 30px }
 .less .mode { font-weight: 700 }
 .less .mode.paused-ln { background: var(--yellow); color: var(--panel); padding: 0 6px }
 .less .sp { flex: 1 }
 /* グラフ */
 .chart { padding: 18px 14px 10px; min-width: 0 }
-.ch-legend { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 12px; color: var(--dim); margin-bottom: 8px }
+.ch-legend { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 0.75rem; color: var(--dim); margin-bottom: 8px }
 .ch-legend i { display: inline-block; width: 10px; height: 10px; margin-right: 6px; vertical-align: -1px }
 .plot-wrap { display: grid; grid-template-columns: 4ch minmax(0,1fr); gap: 0 8px }
-.yax { position: relative; height: 160px; font-size: 11.5px; color: var(--faint) }
+.yax { position: relative; height: 160px; font-size: 0.75rem; color: var(--faint) }
 .yax span { position: absolute; right: 0; transform: translateY(50%) }
 .plot { position: relative; height: 160px; border-left: 1px solid var(--rule); border-bottom: 1px solid var(--rule) }
 .plot .gl { position: absolute; left: 0; right: 0; border-top: 1px dotted var(--rule-soft) }
@@ -258,61 +258,61 @@ table.t tr.picked td.ck::before { content: "[x]" }
 .bar:hover, .bar:focus-visible { background: repeating-linear-gradient(to top, var(--fg) 0 6px, transparent 6px 8px) }
 .bar:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
 .bar .ov { position: absolute; left: 0; right: 0; top: 0; background: repeating-linear-gradient(45deg, var(--red) 0 3px, transparent 3px 6px); border-top: 2px solid var(--red) }
-.bar .ovl { position: absolute; left: 50%; bottom: 100%; transform: translateX(-50%); font-size: 11px; color: var(--red); white-space: nowrap; padding-bottom: 2px }
+.bar .ovl { position: absolute; left: 50%; bottom: 100%; transform: translateX(-50%); font-size: 0.75rem; color: var(--red); white-space: nowrap; padding-bottom: 2px }
 .sw-blue { background: repeating-linear-gradient(to top, var(--blue) 0 3px, transparent 3px 4px) } .sw-red { background: repeating-linear-gradient(45deg, var(--red) 0 2px, transparent 2px 4px); outline: 1px solid var(--red) }
-.xax { display: flex; justify-content: space-around; padding: 4px 2% 0; font-size: 11.5px; color: var(--faint); margin-left: calc(4ch + 8px) }
+.xax { display: flex; justify-content: space-around; padding: 4px 2% 0; font-size: 0.75rem; color: var(--faint); margin-left: calc(4ch + 8px) }
 .xax span { width: 9%; text-align: center; white-space: nowrap }
-.tip { position: absolute; z-index: 5; pointer-events: none; background: var(--sel-bg); color: var(--sel-fg); font-size: 12px; padding: 1px 6px; white-space: nowrap; left: 0; top: 0 }
+.tip { position: absolute; z-index: 5; pointer-events: none; background: var(--sel-bg); color: var(--sel-fg); font-size: 0.75rem; padding: 1px 6px; white-space: nowrap; left: 0; top: 0 }
 .line-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible }
 .line-svg polyline { fill: none; stroke-width: 2; vector-effect: non-scaling-stroke }
 .pt { position: absolute; width: 6px; height: 6px; transform: translate(-50%, 50%) }
 .pt.dia { width: 7px; height: 7px; transform: translate(-50%, 50%) rotate(45deg); background: var(--panel) !important; border: 2px solid currentColor }
-.ln-end { position: absolute; right: 4px; transform: translateY(-40%); font-size: 11.5px; white-space: nowrap; padding: 0 3px; background: var(--panel); font-weight: 700 }
+.ln-end { position: absolute; right: 4px; transform: translateY(-40%); font-size: 0.75rem; white-space: nowrap; padding: 0 3px; background: var(--panel); font-weight: 700 }
 .ch-legend .ln { display: inline-block; width: 18px; border-top: 2px solid; vertical-align: 3px; margin-right: 6px }
 .ch-legend .ln.dash { border-top-style: dashed }
 .cross { position: absolute; top: 0; bottom: 0; left: 0; border-left: 1px dashed var(--fg); pointer-events: none }
 .thr { position: absolute; left: 0; right: 0; border-top: 1px dashed var(--red) }
-.thr span { position: absolute; right: 0; top: -1.5em; font-size: 11px; color: var(--red); background: var(--panel); padding: 0 4px }
+.thr span { position: absolute; right: 0; top: -1.5em; font-size: 0.75rem; color: var(--red); background: var(--panel); padding: 0 4px }
 .cv { position: relative; height: 160px; border-left: 1px solid var(--rule); border-bottom: 1px solid var(--rule) }
 .cv canvas { position: absolute; inset: 0; width: 100%; height: 100%; image-rendering: pixelated }
-.cv-info { font-size: 12px; color: var(--dim); margin-top: 6px }
-.hist { padding: 14px; font-size: 13px; display: grid; grid-template-columns: max-content minmax(0,1fr) max-content; gap: 1px 1ch; align-items: center }
+.cv-info { font-size: 0.75rem; color: var(--dim); margin-top: 6px }
+.hist { padding: 14px; font-size: 0.8125rem; display: grid; grid-template-columns: max-content minmax(0,1fr) max-content; gap: 1px 1ch; align-items: center }
 .hist .b { color: var(--blue); white-space: nowrap; overflow: hidden }
 .hist .b.hot { color: var(--yellow) }
 .hist .lb, .hist .n { color: var(--dim); text-align: right }
-.hist .scale { grid-column: 2; display: flex; justify-content: space-between; font-size: 11px; color: var(--faint); border-top: 1px solid var(--rule); padding-top: 2px; max-width: 40ch }
-.spk-row { display: grid; grid-template-columns: 12ch minmax(0,1fr) auto; gap: 0 1ch; align-items: center; padding: 1px 0; font-size: 13px }
-.spk-row .spark { font-size: 15px; white-space: nowrap; overflow: hidden }
+.hist .scale { grid-column: 2; display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--faint); border-top: 1px solid var(--rule); padding-top: 2px; max-width: 40ch }
+.spk-row { display: grid; grid-template-columns: 12ch minmax(0,1fr) auto; gap: 0 1ch; align-items: center; padding: 1px 0; font-size: 0.8125rem }
+.spk-row .spark { font-size: 0.9375rem; white-space: nowrap; overflow: hidden }
 .gauges { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px 24px; padding: 14px }
-.meter { display: grid; grid-template-columns: 4ch minmax(0, 1fr) auto; gap: 0 1ch; align-items: center; white-space: nowrap; font-size: 13px; min-width: 0 }
+.meter { display: grid; grid-template-columns: 4ch minmax(0, 1fr) auto; gap: 0 1ch; align-items: center; white-space: nowrap; font-size: 0.8125rem; min-width: 0 }
 .meter .v { text-align: right; min-width: 9ch }
 .meter.wide { grid-column: 1 / -1 }
-.meter .note { grid-column: 2 / -1; font: 12px/1.6 var(--font-read); color: var(--dim); white-space: normal }
+.meter .note { grid-column: 2 / -1; font: 0.75rem/1.6 var(--font-read); color: var(--dim); white-space: normal }
 .meter .lb { color: var(--cyan); font-weight: 700; width: 4ch; flex: none }
 .meter .br { min-width: 0; overflow: hidden }
-.seg-g { font-size: 15px; letter-spacing: 1px; white-space: nowrap }
+.seg-g { font-size: 0.9375rem; letter-spacing: 1px; white-space: nowrap }
 /* 進捗・スピナー・状態 */
-.prog { display: grid; gap: 2px; font-size: 13px; min-width: 0 }
+.prog { display: grid; gap: 2px; font-size: 0.8125rem; min-width: 0 }
 .prog .line { display: flex; gap: 1ch; white-space: nowrap; overflow: hidden }
 .prog .line span:first-child { color: var(--dim) } .prog .line span:last-child { font-weight: 700 }
 .prog .line { justify-content: space-between }
 .ledc { display: block; width: 100%; height: 8px }
-.prog .meta { color: var(--dim); font-size: 12.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
-.steps { display: flex; flex-wrap: wrap; gap: 0 1ch; font-size: 13px }
+.prog .meta { color: var(--dim); font-size: 0.78125rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+.steps { display: flex; flex-wrap: wrap; gap: 0 1ch; font-size: 0.8125rem }
 .steps .done { color: var(--green) } .steps .now { color: var(--blue); font-weight: 700 } .steps .todo { color: var(--faint) }
 .spin { color: var(--blue); display: inline-block; width: 1ch }
-.badge { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; padding: 0 6px; line-height: 20px; white-space: nowrap }
+.badge { display: inline-flex; align-items: center; gap: 4px; font-size: 0.75rem; padding: 0 6px; line-height: 20px; white-space: nowrap }
 .badge.solid-ok { background: var(--green); color: var(--on) } .badge.solid-err { background: var(--red); color: var(--on) } .badge.solid-warn { background: var(--yellow); color: var(--on) } .badge.solid-n { background: var(--sel-bg); color: var(--sel-fg) }
 .badge.out-ok { border: 1px solid var(--green); color: var(--green); line-height: 18px } .badge.out-err { border: 1px solid var(--red); color: var(--red); line-height: 18px } .badge.out-n { border: 1px solid var(--rule); color: var(--dim); line-height: 18px }
-.dotst { display: inline-flex; gap: 6px; align-items: center; font: 13.5px var(--font-read) }
+.dotst { display: inline-flex; gap: 6px; align-items: center; font: 0.84375rem var(--font-read) }
 .dotst i { font-style: normal; font-family: var(--font) }
-.sysd { font-size: 13px; line-height: 1.8 }
+.sysd { font-size: 0.8125rem; line-height: 1.8 }
 .sysd .s { white-space: pre; font-weight: 700 }
-.count { display: inline-block; min-width: 2.4ch; text-align: center; font-size: 11.5px; background: var(--red); color: var(--on); line-height: 18px; padding: 0 4px }
+.count { display: inline-block; min-width: 2.4ch; text-align: center; font-size: 0.75rem; background: var(--red); color: var(--on); line-height: 18px; padding: 0 4px }
 /* 通知の帯・トースト */
 .alert { display: grid; grid-template-columns: auto minmax(0,1fr) auto; gap: 4px 12px; align-items: start; border: 1px solid; padding: 8px 12px; margin-top: 10px }
-.alert .hd { font-weight: 700; font-size: 12.5px; white-space: pre; padding-top: 2px }
-.alert .bd { font: 14px/1.75 var(--font-read); letter-spacing: .02em; color: var(--fg) }
+.alert .hd { font-weight: 700; font-size: 0.78125rem; white-space: pre; padding-top: 2px }
+.alert .bd { font: 0.875rem/1.75 var(--font-read); letter-spacing: .02em; color: var(--fg) }
 .alert .bd .acts { margin-top: 6px }
 .alert .x { border: 0; background: transparent; cursor: pointer; color: var(--dim); padding: 0 2px; min-width: 24px; min-height: 24px }
 .alert .x:hover { color: var(--fg) }
@@ -321,89 +321,91 @@ table.t tr.picked td.ck::before { content: "[x]" }
 .alert.err { border-color: var(--red); background: var(--red-bg) } .alert.err .hd { color: var(--red) }
 .alert.ok { border-color: var(--green); background: var(--green-bg) } .alert.ok .hd { color: var(--green) }
 .toasts { position: fixed; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(40px + env(safe-area-inset-bottom, 0px)); z-index: 40; display: grid; gap: 8px; width: min(360px, calc(100vw - 32px)) }
-.toast { background: var(--panel); border: 1px solid var(--fg); box-shadow: 4px 4px 0 var(--rule-soft); padding: 8px 12px 0; animation: pop var(--t-base) ease-out; font-size: 13px }
-.toast .bd { display: flex; gap: 10px; align-items: center; font: 14px/1.6 var(--font-read) }
+.toast { background: var(--panel); border: 1px solid var(--fg); box-shadow: 4px 4px 0 var(--rule-soft); padding: 8px 12px 0; animation: pop var(--t-base) ease-out; font-size: 0.8125rem }
+.toast .bd { display: flex; gap: 10px; align-items: center; font: 0.875rem/1.6 var(--font-read) }
 .toast .bd .sp { flex: 1 }
 .toast .life { margin: 6px -12px 0; height: 2px; background: var(--fg); transform-origin: left }
 /* 空の状態 */
 .empty { display: grid; justify-items: center; text-align: center; gap: 8px; padding: 28px 16px; color: var(--dim) }
 .empty .ill { color: var(--faint) }
-.empty h3 { margin: 0; font: 700 15px var(--font-read); color: var(--fg) }
-.empty p { margin: 0; font: 14px/1.75 var(--font-read); max-width: 30em }
+.empty h3 { margin: 0; font: 700 0.9375rem var(--font-read); color: var(--fg) }
+.empty p { margin: 0; font: 0.875rem/1.75 var(--font-read); max-width: 30em }
 /* タブ・パンくず・ページ送り */
 .tabs { display: flex; flex-wrap: wrap; border-bottom: 1px solid var(--rule); padding: 12px 8px 0 }
 .tabs button { border: 0; background: transparent; padding: 2px 12px; cursor: pointer; color: var(--dim); display: inline-flex; gap: 6px; align-items: center; white-space: nowrap }
 .tabs button:hover:not([aria-selected="true"]):not(:disabled) { color: var(--fg); background: var(--rule-soft) }
 .tabs button[aria-selected="true"] { background: var(--sel-bg); color: var(--sel-fg); font-weight: 700 }
-.tabs button .n { font-size: 11.5px; opacity: .75 }
+.tabs button .n { font-size: 0.75rem; opacity: .75 }
 .tabs button:disabled { color: var(--faint); cursor: not-allowed; text-decoration: line-through }
-.tab-body { padding: 12px 14px; font: 14px/1.75 var(--font-read); min-height: 4em }
-.crumbs { display: flex; flex-wrap: wrap; font-size: 13px; padding: 12px 14px }
+.tab-body { padding: 12px 14px; font: 0.875rem/1.75 var(--font-read); min-height: 4em }
+.crumbs { display: flex; flex-wrap: wrap; font-size: 0.8125rem; padding: 12px 14px }
 .crumbs a { color: var(--blue); text-decoration: none; padding: 0 2px; display: inline-block; line-height: 24px }
 .crumbs a:hover { background: var(--blue-bg); text-decoration: underline; text-underline-offset: 3px }
 .crumbs .sl { color: var(--deco); padding: 0 1ch }
 .crumbs .cur { font-weight: 700; padding: 0 2px }
-.pager { display: flex; flex-wrap: wrap; gap: 4px 2px; align-items: center; padding: 12px 14px; font-size: 13px }
+.pager { display: flex; flex-wrap: wrap; gap: 4px 2px; align-items: center; padding: 12px 14px; font-size: 0.8125rem }
 .pager button { border: 0; background: transparent; cursor: pointer; padding: 0 6px; min-width: 24px; min-height: 24px }
 .pager button:hover:not(:disabled):not([aria-current]) { background: var(--rule-soft) }
 .pager button[aria-current] { background: var(--sel-bg); color: var(--sel-fg); font-weight: 700 }
 .pager button:disabled { color: var(--faint); cursor: not-allowed }
 .pager .gap { color: var(--faint); padding: 0 4px }
-.pager .info { margin-left: auto; color: var(--dim); font-size: 12.5px; padding-left: 2ch }
+.pager .info { margin-left: auto; color: var(--dim); font-size: 0.78125rem; padding-left: 2ch }
 /* ツールチップ・ダイアログ */
 .tt-host { position: relative; display: inline-flex }
-.tt { position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: var(--sel-bg); color: var(--sel-fg); padding: 2px 8px; font: 12.5px/1.6 var(--font-read); white-space: nowrap; z-index: 2; pointer-events: none; opacity: 0; transition: opacity var(--t-fast) }
+.tt { position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: var(--sel-bg); color: var(--sel-fg); padding: 2px 8px; font: 0.78125rem/1.6 var(--font-read); white-space: nowrap; z-index: 2; pointer-events: none; opacity: 0; transition: opacity var(--t-fast) }
+.tt::after { content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 6px }  /* 部品との 6px の隙間を埋め、ポインタを上に動かしても消えないようにする */
 .tt kbd { background: var(--sel-fg); color: var(--sel-bg); margin-left: 6px }
-.tt-host:hover .tt, .tt-host:focus-within .tt { opacity: 1 }
+.tt-host:hover .tt, .tt-host:focus-within .tt { opacity: 1; pointer-events: auto }
+.tt-host.tt-off .tt { opacity: 0; pointer-events: none }  /* Esc で閉じた。ポインタが離れるかフォーカスが外れたら戻す */
 .dlg { border: 3px double var(--fg); background: var(--panel); color: var(--fg); max-width: 460px; width: calc(100% - 32px); box-shadow: 6px 6px 0 var(--rule-soft); padding: 0 }
 dialog.dlg::backdrop { background: color-mix(in srgb, var(--bg) 70%, transparent) }
 dialog.dlg[open] { animation: pop var(--t-base) ease-out }
 .dlg-hd { display: flex; align-items: center; gap: 8px; padding: 6px 12px; border-bottom: 1px solid var(--rule); font-weight: 700 }
 .dlg-hd .sp { flex: 1 }
-.dlg-bd { padding: 12px; font: 14px/1.8 var(--font-read); letter-spacing: .02em }
+.dlg-bd { padding: 12px; font: 0.875rem/1.8 var(--font-read); letter-spacing: .02em }
 .dlg-bd code { background: var(--rule-soft); padding: 0 4px }
 .dlg-ft { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; padding: 8px 12px; border-top: 1px solid var(--rule-soft); margin: 0 }
 /* キー・区切り */
-.kbd-demo { display: grid; grid-template-columns: max-content minmax(0,1fr); gap: 6px 2ch; align-items: center; font-size: 13px }
-.kbd-demo .d { font: 13px var(--font-read); color: var(--dim) }
+.kbd-demo { display: grid; grid-template-columns: max-content minmax(0,1fr); gap: 6px 2ch; align-items: center; font-size: 0.8125rem }
+.kbd-demo .d { font: 0.8125rem var(--font-read); color: var(--dim) }
 .then { color: var(--faint); padding: 0 .5ch }
 .hr { border: 0; border-top: 1px solid var(--rule); margin: 0 }
 .hr.dash { border-top-style: dashed } .hr.dbl { border-top: 3px double var(--rule) }
-.hr-lb { display: flex; align-items: center; gap: 1ch; font-size: 12px; color: var(--faint) }
+.hr-lb { display: flex; align-items: center; gap: 1ch; font-size: 0.75rem; color: var(--faint) }
 .hr-lb::before, .hr-lb::after { content: ""; flex: 1; border-top: 1px solid var(--rule-soft) }
 .hr-lb::before { flex: 0 0 2ch }
 /* トークン・速さ */
 .ansi { display: grid; grid-template-columns: repeat(8, minmax(0,1fr)) }
-.ansi div { padding: 8px 6px; font-size: 11.5px; min-height: 58px; display: flex; flex-direction: column; justify-content: space-between; color: var(--panel) }
+.ansi div { padding: 8px 6px; font-size: 0.75rem; min-height: 58px; display: flex; flex-direction: column; justify-content: space-between; color: var(--panel) }
 .tok-row { display: grid; grid-template-columns: 18ch minmax(0,1fr); gap: 1ch; align-items: baseline; padding: 6px 0; border-bottom: 1px solid var(--rule-soft) }
 .tok-row:last-child { border-bottom: 0 }
-.tok-row .lb { font-size: 11.5px; color: var(--faint) }
+.tok-row .lb { font-size: 0.75rem; color: var(--faint) }
 .space-bar { background: var(--blue); height: 10px }
 .mot .track { position: relative; height: 1.6em; border: 1px solid var(--rule-soft) }
 .mot .track i { position: absolute; top: 2px; bottom: 2px; left: 2px; width: 1ch; background: var(--fg) }
-.perf { display: grid; grid-template-columns: max-content max-content minmax(0,1fr); gap: 2px 2ch; padding: 14px; font-size: 13px }
+.perf { display: grid; grid-template-columns: max-content max-content minmax(0,1fr); gap: 2px 2ch; padding: 14px; font-size: 0.8125rem }
 .perf .k { color: var(--dim) }
 .perf .v { text-align: right; font-weight: 700 }
-.perf .s { font: 12.5px/1.6 var(--font-read); color: var(--dim) }
+.perf .s { font: 0.78125rem/1.6 var(--font-read); color: var(--dim) }
 .perf .s.ok { color: var(--green) } .perf .s.ng { color: var(--red) }
-.how { margin: 0; padding: 14px 14px 12px 3.4ch; font: 14px/1.8 var(--font-read); max-width: 44em }
+.how { margin: 0; padding: 14px 14px 12px 3.4ch; font: 0.875rem/1.8 var(--font-read); max-width: 44em }
 .how li { margin-bottom: 4px }
 .how code { background: var(--rule-soft); padding: 0 3px }
 /* エラーの詳しい内容は折りたたむ */
 .alert details { margin-top: 6px }
-.alert summary { cursor: pointer; color: var(--dim); font: 12.5px var(--font); min-height: 24px; display: inline-flex; align-items: center }
-.alert pre { margin: 4px 0 0; padding: 6px 8px; background: var(--rule-soft); font: 12px/1.6 var(--font); overflow-x: auto; white-space: pre; color: var(--fg) }
+.alert summary { cursor: pointer; color: var(--dim); font: 0.78125rem var(--font); min-height: 24px; display: inline-flex; align-items: center }
+.alert pre { margin: 4px 0 0; padding: 6px 8px; background: var(--rule-soft); font: 0.75rem/1.6 var(--font); overflow-x: auto; white-space: pre; color: var(--fg) }
 /* その場の確認（y/N） */
-.ask { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; padding: 6px 10px; border: 1px solid var(--red); background: var(--red-bg); font-size: 13px }
+.ask { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; padding: 6px 10px; border: 1px solid var(--red); background: var(--red-bg); font-size: 0.8125rem }
 .ask .q { color: var(--red); font-weight: 700 }
-.ask .read { font-size: 14px }
+.ask .read { font-size: 0.875rem }
 /* ⌥ を押している間だけ出すキーの札 */
 .kh-layer { position: fixed; inset: 0; pointer-events: none; z-index: 60 }
-.kh { position: absolute; font: 700 11.5px/1.5 var(--font); background: var(--yellow); color: var(--on); padding: 0 5px; white-space: nowrap; box-shadow: 2px 2px 0 var(--rule) }
+.kh { position: absolute; font: 700 0.75rem/1.5 var(--font); background: var(--yellow); color: var(--on); padding: 0 5px; white-space: nowrap; box-shadow: 2px 2px 0 var(--rule) }
 /* 並びが変わる時だけ短く動かす */
 .flip { transition: transform var(--t-base) cubic-bezier(.2,.7,.2,1) }
 /* ステータスライン */
-.statusline { position: fixed; left: 0; right: 0; bottom: 0; z-index: 35; display: flex; align-items: stretch; height: calc(26px + env(safe-area-inset-bottom, 0px)); padding-bottom: env(safe-area-inset-bottom, 0px); padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-area-inset-right, 0px); background: var(--panel); border-top: 1px solid var(--rule); font-size: 12.5px; overflow: hidden; white-space: nowrap; contain: strict }
+.statusline { position: fixed; left: 0; right: 0; bottom: 0; z-index: 35; display: flex; align-items: stretch; height: calc(26px + env(safe-area-inset-bottom, 0px)); padding-bottom: env(safe-area-inset-bottom, 0px); padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-area-inset-right, 0px); background: var(--panel); border-top: 1px solid var(--rule); font-size: 0.78125rem; overflow: hidden; white-space: nowrap; contain: strict }
 .statusline > * { display: flex; align-items: center; padding: 0 10px; gap: 6px }
 .pl { position: relative; margin-right: 10px }
 .pl::after { content: ""; position: absolute; right: -10px; top: 0; bottom: 0; width: 10px; background: inherit; clip-path: polygon(0 0, 100% 50%, 0 100%) }
