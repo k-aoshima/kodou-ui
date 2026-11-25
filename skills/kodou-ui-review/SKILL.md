@@ -3,7 +3,7 @@ name: kodou-ui-review
 description: Kodou-ui の考え方で作ったエンジニア向けのツールの画面を点検するときに使う。4つの原則（手応え・中が見える・ハンドルは人・うまくなる）、コントラスト比、色だけで伝えていないか、押せる範囲、フォーカス、待ち時間の見せ方、エラーの文、キー入力から描画までの時間と要素の数を確かめ、場所・問題・直し方の形で指摘を出す。「Kodou-ui で点検して」「この画面を見直して」と頼まれたとき、kodou-ui-build で画面を作り終えたときに使う。
 license: MIT
 metadata:
-  version: "0.2.0"
+  version: "0.3.0"
   homepage: https://github.com/k-aoshima/kodou-ui
 ---
 

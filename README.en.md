@@ -6,7 +6,7 @@ A UI and UX design system for the tools engineers use every day. It keeps the fe
 
 ![Site](docs/img/site.png)
 
-> Status: 0.2.0. The docs and skills are written in Japanese first. Agents read them fine; this page is the English entry point.
+> Status: 0.3.0. The docs and skills are written in Japanese first. Agents read them fine; this page is the English entry point.
 
 ## Idea
 

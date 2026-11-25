@@ -2,6 +2,21 @@
 
 版の番号は [Semantic Versioning](https://semver.org/lang/ja/) に従います。
 
+## 0.3.0（2026-11-26）
+
+部品見本を、読みやすさと WCAG の文献に照らして見直した。測り方と根拠は `docs/research/components-review.md` にある。
+
+- 文の書体の既定を OS の和文ゴシック（ヒラギノ角ゴ、游ゴシック UI、メイリオ）にし、Noto Sans JP を読み込まないようにした。1 部品あたりの転送量は平均 653KB から 270KB になった。
+- 文字の大きさを px から rem にし、12px 未満の文字をなくした。`lint.py` の `tiny-text` は 12px 未満で出る。
+- `prefers-contrast: more` のとき、文字と罫線を濃くする（`tokens.css` にも入れた）。
+- ツールチップは、マウスを載せても消えず、Esc で閉じられる。`aria-describedby` で元の部品とつないだ。
+- トーストは、マウスやフォーカスが載っている間は消えるまでの時間を止める。
+- 入力欄の誤りは、欄を離れてから出す。`aria-invalid` と `aria-describedby` を付けた。
+- 長いリストの行を 24px にした。リストとツリーに `aria-setsize`・`aria-posinset`、表に `aria-rowcount`・`aria-rowindex` を付けた。
+- canvas のグラフに、最小・最大・平均などの要約を `role="img"` の名前として付けた。
+- `every()` は、画面外の部品のタイマーを止め、何も見えていないときは rAF を回さない。
+- `bench/run.mjs` に、CPU を遅くする `--cpu` と長く流す `--soak` を足した。結果は `bench/README.md` にある。
+
 ## 0.2.0（2026-11-24）
 
 - 部品の作りをスキルに入れた。見本帳から部品ごとに切り出した `assets/components/<名前>.html`（37 ファイル、開けばそのまま動く）と、共通の `kodou.css`・`kodou.js`、110 個のアイコンの `icons.js`。作るスキルは、部品を一から書かずにここから写す。
