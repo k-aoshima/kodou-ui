@@ -3,3 +3,4 @@ __pycache__/
 bench/node_modules/
 bench/dist/
 bench/run.log
+bench/swift/build/

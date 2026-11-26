@@ -2,6 +2,16 @@
 
 版の番号は [Semantic Versioning](https://semver.org/lang/ja/) に従います。
 
+## 0.4.0（2026-11-26）
+
+macOS のネイティブアプリ（SwiftUI・AppKit）でも Kodou-ui を使えるようにした。
+
+- Swift の部品 `KodouUI`（`swift/`）: 見本帳と同じ 36 の部品と、ドット絵のアイコン。一覧・ログ・表・ツリーと、セレクト・コンボボックスの候補は NSTableView・NSOutlineView で描き、ほかは SwiftUI で作る。タイマーは `KodouTicker` の 1 本にまとめ、窓が隠れている間は止まる。
+- トークン（`Tokens.swift`）とアイコン（`IconData.swift`）は、`tools/build-assets.py` が見本帳から書き出す。部品のコードはスキルの `assets/swift/KodouUI/` にも写し、`--check` で見本帳とのずれを見張る。
+- `kodou-ui-build` に `references/swift.md` を足した。SwiftUI と AppKit の分け方とその根拠、トークン、36 の部品の一覧、自分のプロジェクトへの入れ方を書いている。スキルの説明に SwiftUI・AppKit を足し、「SwiftUI で作って」でも読まれるようにした。
+- `lint.py` に Swift の規則を 4 つ足した（`swift-hidden-timer`、`swift-bulk-rows`、`swift-tiny-text`、`swift-fixed-color`）。
+- Swift のベンチ（`bench/swift/`）: 同じ画面を 5 通りで作って比べた。KodouUI はメモリ 34 MB・流している間の CPU 7.3% で、手当てをした SwiftUI は 112 MB・37.1%、同じ頁を WKWebView で出したものは 121 MB・19.7% だった。
+
 ## 0.3.0（2026-11-26）
 
 部品見本を、読みやすさと WCAG の文献に照らして見直した。測り方と根拠は `docs/research/components-review.md` にある。

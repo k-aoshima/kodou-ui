@@ -1,0 +1,461 @@
+{
+  "date": "2026-11-26T12:10:20",
+  "macos": "27.0",
+  "machine": "Apple M6",
+  "runs": 3,
+  "streamSec": 60,
+  "summary": {
+    "kodou": {
+      "busyPct": 7.27,
+      "frameMax": 13.44,
+      "frameP95": 13.33,
+      "frames": 4499,
+      "hiddenBusyPct": 0,
+      "longFrames": 0,
+      "memMB": 34,
+      "memStreamEndMB": 33,
+      "memStreamStartMB": 31,
+      "pids": 1,
+      "readyMs": 145.92,
+      "selectMs": 26.67,
+      "memParts": {
+        "app": 34
+      }
+    },
+    "lazy": {
+      "busyPct": 29.95,
+      "frameMax": 26.67,
+      "frameP95": 13.33,
+      "frames": 4477,
+      "hiddenBusyPct": 0,
+      "longFrames": 0,
+      "memMB": 81,
+      "memStreamEndMB": 41,
+      "memStreamStartMB": 43,
+      "pids": 1,
+      "readyMs": 151.14,
+      "selectMs": 40.0,
+      "memParts": {
+        "app": 81
+      }
+    },
+    "tuned": {
+      "busyPct": 37.08,
+      "frameMax": 53.34,
+      "frameP95": 44.94,
+      "frames": 3154,
+      "hiddenBusyPct": 0.09,
+      "longFrames": 21,
+      "memMB": 112,
+      "memStreamEndMB": 89,
+      "memStreamStartMB": 94,
+      "pids": 1,
+      "readyMs": 196.13,
+      "selectMs": 26.67,
+      "memParts": {
+        "app": 112
+      }
+    },
+    "plain": {
+      "busyPct": 100.07,
+      "frameMax": 231.7,
+      "frameP95": 228.28,
+      "frames": 429,
+      "hiddenBusyPct": 100.24,
+      "longFrames": 429,
+      "memMB": 206,
+      "memStreamEndMB": 180,
+      "memStreamStartMB": 226,
+      "pids": 1,
+      "readyMs": 702.89,
+      "selectMs": 353.76,
+      "memParts": {
+        "app": 206
+      }
+    },
+    "web": {
+      "busyPct": 19.66,
+      "frameMax": 16,
+      "frameP95": 15,
+      "frames": 4817,
+      "hiddenBusyPct": 0.19,
+      "longFrames": 0,
+      "memMB": 121.41,
+      "memStreamEndMB": 119.47,
+      "memStreamStartMB": 164.59,
+      "pids": 4,
+      "readyMs": 254.33,
+      "selectMs": 27,
+      "memParts": {
+        "app": 26,
+        "content": 49,
+        "gpu": 42,
+        "net": 5.5
+      }
+    },
+    "empty": {
+      "busyPct": 0.41,
+      "frameMax": 13.46,
+      "frameP95": 13.33,
+      "frames": 4791,
+      "hiddenBusyPct": 0,
+      "longFrames": 0,
+      "memMB": 18,
+      "memStreamEndMB": 19,
+      "memStreamStartMB": 19,
+      "pids": 1,
+      "readyMs": 111.74,
+      "selectMs": 26.67,
+      "memParts": {
+        "app": 18
+      }
+    }
+  },
+  "raw": {
+    "kodou": [
+      {
+        "busyPct": 7.2652099063096065,
+        "frameMax": 13.439500004053116,
+        "frameP95": 13.33479169011116,
+        "frames": 4498,
+        "hiddenBusyPct": 0,
+        "longFrames": 0,
+        "memMB": 34,
+        "memParts": {
+          "app": 34
+        },
+        "memStreamEndMB": 33,
+        "memStreamStartMB": 31,
+        "pids": 1,
+        "readyMs": 245.65792083740234,
+        "selectMs": 26.67191665386781,
+        "variant": "kodou"
+      },
+      {
+        "busyPct": 8.33249393294047,
+        "frameMax": 13.439708352088928,
+        "frameP95": 13.33479169011116,
+        "frames": 4499,
+        "hiddenBusyPct": 0.09477018924089785,
+        "longFrames": 0,
+        "memMB": 34,
+        "memParts": {
+          "app": 34
+        },
+        "memStreamEndMB": 34,
+        "memStreamStartMB": 31,
+        "pids": 1,
+        "readyMs": 145.920991897583,
+        "selectMs": 26.663291675504297,
+        "variant": "kodou"
+      },
+      {
+        "busyPct": 7.099085051185402,
+        "frameMax": 13.43941667675972,
+        "frameP95": 13.33479169011116,
+        "frames": 4499,
+        "hiddenBusyPct": 0,
+        "longFrames": 0,
+        "memMB": 33,
+        "memParts": {
+          "app": 33
+        },
+        "memStreamEndMB": 33,
+        "memStreamStartMB": 32,
+        "pids": 1,
+        "readyMs": 140.8858299255371,
+        "selectMs": 26.67145835584961,
+        "variant": "kodou"
+      }
+    ],
+    "lazy": [
+      {
+        "busyPct": 29.954523976313325,
+        "frameMax": 26.669583350419998,
+        "frameP95": 13.33479169011116,
+        "frames": 4477,
+        "hiddenBusyPct": 0.09387226312234649,
+        "longFrames": 0,
+        "memMB": 81,
+        "memParts": {
+          "app": 81
+        },
+        "memStreamEndMB": 41,
+        "memStreamStartMB": 43,
+        "pids": 1,
+        "readyMs": 151.14474296569824,
+        "selectMs": 40.00279167667031,
+        "variant": "lazy"
+      },
+      {
+        "busyPct": 32.60313925888501,
+        "frameMax": 26.669583350419998,
+        "frameP95": 13.33479169011116,
+        "frames": 4467,
+        "hiddenBusyPct": 0,
+        "longFrames": 0,
+        "memMB": 81,
+        "memParts": {
+          "app": 81
+        },
+        "memStreamEndMB": 41,
+        "memStreamStartMB": 43,
+        "pids": 1,
+        "readyMs": 118.03889274597168,
+        "selectMs": 40.004000009503216,
+        "variant": "lazy"
+      },
+      {
+        "busyPct": 29.526061043997686,
+        "frameMax": 26.669583350419998,
+        "frameP95": 13.33479169011116,
+        "frames": 4478,
+        "hiddenBusyPct": 0,
+        "longFrames": 0,
+        "memMB": 80,
+        "memParts": {
+          "app": 80
+        },
+        "memStreamEndMB": 41,
+        "memStreamStartMB": 43,
+        "pids": 1,
+        "readyMs": 178.2529354095459,
+        "selectMs": 40.0074583303649,
+        "variant": "lazy"
+      }
+    ],
+    "tuned": [
+      {
+        "busyPct": 34.45877490962058,
+        "frameMax": 53.339166700839996,
+        "frameP95": 44.12487503886223,
+        "frames": 3264,
+        "hiddenBusyPct": 0.09588706881279636,
+        "longFrames": 14,
+        "memMB": 114,
+        "memParts": {
+          "app": 114
+        },
+        "memStreamEndMB": 91,
+        "memStreamStartMB": 94,
+        "pids": 1,
+        "readyMs": 196.13027572631836,
+        "selectMs": 26.6704999958165,
+        "variant": "tuned"
+      },
+      {
+        "busyPct": 37.08087118762837,
+        "frameMax": 53.44341665506363,
+        "frameP95": 45.131916642189026,
+        "frames": 3154,
+        "hiddenBusyPct": 0,
+        "longFrames": 21,
+        "memMB": 112,
+        "memParts": {
+          "app": 112
+        },
+        "memStreamEndMB": 89,
+        "memStreamStartMB": 94,
+        "pids": 1,
+        "readyMs": 213.95492553710938,
+        "selectMs": 26.672083331504837,
+        "variant": "tuned"
+      },
+      {
+        "busyPct": 37.10668895263904,
+        "frameMax": 53.339166700839996,
+        "frameP95": 44.94400003552437,
+        "frames": 3148,
+        "hiddenBusyPct": 0.09437820121514344,
+        "longFrames": 21,
+        "memMB": 105,
+        "memParts": {
+          "app": 105
+        },
+        "memStreamEndMB": 82,
+        "memStreamStartMB": 94,
+        "pids": 1,
+        "readyMs": 187.49094009399414,
+        "selectMs": 26.705916679929942,
+        "variant": "tuned"
+      }
+    ],
+    "plain": [
+      {
+        "busyPct": 100.07218418080201,
+        "frameMax": 231.09000000357628,
+        "frameP95": 227.7635833323002,
+        "frames": 429,
+        "hiddenBusyPct": 100.20434854239627,
+        "longFrames": 429,
+        "memMB": 207,
+        "memParts": {
+          "app": 207
+        },
+        "memStreamEndMB": 180,
+        "memStreamStartMB": 223,
+        "pids": 1,
+        "readyMs": 753.2281875610352,
+        "selectMs": 262.80133333057165,
+        "variant": "plain"
+      },
+      {
+        "busyPct": 100.07371205599594,
+        "frameMax": 231.7034166455269,
+        "frameP95": 228.2815416753292,
+        "frames": 437,
+        "hiddenBusyPct": 100.24266628335286,
+        "longFrames": 437,
+        "memMB": 206,
+        "memParts": {
+          "app": 206
+        },
+        "memStreamEndMB": 181,
+        "memStreamStartMB": 227,
+        "pids": 1,
+        "readyMs": 480.21507263183594,
+        "selectMs": 353.7577083334327,
+        "variant": "plain"
+      },
+      {
+        "busyPct": 100.05122505218216,
+        "frameMax": 232.19283336400986,
+        "frameP95": 228.31137496232986,
+        "frames": 415,
+        "hiddenBusyPct": 100.37259688111848,
+        "longFrames": 415,
+        "memMB": 202,
+        "memParts": {
+          "app": 202
+        },
+        "memStreamEndMB": 175,
+        "memStreamStartMB": 226,
+        "pids": 1,
+        "readyMs": 702.8932571411133,
+        "selectMs": 374.11879168939777,
+        "variant": "plain"
+      }
+    ],
+    "web": [
+      {
+        "busyPct": 19.664880326084983,
+        "frameMax": 16,
+        "frameP95": 15,
+        "frames": 4856,
+        "hiddenBusyPct": 0.19058759648942697,
+        "longFrames": 0,
+        "memMB": 119.4853515625,
+        "memParts": {
+          "app": 26,
+          "content": 48,
+          "gpu": 40,
+          "net": 5.4853515625
+        },
+        "memStreamEndMB": 119.4853515625,
+        "memStreamStartMB": 153.5947265625,
+        "pids": 4,
+        "readyMs": 292.134033203125,
+        "selectMs": 27,
+        "variant": "web"
+      },
+      {
+        "busyPct": 18.968033021878895,
+        "frameMax": 17,
+        "frameP95": 15,
+        "frames": 4813,
+        "hiddenBusyPct": 0.09409742091040009,
+        "longFrames": 0,
+        "memMB": 121.4072265625,
+        "memParts": {
+          "app": 25,
+          "content": 49,
+          "gpu": 42,
+          "net": 5.4072265625
+        },
+        "memStreamEndMB": 118.4072265625,
+        "memStreamStartMB": 172.5322265625,
+        "pids": 4,
+        "readyMs": 237.52197265625,
+        "selectMs": 27,
+        "variant": "web"
+      },
+      {
+        "busyPct": 23.618291803918993,
+        "frameMax": 16,
+        "frameP95": 15,
+        "frames": 4817,
+        "hiddenBusyPct": 0.28640455820569116,
+        "longFrames": 0,
+        "memMB": 131.4697265625,
+        "memParts": {
+          "app": 26,
+          "content": 58,
+          "gpu": 42,
+          "net": 5.4697265625
+        },
+        "memStreamEndMB": 119.4697265625,
+        "memStreamStartMB": 164.5947265625,
+        "pids": 4,
+        "readyMs": 254.325927734375,
+        "selectMs": 27,
+        "variant": "web"
+      }
+    ],
+    "empty": [
+      {
+        "busyPct": 0.40664034349046296,
+        "frameMax": 13.469041675329208,
+        "frameP95": 13.33479169011116,
+        "frames": 4793,
+        "hiddenBusyPct": 0,
+        "longFrames": 0,
+        "memMB": 18,
+        "memParts": {
+          "app": 18
+        },
+        "memStreamEndMB": 19,
+        "memStreamStartMB": 19,
+        "pids": 1,
+        "readyMs": 103.69610786437988,
+        "selectMs": 26.668083330150694,
+        "variant": "empty"
+      },
+      {
+        "busyPct": 0.40685645424434075,
+        "frameMax": 13.460291653871536,
+        "frameP95": 13.33479169011116,
+        "frames": 4791,
+        "hiddenBusyPct": 0,
+        "longFrames": 0,
+        "memMB": 18,
+        "memParts": {
+          "app": 18
+        },
+        "memStreamEndMB": 19,
+        "memStreamStartMB": 19,
+        "pids": 1,
+        "readyMs": 112.14709281921387,
+        "selectMs": 26.668125006835908,
+        "variant": "empty"
+      },
+      {
+        "busyPct": 0.36007141750419797,
+        "frameMax": 13.449666678905487,
+        "frameP95": 13.33479169011116,
+        "frames": 4789,
+        "hiddenBusyPct": 0,
+        "longFrames": 0,
+        "memMB": 19,
+        "memParts": {
+          "app": 19
+        },
+        "memStreamEndMB": 19,
+        "memStreamStartMB": 18,
+        "pids": 1,
+        "readyMs": 111.73701286315918,
+        "selectMs": 26.667916652513668,
+        "variant": "empty"
+      }
+    ]
+  }
+}

@@ -1,6 +1,6 @@
 # 省メモリの比較
 
-Kodou-ui の「速さと軽さ」の決まりで作った画面が、React で作った同じ画面と比べてどれだけ軽いかを測る。
+Kodou-ui の「速さと軽さ」の決まりで作った画面が、React で作った同じ画面と比べてどれだけ軽いかを測る。macOS のネイティブ（SwiftUI・AppKit）で同じ画面を比べた結果は [swift/README.md](swift/README.md) にある。
 
 ## 比べる 3 つの版
 

@@ -6,7 +6,7 @@
 
 ![紹介ページ](docs/img/site.png)
 
-> 状態: 0.3.0。作るスキルと点検するスキルがあり、36 の部品の作りと 110 個のアイコンはスキルの中に入っています。npm のパッケージとしての配布はまだです。変わったことは [CHANGELOG.md](CHANGELOG.md) に書きます。
+> 状態: 0.4.0。作るスキルと点検するスキルがあり、36 の部品の作りと 110 個のアイコンはスキルの中に入っています。macOS のネイティブ（SwiftUI・AppKit）向けにも、同じ 36 の部品があります。npm のパッケージとしての配布はまだです。変わったことは [CHANGELOG.md](CHANGELOG.md) に書きます。
 
 ## 考え方
 
@@ -29,6 +29,8 @@
 ![見本帳](docs/img/catalog.png)
 
 同じ画面を React（MUI と Recharts、よく勧められる手当てをしたもの）で作って比べると、ページの使用メモリは 128 MB に対して 57 MB、JS のヒープは 15 分の 1 でした。測り方と結果は [bench/README.md](bench/README.md) にあります。
+
+macOS のネイティブ（SwiftUI・AppKit）向けにも、同じ 36 の部品を Swift で作りました（[swift/](swift/README.md)）。同じ画面を手当てをした SwiftUI（List と間引いた Swift Charts）で作って比べると、メモリは 112 MB に対して 34 MB、流している間の CPU は 37.1% に対して 7.3% でした。測り方と結果は [bench/swift/README.md](bench/swift/README.md) にあります。
 
 ## 入れ方
 
@@ -97,7 +99,8 @@ node $S/measure.mjs page.html             # 要素の数、JS のヒープ、隠
 | 部品の作り | 見本帳から部品ごとに切り出した HTML・CSS・JS と、110 個のアイコン。エージェントはここから写して使う | `skills/kodou-ui-build/assets/` |
 | 書き出し | 見本帳から部品の作りを書き出すスクリプト。見本帳との食い違いは CI が確かめる | `tools/build-assets.py` |
 | スキル（点検） | できた画面の点検手順、チェックリスト、点検のスクリプト | `skills/kodou-ui-review/` |
-| 比較 | 同じ画面を Kodou-ui と React で作り、メモリと描画の重さを比べた結果 | `bench/` |
+| 比較 | 同じ画面を Kodou-ui と React で作り、メモリと描画の重さを比べた結果。Swift の版は `bench/swift/` | `bench/` |
+| Swift | macOS の SwiftUI・AppKit で使う部品（KodouUI） | `swift/` |
 | プラグイン | Claude Code のプラグインとして入れるための定義 | `.claude-plugin/marketplace.json` |
 
 ## 今後の予定

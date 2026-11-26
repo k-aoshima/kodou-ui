@@ -6,7 +6,7 @@ A UI and UX design system for the tools engineers use every day. It keeps the fe
 
 ![Site](docs/img/site.png)
 
-> Status: 0.3.0. The docs and skills are written in Japanese first. Agents read them fine; this page is the English entry point.
+> Status: 0.4.0. The docs and skills are written in Japanese first. Agents read them fine; this page is the English entry point.
 
 ## Idea
 
@@ -22,6 +22,8 @@ Every decision is checked against four principles:
 Components alone let you build screens without any of this. So Kodou-ui ships the judgment as agent skills: one that builds, one that reviews, plus scripts that measure.
 
 On the same screen built with React (MUI and Recharts, with the usual optimizations), page memory was 57 MB against 128 MB. See [bench/README.md](bench/README.md).
+
+The same 36 components also exist for native macOS apps in Swift (SwiftUI and AppKit), in [swift/](swift/README.md). Against the same screen in SwiftUI with the usual optimizations (List and downsampled Swift Charts), memory was 34 MB against 112 MB and CPU while streaming was 7.3% against 37.1%. See [bench/swift/README.md](bench/swift/README.md).
 
 ## Install
 
