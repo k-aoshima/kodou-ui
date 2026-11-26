@@ -167,7 +167,7 @@ footer { text-align: center; color: var(--sub); font-size: 14px; }
     <p class="lead">同じ文でも、大きさと並べ方で読みやすさが変わります。</p>
     <ul class="goals" aria-label="この章のゴール">
       <li>読みやすい字の大きさがわかる</li>
-      <li>1行の長さと行間の目安がわかる</li>
+      <li>1行の長さと行の高さの目安がわかる</li>
       <li>大文字だけにしてよい所がわかる</li>
     </ul>
   </section>
@@ -198,7 +198,7 @@ footer { text-align: center; color: var(--sub); font-size: 14px; }
           <li><b>好まれる</b><span>パソコンで 18px くらい</span></li>
           <li><b>小さい字</b><span>書体しだいで最大 50% 遅くなる</span></li>
         </ul>
-        <details><summary>くわしく</summary><p>液晶の画面で好まれた字の大きさは、目から見た角度で 32〜33 分でした<sup>[1]</sup>。ふつうの画面を 50cm 離れて見るなら、だいたい 18px です（この換算は目安）。字が読める限界に近いほど小さいと、書体によって読む速さが最大 50% も違いました<sup>[2]</sup>。ふつうの大きさなら、差は 5% ほどです。</p></details>
+        <details><summary>くわしく</summary><p>液晶の画面で好まれた字の大きさは、目から見た角度で 32〜33 分でした<sup>[1]</sup>。ふつうの画面を 50cm 離れて見るなら、だいたい 18px です（この換算は目安）。読める限界に近い小さな字では、書体によって読む速さが最大 50% も違いました<sup>[2]</sup>。ふつうの大きさなら、差は 5% ほどです。</p></details>
       </article>
 
       <article class="spot">
@@ -218,9 +218,9 @@ footer { text-align: center; color: var(--sub); font-size: 14px; }
         <p class="key">文は<mark>1行 40字まで</mark>、行の間はゆったり</p>
         <ul class="facts">
           <li><b>1行</b><span>日本語なら 40字まで</span></li>
-          <li><b>行の間</b><span>字の高さの 1.5倍以上</span></li>
+          <li><b>行の高さ</b><span>字の大きさの 1.5倍以上</span></li>
         </ul>
-        <details><summary>くわしく</summary><p>Web の読みやすさの基準（WCAG）は、1行を英語で 80字、日本語で 40字までにし、行と行の間を 1.5 以上空けるよう勧めています<sup>[3]</sup>。実験では長い行の方が速く読めることもありますが、人が好むのは中くらいの長さでした<sup>[4]</sup>。一覧や表は、1行を目で追うより列で拾うので、幅いっぱいに使ってかまいません。</p></details>
+        <details><summary>くわしく</summary><p>Web の読みやすさの基準（WCAG）は、1行を英語で 80字、日本語で 40字までにし、行の高さを字の大きさの 1.5 倍以上にするよう勧めています<sup>[3]</sup>。実験では長い行の方が速く読めることもありますが、人が好むのは中くらいの長さでした<sup>[4]</sup>。一覧や表は、1行を目で追うより列で拾うので、幅いっぱいに使ってかまいません。</p></details>
       </article>
 
       <article class="spot">
@@ -273,7 +273,7 @@ footer { text-align: center; color: var(--sub); font-size: 14px; }
           <li><b>短い語</b><span>大文字だけでいい</span></li>
           <li><b>長い文</b><span>大文字だけにしない</span></li>
         </ul>
-        <details><summary>くわしく</summary><p>小さい字では、大文字だけの方が速く読めたという実験があります。ただし字を大きくすると差は消えました<sup>[6]</sup>。ひと目で単語を見分ける実験では、小文字の方が 26% 長くかかりました。ただしこれは単語1つの話で、文や長い見出しを大文字だけにするのは勧められていません<sup>[7]</sup>。</p></details>
+        <details><summary>くわしく</summary><p>小さい字では、大文字だけの方が速く読めたという実験があります。ただし字を大きくすると差は消えました<sup>[6]</sup>。ひと目で単語を見分ける実験では、小文字の方が 26% 長くかかりました。これは単語1つの話で、文や長い見出しを大文字だけにするのは勧められていません<sup>[7]</sup>。</p></details>
       </article>
 
     </div>
@@ -287,7 +287,7 @@ footer { text-align: center; color: var(--sub); font-size: 14px; }
         <input type="range" id="fs" min="10" max="22" value="15">
         <label for="ll">1行の字数 <b id="ll-v">40字</b></label>
         <input type="range" id="ll" min="15" max="80" value="40">
-        <label for="lh">行の間 <b id="lh-v">1.8</b></label>
+        <label for="lh">行の高さ <b id="lh-v">1.8</b></label>
         <input type="range" id="lh" min="10" max="22" value="18">
         <div class="presets">
           <button class="btn small" type="button" id="p-bad">読みにくい例</button>
@@ -296,14 +296,14 @@ footer { text-align: center; color: var(--sub); font-size: 14px; }
       </div>
       <div class="sample-wrap"><p class="sample" id="sample">画面の文字は、紙の本よりも少し大きめにした方が読みやすくなります。1行が長すぎると、次の行の頭を探すときに目が迷い、同じ行を二度読んでしまうことがあります。行と行の間を少し空けるだけで、文の区切りが見つけやすくなり、長い説明でも最後まで読み通しやすくなります。</p></div>
     </div>
-    <p class="try-note">「読みにくい例」は 11px・80字・行の間 1.2 です。</p>
+    <p class="try-note">「読みにくい例」は 11px・80字・行の高さ 1.2倍です。</p>
   </section>
 
   <section class="panel mint" aria-label="まとめ">
     <div class="panel-head"><span class="chip">この章のまとめ</span><h2>3つだけ覚えて帰る</h2></div>
     <ul class="check">
       <li><b>1</b><span>字は<mark>小さくしすぎない</mark></span></li>
-      <li><b>2</b><span>文は <mark>1行 40字まで・行の間 1.5倍以上</mark></span></li>
+      <li><b>2</b><span>文は <mark>1行 40字まで・行の高さ 1.5倍以上</mark></span></li>
       <li><b>3</b><span>大文字だけにするのは<mark>短い語だけ</mark></span></li>
     </ul>
     <div class="point"><b>POINT</b><div>迷ったら、字は大きく、行は短く。</div></div>

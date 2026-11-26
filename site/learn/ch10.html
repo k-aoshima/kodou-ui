@@ -196,13 +196,13 @@ footer { text-align: center; color: var(--sub); font-size: 14px; }
         <p class="key">日本語の画面は<mark>文字の形のデータ</mark>が重い</p>
         <ul class="facts">
           <li><b>重さの内訳</b><span>8割以上が文字の形</span></li>
-          <li><b>1つ出すだけ</b><span>200〜600KB</span></li>
+          <li><b>部品1つでも</b><span>200〜600KB</span></li>
         </ul>
         <details><summary>くわしく</summary><p>ネットから読み込む文字の形のデータを「Web フォント」と言います。日本語は字の数が多いので、Google Fonts は1つの太さを 124 個のファイルに分けて配り、ページで使う字が入ったファイルだけを読み込みます<sup>[1]</sup>。それでも、書体を3種類使った見本では、部品を1つ出すだけで 9〜36 回の読み込み、208〜595KB になり、全体の重さの 8 割以上を占めました。部品の見た目と動きのプログラムは、合わせて約 17KB（圧縮後）でした。</p></details>
       </article>
 
       <article class="spot">
-        <h3><span>10-2</span>文字が差し替わっても、ずらさない</h3>
+        <h3><span>10-2</span>字が差し替わっても、画面をずらさない</h3>
         <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="上の箱が横にずれた積み木と、水平器">
           <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="36" y="112" width="74" height="34" rx="3" fill="#c9d6ea"/>
@@ -221,7 +221,7 @@ footer { text-align: center; color: var(--sub); font-size: 14px; }
           <li><b>先に使う</b><span>パソコンに入っている字</span></li>
           <li><b>間に合わなければ</b><span>差し替えない</span></li>
         </ul>
-        <details><summary>くわしく</summary><p>Web フォントが遅れて届くと、字の幅が変わって、読んでいる途中の文や押そうとしたボタンがずれます。見本の1つでは、このずれの大きさ（CLS）が 0.106 で、「良好」の目安 0.1 を超えました。直し方は、まずパソコンに入っている字（Mac ならヒラギノ）で足りる時は読み込まないこと、次に書体の種類を減らすこと、そして <code>font-display: optional</code> で、100ms 以内に届かなければ差し替えないことです<sup>[1]</sup>。このページも <code>optional</code> にしていて、初めて開いた時は Mac の字のまま表示されることがあります。</p></details>
+        <details><summary>くわしく</summary><p>Web フォントが遅れて届くと、字の幅が変わって、読んでいる途中の文や押そうとしたボタンがずれます。見本の1つでは、このずれの大きさ（CLS）が 0.106 で、「良好」の目安 0.1 を超えました。直し方は3つです。パソコンに入っている字（Mac ならヒラギノ）で足りる時は読み込まない。書体の種類を減らす。<code>font-display: optional</code> で、100ms 以内に届かなければ差し替えない<sup>[1]</sup>。このページも <code>optional</code> にしていて、初めて開いた時は Mac の字のまま表示されることがあります。</p></details>
       </article>
 
       <article class="spot">
@@ -244,9 +244,9 @@ footer { text-align: center; color: var(--sub); font-size: 14px; }
         <p class="key">隠れたら<mark>止める</mark></p>
         <ul class="facts">
           <li><b>隠れた画面</b><span>描き直しを止める</span></li>
-          <li><b>何もしない</b><span>空回りでも電気を使う</span></li>
+          <li><b>空回り</b><span>何も描かなくても電気を使う</span></li>
         </ul>
-        <details><summary>くわしく</summary><p>動く部品は、画面を描き直す回し車（ループ）を1本にまとめ、ページが隠れたら止め、画面の外に出た部品は更新しません。何も描かない空回りのループでも電力を使うので、画面の中に動く物が無くなったら止めます<sup>[2]</sup>。部品の中で字が変わっても、計算をその部品の中だけで済ませる指定（<code>contain</code>）も効きます<sup>[3]</sup>。ぼかした影や半透明のぼかしは重いので使わない、という方法もあります<sup>[4]</sup>。</p></details>
+        <details><summary>くわしく</summary><p>動く部品があるなら、画面を描き直す繰り返し（ループ）は1本にまとめます。ページが隠れたら止め、画面の外に出た部品は更新しません。何も描かない空回りのループでも電力を使うので、画面の中に動く物が無くなったら止めます<sup>[2]</sup>。部品の中で字が変わっても、計算をその部品の中だけで済ませる指定（<code>contain</code>）も効きます<sup>[3]</sup>。ぼかした影や半透明のぼかしは重いので使わない、という方法もあります<sup>[4]</sup>。</p></details>
       </article>
 
       <article class="spot">
@@ -275,7 +275,7 @@ footer { text-align: center; color: var(--sub); font-size: 14px; }
           <li><b>目安</b><span>1ページ約 1,400 個まで</span></li>
           <li><b>点の多いグラフ</b><span>画面の幅ぶんに間引く</span></li>
         </ul>
-        <details><summary>くわしく</summary><p>画面の部品は、見出し・段落・ボタンなどの小さな箱（要素）の集まりです。箱が多いほど、押した後の描き直しに時間がかかります。速さを点検する道具（Lighthouse）は、約 1,400 個を超えると警告を出します<sup>[5]</sup>。部品を全部1ページに並べた見本帳は 1,808 個で、これを超えました。点がたくさんのグラフは、画面の横1列に1点まで間引けば、点の数が画面の幅で頭打ちになります。1万点を超える量なら、絵として描く <code>canvas</code> が勧められています<sup>[6]</sup>。</p></details>
+        <details><summary>くわしく</summary><p>画面の部品は、見出し・段落・ボタンなどの小さな箱（要素）の集まりです。箱が多いほど、押した後の描き直しに時間がかかります。速さを点検する道具（Lighthouse）は、約 1,400 個を超えると警告を出します<sup>[5]</sup>。部品を全部1ページに並べた見本帳は 1,808 個で、これを超えました。点がたくさんのグラフは、画面の横 1px に1点まで間引けば、点の数は画面の幅より増えません。1万点を超える量なら、絵として描く <code>canvas</code> が勧められています<sup>[6]</sup>。</p></details>
       </article>
 
     </div>
