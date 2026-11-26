@@ -296,6 +296,9 @@ svg.px { flex: none; fill: currentColor; shape-rendering: crispEdges }
 .vs code { font: 13px var(--font) }
 .light { margin-top: 24px; color: var(--dim) } .light b { font: 800 20px var(--font); color: var(--fg) }
 .light small { display: block; font-size: 12.5px; color: var(--faint) }
+.shot { display: block; width: 100%; height: auto; margin-top: 26px; border: 1px solid var(--fg) }
+.cmp { margin-top: 24px; max-width: 40em; font-size: 0.875rem }
+.cmp th { cursor: default } .cmp td { padding: 3px 6px } .cmp td:first-child { white-space: normal; font-family: var(--font-read) } .cmp tr.me td { font-weight: 700 }
 .sh { position: relative; background: var(--sel-bg); color: var(--sel-fg); padding: 16px 18px; font: 13px/1.9 var(--font); overflow-x: auto }
 .sh div { white-space: pre } .sh .p { color: #7FD3B0 }
 .copy { position: absolute; top: 10px; right: 10px; border: 1px solid currentColor; background: var(--sel-bg); color: var(--sel-fg); font: 12px var(--font); padding: 2px 10px; min-height: 28px; cursor: pointer }
@@ -314,7 +317,7 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 4px 2ch; padding-block: 16px
 
 <header class="top"><div class="wrap">
   <span class="name">Kodou-ui</span><span class="sp"></span>
-  <a href="#get">入れ方</a><a href="#tool">サンプル</a><a href="#samples">部品</a><a href="#only">Kodou ならでは</a><a href="#ux">使い心地</a><a href="#pixels">ドット絵</a><a href="https://github.com/k-aoshima/kodou-ui">GitHub</a>
+  <a href="#get">入れ方</a><a href="#tool">サンプル</a><a href="#samples">部品</a><a href="#only">Kodou ならでは</a><a href="#ux">使い心地</a><a href="#pixels">ドット絵</a><a href="#swift">Swift</a><a href="https://github.com/k-aoshima/kodou-ui">GitHub</a>
 </div></header>
 
 <main class="wrap">
@@ -535,6 +538,22 @@ to type 'string'.</pre></details></div></div>
     </div>
     <div class="gal" id="gal" aria-label="見本帳のアイコン"></div>
     <p class="more">スキルには 110 個入っています。足りないものはエージェントが同じ格子で描き足し、点検のスクリプトが大きさと中心のずれを確かめます。</p>
+  </section>
+
+  <section class="band" id="swift">
+    <h2><span class="ph">Mac のアプリも、</span><span class="ph">同じ部品で。</span></h2>
+    <p>見本帳と同じ 36 の部品を、Swift でも作りました。一覧・ログ・表・ツリーは AppKit の NSTableView で見えている行だけ描き、ほかは SwiftUI で作ります。色と文字は見本帳から書き出すので、Web と同じ見た目になります。</p>
+    <img class="shot" src="img/swift.webp" width="1300" height="940" loading="lazy" decoding="async" alt="Swift の部品の見本。通知の帯、バッジ、進捗バー、折れ線、メーター、棒グラフ、ヒストグラム、スパークライン、点の多いグラフを並べた窓">
+    <table class="cmp">
+      <thead><tr><th>同じ画面の作り方</th><th class="n">メモリ</th><th class="n">流している間の CPU</th></tr></thead>
+      <tbody>
+        <tr class="me"><td>Kodou-ui の Swift の部品</td><td class="n">34 MB</td><td class="n">7.3%</td></tr>
+        <tr><td>手当てをした SwiftUI（List と、点を間引いた Swift Charts）</td><td class="n">112 MB</td><td class="n">37.1%</td></tr>
+        <tr><td>同じ頁を WKWebView で出したもの</td><td class="n">121 MB</td><td class="n">19.7%</td></tr>
+      </tbody>
+    </table>
+    <p class="light"><small>一覧 1 万行、50 行/秒のログ、2 万点のグラフ。Apple M6 の実際の窓で、3 回の中央値。測り方は <a href="https://github.com/k-aoshima/kodou-ui/blob/main/bench/swift/README.md">bench/swift</a> にあります。</small></p>
+    <p class="more">エージェントに「SwiftUI で作って」と添えると、この部品と、SwiftUI と AppKit の分け方の決まりで作ります。</p>
   </section>
 
   <section class="band">

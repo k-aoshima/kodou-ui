@@ -25,6 +25,8 @@ On the same screen built with React (MUI and Recharts, with the usual optimizati
 
 The same 36 components also exist for native macOS apps in Swift (SwiftUI and AppKit), in [swift/](swift/README.md). Against the same screen in SwiftUI with the usual optimizations (List and downsampled Swift Charts), memory was 34 MB against 112 MB and CPU while streaming was 7.3% against 37.1%. See [bench/swift/README.md](bench/swift/README.md).
 
+![Swift components](site/img/swift.webp)
+
 ## Install
 
 Claude Code:
