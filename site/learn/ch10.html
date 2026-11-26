@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>目の疲れ｜UI デザイン講座</title>
+<title>軽い画面のつくり方｜UI デザイン講座</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Klee+One:wght@600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=optional">
 <style>
 body{margin:0;font-size:14px}img{max-width:100%}[hidden]{display:none!important}
 
@@ -129,19 +129,19 @@ footer { text-align: center; color: var(--sub); font-size: 14px; }
 @media (max-width: 760px) { .spot-grid { grid-template-columns: minmax(0, 1fr); } }
 @media (prefers-reduced-motion: reduce) { .spin { animation-duration: 3s; } .btn { transition: none; } }
 
-.eyes { display: grid; grid-template-columns: 330px minmax(0, 1fr); gap: 18px; align-items: start; }
-.knobs { background: var(--mist); border-radius: 14px; padding: 14px; display: grid; gap: 8px; }
-.klabel { margin: 0; font-family: var(--display); font-weight: 700; font-size: 16px; }
-.seg { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
-.btn.small { font-size: 15px; padding: 5px 14px; box-shadow: 3px 3px 0 var(--ink); }
-.btn.small[aria-pressed="true"] { background: var(--ink); color: #fff; box-shadow: 3px 3px 0 var(--yellow); }
-.reader { border: 2px solid var(--ink); border-radius: 12px; padding: 18px 20px; line-height: 1.85; min-width: 0; transition: background .2s, color .2s; }
-.reader p { margin: 0; max-width: 38em; }
-.reader.light { background: #ffffff; color: #2a2a33; }
-.reader.dim { background: #d6d7d1; color: #23232b; }
-.reader.dark { background: #26262e; color: #d9dce3; }
-@media (max-width: 760px) { .eyes { grid-template-columns: minmax(0, 1fr); } }
-@media (prefers-reduced-motion: reduce) { .reader { transition: none; } }
+.demo2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.dbox { background: var(--mist); border-radius: 14px; padding: 16px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.dbox h4 { margin: 0; font-family: var(--display); font-weight: 900; font-size: 18px; }
+.btn.small { font-size: 15px; padding: 5px 14px; box-shadow: 3px 3px 0 var(--ink); justify-self: start; }
+.wtable { width: 100%; border-collapse: collapse; background: #fff; border: 2px solid var(--ink); border-radius: 12px; font-size: 16px; font-variant-numeric: tabular-nums; }
+.wtable td, .wtable th { padding: 6px 12px; text-align: left; border-bottom: 1px solid var(--mist); }
+.wtable th { font-family: var(--display); font-size: 15px; }
+.wtable td.n { text-align: right; }
+.bignum { margin: 0; font-family: var(--display); font-weight: 900; font-size: 32px; font-variant-numeric: tabular-nums; }
+.gauge { position: relative; height: 22px; background: #fff; border: 2px solid var(--ink); border-radius: 11px; overflow: hidden; }
+.gbar { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: var(--mint); }
+.gline { position: absolute; top: 0; bottom: 0; left: 70%; width: 3px; background: var(--ink); }
+@media (max-width: 760px) { .demo2 { grid-template-columns: minmax(0, 1fr); } }
 
 /* 目次ボタン */
 .fab { position: fixed; z-index: 9; right: calc(16px + env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); display: grid; justify-items: end; gap: 10px; }
@@ -161,171 +161,173 @@ footer { text-align: center; color: var(--sub); font-size: 14px; }
 <div class="wrap">
 
   <section class="cover">
-    <div class="course"><a href="index.html" style="color:var(--navy)">UI デザイン講座</a>　全11章</div>
+    <div class="course"><a href="index.html" style="color:var(--navy)">UI デザイン講座</a>　全12章</div>
     <div class="plate">
       <span class="chip">第10章</span>
-      <h1><span class="fukuro">目</span>の<br>疲れ</h1>
+      <h1><span class="fukuro">軽い</span><br>画面のつくり方</h1>
     </div>
-    <p class="lead">目の疲れの元は、色よりも、まばたきと明るさの差です。</p>
+    <p class="lead">画面が重いと、開くのも動くのも遅くなります。何が重いのかを知る章です。</p>
     <ul class="goals" aria-label="この章のゴール">
-      <li>目が疲れる本当の原因がわかる</li>
-      <li>「目に優しい色」の根拠の弱さがわかる</li>
-      <li>画面でできる手当てがわかる</li>
+      <li>日本語の画面で一番重い物がわかる</li>
+      <li>文字の差し替えでずれない方法がわかる</li>
+      <li>見えない所を止める理由がわかる</li>
     </ul>
   </section>
 
   <section class="panel">
-    <div class="panel-head"><span class="chip">4つの単元</span><h2>疲れの元と手当て</h2></div>
+    <div class="panel-head"><span class="chip">4つの単元</span><h2>重さのもとを減らす</h2></div>
     <div class="spot-grid">
 
       <article class="spot">
-        <h3><span>10-1</span>疲れの元は、まばたき</h3>
-        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="大きな目、涙のしずく、目薬">
+        <h3><span>10-1</span>一番重いのは文字の形</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="ガムテープを貼った重い段ボール箱、鉄の重り、軽い羽根">
           <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M28 102q52-44 104 0-52 44-104 0z" fill="#fff"/>
-            <circle cx="80" cy="102" r="17" fill="#9aa3d6"/>
-            <circle cx="80" cy="102" r="7" fill="#2a2a33"/>
-            <path d="M44 84l-6-8M62 74l-3-9M80 71v-9M98 74l3-9M116 84l6-8" fill="none"/>
-            <path d="M172 82c10 14 16 22 16 30a16 16 0 0 1-32 0c0-8 6-16 16-30z" fill="#c9d6ea"/>
-            <path d="M166 114a6 6 0 0 0 6 6" stroke="#fff" stroke-width="3" fill="none"/>
-            <path d="M238 82l6-14 6 14z" fill="#fff"/>
-            <rect x="234" y="82" width="20" height="14" rx="2" fill="#f6e3c8"/>
-            <rect x="226" y="96" width="36" height="50" rx="6" fill="#fff"/>
-            <rect x="232" y="110" width="24" height="18" rx="2" fill="#a8d5ba"/>
+            <rect x="30" y="84" width="92" height="62" rx="4" fill="#f6e3c8"/>
+            <rect x="68" y="84" width="16" height="62" fill="#f6b98f"/>
+            <path d="M22 74l-6-6M40 70l-2-8M118 72l6-6" stroke="#f6b98f" fill="none"/>
+            <path d="M162 104a18 18 0 0 1 36 0" stroke-width="6" fill="none"/>
+            <circle cx="180" cy="122" r="24" fill="#4f6f9c"/>
+            <path d="M172 116a8 8 0 0 1 8-6" stroke="#fff" stroke-width="3" fill="none"/>
+            <path d="M232 144c10-30 34-50 66-56-6 30-30 52-66 56z" fill="#fff"/>
+            <path d="M232 144c18-18 38-36 60-50" fill="none"/>
             <path d="M14 152h292" fill="none"/>
           </g>
         </svg>
-        <p class="key">画面を見ると<mark>まばたきが減る</mark></p>
+        <p class="key">日本語の画面は<mark>文字の形のデータ</mark>が重い</p>
         <ul class="facts">
-          <li><b>まばたき</b><span>約 5分の1 に減る</span></li>
-          <li><b>多い症状</b><span>目の乾き（ドライアイ）</span></li>
+          <li><b>重さの内訳</b><span>8割以上が文字の形</span></li>
+          <li><b>1つ出すだけ</b><span>200〜600KB</span></li>
         </ul>
-        <details><summary>くわしく</summary><p>画面で作業すると、まばたきが約 5 分の 1 に減ります<sup>[1]</sup>。画面を見る時のピント合わせや寄り目の負担は紙とほぼ同じで、画面で多いのは目の乾きだとまとめられています<sup>[1]</sup>。まばたきの回数は、画面の色では変えられません。</p></details>
+        <details><summary>くわしく</summary><p>ネットから読み込む文字の形のデータを「Web フォント」と言います。日本語は字の数が多いので、Google Fonts は1つの太さを 124 個のファイルに分けて配り、ページで使う字が入ったファイルだけを読み込みます<sup>[1]</sup>。それでも、書体を3種類使った見本では、部品を1つ出すだけで 9〜36 回の読み込み、208〜595KB になり、全体の重さの 8 割以上を占めました。部品の見た目と動きのプログラムは、合わせて約 17KB（圧縮後）でした。</p></details>
       </article>
 
       <article class="spot">
-        <h3><span>10-2</span>画面だけ明るくしない</h3>
-        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="まぶしく光るモニターと、机のライト">
+        <h3><span>10-2</span>文字が差し替わっても、ずらさない</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="上の箱が横にずれた積み木と、水平器">
           <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M30 60l-10-8M150 60l10-8M30 120l-10 6M150 120l10 6" stroke="#f6b98f" fill="none"/>
-            <rect x="40" y="58" width="100" height="68" rx="6" fill="#4f6f9c"/>
-            <rect x="48" y="66" width="84" height="52" rx="2" fill="#fff"/>
-            <path d="M90 126v12M70 146h40l-6-8H76z" fill="#dfe2f4"/>
-            <rect x="206" y="140" width="56" height="7" rx="3" fill="#c9d6ea"/>
-            <path d="M234 140l-16-42 30-28" fill="none"/>
-            <path d="M244 66l30 8-12 26z" fill="#ffe45c"/>
-            <path d="M268 104l6 10M256 108l2 12" stroke="#f6b98f" fill="none"/>
+            <rect x="36" y="112" width="74" height="34" rx="3" fill="#c9d6ea"/>
+            <rect x="62" y="78" width="74" height="34" rx="3" fill="#f2a99d"/>
+            <path d="M44 86h10M40 96h12M46 106h6" stroke="#f6b98f" fill="none"/>
+            <rect x="172" y="118" width="122" height="22" rx="5" fill="#ffe45c"/>
+            <rect x="220" y="122" width="26" height="14" rx="7" fill="#a8d5ba"/>
+            <circle cx="229" cy="129" r="4" fill="#fff"/>
+            <path d="M186 140v6M280 140v6" fill="none"/>
+            <path d="M262 70v10M257 75h10" stroke="#f6b98f" fill="none"/>
             <path d="M14 152h292" fill="none"/>
           </g>
         </svg>
-        <p class="key">画面と<mark>まわりの明るさの差</mark>が疲れる</p>
+        <p class="key">遅れて届いた字で<mark>画面をずらさない</mark></p>
         <ul class="facts">
-          <li><b>明るい画面</b><span>まばたきが減り、疲れが増えた</span></li>
-          <li><b>差が大きい</b><span>暗い部屋で明るい画面は疲れる</span></li>
+          <li><b>先に使う</b><span>パソコンに入っている字</span></li>
+          <li><b>間に合わなければ</b><span>差し替えない</span></li>
         </ul>
-        <details><summary>くわしく</summary><p>画面をとても明るくした時（140 cd/m²）は、暗めにした時（20 cd/m²）よりまばたきが減り、疲れが増えました<sup>[2]</sup>。部屋が明るいほど快適な画面の明るさは上がり、部屋と画面の明るさの差が大きいほど疲れる、という結果もあります<sup>[2]</sup>。</p></details>
+        <details><summary>くわしく</summary><p>Web フォントが遅れて届くと、字の幅が変わって、読んでいる途中の文や押そうとしたボタンがずれます。見本の1つでは、このずれの大きさ（CLS）が 0.106 で、「良好」の目安 0.1 を超えました。直し方は、まずパソコンに入っている字（Mac ならヒラギノ）で足りる時は読み込まないこと、次に書体の種類を減らすこと、そして <code>font-display: optional</code> で、100ms 以内に届かなければ差し替えないことです<sup>[1]</sup>。このページも <code>optional</code> にしていて、初めて開いた時は Mac の字のまま表示されることがあります。</p></details>
       </article>
 
       <article class="spot">
-        <h3><span>10-3</span>「目に優しい色」は根拠が弱い</h3>
-        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="色の付いためがねと、重ねた色付きの透明な板">
+        <h3><span>10-3</span>見えない所は動かさない</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="画面の消えたモニター、コンセントから抜いたプラグ、月">
           <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="34" y="96" width="44" height="34" rx="14" fill="#f6b98f"/>
-            <rect x="92" y="96" width="44" height="34" rx="14" fill="#f6b98f"/>
-            <path d="M78 106q7-6 14 0M34 104l-10-8M136 104l10-8" fill="none"/>
-            <rect x="182" y="70" width="64" height="64" rx="4" fill="#f8cfc6"/>
-            <rect x="214" y="84" width="64" height="62" rx="4" fill="#a8d5ba"/>
-            <path d="M214 84h32v50h-32z" fill="#c9cfb8"/>
-            <path d="M290 62v10M285 67h10" stroke="#f6b98f" fill="none"/>
+            <rect x="34" y="58" width="112" height="72" rx="6" fill="#4f6f9c"/>
+            <rect x="42" y="66" width="96" height="56" rx="2" fill="#2a2a33"/>
+            <path d="M90 130v10M70 146h40" fill="none"/>
+            <path d="M54 76l14 14" stroke="#9aa3d6" fill="none"/>
+            <path d="M176 140c18 0 24-14 36-14" fill="none"/>
+            <rect x="212" y="116" width="30" height="22" rx="4" fill="#fff"/>
+            <path d="M242 122h10M242 132h10" stroke-width="3" fill="none"/>
+            <rect x="268" y="100" width="32" height="46" rx="5" fill="#dfe2f4"/>
+            <path d="M280 116v6M288 116v6" stroke-width="3" fill="none"/>
+            <path d="M206 64a12 12 0 1 0 10 18 9 9 0 1 1-10-18z" fill="#f6e3c8"/>
             <path d="M14 152h292" fill="none"/>
           </g>
         </svg>
-        <p class="key">色を変えても<mark>疲れはほぼ変わらない</mark></p>
+        <p class="key">隠れたら<mark>止める</mark></p>
         <ul class="facts">
-          <li><b>暗い地</b><span>疲れの差は、はっきりしない</span></li>
-          <li><b>青カット</b><span>疲れを減らさない見込みが高い</span></li>
-          <li><b>色付きの板</b><span>読みが楽になる根拠なし</span></li>
+          <li><b>隠れた画面</b><span>描き直しを止める</span></li>
+          <li><b>何もしない</b><span>空回りでも電気を使う</span></li>
         </ul>
-        <details><summary>くわしく</summary><p>明るい地と暗い地で疲れに差はなかったという研究があり、暗い地で疲れが減ったのは明るい部屋だけという研究もあって、結果は割れています<sup>[3]</sup>。色付きの透明板やレンズで読みが楽になるという主張は、研究をまとめた見直しで支持されませんでした<sup>[4]</sup>。画面の青い光が目を傷める根拠はなく、青い光を切るめがねも疲れを減らさない見込みが高いです<sup>[5]</sup>。黒い字と白い地の組み合わせが近視に関係するかもしれない、という実験もありますが、まだ仮説の段階です<sup>[6]</sup>。</p></details>
+        <details><summary>くわしく</summary><p>動く部品は、画面を描き直す回し車（ループ）を1本にまとめ、ページが隠れたら止め、画面の外に出た部品は更新しません。何も描かない空回りのループでも電力を使うので、画面の中に動く物が無くなったら止めます<sup>[2]</sup>。部品の中で字が変わっても、計算をその部品の中だけで済ませる指定（<code>contain</code>）も効きます<sup>[3]</sup>。ぼかした影や半透明のぼかしは重いので使わない、という方法もあります<sup>[4]</sup>。</p></details>
       </article>
 
       <article class="spot">
-        <h3><span>10-4</span>しま模様と、暗い地の派手な色</h3>
-        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="同じ幅の濃い縞が並ぶ板と、暗い地に赤と青の細い線が並んだ板">
+        <h3><span>10-4</span>画面に置く物の数を減らす</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="ばらばらに積まれたたくさんの積み木と、お盆に並んだ三つの積み木">
           <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="34" y="62" width="110" height="78" rx="4" fill="#fff"/>
-            <path d="M35 72h108M35 88h108M35 104h108M35 120h108M35 135h108" stroke="#4f6f9c" stroke-width="7" fill="none"/>
-            <path d="M60 140l-6 6M118 140l6 6" fill="none"/>
-            <rect x="176" y="72" width="116" height="74" rx="6" fill="#2a2a33"/>
-            <path d="M190 92h40M190 112h52M190 128h34" stroke="#ff7a66" stroke-width="3" fill="none"/>
-            <path d="M236 92h42M248 112h30M230 128h48" stroke="#6f9bff" stroke-width="3" fill="none"/>
-            <path d="M160 52v10M155 57h10" stroke="#f6b98f" fill="none"/>
+            <rect x="30" y="126" width="22" height="20" rx="2" fill="#f2a99d"/>
+            <rect x="54" y="126" width="22" height="20" rx="2" fill="#c9d6ea"/>
+            <rect x="78" y="126" width="22" height="20" rx="2" fill="#ffe45c"/>
+            <rect x="102" y="126" width="22" height="20" rx="2" fill="#a8d5ba"/>
+            <rect x="40" y="106" width="22" height="20" rx="2" fill="#ffe45c" transform="rotate(-8 51 116)"/>
+            <rect x="66" y="106" width="22" height="20" rx="2" fill="#f6b98f"/>
+            <rect x="90" y="106" width="22" height="20" rx="2" fill="#c9d6ea" transform="rotate(10 101 116)"/>
+            <rect x="54" y="86" width="22" height="20" rx="2" fill="#9aa3d6" transform="rotate(6 65 96)"/>
+            <rect x="80" y="86" width="22" height="20" rx="2" fill="#f2a99d" transform="rotate(-6 91 96)"/>
+            <rect x="66" y="66" width="22" height="20" rx="2" fill="#a8d5ba" transform="rotate(12 77 76)"/>
+            <rect x="176" y="138" width="124" height="8" rx="3" fill="#f6e3c8"/>
+            <rect x="188" y="110" width="28" height="28" rx="3" fill="#9aa3d6"/>
+            <rect x="224" y="110" width="28" height="28" rx="3" fill="#ffe45c"/>
+            <rect x="260" y="110" width="28" height="28" rx="3" fill="#f2a99d"/>
             <path d="M14 152h292" fill="none"/>
           </g>
         </svg>
-        <p class="key">同じ幅の<mark>濃いしま</mark>は、見ていてつらい</p>
+        <p class="key">部品が多いと<mark>描き直しが重くなる</mark></p>
         <ul class="facts">
-          <li><b>しま</b><span>表の縞はごく薄く</span></li>
-          <li><b>暗い地</b><span>派手な色は淡くする</span></li>
+          <li><b>目安</b><span>1ページ約 1,400 個まで</span></li>
+          <li><b>点の多いグラフ</b><span>画面の幅ぶんに間引く</span></li>
         </ul>
-        <details><summary>くわしく</summary><p>同じ幅の明暗の帯が等間隔に並ぶと、見ていて不快になりやすくなります<sup>[7]</sup>。表に縞を付けるなら薄く、選んだ行の反転を何行も続けて並べないようにします。暗い地の上の鮮やかな色はちらついて見えやすいので淡い色を使う、という指針もあります。ただしこれは実験の裏付けのない指針です<sup>[8]</sup>。暗い地で赤と青の細い線を隣り合わせると、前後に浮いて見えることがあり、見え方には個人差があります<sup>[8]</sup>。</p></details>
+        <details><summary>くわしく</summary><p>画面の部品は、見出し・段落・ボタンなどの小さな箱（要素）の集まりです。箱が多いほど、押した後の描き直しに時間がかかります。速さを点検する道具（Lighthouse）は、約 1,400 個を超えると警告を出します<sup>[5]</sup>。部品を全部1ページに並べた見本帳は 1,808 個で、これを超えました。点がたくさんのグラフは、画面の横1列に1点まで間引けば、点の数が画面の幅で頭打ちになります。1万点を超える量なら、絵として描く <code>canvas</code> が勧められています<sup>[6]</sup>。</p></details>
       </article>
 
     </div>
   </section>
 
   <section class="panel lilac" aria-label="さわって確かめる">
-    <div class="panel-head"><span class="chip">さわって確かめる</span><h2>明るさと字の大きさを選ぶ</h2></div>
-    <div class="eyes">
-      <div class="knobs">
-        <p class="klabel">地の明るさ</p>
-        <div class="seg" role="group" aria-label="地の明るさ">
-          <button class="btn small" type="button" data-bg="light" aria-pressed="true">明るい</button>
-          <button class="btn small" type="button" data-bg="dim" aria-pressed="false">少し暗い</button>
-          <button class="btn small" type="button" data-bg="dark" aria-pressed="false">暗い</button>
-        </div>
-        <p class="klabel">字の大きさ</p>
-        <div class="seg" role="group" aria-label="字の大きさ">
-          <button class="btn small" type="button" data-fs="15" aria-pressed="false">小</button>
-          <button class="btn small" type="button" data-fs="18" aria-pressed="true">中</button>
-          <button class="btn small" type="button" data-fs="22" aria-pressed="false">大</button>
-        </div>
+    <div class="panel-head"><span class="chip">さわって確かめる</span><h2>このページの重さを量る</h2></div>
+    <div class="demo2">
+      <div class="dbox">
+        <h4>読み込んだ物の重さ</h4>
+        <button class="btn small" type="button" id="m-res">量る</button>
+        <table class="wtable" id="wtable" aria-live="polite">
+          <tbody><tr><td colspan="3">「量る」を押すと、このページが読み込んだ物を数えます</td></tr></tbody>
+        </table>
+        <p class="try-note">ブラウザによっては、別のサイトから来た物の重さが 0 と出ます。その時は回数だけを見てください。</p>
       </div>
-      <div class="reader light" id="reader" style="font-size:18px">
-        <p>画面で作業していると、まばたきが減っていきます。部屋と画面の明るさの差が大きいほど、目は疲れやすくなります。明るさと字の大きさを、いまの部屋に合わせて選んでみてください。</p>
+      <div class="dbox">
+        <h4>画面の箱の数</h4>
+        <button class="btn small" type="button" id="m-dom">数える</button>
+        <p class="bignum" id="domcount">― 個</p>
+        <div class="gauge" aria-hidden="true"><div class="gbar" id="gbar"></div><div class="gline"></div></div>
+        <p class="try-note">線の位置が、警告の目安の 1,400 個です。</p>
       </div>
     </div>
-    <p class="try-note">どの色が一番いいかは人と部屋によって違います。画面にできる一番の手当ては、選べるようにしておくことです。</p>
   </section>
 
   <section class="panel mint" aria-label="まとめ">
     <div class="panel-head"><span class="chip">この章のまとめ</span><h2>3つだけ覚えて帰る</h2></div>
     <ul class="check">
-      <li><b>1</b><span>疲れの元は<mark>まばたきと明るさの差</mark></span></li>
-      <li><b>2</b><span>「目に優しい色」に<mark>頼らない</mark></span></li>
-      <li><b>3</b><span>明るさと字の大きさを<mark>選べる</mark>ようにする</span></li>
+      <li><b>1</b><span>日本語の画面は<mark>文字の形</mark>が一番重い</span></li>
+      <li><b>2</b><span>遅れて届いた字で<mark>ずらさない</mark></span></li>
+      <li><b>3</b><span>見えない所は<mark>止める</mark>、置く物は<mark>減らす</mark></span></li>
     </ul>
-    <div class="point"><b>POINT</b><div>色を1つに決めるより、利用者に選ばせる。</div></div>
+    <div class="point"><b>POINT</b><div>見た目を飾る前に、何を読み込んでいるかを量る。</div></div>
   </section>
 
   <section class="panel" aria-label="参考文献" style="box-shadow:none">
     <div class="panel-head"><span class="chip white">参考文献</span><h2>もっと読むなら</h2></div>
     <ol class="refs">
-      <li>Patel, S. ほか (1991). Effect of visual display unit use on blink rate and tear stability. Optom Vis Sci 68. <a href="https://pubmed.ncbi.nlm.nih.gov/1766652/">pubmed</a> ／ Rosenfield, M. (2011). Computer vision syndrome. Ophthalmic Physiol Opt 31. <a href="https://pubmed.ncbi.nlm.nih.gov/21480937/">pubmed</a></li>
-      <li>Benedetto, S. ほか (2014). Effects of luminance and illuminance on visual fatigue and arousal during digital reading. <a href="https://lead.ube.fr/wp-content/uploads/2023/09/Benedetto_et_al._2014.pdf">ube.fr</a> ／ Zhou, Y. ほか (2021). Applied Sciences. <a href="https://doi.org/10.3390/app11094108">doi.org</a></li>
-      <li>Sengsoon, P., &amp; Intaruk, R. (2025). IJERPH. <a href="https://doi.org/10.3390/ijerph22040609">doi.org</a> ／ Xie, X. ほか (2021). IEEE Access. <a href="https://doi.org/10.1109/ACCESS.2021.3061770">doi.org</a></li>
-      <li>Griffiths, P. G. ほか (2016). The effect of coloured overlays and lenses on reading: a systematic review. Ophthalmic Physiol Opt 36. <a href="https://doi.org/10.1111/opo.12316">doi.org</a></li>
-      <li>Singh, S. ほか (2023). Blue-light filtering spectacles for computer vision syndrome. Cochrane. <a href="https://doi.org/10.1002/14651858.CD013244.pub2">doi.org</a></li>
-      <li>Aleman, A. C., Wang, M., &amp; Schaeffel, F. (2018). Reading and Myopia: Contrast Polarity Matters. Scientific Reports. <a href="https://doi.org/10.1038/s41598-018-28904-x">doi.org</a></li>
-      <li>Monger, L. J., Wilkins, A. J., &amp; Allen, P. M. (2015). Frontiers in Psychology. <a href="https://doi.org/10.3389/fpsyg.2015.01651">doi.org</a></li>
-      <li>Ozolinsh, M. ほか (2015). Frontiers in Psychology. <a href="https://doi.org/10.3389/fpsyg.2015.00337">doi.org</a> ／ Material Design. Dark theme. <a href="https://m2.material.io/design/color/dark-theme">material.io</a></li>
+      <li>web.dev. Best practices for fonts. <a href="https://web.dev/articles/font-best-practices">web.dev</a> ／ Google Developers Blog (2018). Google Fonts launches Japanese support. <a href="https://developers.googleblog.com/2018/09/google-fonts-launches-japanese-support.html">googleblog.com</a></li>
+      <li>Chrome for Developers. Heavy throttling of chained JS timers beginning in Chrome 88. <a href="https://developer.chrome.com/blog/timer-throttling-in-chrome-88">developer.chrome.com</a></li>
+      <li>web.dev. Avoid large, complex layouts and layout thrashing. <a href="https://web.dev/articles/avoid-large-complex-layouts-and-layout-thrashing">web.dev</a> ／ MDN. contain. <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/contain">mozilla.org</a></li>
+      <li>web.dev. Animations guide. <a href="https://web.dev/articles/animations-guide">web.dev</a></li>
+      <li>Chrome for Developers. Avoid an excessive DOM size. <a href="https://developer.chrome.com/docs/lighthouse/performance/dom-size">developer.chrome.com</a></li>
+      <li>MDN. &lt;canvas&gt;. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/canvas">mozilla.org</a> ／ Horak, T. ほか (2018). Comparing Rendering Performance of Common Web Technologies for Large Graphs. <a href="https://mt.inf.tu-dresden.de/cnt/uploads/Horak-2018-Graph-Performance-Poster.pdf">tu-dresden.de</a></li>
     </ol>
   </section>
 
   <div class="next">
     <p><small>表紙</small><a href="index.html" style="color:var(--navy)">目次へ戻る</a></p>
-    <p><small>前の章</small><a href="ch09.html" style="color:var(--navy)">第9章　軽い画面のつくり方</a></p>
-    <p><small>次の章</small>第11章　これからの UI</p>
+    <p><small>前の章</small><a href="ch09.html" style="color:var(--navy)">第9章　エラーと確認</a></p>
+    <p><small>次の章</small>第11章　目の疲れ</p>
     <a class="chip" href="ch11.html" style="color:inherit;text-decoration:none">読む →</a>
   </div>
 
@@ -361,24 +363,32 @@ document.querySelectorAll('.scene').forEach(function (svg, i) {
 });
 
 
-/* 明るさと字の大きさを選ぶ */
+/* このページの重さ */
 (function () {
-  var r = document.getElementById('reader');
-  function group(attr, apply) {
-    var bs = document.querySelectorAll('[data-' + attr + ']');
-    bs.forEach(function (b) {
-      b.addEventListener('click', function () {
-        bs.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
-        apply(b.getAttribute('data-' + attr));
-      });
+  function kb(b) { return (b / 1024).toFixed(1) + ' KB'; }
+  document.getElementById('m-res').addEventListener('click', function () {
+    var groups = { '文字の形（フォント）': [0, 0], '見た目の指定（CSS）': [0, 0], 'そのほか': [0, 0] };
+    var nav = performance.getEntriesByType('navigation')[0];
+    var page = nav ? (nav.transferSize || nav.encodedBodySize || 0) : 0;
+    performance.getEntriesByType('resource').forEach(function (r) {
+      var size = r.transferSize || r.encodedBodySize || 0;
+      var k = /\.(woff2?|ttf|otf)(\?|$)/.test(r.name) || r.name.indexOf('fonts.gstatic.com') >= 0 ? '文字の形（フォント）'
+            : (r.initiatorType === 'link' || /\.css/.test(r.name) || r.name.indexOf('fonts.googleapis.com') >= 0) ? '見た目の指定（CSS）' : 'そのほか';
+      groups[k][0]++; groups[k][1] += size;
     });
-  }
-  group('bg', function (v) { r.className = 'reader ' + v; });
-  group('fs', function (v) { r.style.fontSize = v + 'px'; });
+    var rows = '<tr><th>種類</th><th>回数</th><th>重さ</th></tr><tr><td>このページ本体</td><td class="n">1</td><td class="n">' + kb(page) + '</td></tr>';
+    Object.keys(groups).forEach(function (k) { rows += '<tr><td>' + k + '</td><td class="n">' + groups[k][0] + '</td><td class="n">' + kb(groups[k][1]) + '</td></tr>'; });
+    document.getElementById('wtable').innerHTML = '<tbody>' + rows + '</tbody>';
+  });
+  document.getElementById('m-dom').addEventListener('click', function () {
+    var n = document.getElementsByTagName('*').length;
+    document.getElementById('domcount').textContent = n.toLocaleString() + ' 個';
+    document.getElementById('gbar').style.width = Math.min(100, n / 2000 * 100) + '%';
+  });
 })();
 </script>
 
-<div class="fab"><ol class="fab-menu" id="fab-menu" hidden aria-label="目次"><li><a href="index.html"><b></b>表紙と目次</a></li><li><a href="ch01.html"><b>1</b>人はどう画面を見るか</a></li><li><a href="ch02.html"><b>2</b>文字の読みやすさ</a></li><li><a href="ch03.html"><b>3</b>色の使い方</a></li><li><a href="ch04.html"><b>4</b>いまどこを選んでいるか</a></li><li><a href="ch05.html"><b>5</b>押す・打つのしやすさ</a></li><li><a href="ch06.html"><b>6</b>動きを入れていい時</a></li><li><a href="ch07.html"><b>7</b>情報の見せ方</a></li><li><a href="ch08.html"><b>8</b>エラーと確認</a></li><li><a href="ch09.html"><b>9</b>軽い画面のつくり方</a></li><li><a href="ch10.html" aria-current="page"><b>10</b>目の疲れ</a></li><li><a href="ch11.html"><b>11</b>これからの UI</a></li></ol><button class="fab-b" type="button" id="fab-b" aria-expanded="false" aria-controls="fab-menu">目次</button></div>
+<div class="fab"><ol class="fab-menu" id="fab-menu" hidden aria-label="目次"><li><a href="index.html"><b></b>表紙と目次</a></li><li><a href="ch01.html"><b>1</b>人はどう画面を見るか</a></li><li><a href="ch02.html"><b>2</b>文字の読みやすさ</a></li><li><a href="ch03.html"><b>3</b>色の使い方</a></li><li><a href="ch04.html"><b>4</b>いまどこを選んでいるか</a></li><li><a href="ch05.html"><b>5</b>押す・打つのしやすさ</a></li><li><a href="ch06.html"><b>6</b>動きを入れていい時</a></li><li><a href="ch07.html"><b>7</b>情報の見せ方</a></li><li><a href="ch08.html"><b>8</b>詳しいものは奥に置く</a></li><li><a href="ch09.html"><b>9</b>エラーと確認</a></li><li><a href="ch10.html" aria-current="page"><b>10</b>軽い画面のつくり方</a></li><li><a href="ch11.html"><b>11</b>目の疲れ</a></li><li><a href="ch12.html"><b>12</b>これからの UI</a></li></ol><button class="fab-b" type="button" id="fab-b" aria-expanded="false" aria-controls="fab-menu">目次</button></div>
 <script>
 (function () {
   var b = document.getElementById('fab-b'), m = document.getElementById('fab-menu');

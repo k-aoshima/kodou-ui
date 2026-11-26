@@ -9,7 +9,7 @@
 <style>
 body{margin:0;font-size:14px}img{max-width:100%}[hidden]{display:none!important}
 
-/* 白い方眼の紙に、章の札→5つの単元カード→さわって確かめる欄→まとめ→参考文献 */
+/* 白い方眼の紙に、章の札→4つの単元カード→さわって確かめる欄→まとめ→参考文献 */
 :root {
   color-scheme: light;
   --paper: #fffdf9;
@@ -156,10 +156,6 @@ footer { text-align: center; color: var(--sub); font-size: 14px; }
 @media (max-width: 760px) { .demo2 { grid-template-columns: minmax(0, 1fr); } }
 .ex { margin: 0; text-align: center; font-size: 16px; }
 .ex code { font-size: 18px; letter-spacing: 1px; }
-.spot.wide { grid-column: 1 / -1; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 24px; align-items: start; }
-.spot.wide h3 { grid-column: 1 / -1; }
-.wide-text { display: grid; gap: 8px; align-content: start; min-width: 0; }
-@media (max-width: 760px) { .spot.wide { grid-template-columns: minmax(0, 1fr); } }
 
 /* 目次ボタン */
 .fab { position: fixed; z-index: 9; right: calc(16px + env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); display: grid; justify-items: end; gap: 10px; }
@@ -179,7 +175,7 @@ footer { text-align: center; color: var(--sub); font-size: 14px; }
 <div class="wrap">
 
   <section class="cover">
-    <div class="course"><a href="index.html" style="color:var(--navy)">UI デザイン講座</a>　全11章</div>
+    <div class="course"><a href="index.html" style="color:var(--navy)">UI デザイン講座</a>　全12章</div>
     <div class="plate">
       <span class="chip">第7章</span>
       <h1><span class="fukuro">情報</span>の<br>見せ方</h1>
@@ -189,12 +185,11 @@ footer { text-align: center; color: var(--sub); font-size: 14px; }
       <li>ごちゃごちゃが与える印象がわかる</li>
       <li>比べやすいグラフの形がわかる</li>
       <li>アイコンに文字を添える理由がわかる</li>
-      <li>何を畳んで奥に置くかわかる</li>
     </ul>
   </section>
 
   <section class="panel">
-    <div class="panel-head"><span class="chip">5つの単元</span><h2>伝わる並べ方</h2></div>
+    <div class="panel-head"><span class="chip">4つの単元</span><h2>伝わる並べ方</h2></div>
     <div class="spot-grid">
 
       <article class="spot">
@@ -306,39 +301,6 @@ footer { text-align: center; color: var(--sub); font-size: 14px; }
         <details><summary>くわしく</summary><p>誰が見ても意味がわかるアイコンは、家（ホーム）、印刷、虫めがね（検索）などほんのわずかです。そのためアイコンには、いつも見えている文字を添えるよう勧められています<sup>[5]</sup>。ある調査では、閲覧の履歴を表す時計のアイコンは一度も押されませんでした。アイコンは見た目をそろえる役、意味を伝えるのは文字の役です。</p></details>
       </article>
 
-      <article class="spot wide">
-        <h3><span>7-5</span>詳しいものは畳んで奥に</h3>
-        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="一番上の引き出しだけ開いた棚と、たたんだ紙">
-          <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="30" y="86" width="116" height="60" rx="4" fill="#f6e3c8"/>
-            <rect x="40" y="114" width="96" height="12" rx="2" fill="#f6e3c8"/>
-            <rect x="40" y="130" width="96" height="12" rx="2" fill="#f6e3c8"/>
-            <path d="M82 120h12M82 136h12" fill="none"/>
-            <rect x="140" y="112" width="18" height="10" rx="2" fill="#ffe45c"/>
-            <rect x="70" y="80" width="10" height="16" rx="2" fill="#f2a99d"/>
-            <rect x="86" y="76" width="8" height="20" rx="2" fill="#9aa3d6"/>
-            <rect x="100" y="84" width="24" height="12" rx="2" fill="#a8d5ba"/>
-            <rect x="58" y="94" width="112" height="16" rx="2" fill="#fff"/>
-            <path d="M108 102h14" fill="none"/>
-            <path d="M196 146l16-52 16 52z" fill="#dfe2f4"/>
-            <path d="M228 146l16-52 16 52z" fill="#fff"/>
-            <path d="M260 146l16-52 16 52z" fill="#dfe2f4"/>
-            <path d="M212 94h64" fill="none"/>
-            <path d="M300 64v10M295 69h10" stroke="#f6b98f" fill="none"/>
-            <path d="M14 152h292" fill="none"/>
-          </g>
-        </svg>
-        <div class="wide-text">
-          <p class="key">よく使う物だけ先に、<mark>残りは畳んで奥に</mark></p>
-          <ul class="facts">
-            <li><b>最初の画面</b><span>よく使う少しだけ</span></li>
-            <li><b>奥</b><span>細かい設定・内訳・ログ</span></li>
-            <li><b>深さ</b><span>2段まで</span></li>
-          </ul>
-          <details><summary>くわしく</summary><p>「段階的に見せる（progressive disclosure）」と呼ばれる考え方です<sup>[6]</sup>。印刷の画面なら、最初は部数のような少しの項目だけを出し、残りは「詳細設定」を押した先に置きます。最初の画面にある物は「大事な物」という合図にもなります。初めての人は大事な所に集中でき、隠れた設定でのまちがいも減ります。慣れた人も、めったに使わない物を毎回目で追わずに済みます。学びやすさ、速さ、まちがいの少なさの3つが良くなります。</p><p>何を先に出すかは、使う人の作業を観察したり、それぞれの機能が使われた回数を調べたりして決めます。奥への入り口には、開くと何があるか分かる名前を付けます。実際には、2段を超えると行き来の途中で迷いやすくなります。3段以上が要るほど機能が多いなら、まず画面そのものを簡単にできないか考えます<sup>[6]</sup>。この講座の「くわしく」も、この作りです。</p></details>
-        </div>
-      </article>
-
     </div>
   </section>
 
@@ -401,14 +363,13 @@ footer { text-align: center; color: var(--sub); font-size: 14px; }
       <li>Bateman, S. ほか (2010). Useful Junk? The Effects of Visual Embellishment on Comprehension and Memorability of Charts. CHI 2010. <a href="https://vis.csail.mit.edu/classes/6.859/readings/pdfs/Bateman-UsefulJunk.pdf">mit.edu</a></li>
       <li>Heer, J., &amp; Bostock, M. (2010). Crowdsourcing Graphical Perception: Using Mechanical Turk to Assess Visualization Design. CHI 2010. <a href="https://idl.cs.washington.edu/files/2010-MTurk-CHI.pdf">washington.edu</a></li>
       <li>Harley, A. (2014). Icon Usability. Nielsen Norman Group. <a href="https://www.nngroup.com/articles/icon-usability/">nngroup.com</a></li>
-      <li>Nielsen, J. (2006). Progressive Disclosure. Nielsen Norman Group. <a href="https://www.nngroup.com/articles/progressive-disclosure/">nngroup.com</a></li>
     </ol>
   </section>
 
   <div class="next">
     <p><small>表紙</small><a href="index.html" style="color:var(--navy)">目次へ戻る</a></p>
     <p><small>前の章</small><a href="ch06.html" style="color:var(--navy)">第6章　動きを入れていい時</a></p>
-    <p><small>次の章</small>第8章　エラーと確認</p>
+    <p><small>次の章</small>第8章　詳しいものは奥に置く</p>
     <a class="chip" href="ch08.html" style="color:inherit;text-decoration:none">読む →</a>
   </div>
 
@@ -452,7 +413,7 @@ document.querySelectorAll('.scene').forEach(function (svg, i) {
 })();
 </script>
 
-<div class="fab"><ol class="fab-menu" id="fab-menu" hidden aria-label="目次"><li><a href="index.html"><b></b>表紙と目次</a></li><li><a href="ch01.html"><b>1</b>人はどう画面を見るか</a></li><li><a href="ch02.html"><b>2</b>文字の読みやすさ</a></li><li><a href="ch03.html"><b>3</b>色の使い方</a></li><li><a href="ch04.html"><b>4</b>いまどこを選んでいるか</a></li><li><a href="ch05.html"><b>5</b>押す・打つのしやすさ</a></li><li><a href="ch06.html"><b>6</b>動きを入れていい時</a></li><li><a href="ch07.html" aria-current="page"><b>7</b>情報の見せ方</a></li><li><a href="ch08.html"><b>8</b>エラーと確認</a></li><li><a href="ch09.html"><b>9</b>軽い画面のつくり方</a></li><li><a href="ch10.html"><b>10</b>目の疲れ</a></li><li><a href="ch11.html"><b>11</b>これからの UI</a></li></ol><button class="fab-b" type="button" id="fab-b" aria-expanded="false" aria-controls="fab-menu">目次</button></div>
+<div class="fab"><ol class="fab-menu" id="fab-menu" hidden aria-label="目次"><li><a href="index.html"><b></b>表紙と目次</a></li><li><a href="ch01.html"><b>1</b>人はどう画面を見るか</a></li><li><a href="ch02.html"><b>2</b>文字の読みやすさ</a></li><li><a href="ch03.html"><b>3</b>色の使い方</a></li><li><a href="ch04.html"><b>4</b>いまどこを選んでいるか</a></li><li><a href="ch05.html"><b>5</b>押す・打つのしやすさ</a></li><li><a href="ch06.html"><b>6</b>動きを入れていい時</a></li><li><a href="ch07.html" aria-current="page"><b>7</b>情報の見せ方</a></li><li><a href="ch08.html"><b>8</b>詳しいものは奥に置く</a></li><li><a href="ch09.html"><b>9</b>エラーと確認</a></li><li><a href="ch10.html"><b>10</b>軽い画面のつくり方</a></li><li><a href="ch11.html"><b>11</b>目の疲れ</a></li><li><a href="ch12.html"><b>12</b>これからの UI</a></li></ol><button class="fab-b" type="button" id="fab-b" aria-expanded="false" aria-controls="fab-menu">目次</button></div>
 <script>
 (function () {
   var b = document.getElementById('fab-b'), m = document.getElementById('fab-menu');
