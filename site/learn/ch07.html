@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>情報の見せ方｜UI デザイン講座</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Klee+One:wght@600&display=swap">
+<style>
+body{margin:0;font-size:14px}img{max-width:100%}[hidden]{display:none!important}
+
+/* 白い方眼の紙に、章の札→4つの単元カード→さわって確かめる欄→まとめ→参考文献 */
+:root {
+  color-scheme: light;
+  --paper: #fffdf9;
+  --ink: #2a2a33;
+  --sub: #6b6a78;
+  --mist: #eef0f6;
+  --salmon: #f2a99d;
+  --peach: #f6b98f;
+  --lilac: #9aa3d6;
+  --navy: #4f6f9c;
+  --mint: #a8d5ba;
+  --yellow: #ffe45c;
+  --orange: #f09a6c;
+  --display: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Hiragino Sans", sans-serif;
+  --body: "Zen Kaku Gothic New", "Hiragino Sans", "Yu Gothic", sans-serif;
+  --hand: "Klee One", "Zen Maru Gothic", sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, monospace;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--paper); color: var(--ink);
+  font-family: var(--body); font-size: 17px; line-height: 1.8;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 32px 64px;
+  background-image: linear-gradient(var(--mist) 1px, transparent 1px), linear-gradient(90deg, var(--mist) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.wrap { max-width: 1040px; margin: 0 auto; display: grid; gap: 40px; }
+
+.chip { display: inline-block; background: var(--yellow); border: 3px solid var(--ink); border-radius: 999px; padding: 2px 18px; font-family: var(--display); font-weight: 900; font-size: 16px; letter-spacing: .1em; }
+.chip.white { background: #fff; }
+.panel { background: #fff; border: 3px solid var(--ink); border-radius: 24px; box-shadow: 8px 8px 0 var(--salmon); padding: 24px 22px; display: grid; gap: 18px; }
+.panel.lilac { box-shadow: 8px 8px 0 var(--lilac); }
+.panel.mint { box-shadow: 8px 8px 0 var(--mint); }
+.panel-head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.panel-head h2 { margin: 0; font-family: var(--display); font-weight: 900; font-size: 24px; text-wrap: balance; }
+.fukuro { color: #fff; -webkit-text-stroke: 2.5px var(--ink); paint-order: stroke fill; text-shadow: 4px 4px 0 var(--ink); }
+mark { background: linear-gradient(transparent 55%, var(--yellow) 55%); color: inherit; font-weight: 700; padding: 0 1px; }
+code { font-family: var(--mono); font-size: .9em; background: var(--mist); border-radius: 4px; padding: 0 4px; }
+sup { font-size: 12px; color: var(--navy); font-weight: 700; }
+
+/* 章の表紙 */
+.cover { text-align: center; display: grid; gap: 14px; justify-items: center; padding-top: 8px; }
+.course { font-family: var(--display); font-weight: 700; color: var(--sub); font-size: 16px; letter-spacing: .08em; }
+.plate { position: relative; background: #fff; border: 3px solid var(--ink); border-radius: 56px; box-shadow: 8px 8px 0 var(--ink); padding: 34px clamp(20px, 5vw, 56px) 26px; max-width: 100%; }
+.plate .chip { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); white-space: nowrap; }
+.plate h1 { margin: 0; font-family: var(--display); font-weight: 900; font-size: clamp(30px, 6vw, 56px); line-height: 1.25; letter-spacing: .04em; text-wrap: balance; }
+.lead { max-width: 640px; margin: 0; font-size: 18px; text-align: center; font-weight: 700; }
+.goals { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 0; padding: 0; list-style: none; }
+.goals li { background: #fff; border: 2px solid var(--ink); border-radius: 999px; padding: 2px 14px; font-size: 16px; font-weight: 700; }
+.goals li::before { content: "□ "; color: var(--navy); }
+
+/* 単元カード */
+.spot-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+.spot { border: 2px solid var(--ink); border-radius: 14px; padding: 12px 14px 14px; min-width: 0; background: #fff; display: grid; gap: 8px; align-content: start; }
+.spot h3 { margin: 0; display: flex; align-items: center; gap: 10px; font-family: var(--display); font-weight: 900; font-size: 19px; border-bottom: 2px solid var(--ink); padding-bottom: 8px; line-height: 1.4; }
+.spot h3 span { background: #f8cfc6; border: 2px solid var(--ink); padding: 0 8px; font-size: 16px; line-height: 1.5; flex: none; }
+.spot p { margin: 0; font-size: 16px; }
+.scene { width: 100%; height: auto; display: block; }
+.scene .fills { transform: translate(3.5px, 3px); }
+.facts { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+.facts li { display: grid; grid-template-columns: max-content 1fr; gap: 10px; align-items: baseline; font-size: 16px; }
+.facts li b { font-family: var(--display); font-weight: 900; font-size: 17px; text-align: right; color: var(--navy); font-variant-numeric: tabular-nums; }
+.key { margin: 0; font-family: var(--display); font-weight: 900; font-size: 22px; line-height: 1.5; text-align: center; padding-block: 4px; }
+.spot .facts { justify-self: center; }
+details { font-size: 15px; color: var(--sub); }
+details summary { cursor: pointer; font-family: var(--display); font-weight: 700; color: var(--navy); width: fit-content; }
+details summary:focus-visible { outline: 2px dashed var(--navy); outline-offset: 2px; }
+details p { margin: 6px 0 0; font-size: 16px !important; line-height: 1.85; }
+.apply { background: var(--mist); border-radius: 10px; padding: 8px 12px; font-size: 16px; }
+.apply strong { font-family: var(--display); font-size: 14px; letter-spacing: .1em; display: block; color: var(--navy); }
+
+/* さわって確かめる */
+.try-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.try { background: var(--mist); border-radius: 14px; padding: 14px 12px; display: grid; gap: 10px; justify-items: center; text-align: center; min-width: 0; }
+.try .ms { font-family: var(--display); font-weight: 900; font-size: 24px; font-variant-numeric: tabular-nums; }
+.try .ms small { font-size: 14px; margin-left: 2px; }
+.try .what { font-size: 14px; color: var(--sub); line-height: 1.5; min-height: 3em; }
+.btn {
+  font-family: var(--display); font-weight: 900; font-size: 17px;
+  background: var(--yellow); color: var(--ink);
+  border: 3px solid var(--ink); border-radius: 999px;
+  padding: 8px 20px; cursor: pointer;
+  box-shadow: 5px 5px 0 var(--ink);
+  transition: transform .06s, box-shadow .06s;
+}
+.btn:hover { transform: translate(2px, 2px); box-shadow: 3px 3px 0 var(--ink); }
+.btn:active { transform: translate(5px, 5px); box-shadow: 0 0 0 var(--ink); }
+.btn:focus-visible { outline: 3px dashed var(--navy); outline-offset: 4px; }
+.btn:disabled { cursor: progress; }
+.out { width: 100%; height: 44px; background: #fff; border: 2px solid var(--ink); border-radius: 10px; display: grid; place-items: center; font-weight: 700; font-size: 16px; position: relative; overflow: hidden; }
+.out.done { background: #e4f3ea; }
+.bar { position: absolute; left: 0; top: 0; bottom: 0; background: var(--mint); width: 0; }
+.out span { position: relative; }
+.spin { width: 18px; height: 18px; border: 3px solid var(--mist); border-top-color: var(--navy); border-radius: 50%; animation: sp .8s linear infinite; }
+@keyframes sp { to { transform: rotate(360deg); } }
+.try-note { margin: 0; font-size: 15px; color: var(--sub); }
+
+/* まとめ */
+.check { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.check li { display: flex; gap: 10px; align-items: flex-start; font-size: 17px; }
+.check li b { flex: none; width: 26px; height: 26px; border: 2px solid var(--ink); border-radius: 6px; background: var(--yellow); display: grid; place-items: center; font-family: var(--display); font-size: 15px; }
+.point { position: relative; margin-top: 10px; }
+.point > b { position: absolute; top: -11px; left: 14px; background: var(--navy); color: #fff; border-radius: 999px; font-size: 13px; letter-spacing: .14em; padding: 1px 12px; font-family: var(--display); }
+.point > div { background: #fff; border: 2px solid var(--ink); border-radius: 12px; box-shadow: 5px 5px 0 var(--lilac); padding: 16px 16px 12px; font-size: 16px; }
+
+/* 参考文献と次の章 */
+.refs { margin: 0; padding-left: 1.6em; display: grid; gap: 6px; font-size: 14px; color: var(--sub); }
+.refs a { color: var(--navy); word-break: break-all; }
+.next { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; background: #fff; border: 3px solid var(--ink); border-radius: 18px; padding: 14px 20px; }
+.next p { margin: 0; font-family: var(--display); font-weight: 700; }
+.next p small { display: block; color: var(--sub); font-size: 14px; font-weight: 500; }
+
+footer { text-align: center; color: var(--sub); font-size: 14px; }
+@media (max-width: 860px) { .try-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 760px) { .spot-grid { grid-template-columns: minmax(0, 1fr); } }
+@media (prefers-reduced-motion: reduce) { .spin { animation-duration: 3s; } .btn { transition: none; } }
+
+.demo2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.dbox { background: var(--mist); border-radius: 14px; padding: 16px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.dbox h4 { margin: 0; font-family: var(--display); font-weight: 900; font-size: 18px; }
+.btn.small { font-size: 15px; padding: 5px 14px; box-shadow: 3px 3px 0 var(--ink); justify-self: start; }
+.btn.small[aria-pressed="true"] { background: var(--ink); color: #fff; box-shadow: 3px 3px 0 var(--yellow); }
+.charts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.chart { margin: 0; background: #fff; border: 2px solid var(--ink); border-radius: 12px; padding: 12px; display: grid; gap: 8px; justify-items: center; min-width: 0; }
+.chart figcaption { font-weight: 700; font-size: 15px; }
+.pie { width: 120px; height: 120px; max-width: 100%; border-radius: 50%; border: 2px solid var(--ink); background: conic-gradient(#f2a99d 0 86.4deg, #ffe45c 0 162deg, #a8d5ba 0 230.4deg, #9aa3d6 0 295.2deg, #f6b98f 0 360deg); }
+.legend { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 10px; justify-content: center; font-size: 15px; font-weight: 700; }
+.legend i { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--ink); border-radius: 3px; margin-right: 4px; vertical-align: -2px; }
+.bars { display: flex; align-items: flex-end; gap: 8px; height: 140px; border-bottom: 3px solid var(--ink); padding: 0 4px; width: 100%; justify-content: center; }
+.cbar { height: 100%; width: 24px; position: relative; }
+.cbar span { position: absolute; left: 0; right: 0; bottom: 0; border: 2px solid var(--ink); border-bottom: 0; display: block; }
+.cbar b { left: 50%; transform: translateX(-50%); }
+.cbar b { position: absolute; bottom: -26px; font-size: 15px; }
+.chart:nth-child(2) figcaption { margin-top: 18px; }
+.answer { margin: 0; background: #fff; border: 2px solid var(--ink); border-radius: 10px; padding: 10px 12px; font-size: 16px; }
+.icons { display: flex; gap: 12px; flex-wrap: wrap; background: #fff; border: 2px solid var(--ink); border-radius: 12px; padding: 14px; }
+.ib { display: grid; justify-items: center; gap: 4px; min-width: 64px; min-height: 48px; padding: 8px; background: var(--mist); border: 2px solid var(--ink); border-radius: 10px; cursor: pointer; font-family: var(--body); color: var(--ink); }
+.ib:focus-visible { outline: 3px dashed var(--navy); outline-offset: 2px; }
+.ib svg { width: 26px; height: 26px; fill: none; stroke: var(--ink); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.ib span { font-size: 15px; font-weight: 700; visibility: hidden; }
+.icons.show .ib span { visibility: visible; }
+@media (max-width: 760px) { .demo2 { grid-template-columns: minmax(0, 1fr); } }
+.ex { margin: 0; text-align: center; font-size: 16px; }
+.ex code { font-size: 18px; letter-spacing: 1px; }
+
+/* 目次ボタン */
+.fab { position: fixed; z-index: 9; right: calc(16px + env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); display: grid; justify-items: end; gap: 10px; }
+.fab-b { font-family: var(--display); font-weight: 900; font-size: 16px; min-height: 44px; padding: 6px 20px; background: var(--yellow); color: var(--ink); border: 3px solid var(--ink); border-radius: 999px; cursor: pointer; box-shadow: 4px 4px 0 var(--ink); }
+.fab-b:hover { background: #ffd92e; }
+.fab-b:focus-visible, .fab-menu a:focus-visible { outline: 3px dashed var(--navy); outline-offset: 2px; }
+.fab-menu { width: min(360px, calc(100vw - 32px)); max-height: 70vh; overflow: auto; overscroll-behavior: contain; background: #fff; border: 3px solid var(--ink); border-radius: 14px; box-shadow: 6px 6px 0 var(--ink); padding: 8px; margin: 0; list-style: none; }
+.fab-menu a { display: flex; gap: 12px; align-items: center; min-height: 40px; padding: 4px 10px; border-radius: 8px; color: var(--ink); text-decoration: none; font-family: var(--display); font-weight: 700; font-size: 16px; }
+.fab-menu a b { width: 2.2em; text-align: right; font-weight: 900; color: var(--navy); }
+.fab-menu a:hover { background: #fff6d6; }
+.fab-menu a[aria-current="page"] { background: var(--ink); color: #fff; }
+.fab-menu a[aria-current="page"] b { color: var(--yellow); }
+</style>
+
+</head>
+<body>
+<div class="wrap">
+
+  <section class="cover">
+    <div class="course"><a href="index.html" style="color:var(--navy)">UI デザイン講座</a>　全11章</div>
+    <div class="plate">
+      <span class="chip">第7章</span>
+      <h1><span class="fukuro">情報</span>の<br>見せ方</h1>
+    </div>
+    <p class="lead">同じ中身でも、並べ方とグラフの形で伝わり方が変わります。</p>
+    <ul class="goals" aria-label="この章のゴール">
+      <li>ごちゃごちゃが与える印象がわかる</li>
+      <li>比べやすいグラフの形がわかる</li>
+      <li>アイコンに文字を添える理由がわかる</li>
+    </ul>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head"><span class="chip">4つの単元</span><h2>伝わる並べ方</h2></div>
+    <div class="spot-grid">
+
+      <article class="spot">
+        <h3><span>7-1</span>ごちゃごちゃは一瞬でばれる</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="メモがばらばらに貼られた掲示板と、3枚だけきれいに並んだ掲示板">
+          <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M44 146v-6M128 146v-6M192 146v-6M276 146v-6" fill="none"/>
+            <rect x="26" y="54" width="120" height="86" rx="4" fill="#f6e3c8"/>
+            <rect x="34" y="62" width="26" height="22" fill="#f2a99d" transform="rotate(-8 47 73)"/>
+            <rect x="64" y="60" width="22" height="26" fill="#ffe45c" transform="rotate(6 75 73)"/>
+            <rect x="94" y="64" width="30" height="20" fill="#9aa3d6" transform="rotate(-4 109 74)"/>
+            <rect x="38" y="94" width="22" height="22" fill="#a8d5ba" transform="rotate(10 49 105)"/>
+            <rect x="66" y="96" width="28" height="18" fill="#fff" transform="rotate(-12 80 105)"/>
+            <rect x="100" y="92" width="24" height="26" fill="#f6b98f" transform="rotate(5 112 105)"/>
+            <rect x="50" y="118" width="30" height="16" fill="#c9d6ea" transform="rotate(4 65 126)"/>
+            <rect x="92" y="120" width="22" height="16" fill="#f8cfc6" transform="rotate(-6 103 128)"/>
+            <rect x="174" y="54" width="120" height="86" rx="4" fill="#f6e3c8"/>
+            <rect x="186" y="70" width="28" height="28" fill="#fff"/>
+            <rect x="220" y="70" width="28" height="28" fill="#fff"/>
+            <rect x="254" y="70" width="28" height="28" fill="#ffe45c"/>
+            <path d="M192 112h84M192 124h60" stroke="#9aa3d6" fill="none"/>
+            <path d="M14 152h292" fill="none"/>
+          </g>
+        </svg>
+        <p class="key">ひと目の印象は<mark>複雑さ</mark>で決まる</p>
+        <ul class="facts">
+          <li><b>0.017秒</b><span>見ただけで印象が決まる</span></li>
+          <li><b>好まれる</b><span>すっきりして、よくある形の画面</span></li>
+          <li><b>色の数</b><span>複雑さほどは効かない</span></li>
+        </ul>
+        <details><summary>くわしく</summary><p>Web ページを 17ms（0.017秒）だけ見せても、見た目の複雑さが第一印象を左右しました。すっきりしていて、よくある形に近いページが最も好まれました<sup>[1]</sup>。別の研究では、色の多さより複雑さの方がずっと強く効きました<sup>[2]</sup>。色の数を絞るより、置く物の数と線の多さを減らす方が効きます。なお、グラフに絵の飾りを足しても読み取りの正確さは変わらず、2〜3週間後の記憶はよかったという結果もあります。ただし著者は、全部のグラフをそうするよう勧めてはいません<sup>[3]</sup>。</p></details>
+      </article>
+
+      <article class="spot">
+        <h3><span>7-2</span>量は長さで比べる</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="扇形に分かれた円グラフと、同じ線から伸びた棒グラフ">
+          <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="80" cy="102" r="40" fill="#dfe2f4"/>
+            <path d="M80 102V62a40 40 0 0 1 38 27.6z" fill="#f2a99d"/>
+            <path d="M80 102l38-12.4A40 40 0 0 1 100 136.6z" fill="#ffe45c"/>
+            <path d="M80 102l20 34.6A40 40 0 0 1 45.4 122z" fill="#a8d5ba"/>
+            <rect x="184" y="92" width="22" height="54" fill="#f2a99d"/>
+            <rect x="214" y="100" width="22" height="46" fill="#ffe45c"/>
+            <rect x="244" y="108" width="22" height="38" fill="#a8d5ba"/>
+            <rect x="274" y="114" width="22" height="32" fill="#9aa3d6"/>
+            <path d="M176 146h128" stroke-width="3" fill="none"/>
+            <path d="M150 64v10M145 69h10" stroke="#f6b98f" fill="none"/>
+            <path d="M14 152h292" fill="none"/>
+          </g>
+        </svg>
+        <p class="key">円グラフより<mark>棒グラフ</mark></p>
+        <ul class="facts">
+          <li><b>位置・長さ</b><span>正確に比べられる</span></li>
+          <li><b>角度・面積</b><span>読みまちがえやすい</span></li>
+        </ul>
+        <details><summary>くわしく</summary><p>グラフの読み取りの正確さを、多くの人で比べた実験があります<sup>[4]</sup>。同じ目盛りの上での位置が一番正確で、次が長さでした。面積は角度より悪く、どちらも位置より大幅に悪い結果でした。円グラフは角度と面積で量を見せるので、近い値どうしを比べるのに向きません。同じ線から伸びる棒にすると、長さで比べられます。</p></details>
+      </article>
+
+      <article class="spot">
+        <h3><span>7-3</span>1行ぶんの小さなグラフ</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="細い一行の小さな線グラフと、目盛りのある大きな線グラフ">
+          <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="26" y="112" width="96" height="34" rx="6" fill="#fff"/>
+            <path d="M34 134l10-6 10 4 10-10 10 6 10-12 10 4 12-6" stroke="#4f6f9c" fill="none"/>
+            <rect x="148" y="54" width="146" height="92" rx="6" fill="#fff"/>
+            <path d="M160 72h122M160 90h122M160 108h122M160 126h122" stroke="#e3e6f3" stroke-width="1.6" fill="none"/>
+            <path d="M162 124l20-12 20 8 20-26 20 10 20-30 18 8" stroke="#4f6f9c" stroke-width="3" fill="none"/>
+            <circle cx="280" cy="82" r="4" fill="#f2a99d"/>
+            <path d="M74 80v10M69 85h10" stroke="#f6b98f" fill="none"/>
+            <path d="M14 152h292" fill="none"/>
+          </g>
+        </svg>
+        <p class="key">小さなグラフは<mark>上がった・下がった</mark>だけ見る</p>
+        <ul class="facts">
+          <li><b>低いグラフ</b><span>値を読みまちがえやすい</span></li>
+          <li><b>だから</b><span>今の値は数字で横に書く</span></li>
+        </ul>
+        <p class="ex">例：<code>▂▃▅▇▆</code>　今 82・最大 95</p>
+        <details><summary>くわしく</summary><p>グラフの高さを変えて、値を読み取る正確さを測った実験があります<sup>[4]</sup>。高さが 40px だと読みまちがいがはっきり増え、80px より高くしても正確さはほとんど上がりませんでした。表の中や文の横に置く1行ぶんの小さな線グラフ（上の例の <code>▂▃▅▇▆</code> のようなもの）は、40px にも届きません。上がっているか、山がどこかを見るのには使えますが、値をくらべるのには向きません。だから値は数字で横に書きます。</p></details>
+      </article>
+
+      <article class="spot">
+        <h3><span>7-4</span>アイコンには文字を添える</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="はてなの浮かぶ文字のないアイコン2つと、下に名前の札が付いたアイコン2つ">
+          <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M74 66a8 8 0 1 1 10 8v5M84 88v1" stroke="#4f6f9c" fill="none"/>
+            <rect x="30" y="98" width="48" height="48" rx="10" fill="#dfe2f4"/>
+            <circle cx="54" cy="122" r="13" fill="#fff"/>
+            <path d="M54 113v9l6 4" stroke="#4f6f9c" fill="none"/>
+            <rect x="90" y="98" width="48" height="48" rx="10" fill="#dfe2f4"/>
+            <path d="M114 108l4 9 10 1-7 7 2 10-9-5-9 5 2-10-7-7 10-1z" fill="#fff"/>
+            <rect x="182" y="82" width="44" height="40" rx="10" fill="#dfe2f4"/>
+            <circle cx="204" cy="102" r="11" fill="#fff"/>
+            <path d="M204 95v7l5 3" stroke="#4f6f9c" fill="none"/>
+            <rect x="176" y="128" width="56" height="18" rx="4" fill="#ffe45c"/>
+            <path d="M188 137h32" stroke-width="3" fill="none"/>
+            <rect x="248" y="82" width="44" height="40" rx="10" fill="#dfe2f4"/>
+            <path d="M270 90l4 8 9 1-7 6 2 9-8-4-8 4 2-9-7-6 9-1z" fill="#fff"/>
+            <rect x="242" y="128" width="56" height="18" rx="4" fill="#ffe45c"/>
+            <path d="M254 137h32" stroke-width="3" fill="none"/>
+            <path d="M14 152h292" fill="none"/>
+          </g>
+        </svg>
+        <p class="key">アイコンだけでは<mark>伝わらない</mark></p>
+        <ul class="facts">
+          <li><b>誰でもわかる</b><span>家・印刷・虫めがねくらい</span></li>
+          <li><b>時計で「履歴」</b><span>一度も押されなかった</span></li>
+        </ul>
+        <details><summary>くわしく</summary><p>誰が見ても意味がわかるアイコンは、家（ホーム）、印刷、虫めがね（検索）などほんのわずかです。そのためアイコンには、いつも見えている文字を添えるよう勧められています<sup>[5]</sup>。ある調査では、閲覧の履歴を表す時計のアイコンは一度も押されませんでした。アイコンは見た目をそろえる役、意味を伝えるのは文字の役です。</p></details>
+      </article>
+
+    </div>
+  </section>
+
+  <section class="panel lilac" aria-label="さわって確かめる">
+    <div class="panel-head"><span class="chip">さわって確かめる</span><h2>どっちが伝わる？</h2></div>
+    <div class="demo2">
+      <div class="dbox">
+        <h4>B と C、どちらが大きい？</h4>
+        <div class="charts">
+          <figure class="chart">
+            <div class="pie" role="img" aria-label="円グラフ。AからEの5つ"></div>
+            <ul class="legend">
+              <li><i style="background:#f2a99d"></i>A</li><li><i style="background:#ffe45c"></i>B</li><li><i style="background:#a8d5ba"></i>C</li><li><i style="background:#9aa3d6"></i>D</li><li><i style="background:#f6b98f"></i>E</li>
+            </ul>
+            <figcaption>円グラフ</figcaption>
+          </figure>
+          <figure class="chart">
+            <div class="bars" role="img" aria-label="棒グラフ。AからEの5つ">
+              <div class="cbar"><span style="height:96%;background:#f2a99d"></span><b>A</b></div>
+              <div class="cbar"><span style="height:84%;background:#ffe45c"></span><b>B</b></div>
+              <div class="cbar"><span style="height:76%;background:#a8d5ba"></span><b>C</b></div>
+              <div class="cbar"><span style="height:72%;background:#9aa3d6"></span><b>D</b></div>
+              <div class="cbar"><span style="height:72%;background:#f6b98f"></span><b>E</b></div>
+            </div>
+            <figcaption>棒グラフ</figcaption>
+          </figure>
+        </div>
+        <button class="btn small" type="button" id="reveal" aria-expanded="false">答えを見る</button>
+        <p class="answer" id="answer" hidden>B（21）の方が C（19）より大きい。中身はどちらのグラフも同じです。A 24・B 21・C 19・D 18・E 18</p>
+      </div>
+      <div class="dbox">
+        <h4>このアイコン、何のボタン？</h4>
+        <div class="icons" id="icons">
+          <button class="ib" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2"/></svg><span>履歴</span></button>
+          <button class="ib" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16l-6 7v6l-4 2v-8z"/></svg><span>絞り込み</span></button>
+          <button class="ib" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12l8-8h8v8l-8 8z"/><circle cx="16" cy="8" r="1.5"/></svg><span>ラベル</span></button>
+          <button class="ib" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10M8 10l4 4 4-4M5 18h14"/></svg><span>書き出し</span></button>
+        </div>
+        <button class="btn small" type="button" id="labels" aria-pressed="false">文字を出す</button>
+        <p class="try-note">先に意味を当ててから、文字を出してみてください。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel mint" aria-label="まとめ">
+    <div class="panel-head"><span class="chip">この章のまとめ</span><h2>3つだけ覚えて帰る</h2></div>
+    <ul class="check">
+      <li><b>1</b><span>置く物と線を<mark>減らす</mark></span></li>
+      <li><b>2</b><span>量は<mark>同じ線から伸びる棒</mark>で比べる</span></li>
+      <li><b>3</b><span>アイコンには<mark>文字</mark>を添える</span></li>
+    </ul>
+    <div class="point"><b>POINT</b><div>形でざっくり見せ、正確な値は数字と文字で伝える。</div></div>
+  </section>
+
+  <section class="panel" aria-label="参考文献" style="box-shadow:none">
+    <div class="panel-head"><span class="chip white">参考文献</span><h2>もっと読むなら</h2></div>
+    <ol class="refs">
+      <li>Tuch, A. N. ほか (2012). The role of visual complexity and prototypicality regarding first impression of websites. <a href="https://research.google.com/pubs/archive/38315.pdf">research.google.com</a></li>
+      <li>Reinecke, K. ほか (2013). Predicting Users' First Impressions of Website Aesthetics. CHI 2013. <a href="https://kgajos.seas.harvard.edu/papers/reinecke13aesthetics.pdf">harvard.edu</a></li>
+      <li>Bateman, S. ほか (2010). Useful Junk? The Effects of Visual Embellishment on Comprehension and Memorability of Charts. CHI 2010. <a href="https://vis.csail.mit.edu/classes/6.859/readings/pdfs/Bateman-UsefulJunk.pdf">mit.edu</a></li>
+      <li>Heer, J., &amp; Bostock, M. (2010). Crowdsourcing Graphical Perception: Using Mechanical Turk to Assess Visualization Design. CHI 2010. <a href="https://idl.cs.washington.edu/files/2010-MTurk-CHI.pdf">washington.edu</a></li>
+      <li>Harley, A. (2014). Icon Usability. Nielsen Norman Group. <a href="https://www.nngroup.com/articles/icon-usability/">nngroup.com</a></li>
+    </ol>
+  </section>
+
+  <div class="next">
+    <p><small>表紙</small><a href="index.html" style="color:var(--navy)">目次へ戻る</a></p>
+    <p><small>前の章</small><a href="ch06.html" style="color:var(--navy)">第6章　動きを入れていい時</a></p>
+    <p><small>次の章</small>第8章　エラーと確認</p>
+    <a class="chip" href="ch08.html" style="color:inherit;text-decoration:none">読む →</a>
+  </div>
+
+  <footer>出典: Kodou-ui の文献調査 docs/research/retro-vs-modern.md と components-review.md をもとに作成。</footer>
+</div>
+
+<script>
+/* 線の後処理: 塗りと線を別の層に分け、塗りをずらし（版ずれ）、長い線に1〜2か所すき間を入れる */
+document.querySelectorAll('.scene').forEach(function (svg, i) {
+  var art = svg.querySelector('g.art');
+  if (!art) return;
+  var lines = art.cloneNode(true);
+  lines.setAttribute('class', 'lines');
+  lines.querySelectorAll('*').forEach(function (el) { if (el.tagName !== 'g') el.setAttribute('fill', 'none'); });
+  art.setAttribute('class', 'fills');
+  art.setAttribute('stroke', 'none');
+  art.querySelectorAll('[stroke]').forEach(function (el) { el.setAttribute('stroke', 'none'); });
+  svg.appendChild(lines);
+  var seed = 7 + i;
+  function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+  lines.querySelectorAll('path, rect, circle, ellipse, polygon, polyline, line').forEach(function (el) {
+    if (el.hasAttribute('stroke-dasharray') || el.hasAttribute('stroke') || el.hasAttribute('data-solid')) return;
+    if ((el.getAttribute('d') || '').split(/[Mm]/).length > 2) return;
+    var len = el.getTotalLength ? el.getTotalLength() : 0;
+    if (len < 40) return;
+    var gap = 6 + rnd() * 4;
+    var cuts = len > 160 ? 2 : 1;
+    var seg = len / cuts - gap;
+    var a = seg * (0.35 + rnd() * 0.3);
+    el.setAttribute('stroke-dasharray', a.toFixed(1) + ' ' + gap.toFixed(1) + ' ' + (seg - a).toFixed(1) + ' 0');
+    el.setAttribute('stroke-dashoffset', (rnd() * len).toFixed(1));
+  });
+});
+
+
+(function () {
+  var r = document.getElementById('reveal'), a = document.getElementById('answer');
+  r.addEventListener('click', function () { a.hidden = !a.hidden; r.setAttribute('aria-expanded', a.hidden ? 'false' : 'true'); r.textContent = a.hidden ? '答えを見る' : '答えを隠す'; });
+  var l = document.getElementById('labels'), ic = document.getElementById('icons');
+  l.addEventListener('click', function () { var on = ic.classList.toggle('show'); l.setAttribute('aria-pressed', on ? 'true' : 'false'); l.textContent = on ? '文字を隠す' : '文字を出す'; });
+})();
+</script>
+
+<div class="fab"><ol class="fab-menu" id="fab-menu" hidden aria-label="目次"><li><a href="index.html"><b></b>表紙と目次</a></li><li><a href="ch01.html"><b>1</b>人はどう画面を見るか</a></li><li><a href="ch02.html"><b>2</b>文字の読みやすさ</a></li><li><a href="ch03.html"><b>3</b>色の使い方</a></li><li><a href="ch04.html"><b>4</b>いまどこを選んでいるか</a></li><li><a href="ch05.html"><b>5</b>押す・打つのしやすさ</a></li><li><a href="ch06.html"><b>6</b>動きを入れていい時</a></li><li><a href="ch07.html" aria-current="page"><b>7</b>情報の見せ方</a></li><li><a href="ch08.html"><b>8</b>エラーと確認</a></li><li><a href="ch09.html"><b>9</b>軽い画面のつくり方</a></li><li><a href="ch10.html"><b>10</b>目の疲れ</a></li><li><a href="ch11.html"><b>11</b>これからの UI</a></li></ol><button class="fab-b" type="button" id="fab-b" aria-expanded="false" aria-controls="fab-menu">目次</button></div>
+<script>
+(function () {
+  var b = document.getElementById('fab-b'), m = document.getElementById('fab-menu');
+  function close() { if (!m.hidden) { m.hidden = true; b.setAttribute('aria-expanded', 'false'); } }
+  b.addEventListener('click', function () { if (m.hidden) { m.hidden = false; b.setAttribute('aria-expanded', 'true'); (m.querySelector('[aria-current]') || m.querySelector('a')).focus(); } else close(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !m.hidden) { close(); b.focus(); } });
+  document.addEventListener('click', function (e) { if (!e.target.closest('.fab')) close(); });
+})();
+</script>
+</body>
+</html>
