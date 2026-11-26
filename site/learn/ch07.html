@@ -154,8 +154,6 @@ footer { text-align: center; color: var(--sub); font-size: 14px; }
 .ib span { font-size: 15px; font-weight: 700; visibility: hidden; }
 .icons.show .ib span { visibility: visible; }
 @media (max-width: 760px) { .demo2 { grid-template-columns: minmax(0, 1fr); } }
-.ex { margin: 0; text-align: center; font-size: 16px; }
-.ex code { font-size: 18px; letter-spacing: 1px; }
 
 /* 目次ボタン */
 .fab { position: fixed; z-index: 9; right: calc(16px + env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); display: grid; justify-items: end; gap: 10px; }
@@ -245,30 +243,41 @@ footer { text-align: center; color: var(--sub); font-size: 14px; }
           <li><b>位置・長さ</b><span>正確に比べられる</span></li>
           <li><b>角度・面積</b><span>読みまちがえやすい</span></li>
         </ul>
-        <details><summary>くわしく</summary><p>グラフの読み取りの正確さを、多くの人で比べた実験があります<sup>[4]</sup>。同じ目盛りの上での位置が一番正確で、次が長さでした。面積は角度より悪く、どちらも位置より大幅に悪い結果でした。円グラフは角度と面積で量を見せるので、近い値どうしを比べるのに向きません。同じ線から伸びる棒にすると、長さで比べられます。</p></details>
+        <details><summary>くわしく</summary><p>グラフの読み取りの正確さを、多くの人で比べた実験があります<sup>[4]</sup>。同じ目盛りの上での位置が一番正確で、次が長さでした。面積は角度より悪く、どちらも位置より大幅に悪い結果でした。円グラフは角度と面積で量を見せるので、近い値どうしを比べるのに向きません。同じ線から伸びる棒にすると、長さで比べられます。同じ実験では、グラフの高さが 40px だと読みまちがいがはっきり増えました。表の中の1行ぶんの小さな線グラフは、上がった・下がったを見る物と割り切り、値は数字で横に書きます。</p></details>
       </article>
 
       <article class="spot">
-        <h3><span>7-3</span>1行ぶんの小さなグラフ</h3>
-        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="細い一行の小さな線グラフと、目盛りのある大きな線グラフ">
+        <h3><span>7-3</span>折れ線は色以外でも見分ける</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="実線に丸と、破線に四角の2本の折れ線。線の端に名前の札">
           <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="26" y="112" width="96" height="34" rx="6" fill="#fff"/>
-            <path d="M34 134l10-6 10 4 10-10 10 6 10-12 10 4 12-6" stroke="#4f6f9c" fill="none"/>
-            <rect x="148" y="54" width="146" height="92" rx="6" fill="#fff"/>
-            <path d="M160 72h122M160 90h122M160 108h122M160 126h122" stroke="#e3e6f3" stroke-width="1.6" fill="none"/>
-            <path d="M162 124l20-12 20 8 20-26 20 10 20-30 18 8" stroke="#4f6f9c" stroke-width="3" fill="none"/>
-            <circle cx="280" cy="82" r="4" fill="#f2a99d"/>
-            <path d="M74 80v10M69 85h10" stroke="#f6b98f" fill="none"/>
+            <path d="M70 140l-8 6M230 140l8 6" fill="none"/>
+            <rect x="40" y="54" width="220" height="86" rx="6" fill="#fff"/>
+            <path d="M56 68v62h150" stroke="#c9c8d2" fill="none"/>
+            <path d="M64 120l34-16 34 6 34-26 32-12" stroke="#4f6f9c" stroke-width="3" fill="none"/>
+            <path d="M64 128l34-4 34-8 34 2 32-14" stroke="#c9543f" stroke-width="3" stroke-dasharray="6 4" fill="none"/>
+            <circle cx="64" cy="120" r="4" fill="#4f6f9c" data-solid=""/>
+            <circle cx="98" cy="104" r="4" fill="#4f6f9c" data-solid=""/>
+            <circle cx="132" cy="110" r="4" fill="#4f6f9c" data-solid=""/>
+            <circle cx="166" cy="84" r="4" fill="#4f6f9c" data-solid=""/>
+            <circle cx="198" cy="72" r="4" fill="#4f6f9c" data-solid=""/>
+            <rect x="60" y="124" width="8" height="8" fill="#f2a99d"/>
+            <rect x="94" y="120" width="8" height="8" fill="#f2a99d"/>
+            <rect x="128" y="112" width="8" height="8" fill="#f2a99d"/>
+            <rect x="162" y="114" width="8" height="8" fill="#f2a99d"/>
+            <rect x="194" y="100" width="8" height="8" fill="#f2a99d"/>
+            <rect x="210" y="66" width="34" height="12" rx="3" fill="#dfe2f4"/>
+            <rect x="210" y="98" width="34" height="12" rx="3" fill="#f8cfc6"/>
+            <path d="M286 64v10M281 69h10" stroke="#f6b98f" fill="none"/>
             <path d="M14 152h292" fill="none"/>
           </g>
         </svg>
-        <p class="key">小さなグラフは<mark>上がった・下がった</mark>だけ見る</p>
+        <p class="key">線は<mark>色・線の種類・名前</mark>で分ける</p>
         <ul class="facts">
-          <li><b>低いグラフ</b><span>値を読みまちがえやすい</span></li>
-          <li><b>だから</b><span>今の値は数字で横に書く</span></li>
+          <li><b>線の種類</b><span>実線と破線、丸と四角</span></li>
+          <li><b>名前</b><span>線の端に直接書く</span></li>
+          <li><b>線の数</b><span>少なく</span></li>
         </ul>
-        <p class="ex">例：<code>▂▃▅▇▆</code>　今 82・最大 95</p>
-        <details><summary>くわしく</summary><p>グラフの高さを変えて、値を読み取る正確さを測った実験があります<sup>[4]</sup>。高さが 40px だと読みまちがいがはっきり増え、80px より高くしても正確さはほとんど上がりませんでした。表の中や文の横に置く1行ぶんの小さな線グラフ（上の例の <code>▂▃▅▇▆</code> のようなもの）は、40px にも届きません。上がっているか、山がどこかを見るのには使えますが、値をくらべるのには向きません。だから値は数字で横に書きます。</p></details>
+        <details><summary>くわしく</summary><p>折れ線が何本もあるとき、色だけで分けると、色の見え方が違う人には区別がつきません（第3章）。線の種類（実線・破線）と点の形（丸・四角）を変え、線の端に名前を書けば、色が分からなくても見分けられます<sup>[6]</sup>。ただし短い区間では破線の模様が見えないので、線の数は少なく保ちます。</p></details>
       </article>
 
       <article class="spot">
@@ -363,6 +372,7 @@ footer { text-align: center; color: var(--sub); font-size: 14px; }
       <li>Bateman, S. ほか (2010). Useful Junk? The Effects of Visual Embellishment on Comprehension and Memorability of Charts. CHI 2010. <a href="https://vis.csail.mit.edu/classes/6.859/readings/pdfs/Bateman-UsefulJunk.pdf">mit.edu</a></li>
       <li>Heer, J., &amp; Bostock, M. (2010). Crowdsourcing Graphical Perception: Using Mechanical Turk to Assess Visualization Design. CHI 2010. <a href="https://idl.cs.washington.edu/files/2010-MTurk-CHI.pdf">washington.edu</a></li>
       <li>Harley, A. (2014). Icon Usability. Nielsen Norman Group. <a href="https://www.nngroup.com/articles/icon-usability/">nngroup.com</a></li>
+      <li>Huestegge, L., &amp; Philipp, A. M. (2011). Effects of spatial compatibility on integration processes in graph comprehension. Attention, Perception, &amp; Psychophysics. <a href="https://doi.org/10.3758/s13414-011-0155-1">doi.org</a></li>
     </ol>
   </section>
 
