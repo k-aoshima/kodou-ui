@@ -2,7 +2,7 @@
 
 エンジニアが毎日使うツールのための、UI と UX のデザインシステム。CLI の手触りを残したまま、分かりやすさを今のものにする。
 
-[紹介ページ](https://k-aoshima.github.io/kodou-ui/) ・ [見本帳](https://k-aoshima.github.io/kodou-ui/catalog/) ・ [English](README.en.md)
+[紹介ページ](https://k-aoshima.github.io/kodou-ui/) ・ [見本帳](https://k-aoshima.github.io/kodou-ui/catalog/) ・ [UI デザイン講座](https://k-aoshima.github.io/kodou-ui/learn/) ・ [English](README.en.md)
 
 ![紹介ページ](docs/img/site.png)
 
@@ -15,6 +15,8 @@
 今のエンジニアのツールは2つに分かれています。CLI（git、grep、fzf、Vim）は打てば必ず応え、使うほどうまくなりますが、何ができるのか分かりにくく状態も見えにくいツールです。GUI（IDE、Web のダッシュボード、AI のエージェント画面）は分かりやすい一方で、待たされ、中を隠し、AI が勝手に進めます。Kodou-ui は、CLI の手触りを持った今のツールを作るための部品と判断の基準をそろえます。
 
 大事にするのは**操作するよろこび**と**機械との対話**です。詳しくは [docs/principles.md](docs/principles.md) にあります。
+
+Kodou-ui を設計するために調べた文献（反応の速さ、文字、色、選択の見せ方、押す所の大きさ、動き、エラー、軽さ、目の疲れなど）は、初めての人にも読めるよう [UI デザイン講座](https://k-aoshima.github.io/kodou-ui/learn/)（全 11 章）としてサイトにまとめました。章ごとに要点、図、手で試せる見本、参考文献があります。
 
 部品だけでは、手応えも中の見え方もない画面を組めてしまいます。そのため Kodou-ui は、部品と一緒に作る手順と点検の基準をスキルとしてエージェントに渡します。
 
@@ -98,6 +100,7 @@ node $S/measure.mjs page.html             # 要素の数、JS のヒープ、隠
 |---|---|---|
 | 原則 | 判断の基準になる4つの原則、昔のままにするものと今に替えるもの、文面の読みやすさ、速さと軽さ、人で確かめること | `docs/principles.md` |
 | 根拠 | 昔の見せ方と今の見せ方を比べた文献調査 | `docs/research/retro-vs-modern.md` |
+| 講座 | 根拠の文献調査を、初めての人向けに 11 章の図解ページにしたもの | `site/learn/` |
 | 紹介ページ | 考え方、サンプル、部品の見本、点検の例 | `site/index.html` |
 | 見本帳 | 36 の基本部品を触って試せる頁と、トークン | `catalog/index.html` |
 | アイコン見本 | マス目で描いたアイコンの3案の比較 | `catalog/icons.html` |

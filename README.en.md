@@ -2,7 +2,7 @@
 
 A UI and UX design system for the tools engineers use every day. It keeps the feel of the CLI and brings the look and clarity up to date.
 
-[Site](https://k-aoshima.github.io/kodou-ui/) · [Catalog](https://k-aoshima.github.io/kodou-ui/catalog/) · [日本語](README.md)
+[Site](https://k-aoshima.github.io/kodou-ui/) · [Catalog](https://k-aoshima.github.io/kodou-ui/catalog/) · [UI design course (Japanese)](https://k-aoshima.github.io/kodou-ui/learn/) · [日本語](README.md)
 
 ![Site](docs/img/site.png)
 

@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>目の疲れ｜UI デザイン講座</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Klee+One:wght@600&display=swap">
+<style>
+body{margin:0;font-size:14px}img{max-width:100%}[hidden]{display:none!important}
+
+/* 白い方眼の紙に、章の札→4つの単元カード→さわって確かめる欄→まとめ→参考文献 */
+:root {
+  color-scheme: light;
+  --paper: #fffdf9;
+  --ink: #2a2a33;
+  --sub: #6b6a78;
+  --mist: #eef0f6;
+  --salmon: #f2a99d;
+  --peach: #f6b98f;
+  --lilac: #9aa3d6;
+  --navy: #4f6f9c;
+  --mint: #a8d5ba;
+  --yellow: #ffe45c;
+  --orange: #f09a6c;
+  --display: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Hiragino Sans", sans-serif;
+  --body: "Zen Kaku Gothic New", "Hiragino Sans", "Yu Gothic", sans-serif;
+  --hand: "Klee One", "Zen Maru Gothic", sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, monospace;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--paper); color: var(--ink);
+  font-family: var(--body); font-size: 17px; line-height: 1.8;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 32px 64px;
+  background-image: linear-gradient(var(--mist) 1px, transparent 1px), linear-gradient(90deg, var(--mist) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.wrap { max-width: 1040px; margin: 0 auto; display: grid; gap: 40px; }
+
+.chip { display: inline-block; background: var(--yellow); border: 3px solid var(--ink); border-radius: 999px; padding: 2px 18px; font-family: var(--display); font-weight: 900; font-size: 16px; letter-spacing: .1em; }
+.chip.white { background: #fff; }
+.panel { background: #fff; border: 3px solid var(--ink); border-radius: 24px; box-shadow: 8px 8px 0 var(--salmon); padding: 24px 22px; display: grid; gap: 18px; }
+.panel.lilac { box-shadow: 8px 8px 0 var(--lilac); }
+.panel.mint { box-shadow: 8px 8px 0 var(--mint); }
+.panel-head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.panel-head h2 { margin: 0; font-family: var(--display); font-weight: 900; font-size: 24px; text-wrap: balance; }
+.fukuro { color: #fff; -webkit-text-stroke: 2.5px var(--ink); paint-order: stroke fill; text-shadow: 4px 4px 0 var(--ink); }
+mark { background: linear-gradient(transparent 55%, var(--yellow) 55%); color: inherit; font-weight: 700; padding: 0 1px; }
+code { font-family: var(--mono); font-size: .9em; background: var(--mist); border-radius: 4px; padding: 0 4px; }
+sup { font-size: 12px; color: var(--navy); font-weight: 700; }
+
+/* 章の表紙 */
+.cover { text-align: center; display: grid; gap: 14px; justify-items: center; padding-top: 8px; }
+.course { font-family: var(--display); font-weight: 700; color: var(--sub); font-size: 16px; letter-spacing: .08em; }
+.plate { position: relative; background: #fff; border: 3px solid var(--ink); border-radius: 56px; box-shadow: 8px 8px 0 var(--ink); padding: 34px clamp(20px, 5vw, 56px) 26px; max-width: 100%; }
+.plate .chip { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); white-space: nowrap; }
+.plate h1 { margin: 0; font-family: var(--display); font-weight: 900; font-size: clamp(30px, 6vw, 56px); line-height: 1.25; letter-spacing: .04em; text-wrap: balance; }
+.lead { max-width: 640px; margin: 0; font-size: 18px; text-align: center; font-weight: 700; }
+.goals { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 0; padding: 0; list-style: none; }
+.goals li { background: #fff; border: 2px solid var(--ink); border-radius: 999px; padding: 2px 14px; font-size: 16px; font-weight: 700; }
+.goals li::before { content: "□ "; color: var(--navy); }
+
+/* 単元カード */
+.spot-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+.spot { border: 2px solid var(--ink); border-radius: 14px; padding: 12px 14px 14px; min-width: 0; background: #fff; display: grid; gap: 8px; align-content: start; }
+.spot h3 { margin: 0; display: flex; align-items: center; gap: 10px; font-family: var(--display); font-weight: 900; font-size: 19px; border-bottom: 2px solid var(--ink); padding-bottom: 8px; line-height: 1.4; }
+.spot h3 span { background: #f8cfc6; border: 2px solid var(--ink); padding: 0 8px; font-size: 16px; line-height: 1.5; flex: none; }
+.spot p { margin: 0; font-size: 16px; }
+.scene { width: 100%; height: auto; display: block; }
+.scene .fills { transform: translate(3.5px, 3px); }
+.facts { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+.facts li { display: grid; grid-template-columns: max-content 1fr; gap: 10px; align-items: baseline; font-size: 16px; }
+.facts li b { font-family: var(--display); font-weight: 900; font-size: 17px; text-align: right; color: var(--navy); font-variant-numeric: tabular-nums; }
+.key { margin: 0; font-family: var(--display); font-weight: 900; font-size: 22px; line-height: 1.5; text-align: center; padding-block: 4px; }
+.spot .facts { justify-self: center; }
+details { font-size: 15px; color: var(--sub); }
+details summary { cursor: pointer; font-family: var(--display); font-weight: 700; color: var(--navy); width: fit-content; }
+details summary:focus-visible { outline: 2px dashed var(--navy); outline-offset: 2px; }
+details p { margin: 6px 0 0; font-size: 16px !important; line-height: 1.85; }
+.apply { background: var(--mist); border-radius: 10px; padding: 8px 12px; font-size: 16px; }
+.apply strong { font-family: var(--display); font-size: 14px; letter-spacing: .1em; display: block; color: var(--navy); }
+
+/* さわって確かめる */
+.try-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.try { background: var(--mist); border-radius: 14px; padding: 14px 12px; display: grid; gap: 10px; justify-items: center; text-align: center; min-width: 0; }
+.try .ms { font-family: var(--display); font-weight: 900; font-size: 24px; font-variant-numeric: tabular-nums; }
+.try .ms small { font-size: 14px; margin-left: 2px; }
+.try .what { font-size: 14px; color: var(--sub); line-height: 1.5; min-height: 3em; }
+.btn {
+  font-family: var(--display); font-weight: 900; font-size: 17px;
+  background: var(--yellow); color: var(--ink);
+  border: 3px solid var(--ink); border-radius: 999px;
+  padding: 8px 20px; cursor: pointer;
+  box-shadow: 5px 5px 0 var(--ink);
+  transition: transform .06s, box-shadow .06s;
+}
+.btn:hover { transform: translate(2px, 2px); box-shadow: 3px 3px 0 var(--ink); }
+.btn:active { transform: translate(5px, 5px); box-shadow: 0 0 0 var(--ink); }
+.btn:focus-visible { outline: 3px dashed var(--navy); outline-offset: 4px; }
+.btn:disabled { cursor: progress; }
+.out { width: 100%; height: 44px; background: #fff; border: 2px solid var(--ink); border-radius: 10px; display: grid; place-items: center; font-weight: 700; font-size: 16px; position: relative; overflow: hidden; }
+.out.done { background: #e4f3ea; }
+.bar { position: absolute; left: 0; top: 0; bottom: 0; background: var(--mint); width: 0; }
+.out span { position: relative; }
+.spin { width: 18px; height: 18px; border: 3px solid var(--mist); border-top-color: var(--navy); border-radius: 50%; animation: sp .8s linear infinite; }
+@keyframes sp { to { transform: rotate(360deg); } }
+.try-note { margin: 0; font-size: 15px; color: var(--sub); }
+
+/* まとめ */
+.check { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.check li { display: flex; gap: 10px; align-items: flex-start; font-size: 17px; }
+.check li b { flex: none; width: 26px; height: 26px; border: 2px solid var(--ink); border-radius: 6px; background: var(--yellow); display: grid; place-items: center; font-family: var(--display); font-size: 15px; }
+.point { position: relative; margin-top: 10px; }
+.point > b { position: absolute; top: -11px; left: 14px; background: var(--navy); color: #fff; border-radius: 999px; font-size: 13px; letter-spacing: .14em; padding: 1px 12px; font-family: var(--display); }
+.point > div { background: #fff; border: 2px solid var(--ink); border-radius: 12px; box-shadow: 5px 5px 0 var(--lilac); padding: 16px 16px 12px; font-size: 16px; }
+
+/* 参考文献と次の章 */
+.refs { margin: 0; padding-left: 1.6em; display: grid; gap: 6px; font-size: 14px; color: var(--sub); }
+.refs a { color: var(--navy); word-break: break-all; }
+.next { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; background: #fff; border: 3px solid var(--ink); border-radius: 18px; padding: 14px 20px; }
+.next p { margin: 0; font-family: var(--display); font-weight: 700; }
+.next p small { display: block; color: var(--sub); font-size: 14px; font-weight: 500; }
+
+footer { text-align: center; color: var(--sub); font-size: 14px; }
+@media (max-width: 860px) { .try-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 760px) { .spot-grid { grid-template-columns: minmax(0, 1fr); } }
+@media (prefers-reduced-motion: reduce) { .spin { animation-duration: 3s; } .btn { transition: none; } }
+
+.eyes { display: grid; grid-template-columns: 330px minmax(0, 1fr); gap: 18px; align-items: start; }
+.knobs { background: var(--mist); border-radius: 14px; padding: 14px; display: grid; gap: 8px; }
+.klabel { margin: 0; font-family: var(--display); font-weight: 700; font-size: 16px; }
+.seg { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
+.btn.small { font-size: 15px; padding: 5px 14px; box-shadow: 3px 3px 0 var(--ink); }
+.btn.small[aria-pressed="true"] { background: var(--ink); color: #fff; box-shadow: 3px 3px 0 var(--yellow); }
+.reader { border: 2px solid var(--ink); border-radius: 12px; padding: 18px 20px; line-height: 1.85; min-width: 0; transition: background .2s, color .2s; }
+.reader p { margin: 0; max-width: 38em; }
+.reader.light { background: #ffffff; color: #2a2a33; }
+.reader.dim { background: #d6d7d1; color: #23232b; }
+.reader.dark { background: #26262e; color: #d9dce3; }
+@media (max-width: 760px) { .eyes { grid-template-columns: minmax(0, 1fr); } }
+@media (prefers-reduced-motion: reduce) { .reader { transition: none; } }
+
+/* 目次ボタン */
+.fab { position: fixed; z-index: 9; right: calc(16px + env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); display: grid; justify-items: end; gap: 10px; }
+.fab-b { font-family: var(--display); font-weight: 900; font-size: 16px; min-height: 44px; padding: 6px 20px; background: var(--yellow); color: var(--ink); border: 3px solid var(--ink); border-radius: 999px; cursor: pointer; box-shadow: 4px 4px 0 var(--ink); }
+.fab-b:hover { background: #ffd92e; }
+.fab-b:focus-visible, .fab-menu a:focus-visible { outline: 3px dashed var(--navy); outline-offset: 2px; }
+.fab-menu { width: min(360px, calc(100vw - 32px)); max-height: 70vh; overflow: auto; overscroll-behavior: contain; background: #fff; border: 3px solid var(--ink); border-radius: 14px; box-shadow: 6px 6px 0 var(--ink); padding: 8px; margin: 0; list-style: none; }
+.fab-menu a { display: flex; gap: 12px; align-items: center; min-height: 40px; padding: 4px 10px; border-radius: 8px; color: var(--ink); text-decoration: none; font-family: var(--display); font-weight: 700; font-size: 16px; }
+.fab-menu a b { width: 2.2em; text-align: right; font-weight: 900; color: var(--navy); }
+.fab-menu a:hover { background: #fff6d6; }
+.fab-menu a[aria-current="page"] { background: var(--ink); color: #fff; }
+.fab-menu a[aria-current="page"] b { color: var(--yellow); }
+</style>
+
+</head>
+<body>
+<div class="wrap">
+
+  <section class="cover">
+    <div class="course"><a href="index.html" style="color:var(--navy)">UI デザイン講座</a>　全11章</div>
+    <div class="plate">
+      <span class="chip">第10章</span>
+      <h1><span class="fukuro">目</span>の<br>疲れ</h1>
+    </div>
+    <p class="lead">目の疲れの元は、色よりも、まばたきと明るさの差です。</p>
+    <ul class="goals" aria-label="この章のゴール">
+      <li>目が疲れる本当の原因がわかる</li>
+      <li>「目に優しい色」の根拠の弱さがわかる</li>
+      <li>画面でできる手当てがわかる</li>
+    </ul>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head"><span class="chip">4つの単元</span><h2>疲れの元と手当て</h2></div>
+    <div class="spot-grid">
+
+      <article class="spot">
+        <h3><span>10-1</span>疲れの元は、まばたき</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="大きな目、涙のしずく、目薬">
+          <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M28 102q52-44 104 0-52 44-104 0z" fill="#fff"/>
+            <circle cx="80" cy="102" r="17" fill="#9aa3d6"/>
+            <circle cx="80" cy="102" r="7" fill="#2a2a33"/>
+            <path d="M44 84l-6-8M62 74l-3-9M80 71v-9M98 74l3-9M116 84l6-8" fill="none"/>
+            <path d="M172 82c10 14 16 22 16 30a16 16 0 0 1-32 0c0-8 6-16 16-30z" fill="#c9d6ea"/>
+            <path d="M166 114a6 6 0 0 0 6 6" stroke="#fff" stroke-width="3" fill="none"/>
+            <path d="M238 82l6-14 6 14z" fill="#fff"/>
+            <rect x="234" y="82" width="20" height="14" rx="2" fill="#f6e3c8"/>
+            <rect x="226" y="96" width="36" height="50" rx="6" fill="#fff"/>
+            <rect x="232" y="110" width="24" height="18" rx="2" fill="#a8d5ba"/>
+            <path d="M14 152h292" fill="none"/>
+          </g>
+        </svg>
+        <p class="key">画面を見ると<mark>まばたきが減る</mark></p>
+        <ul class="facts">
+          <li><b>まばたき</b><span>約 5分の1 に減る</span></li>
+          <li><b>多い症状</b><span>目の乾き（ドライアイ）</span></li>
+        </ul>
+        <details><summary>くわしく</summary><p>画面で作業すると、まばたきが約 5 分の 1 に減ります<sup>[1]</sup>。画面を見る時のピント合わせや寄り目の負担は紙とほぼ同じで、画面で多いのは目の乾きだとまとめられています<sup>[1]</sup>。まばたきの回数は、画面の色では変えられません。</p></details>
+      </article>
+
+      <article class="spot">
+        <h3><span>10-2</span>画面だけ明るくしない</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="まぶしく光るモニターと、机のライト">
+          <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M30 60l-10-8M150 60l10-8M30 120l-10 6M150 120l10 6" stroke="#f6b98f" fill="none"/>
+            <rect x="40" y="58" width="100" height="68" rx="6" fill="#4f6f9c"/>
+            <rect x="48" y="66" width="84" height="52" rx="2" fill="#fff"/>
+            <path d="M90 126v12M70 146h40l-6-8H76z" fill="#dfe2f4"/>
+            <rect x="206" y="140" width="56" height="7" rx="3" fill="#c9d6ea"/>
+            <path d="M234 140l-16-42 30-28" fill="none"/>
+            <path d="M244 66l30 8-12 26z" fill="#ffe45c"/>
+            <path d="M268 104l6 10M256 108l2 12" stroke="#f6b98f" fill="none"/>
+            <path d="M14 152h292" fill="none"/>
+          </g>
+        </svg>
+        <p class="key">画面と<mark>まわりの明るさの差</mark>が疲れる</p>
+        <ul class="facts">
+          <li><b>明るい画面</b><span>まばたきが減り、疲れが増えた</span></li>
+          <li><b>差が大きい</b><span>暗い部屋で明るい画面は疲れる</span></li>
+        </ul>
+        <details><summary>くわしく</summary><p>画面をとても明るくした時（140 cd/m²）は、暗めにした時（20 cd/m²）よりまばたきが減り、疲れが増えました<sup>[2]</sup>。部屋が明るいほど快適な画面の明るさは上がり、部屋と画面の明るさの差が大きいほど疲れる、という結果もあります<sup>[2]</sup>。</p></details>
+      </article>
+
+      <article class="spot">
+        <h3><span>10-3</span>「目に優しい色」は根拠が弱い</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="色の付いためがねと、重ねた色付きの透明な板">
+          <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="34" y="96" width="44" height="34" rx="14" fill="#f6b98f"/>
+            <rect x="92" y="96" width="44" height="34" rx="14" fill="#f6b98f"/>
+            <path d="M78 106q7-6 14 0M34 104l-10-8M136 104l10-8" fill="none"/>
+            <rect x="182" y="70" width="64" height="64" rx="4" fill="#f8cfc6"/>
+            <rect x="214" y="84" width="64" height="62" rx="4" fill="#a8d5ba"/>
+            <path d="M214 84h32v50h-32z" fill="#c9cfb8"/>
+            <path d="M290 62v10M285 67h10" stroke="#f6b98f" fill="none"/>
+            <path d="M14 152h292" fill="none"/>
+          </g>
+        </svg>
+        <p class="key">色を変えても<mark>疲れはほぼ変わらない</mark></p>
+        <ul class="facts">
+          <li><b>暗い地</b><span>疲れの差は、はっきりしない</span></li>
+          <li><b>青カット</b><span>疲れを減らさない見込みが高い</span></li>
+          <li><b>色付きの板</b><span>読みが楽になる根拠なし</span></li>
+        </ul>
+        <details><summary>くわしく</summary><p>明るい地と暗い地で疲れに差はなかったという研究があり、暗い地で疲れが減ったのは明るい部屋だけという研究もあって、結果は割れています<sup>[3]</sup>。色付きの透明板やレンズで読みが楽になるという主張は、研究をまとめた見直しで支持されませんでした<sup>[4]</sup>。画面の青い光が目を傷める根拠はなく、青い光を切るめがねも疲れを減らさない見込みが高いです<sup>[5]</sup>。黒い字と白い地の組み合わせが近視に関係するかもしれない、という実験もありますが、まだ仮説の段階です<sup>[6]</sup>。</p></details>
+      </article>
+
+      <article class="spot">
+        <h3><span>10-4</span>しま模様と、暗い地の派手な色</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="同じ幅の濃い縞が並ぶ板と、暗い地に赤と青の細い線が並んだ板">
+          <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="34" y="62" width="110" height="78" rx="4" fill="#fff"/>
+            <path d="M35 72h108M35 88h108M35 104h108M35 120h108M35 135h108" stroke="#4f6f9c" stroke-width="7" fill="none"/>
+            <path d="M60 140l-6 6M118 140l6 6" fill="none"/>
+            <rect x="176" y="72" width="116" height="74" rx="6" fill="#2a2a33"/>
+            <path d="M190 92h40M190 112h52M190 128h34" stroke="#ff7a66" stroke-width="3" fill="none"/>
+            <path d="M236 92h42M248 112h30M230 128h48" stroke="#6f9bff" stroke-width="3" fill="none"/>
+            <path d="M160 52v10M155 57h10" stroke="#f6b98f" fill="none"/>
+            <path d="M14 152h292" fill="none"/>
+          </g>
+        </svg>
+        <p class="key">同じ幅の<mark>濃いしま</mark>は、見ていてつらい</p>
+        <ul class="facts">
+          <li><b>しま</b><span>表の縞はごく薄く</span></li>
+          <li><b>暗い地</b><span>派手な色は淡くする</span></li>
+        </ul>
+        <details><summary>くわしく</summary><p>同じ幅の明暗の帯が等間隔に並ぶと、見ていて不快になりやすくなります<sup>[7]</sup>。表に縞を付けるなら薄く、選んだ行の反転を何行も続けて並べないようにします。暗い地の上の鮮やかな色はちらついて見えやすいので淡い色を使う、という指針もあります。ただしこれは実験の裏付けのない指針です<sup>[8]</sup>。暗い地で赤と青の細い線を隣り合わせると、前後に浮いて見えることがあり、見え方には個人差があります<sup>[8]</sup>。</p></details>
+      </article>
+
+    </div>
+  </section>
+
+  <section class="panel lilac" aria-label="さわって確かめる">
+    <div class="panel-head"><span class="chip">さわって確かめる</span><h2>明るさと字の大きさを選ぶ</h2></div>
+    <div class="eyes">
+      <div class="knobs">
+        <p class="klabel">地の明るさ</p>
+        <div class="seg" role="group" aria-label="地の明るさ">
+          <button class="btn small" type="button" data-bg="light" aria-pressed="true">明るい</button>
+          <button class="btn small" type="button" data-bg="dim" aria-pressed="false">少し暗い</button>
+          <button class="btn small" type="button" data-bg="dark" aria-pressed="false">暗い</button>
+        </div>
+        <p class="klabel">字の大きさ</p>
+        <div class="seg" role="group" aria-label="字の大きさ">
+          <button class="btn small" type="button" data-fs="15" aria-pressed="false">小</button>
+          <button class="btn small" type="button" data-fs="18" aria-pressed="true">中</button>
+          <button class="btn small" type="button" data-fs="22" aria-pressed="false">大</button>
+        </div>
+      </div>
+      <div class="reader light" id="reader" style="font-size:18px">
+        <p>画面で作業していると、まばたきが減っていきます。部屋と画面の明るさの差が大きいほど、目は疲れやすくなります。明るさと字の大きさを、いまの部屋に合わせて選んでみてください。</p>
+      </div>
+    </div>
+    <p class="try-note">どの色が一番いいかは人と部屋によって違います。画面にできる一番の手当ては、選べるようにしておくことです。</p>
+  </section>
+
+  <section class="panel mint" aria-label="まとめ">
+    <div class="panel-head"><span class="chip">この章のまとめ</span><h2>3つだけ覚えて帰る</h2></div>
+    <ul class="check">
+      <li><b>1</b><span>疲れの元は<mark>まばたきと明るさの差</mark></span></li>
+      <li><b>2</b><span>「目に優しい色」に<mark>頼らない</mark></span></li>
+      <li><b>3</b><span>明るさと字の大きさを<mark>選べる</mark>ようにする</span></li>
+    </ul>
+    <div class="point"><b>POINT</b><div>色を1つに決めるより、利用者に選ばせる。</div></div>
+  </section>
+
+  <section class="panel" aria-label="参考文献" style="box-shadow:none">
+    <div class="panel-head"><span class="chip white">参考文献</span><h2>もっと読むなら</h2></div>
+    <ol class="refs">
+      <li>Patel, S. ほか (1991). Effect of visual display unit use on blink rate and tear stability. Optom Vis Sci 68. <a href="https://pubmed.ncbi.nlm.nih.gov/1766652/">pubmed</a> ／ Rosenfield, M. (2011). Computer vision syndrome. Ophthalmic Physiol Opt 31. <a href="https://pubmed.ncbi.nlm.nih.gov/21480937/">pubmed</a></li>
+      <li>Benedetto, S. ほか (2014). Effects of luminance and illuminance on visual fatigue and arousal during digital reading. <a href="https://lead.ube.fr/wp-content/uploads/2023/09/Benedetto_et_al._2014.pdf">ube.fr</a> ／ Zhou, Y. ほか (2021). Applied Sciences. <a href="https://doi.org/10.3390/app11094108">doi.org</a></li>
+      <li>Sengsoon, P., &amp; Intaruk, R. (2025). IJERPH. <a href="https://doi.org/10.3390/ijerph22040609">doi.org</a> ／ Xie, X. ほか (2021). IEEE Access. <a href="https://doi.org/10.1109/ACCESS.2021.3061770">doi.org</a></li>
+      <li>Griffiths, P. G. ほか (2016). The effect of coloured overlays and lenses on reading: a systematic review. Ophthalmic Physiol Opt 36. <a href="https://doi.org/10.1111/opo.12316">doi.org</a></li>
+      <li>Singh, S. ほか (2023). Blue-light filtering spectacles for computer vision syndrome. Cochrane. <a href="https://doi.org/10.1002/14651858.CD013244.pub2">doi.org</a></li>
+      <li>Aleman, A. C., Wang, M., &amp; Schaeffel, F. (2018). Reading and Myopia: Contrast Polarity Matters. Scientific Reports. <a href="https://doi.org/10.1038/s41598-018-28904-x">doi.org</a></li>
+      <li>Monger, L. J., Wilkins, A. J., &amp; Allen, P. M. (2015). Frontiers in Psychology. <a href="https://doi.org/10.3389/fpsyg.2015.01651">doi.org</a></li>
+      <li>Ozolinsh, M. ほか (2015). Frontiers in Psychology. <a href="https://doi.org/10.3389/fpsyg.2015.00337">doi.org</a> ／ Material Design. Dark theme. <a href="https://m2.material.io/design/color/dark-theme">material.io</a></li>
+    </ol>
+  </section>
+
+  <div class="next">
+    <p><small>表紙</small><a href="index.html" style="color:var(--navy)">目次へ戻る</a></p>
+    <p><small>前の章</small><a href="ch09.html" style="color:var(--navy)">第9章　軽い画面のつくり方</a></p>
+    <p><small>次の章</small>第11章　これからの UI</p>
+    <a class="chip" href="ch11.html" style="color:inherit;text-decoration:none">読む →</a>
+  </div>
+
+  <footer>出典: Kodou-ui の文献調査 docs/research/components-review.md をもとに作成。</footer>
+</div>
+
+<script>
+/* 線の後処理: 塗りと線を別の層に分け、塗りをずらし（版ずれ）、長い線に1〜2か所すき間を入れる */
+document.querySelectorAll('.scene').forEach(function (svg, i) {
+  var art = svg.querySelector('g.art');
+  if (!art) return;
+  var lines = art.cloneNode(true);
+  lines.setAttribute('class', 'lines');
+  lines.querySelectorAll('*').forEach(function (el) { if (el.tagName !== 'g') el.setAttribute('fill', 'none'); });
+  art.setAttribute('class', 'fills');
+  art.setAttribute('stroke', 'none');
+  art.querySelectorAll('[stroke]').forEach(function (el) { el.setAttribute('stroke', 'none'); });
+  svg.appendChild(lines);
+  var seed = 7 + i;
+  function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+  lines.querySelectorAll('path, rect, circle, ellipse, polygon, polyline, line').forEach(function (el) {
+    if (el.hasAttribute('stroke-dasharray') || el.hasAttribute('stroke') || el.hasAttribute('data-solid')) return;
+    if ((el.getAttribute('d') || '').split(/[Mm]/).length > 2) return;
+    var len = el.getTotalLength ? el.getTotalLength() : 0;
+    if (len < 40) return;
+    var gap = 6 + rnd() * 4;
+    var cuts = len > 160 ? 2 : 1;
+    var seg = len / cuts - gap;
+    var a = seg * (0.35 + rnd() * 0.3);
+    el.setAttribute('stroke-dasharray', a.toFixed(1) + ' ' + gap.toFixed(1) + ' ' + (seg - a).toFixed(1) + ' 0');
+    el.setAttribute('stroke-dashoffset', (rnd() * len).toFixed(1));
+  });
+});
+
+
+/* 明るさと字の大きさを選ぶ */
+(function () {
+  var r = document.getElementById('reader');
+  function group(attr, apply) {
+    var bs = document.querySelectorAll('[data-' + attr + ']');
+    bs.forEach(function (b) {
+      b.addEventListener('click', function () {
+        bs.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+        apply(b.getAttribute('data-' + attr));
+      });
+    });
+  }
+  group('bg', function (v) { r.className = 'reader ' + v; });
+  group('fs', function (v) { r.style.fontSize = v + 'px'; });
+})();
+</script>
+
+<div class="fab"><ol class="fab-menu" id="fab-menu" hidden aria-label="目次"><li><a href="index.html"><b></b>表紙と目次</a></li><li><a href="ch01.html"><b>1</b>人はどう画面を見るか</a></li><li><a href="ch02.html"><b>2</b>文字の読みやすさ</a></li><li><a href="ch03.html"><b>3</b>色の使い方</a></li><li><a href="ch04.html"><b>4</b>いまどこを選んでいるか</a></li><li><a href="ch05.html"><b>5</b>押す・打つのしやすさ</a></li><li><a href="ch06.html"><b>6</b>動きを入れていい時</a></li><li><a href="ch07.html"><b>7</b>情報の見せ方</a></li><li><a href="ch08.html"><b>8</b>エラーと確認</a></li><li><a href="ch09.html"><b>9</b>軽い画面のつくり方</a></li><li><a href="ch10.html" aria-current="page"><b>10</b>目の疲れ</a></li><li><a href="ch11.html"><b>11</b>これからの UI</a></li></ol><button class="fab-b" type="button" id="fab-b" aria-expanded="false" aria-controls="fab-menu">目次</button></div>
+<script>
+(function () {
+  var b = document.getElementById('fab-b'), m = document.getElementById('fab-menu');
+  function close() { if (!m.hidden) { m.hidden = true; b.setAttribute('aria-expanded', 'false'); } }
+  b.addEventListener('click', function () { if (m.hidden) { m.hidden = false; b.setAttribute('aria-expanded', 'true'); (m.querySelector('[aria-current]') || m.querySelector('a')).focus(); } else close(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !m.hidden) { close(); b.focus(); } });
+  document.addEventListener('click', function (e) { if (!e.target.closest('.fab')) close(); });
+})();
+</script>
+</body>
+</html>

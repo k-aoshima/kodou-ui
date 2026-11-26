@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>押す・打つのしやすさ｜UI デザイン講座</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Klee+One:wght@600&display=swap">
+<style>
+body{margin:0;font-size:14px}img{max-width:100%}[hidden]{display:none!important}
+
+/* 白い方眼の紙に、章の札→4つの単元カード→さわって確かめる欄→まとめ→参考文献 */
+:root {
+  color-scheme: light;
+  --paper: #fffdf9;
+  --ink: #2a2a33;
+  --sub: #6b6a78;
+  --mist: #eef0f6;
+  --salmon: #f2a99d;
+  --peach: #f6b98f;
+  --lilac: #9aa3d6;
+  --navy: #4f6f9c;
+  --mint: #a8d5ba;
+  --yellow: #ffe45c;
+  --orange: #f09a6c;
+  --display: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Hiragino Sans", sans-serif;
+  --body: "Zen Kaku Gothic New", "Hiragino Sans", "Yu Gothic", sans-serif;
+  --hand: "Klee One", "Zen Maru Gothic", sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, monospace;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--paper); color: var(--ink);
+  font-family: var(--body); font-size: 17px; line-height: 1.8;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 32px 64px;
+  background-image: linear-gradient(var(--mist) 1px, transparent 1px), linear-gradient(90deg, var(--mist) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.wrap { max-width: 1040px; margin: 0 auto; display: grid; gap: 40px; }
+
+.chip { display: inline-block; background: var(--yellow); border: 3px solid var(--ink); border-radius: 999px; padding: 2px 18px; font-family: var(--display); font-weight: 900; font-size: 16px; letter-spacing: .1em; }
+.chip.white { background: #fff; }
+.panel { background: #fff; border: 3px solid var(--ink); border-radius: 24px; box-shadow: 8px 8px 0 var(--salmon); padding: 24px 22px; display: grid; gap: 18px; }
+.panel.lilac { box-shadow: 8px 8px 0 var(--lilac); }
+.panel.mint { box-shadow: 8px 8px 0 var(--mint); }
+.panel-head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.panel-head h2 { margin: 0; font-family: var(--display); font-weight: 900; font-size: 24px; text-wrap: balance; }
+.fukuro { color: #fff; -webkit-text-stroke: 2.5px var(--ink); paint-order: stroke fill; text-shadow: 4px 4px 0 var(--ink); }
+mark { background: linear-gradient(transparent 55%, var(--yellow) 55%); color: inherit; font-weight: 700; padding: 0 1px; }
+code { font-family: var(--mono); font-size: .9em; background: var(--mist); border-radius: 4px; padding: 0 4px; }
+sup { font-size: 12px; color: var(--navy); font-weight: 700; }
+
+/* 章の表紙 */
+.cover { text-align: center; display: grid; gap: 14px; justify-items: center; padding-top: 8px; }
+.course { font-family: var(--display); font-weight: 700; color: var(--sub); font-size: 16px; letter-spacing: .08em; }
+.plate { position: relative; background: #fff; border: 3px solid var(--ink); border-radius: 56px; box-shadow: 8px 8px 0 var(--ink); padding: 34px clamp(20px, 5vw, 56px) 26px; max-width: 100%; }
+.plate .chip { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); white-space: nowrap; }
+.plate h1 { margin: 0; font-family: var(--display); font-weight: 900; font-size: clamp(30px, 6vw, 56px); line-height: 1.25; letter-spacing: .04em; text-wrap: balance; }
+.lead { max-width: 640px; margin: 0; font-size: 18px; text-align: center; font-weight: 700; }
+.goals { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 0; padding: 0; list-style: none; }
+.goals li { background: #fff; border: 2px solid var(--ink); border-radius: 999px; padding: 2px 14px; font-size: 16px; font-weight: 700; }
+.goals li::before { content: "□ "; color: var(--navy); }
+
+/* 単元カード */
+.spot-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+.spot { border: 2px solid var(--ink); border-radius: 14px; padding: 12px 14px 14px; min-width: 0; background: #fff; display: grid; gap: 8px; align-content: start; }
+.spot h3 { margin: 0; display: flex; align-items: center; gap: 10px; font-family: var(--display); font-weight: 900; font-size: 19px; border-bottom: 2px solid var(--ink); padding-bottom: 8px; line-height: 1.4; }
+.spot h3 span { background: #f8cfc6; border: 2px solid var(--ink); padding: 0 8px; font-size: 16px; line-height: 1.5; flex: none; }
+.spot p { margin: 0; font-size: 16px; }
+.scene { width: 100%; height: auto; display: block; }
+.scene .fills { transform: translate(3.5px, 3px); }
+.facts { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+.facts li { display: grid; grid-template-columns: max-content 1fr; gap: 10px; align-items: baseline; font-size: 16px; }
+.facts li b { font-family: var(--display); font-weight: 900; font-size: 17px; text-align: right; color: var(--navy); font-variant-numeric: tabular-nums; }
+.key { margin: 0; font-family: var(--display); font-weight: 900; font-size: 22px; line-height: 1.5; text-align: center; padding-block: 4px; }
+.spot .facts { justify-self: center; }
+details { font-size: 15px; color: var(--sub); }
+details summary { cursor: pointer; font-family: var(--display); font-weight: 700; color: var(--navy); width: fit-content; }
+details summary:focus-visible { outline: 2px dashed var(--navy); outline-offset: 2px; }
+details p { margin: 6px 0 0; font-size: 16px !important; line-height: 1.85; }
+.apply { background: var(--mist); border-radius: 10px; padding: 8px 12px; font-size: 16px; }
+.apply strong { font-family: var(--display); font-size: 14px; letter-spacing: .1em; display: block; color: var(--navy); }
+
+/* さわって確かめる */
+.try-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.try { background: var(--mist); border-radius: 14px; padding: 14px 12px; display: grid; gap: 10px; justify-items: center; text-align: center; min-width: 0; }
+.try .ms { font-family: var(--display); font-weight: 900; font-size: 24px; font-variant-numeric: tabular-nums; }
+.try .ms small { font-size: 14px; margin-left: 2px; }
+.try .what { font-size: 14px; color: var(--sub); line-height: 1.5; min-height: 3em; }
+.btn {
+  font-family: var(--display); font-weight: 900; font-size: 17px;
+  background: var(--yellow); color: var(--ink);
+  border: 3px solid var(--ink); border-radius: 999px;
+  padding: 8px 20px; cursor: pointer;
+  box-shadow: 5px 5px 0 var(--ink);
+  transition: transform .06s, box-shadow .06s;
+}
+.btn:hover { transform: translate(2px, 2px); box-shadow: 3px 3px 0 var(--ink); }
+.btn:active { transform: translate(5px, 5px); box-shadow: 0 0 0 var(--ink); }
+.btn:focus-visible { outline: 3px dashed var(--navy); outline-offset: 4px; }
+.btn:disabled { cursor: progress; }
+.out { width: 100%; height: 44px; background: #fff; border: 2px solid var(--ink); border-radius: 10px; display: grid; place-items: center; font-weight: 700; font-size: 16px; position: relative; overflow: hidden; }
+.out.done { background: #e4f3ea; }
+.bar { position: absolute; left: 0; top: 0; bottom: 0; background: var(--mint); width: 0; }
+.out span { position: relative; }
+.spin { width: 18px; height: 18px; border: 3px solid var(--mist); border-top-color: var(--navy); border-radius: 50%; animation: sp .8s linear infinite; }
+@keyframes sp { to { transform: rotate(360deg); } }
+.try-note { margin: 0; font-size: 15px; color: var(--sub); }
+
+/* まとめ */
+.check { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.check li { display: flex; gap: 10px; align-items: flex-start; font-size: 17px; }
+.check li b { flex: none; width: 26px; height: 26px; border: 2px solid var(--ink); border-radius: 6px; background: var(--yellow); display: grid; place-items: center; font-family: var(--display); font-size: 15px; }
+.point { position: relative; margin-top: 10px; }
+.point > b { position: absolute; top: -11px; left: 14px; background: var(--navy); color: #fff; border-radius: 999px; font-size: 13px; letter-spacing: .14em; padding: 1px 12px; font-family: var(--display); }
+.point > div { background: #fff; border: 2px solid var(--ink); border-radius: 12px; box-shadow: 5px 5px 0 var(--lilac); padding: 16px 16px 12px; font-size: 16px; }
+
+/* 参考文献と次の章 */
+.refs { margin: 0; padding-left: 1.6em; display: grid; gap: 6px; font-size: 14px; color: var(--sub); }
+.refs a { color: var(--navy); word-break: break-all; }
+.next { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; background: #fff; border: 3px solid var(--ink); border-radius: 18px; padding: 14px 20px; }
+.next p { margin: 0; font-family: var(--display); font-weight: 700; }
+.next p small { display: block; color: var(--sub); font-size: 14px; font-weight: 500; }
+
+footer { text-align: center; color: var(--sub); font-size: 14px; }
+@media (max-width: 860px) { .try-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 760px) { .spot-grid { grid-template-columns: minmax(0, 1fr); } }
+@media (prefers-reduced-motion: reduce) { .spin { animation-duration: 3s; } .btn { transition: none; } }
+
+.demo2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.dbox { background: var(--mist); border-radius: 14px; padding: 16px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.dbox h4 { margin: 0; font-family: var(--display); font-weight: 900; font-size: 18px; }
+.seg { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn.small { font-size: 15px; padding: 5px 14px; box-shadow: 3px 3px 0 var(--ink); justify-self: start; }
+.field { position: relative; height: 220px; background: #fff; border: 2px solid var(--ink); border-radius: 12px; overflow: hidden; }
+.fmsg { position: absolute; inset: 0; display: grid; place-items: center; margin: 0; color: var(--sub); font-size: 16px; }
+.target { position: absolute; border-radius: 50%; background: var(--salmon); border: 2px solid var(--ink); padding: 0; cursor: pointer; }
+.target:focus-visible { outline: 3px dashed var(--navy); outline-offset: 2px; }
+.result { margin: 0; font-family: var(--display); font-weight: 900; font-size: 18px; min-height: 1.6em; font-variant-numeric: tabular-nums; }
+.toolbar { display: flex; gap: 10px; flex-wrap: wrap; background: #fff; border: 2px solid var(--ink); border-radius: 12px; padding: 30px 12px 12px; }
+.tool { position: relative; border: 2px solid var(--ink); border-radius: 8px; padding: 4px 14px; font-weight: 700; font-size: 16px; background: var(--mist); }
+.tool kbd { position: absolute; top: -24px; left: 50%; transform: translateX(-50%); background: var(--yellow); border: 2px solid var(--ink); border-radius: 6px; padding: 0 8px; font-family: var(--mono); font-size: 14px; font-weight: 700; visibility: hidden; }
+.toolbar.keys kbd { visibility: visible; }
+@media (max-width: 760px) { .demo2 { grid-template-columns: minmax(0, 1fr); } }
+
+/* 目次ボタン */
+.fab { position: fixed; z-index: 9; right: calc(16px + env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); display: grid; justify-items: end; gap: 10px; }
+.fab-b { font-family: var(--display); font-weight: 900; font-size: 16px; min-height: 44px; padding: 6px 20px; background: var(--yellow); color: var(--ink); border: 3px solid var(--ink); border-radius: 999px; cursor: pointer; box-shadow: 4px 4px 0 var(--ink); }
+.fab-b:hover { background: #ffd92e; }
+.fab-b:focus-visible, .fab-menu a:focus-visible { outline: 3px dashed var(--navy); outline-offset: 2px; }
+.fab-menu { width: min(360px, calc(100vw - 32px)); max-height: 70vh; overflow: auto; overscroll-behavior: contain; background: #fff; border: 3px solid var(--ink); border-radius: 14px; box-shadow: 6px 6px 0 var(--ink); padding: 8px; margin: 0; list-style: none; }
+.fab-menu a { display: flex; gap: 12px; align-items: center; min-height: 40px; padding: 4px 10px; border-radius: 8px; color: var(--ink); text-decoration: none; font-family: var(--display); font-weight: 700; font-size: 16px; }
+.fab-menu a b { width: 2.2em; text-align: right; font-weight: 900; color: var(--navy); }
+.fab-menu a:hover { background: #fff6d6; }
+.fab-menu a[aria-current="page"] { background: var(--ink); color: #fff; }
+.fab-menu a[aria-current="page"] b { color: var(--yellow); }
+</style>
+
+</head>
+<body>
+<div class="wrap">
+
+  <section class="cover">
+    <div class="course"><a href="index.html" style="color:var(--navy)">UI デザイン講座</a>　全11章</div>
+    <div class="plate">
+      <span class="chip">第5章</span>
+      <h1><span class="fukuro">押す</span>・打つの<br>しやすさ</h1>
+    </div>
+    <p class="lead">マウスで押す所の大きさと、キー操作の覚えてもらい方です。</p>
+    <ul class="goals" aria-label="この章のゴール">
+      <li>押す所の大きさの目安がわかる</li>
+      <li>押しやすさを決める2つがわかる</li>
+      <li>キーを覚えてもらう方法がわかる</li>
+    </ul>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head"><span class="chip">4つの単元</span><h2>押す所と、覚えるキー</h2></div>
+    <div class="spot-grid">
+
+      <article class="spot">
+        <h3><span>5-1</span>押す所は 24px 以上</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="大きな押しボタン、小さな押しボタン、定規">
+          <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M46 124a32 24 0 0 1 64 0z" fill="#ffe45c"/>
+            <rect x="38" y="124" width="80" height="22" rx="4" fill="#4f6f9c"/>
+            <path d="M154 136a8 6 0 0 1 16 0z" fill="#f2a99d"/>
+            <rect x="150" y="136" width="24" height="10" rx="2" fill="#4f6f9c"/>
+            <rect x="204" y="128" width="96" height="18" rx="2" fill="#f6e3c8"/>
+            <path d="M214 128v6M224 128v10M234 128v6M244 128v10M254 128v6M264 128v10M274 128v6M284 128v10" stroke-width="1.6" fill="none"/>
+            <path d="M60 80l-6-8M78 76v-10M96 80l6-8" stroke="#f6b98f" fill="none"/>
+            <path d="M14 152h292" fill="none"/>
+          </g>
+        </svg>
+        <p class="key">小さい的は<mark>押しまちがえる</mark></p>
+        <ul class="facts">
+          <li><b>最低</b><span>24 × 24px</span></li>
+          <li><b>できれば</b><span>44 × 44px</span></li>
+        </ul>
+        <details><summary>くわしく</summary><p>WCAG は、マウスや指で押す所を 24×24px 以上にするよう求めています。それより小さい時は、まわりに十分な間隔があればかまいません。より高い基準では 44×44px、Apple も 44pt 以上を勧めています<sup>[1]</sup><sup>[2]</sup>。見た目の印が小さくても、押せる範囲をまわりの余白まで広げれば満たせます。</p></details>
+      </article>
+
+      <article class="spot">
+        <h3><span>5-2</span>近くて大きいほど速い</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="手前の大きな的と、遠くの小さな的">
+          <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M66 138l-8 8M94 138l8 8" fill="none"/>
+            <circle cx="80" cy="100" r="40" fill="#f8cfc6"/>
+            <circle cx="80" cy="100" r="26" fill="#fff"/>
+            <circle cx="80" cy="100" r="12" fill="#f2a99d"/>
+            <path d="M266 126l-5 20M274 126l5 20" fill="none"/>
+            <circle cx="270" cy="114" r="13" fill="#f8cfc6"/>
+            <circle cx="270" cy="114" r="5" fill="#f2a99d"/>
+            <path d="M134 100q66-40 118 6" stroke="#f6b98f" stroke-dasharray="4 6" fill="none"/>
+            <path d="M14 152h292" fill="none"/>
+          </g>
+        </svg>
+        <p class="key">押す時間は<mark>距離と大きさ</mark>で決まる</p>
+        <ul class="facts">
+          <li><b>遠い</b><span>時間がかかる</span></li>
+          <li><b>小さい</b><span>時間がかかる</span></li>
+        </ul>
+        <details><summary>くわしく</summary><p>「フィッツの法則」と呼ばれる昔からの決まりです。的までの時間は、的までの距離と的の幅で決まり、遠いほど、小さいほど長くかかります<sup>[3]</sup>。よく押すボタンは大きく、手の近くに置きます。一覧なら、行の文字だけでなく行全体を押せるようにすると、的が大きくなります。</p></details>
+      </article>
+
+      <article class="spot">
+        <h3><span>5-3</span>キーは書くだけでは覚えない</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="メニューの紙、音の出るスピーカー、キーボードのキー">
+          <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="30" y="58" width="80" height="88" rx="6" fill="#fff"/>
+            <path d="M40 76h36M40 96h40M40 116h30M40 134h38" stroke="#9aa3d6" fill="none"/>
+            <path d="M90 76h10M90 96h10M90 116h10M90 134h10" stroke="#c9d6ea" fill="none"/>
+            <rect x="140" y="98" width="20" height="28" rx="3" fill="#4f6f9c"/>
+            <path d="M160 98l22-18v64l-22-18z" fill="#4f6f9c"/>
+            <path d="M192 96q8 16 0 32M202 88q14 24 0 48" stroke="#f6b98f" fill="none"/>
+            <rect x="232" y="114" width="64" height="32" rx="6" fill="#dfe2f4"/>
+            <rect x="238" y="104" width="52" height="32" rx="5" fill="#ffe45c"/>
+            <path d="M14 152h292" fill="none"/>
+          </g>
+        </svg>
+        <p class="key">メニューに書くだけでは<mark>ほとんど覚えない</mark></p>
+        <ul class="facts">
+          <li><b>書くだけ</b><span>ほとんど覚えない</span></li>
+          <li><b>光らせる</b><span>効かなかった</span></li>
+          <li><b>読み上げる</b><span>キーを使う回数が 2倍以上に</span></li>
+        </ul>
+        <details><summary>くわしく</summary><p>メニューの項目の横にキー（例: ⌘S）を書いておくだけでは、キーはほとんど覚えられません<sup>[4]</sup>。キーの表示を光らせて目立たせる方法も、移行を助けませんでした。一方、メニューを選ぶたびにキーを声で読み上げる方法は、キーを使う回数を 2倍以上に増やし、作業時間も縮めました<sup>[4]</sup>。</p></details>
+      </article>
+
+      <article class="spot">
+        <h3><span>5-4</span>押している間だけキーを見せる</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="ボタンの並びの上に小さな札が出て、キーボードのキーが一つ押されている">
+          <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="40" y="64" width="190" height="32" rx="6" fill="#fff"/>
+            <rect x="52" y="72" width="16" height="16" rx="3" fill="#c9d6ea"/>
+            <rect x="96" y="72" width="16" height="16" rx="3" fill="#c9d6ea"/>
+            <rect x="140" y="72" width="16" height="16" rx="3" fill="#c9d6ea"/>
+            <rect x="184" y="72" width="16" height="16" rx="3" fill="#c9d6ea"/>
+            <rect x="64" y="48" width="18" height="14" rx="3" fill="#ffe45c"/>
+            <rect x="108" y="48" width="18" height="14" rx="3" fill="#ffe45c"/>
+            <rect x="152" y="48" width="18" height="14" rx="3" fill="#ffe45c"/>
+            <rect x="196" y="48" width="18" height="14" rx="3" fill="#ffe45c"/>
+            <rect x="40" y="112" width="190" height="34" rx="6" fill="#dfe2f4"/>
+            <rect x="48" y="119" width="30" height="20" rx="3" fill="#f2a99d"/>
+            <rect x="84" y="119" width="20" height="20" rx="3" fill="#fff"/>
+            <rect x="110" y="119" width="20" height="20" rx="3" fill="#fff"/>
+            <rect x="136" y="119" width="20" height="20" rx="3" fill="#fff"/>
+            <rect x="162" y="119" width="20" height="20" rx="3" fill="#fff"/>
+            <rect x="188" y="119" width="34" height="20" rx="3" fill="#fff"/>
+            <path d="M270 70v10M265 75h10M286 100v8M282 104h8" stroke="#f6b98f" fill="none"/>
+            <path d="M14 152h292" fill="none"/>
+          </g>
+        </svg>
+        <p class="key">⌘ を押している間だけ<mark>キーを重ねて出す</mark></p>
+        <ul class="facts">
+          <li><b>押している間</b><span>各ボタンの上にキーが出る</span></li>
+          <li><b>離すと</b><span>ふだんの画面に戻る</span></li>
+        </ul>
+        <details><summary>くわしく</summary><p>⌘ などのキーを押している間だけ、画面の各ボタンの上にそのキーを重ねて出す方法があります（ExposeHK）。追加の操作をせずにキーを見せられる方法として評価されています<sup>[5]</sup>。ただし、どれだけ効いたかの数字は今回の文献では確かめられていません。</p></details>
+      </article>
+
+    </div>
+  </section>
+
+  <section class="panel lilac" aria-label="さわって確かめる">
+    <div class="panel-head"><span class="chip">さわって確かめる</span><h2>押しやすさを測る</h2></div>
+    <div class="demo2">
+      <div class="dbox">
+        <h4>的を5回押す</h4>
+        <div class="seg">
+          <button class="btn small" type="button" id="g-small">小さい的（16px）</button>
+          <button class="btn small" type="button" id="g-big">大きい的（48px）</button>
+        </div>
+        <div class="field" id="field" aria-live="polite"><p class="fmsg">上のボタンで始めます</p></div>
+        <p class="result" id="gres"></p>
+      </div>
+      <div class="dbox">
+        <h4>Option を押している間だけ</h4>
+        <div class="toolbar" id="toolbar">
+          <span class="tool">新規<kbd>N</kbd></span><span class="tool">開く<kbd>O</kbd></span><span class="tool">保存<kbd>S</kbd></span><span class="tool">検索<kbd>F</kbd></span>
+        </div>
+        <button class="btn small" type="button" id="hold">押している間だけ出す</button>
+        <p class="try-note">キーボードの Option（Windows は Alt）を押している間、ボタンの上にキーが出ます。タッチなら「押している間だけ出す」を押し続けてください。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel mint" aria-label="まとめ">
+    <div class="panel-head"><span class="chip">この章のまとめ</span><h2>3つだけ覚えて帰る</h2></div>
+    <ul class="check">
+      <li><b>1</b><span>押す所は <mark>24px 以上</mark></span></li>
+      <li><b>2</b><span>よく押す物は<mark>大きく、近く</mark></span></li>
+      <li><b>3</b><span>キーは<mark>使うその場で</mark>見せる</span></li>
+    </ul>
+    <div class="point"><b>POINT</b><div>はじめての人はマウスで、慣れた人はキーで。両方の道を用意する。</div></div>
+  </section>
+
+  <section class="panel" aria-label="参考文献" style="box-shadow:none">
+    <div class="panel-head"><span class="chip white">参考文献</span><h2>もっと読むなら</h2></div>
+    <ol class="refs">
+      <li>W3C (2023). Understanding Success Criterion 2.5.8: Target Size (Minimum). <a href="https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html">w3.org</a></li>
+      <li>Apple. UI Design Dos and Don'ts. <a href="https://developer.apple.com/design/tips">developer.apple.com</a></li>
+      <li>MacKenzie, I. S. (1992). Fitts' law as a research and design tool in human-computer interaction. HCI 7. <a href="https://www.yorku.ca/mack/hci1992.html">yorku.ca</a></li>
+      <li>Grossman, T., Dragicevic, P., &amp; Balakrishnan, R. (2007). Strategies for Accelerating On-line Learning of Hotkeys. CHI 2007. <a href="https://www.dgp.toronto.edu/~ravin/papers/chi2007_learninghotkeys.pdf">toronto.edu</a></li>
+      <li>Giannisakis, E. ほか (2017). IconHK: Using Toolbar Button Icons to Communicate Keyboard Shortcuts. CHI 2017. <a href="https://hal.inria.fr/hal-01444365">hal.inria.fr</a></li>
+    </ol>
+  </section>
+
+  <div class="next">
+    <p><small>表紙</small><a href="index.html" style="color:var(--navy)">目次へ戻る</a></p>
+    <p><small>前の章</small><a href="ch04.html" style="color:var(--navy)">第4章　いまどこを選んでいるか</a></p>
+    <p><small>次の章</small>第6章　動きを入れていい時</p>
+    <a class="chip" href="ch06.html" style="color:inherit;text-decoration:none">読む →</a>
+  </div>
+
+  <footer>出典: Kodou-ui の文献調査 docs/research/retro-vs-modern.md と components-review.md をもとに作成。</footer>
+</div>
+
+<script>
+/* 線の後処理: 塗りと線を別の層に分け、塗りをずらし（版ずれ）、長い線に1〜2か所すき間を入れる */
+document.querySelectorAll('.scene').forEach(function (svg, i) {
+  var art = svg.querySelector('g.art');
+  if (!art) return;
+  var lines = art.cloneNode(true);
+  lines.setAttribute('class', 'lines');
+  lines.querySelectorAll('*').forEach(function (el) { if (el.tagName !== 'g') el.setAttribute('fill', 'none'); });
+  art.setAttribute('class', 'fills');
+  art.setAttribute('stroke', 'none');
+  art.querySelectorAll('[stroke]').forEach(function (el) { el.setAttribute('stroke', 'none'); });
+  svg.appendChild(lines);
+  var seed = 7 + i;
+  function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+  lines.querySelectorAll('path, rect, circle, ellipse, polygon, polyline, line').forEach(function (el) {
+    if (el.hasAttribute('stroke-dasharray') || el.hasAttribute('stroke') || el.hasAttribute('data-solid')) return;
+    if ((el.getAttribute('d') || '').split(/[Mm]/).length > 2) return;
+    var len = el.getTotalLength ? el.getTotalLength() : 0;
+    if (len < 40) return;
+    var gap = 6 + rnd() * 4;
+    var cuts = len > 160 ? 2 : 1;
+    var seg = len / cuts - gap;
+    var a = seg * (0.35 + rnd() * 0.3);
+    el.setAttribute('stroke-dasharray', a.toFixed(1) + ' ' + gap.toFixed(1) + ' ' + (seg - a).toFixed(1) + ' 0');
+    el.setAttribute('stroke-dashoffset', (rnd() * len).toFixed(1));
+  });
+});
+
+
+/* 的を押す */
+(function () {
+  var field = document.getElementById('field'), res = document.getElementById('gres');
+  var size, left, t0, times, misses, target;
+  function place() {
+    var w = field.clientWidth - size - 8, h = field.clientHeight - size - 8;
+    target.style.left = (4 + Math.random() * w) + 'px';
+    target.style.top = (4 + Math.random() * h) + 'px';
+    t0 = performance.now();
+  }
+  function start(s) {
+    size = s; left = 5; times = []; misses = 0;
+    field.innerHTML = '';
+    target = document.createElement('button');
+    target.type = 'button'; target.className = 'target';
+    target.setAttribute('aria-label', '的');
+    target.style.width = target.style.height = s + 'px';
+    target.addEventListener('click', function (e) {
+      e.stopPropagation();
+      times.push(performance.now() - t0);
+      if (--left > 0) { place(); return; }
+      var avg = times.reduce(function (a, b) { return a + b; }, 0) / times.length;
+      field.innerHTML = '<p class="fmsg">おしまい</p>';
+      res.textContent = s + 'px の的：1回 平均 ' + Math.round(avg) + 'ms、外した回数 ' + misses;
+    });
+    field.appendChild(target);
+    res.textContent = 'あと 5 回';
+    place();
+  }
+  field.addEventListener('click', function () { if (target && left > 0) { misses++; } });
+  document.getElementById('g-small').addEventListener('click', function () { start(16); });
+  document.getElementById('g-big').addEventListener('click', function () { start(48); });
+})();
+/* Option を押している間だけキーを出す */
+(function () {
+  var tb = document.getElementById('toolbar'), hold = document.getElementById('hold');
+  function on() { tb.classList.add('keys'); } function off() { tb.classList.remove('keys'); }
+  document.addEventListener('keydown', function (e) { if (e.key === 'Alt') on(); });
+  document.addEventListener('keyup', function (e) { if (e.key === 'Alt') off(); });
+  window.addEventListener('blur', off);
+  hold.addEventListener('pointerdown', on);
+  ['pointerup', 'pointerleave', 'pointercancel'].forEach(function (ev) { hold.addEventListener(ev, off); });
+  hold.addEventListener('keydown', function (e) { if (e.key === ' ' || e.key === 'Enter') on(); });
+  hold.addEventListener('keyup', function (e) { if (e.key === ' ' || e.key === 'Enter') off(); });
+})();
+</script>
+
+<div class="fab"><ol class="fab-menu" id="fab-menu" hidden aria-label="目次"><li><a href="index.html"><b></b>表紙と目次</a></li><li><a href="ch01.html"><b>1</b>人はどう画面を見るか</a></li><li><a href="ch02.html"><b>2</b>文字の読みやすさ</a></li><li><a href="ch03.html"><b>3</b>色の使い方</a></li><li><a href="ch04.html"><b>4</b>いまどこを選んでいるか</a></li><li><a href="ch05.html" aria-current="page"><b>5</b>押す・打つのしやすさ</a></li><li><a href="ch06.html"><b>6</b>動きを入れていい時</a></li><li><a href="ch07.html"><b>7</b>情報の見せ方</a></li><li><a href="ch08.html"><b>8</b>エラーと確認</a></li><li><a href="ch09.html"><b>9</b>軽い画面のつくり方</a></li><li><a href="ch10.html"><b>10</b>目の疲れ</a></li><li><a href="ch11.html"><b>11</b>これからの UI</a></li></ol><button class="fab-b" type="button" id="fab-b" aria-expanded="false" aria-controls="fab-menu">目次</button></div>
+<script>
+(function () {
+  var b = document.getElementById('fab-b'), m = document.getElementById('fab-menu');
+  function close() { if (!m.hidden) { m.hidden = true; b.setAttribute('aria-expanded', 'false'); } }
+  b.addEventListener('click', function () { if (m.hidden) { m.hidden = false; b.setAttribute('aria-expanded', 'true'); (m.querySelector('[aria-current]') || m.querySelector('a')).focus(); } else close(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !m.hidden) { close(); b.focus(); } });
+  document.addEventListener('click', function (e) { if (!e.target.closest('.fab')) close(); });
+})();
+</script>
+</body>
+</html>

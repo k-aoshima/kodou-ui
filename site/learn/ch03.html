@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>色の使い方｜UI デザイン講座</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Klee+One:wght@600&display=swap">
+<style>
+body{margin:0;font-size:14px}img{max-width:100%}[hidden]{display:none!important}
+
+/* 白い方眼の紙に、章の札→4つの単元カード→さわって確かめる欄→まとめ→参考文献 */
+:root {
+  color-scheme: light;
+  --paper: #fffdf9;
+  --ink: #2a2a33;
+  --sub: #6b6a78;
+  --mist: #eef0f6;
+  --salmon: #f2a99d;
+  --peach: #f6b98f;
+  --lilac: #9aa3d6;
+  --navy: #4f6f9c;
+  --mint: #a8d5ba;
+  --yellow: #ffe45c;
+  --orange: #f09a6c;
+  --display: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Hiragino Sans", sans-serif;
+  --body: "Zen Kaku Gothic New", "Hiragino Sans", "Yu Gothic", sans-serif;
+  --hand: "Klee One", "Zen Maru Gothic", sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, monospace;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--paper); color: var(--ink);
+  font-family: var(--body); font-size: 17px; line-height: 1.8;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 32px 64px;
+  background-image: linear-gradient(var(--mist) 1px, transparent 1px), linear-gradient(90deg, var(--mist) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.wrap { max-width: 1040px; margin: 0 auto; display: grid; gap: 40px; }
+
+.chip { display: inline-block; background: var(--yellow); border: 3px solid var(--ink); border-radius: 999px; padding: 2px 18px; font-family: var(--display); font-weight: 900; font-size: 16px; letter-spacing: .1em; }
+.chip.white { background: #fff; }
+.panel { background: #fff; border: 3px solid var(--ink); border-radius: 24px; box-shadow: 8px 8px 0 var(--salmon); padding: 24px 22px; display: grid; gap: 18px; }
+.panel.lilac { box-shadow: 8px 8px 0 var(--lilac); }
+.panel.mint { box-shadow: 8px 8px 0 var(--mint); }
+.panel-head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.panel-head h2 { margin: 0; font-family: var(--display); font-weight: 900; font-size: 24px; text-wrap: balance; }
+.fukuro { color: #fff; -webkit-text-stroke: 2.5px var(--ink); paint-order: stroke fill; text-shadow: 4px 4px 0 var(--ink); }
+mark { background: linear-gradient(transparent 55%, var(--yellow) 55%); color: inherit; font-weight: 700; padding: 0 1px; }
+code { font-family: var(--mono); font-size: .9em; background: var(--mist); border-radius: 4px; padding: 0 4px; }
+sup { font-size: 12px; color: var(--navy); font-weight: 700; }
+
+/* 章の表紙 */
+.cover { text-align: center; display: grid; gap: 14px; justify-items: center; padding-top: 8px; }
+.course { font-family: var(--display); font-weight: 700; color: var(--sub); font-size: 16px; letter-spacing: .08em; }
+.plate { position: relative; background: #fff; border: 3px solid var(--ink); border-radius: 56px; box-shadow: 8px 8px 0 var(--ink); padding: 34px clamp(20px, 5vw, 56px) 26px; max-width: 100%; }
+.plate .chip { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); white-space: nowrap; }
+.plate h1 { margin: 0; font-family: var(--display); font-weight: 900; font-size: clamp(30px, 6vw, 56px); line-height: 1.25; letter-spacing: .04em; text-wrap: balance; }
+.lead { max-width: 640px; margin: 0; font-size: 18px; text-align: center; font-weight: 700; }
+.goals { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 0; padding: 0; list-style: none; }
+.goals li { background: #fff; border: 2px solid var(--ink); border-radius: 999px; padding: 2px 14px; font-size: 16px; font-weight: 700; }
+.goals li::before { content: "□ "; color: var(--navy); }
+
+/* 単元カード */
+.spot-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+.spot { border: 2px solid var(--ink); border-radius: 14px; padding: 12px 14px 14px; min-width: 0; background: #fff; display: grid; gap: 8px; align-content: start; }
+.spot h3 { margin: 0; display: flex; align-items: center; gap: 10px; font-family: var(--display); font-weight: 900; font-size: 19px; border-bottom: 2px solid var(--ink); padding-bottom: 8px; line-height: 1.4; }
+.spot h3 span { background: #f8cfc6; border: 2px solid var(--ink); padding: 0 8px; font-size: 16px; line-height: 1.5; flex: none; }
+.spot p { margin: 0; font-size: 16px; }
+.scene { width: 100%; height: auto; display: block; }
+.scene .fills { transform: translate(3.5px, 3px); }
+.facts { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+.facts li { display: grid; grid-template-columns: max-content 1fr; gap: 10px; align-items: baseline; font-size: 16px; }
+.facts li b { font-family: var(--display); font-weight: 900; font-size: 17px; text-align: right; color: var(--navy); font-variant-numeric: tabular-nums; }
+.key { margin: 0; font-family: var(--display); font-weight: 900; font-size: 22px; line-height: 1.5; text-align: center; padding-block: 4px; }
+.spot .facts { justify-self: center; }
+details { font-size: 15px; color: var(--sub); }
+details summary { cursor: pointer; font-family: var(--display); font-weight: 700; color: var(--navy); width: fit-content; }
+details summary:focus-visible { outline: 2px dashed var(--navy); outline-offset: 2px; }
+details p { margin: 6px 0 0; font-size: 16px !important; line-height: 1.85; }
+.apply { background: var(--mist); border-radius: 10px; padding: 8px 12px; font-size: 16px; }
+.apply strong { font-family: var(--display); font-size: 14px; letter-spacing: .1em; display: block; color: var(--navy); }
+
+/* さわって確かめる */
+.try-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.try { background: var(--mist); border-radius: 14px; padding: 14px 12px; display: grid; gap: 10px; justify-items: center; text-align: center; min-width: 0; }
+.try .ms { font-family: var(--display); font-weight: 900; font-size: 24px; font-variant-numeric: tabular-nums; }
+.try .ms small { font-size: 14px; margin-left: 2px; }
+.try .what { font-size: 14px; color: var(--sub); line-height: 1.5; min-height: 3em; }
+.btn {
+  font-family: var(--display); font-weight: 900; font-size: 17px;
+  background: var(--yellow); color: var(--ink);
+  border: 3px solid var(--ink); border-radius: 999px;
+  padding: 8px 20px; cursor: pointer;
+  box-shadow: 5px 5px 0 var(--ink);
+  transition: transform .06s, box-shadow .06s;
+}
+.btn:hover { transform: translate(2px, 2px); box-shadow: 3px 3px 0 var(--ink); }
+.btn:active { transform: translate(5px, 5px); box-shadow: 0 0 0 var(--ink); }
+.btn:focus-visible { outline: 3px dashed var(--navy); outline-offset: 4px; }
+.btn:disabled { cursor: progress; }
+.out { width: 100%; height: 44px; background: #fff; border: 2px solid var(--ink); border-radius: 10px; display: grid; place-items: center; font-weight: 700; font-size: 16px; position: relative; overflow: hidden; }
+.out.done { background: #e4f3ea; }
+.bar { position: absolute; left: 0; top: 0; bottom: 0; background: var(--mint); width: 0; }
+.out span { position: relative; }
+.spin { width: 18px; height: 18px; border: 3px solid var(--mist); border-top-color: var(--navy); border-radius: 50%; animation: sp .8s linear infinite; }
+@keyframes sp { to { transform: rotate(360deg); } }
+.try-note { margin: 0; font-size: 15px; color: var(--sub); }
+
+/* まとめ */
+.check { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.check li { display: flex; gap: 10px; align-items: flex-start; font-size: 17px; }
+.check li b { flex: none; width: 26px; height: 26px; border: 2px solid var(--ink); border-radius: 6px; background: var(--yellow); display: grid; place-items: center; font-family: var(--display); font-size: 15px; }
+.point { position: relative; margin-top: 10px; }
+.point > b { position: absolute; top: -11px; left: 14px; background: var(--navy); color: #fff; border-radius: 999px; font-size: 13px; letter-spacing: .14em; padding: 1px 12px; font-family: var(--display); }
+.point > div { background: #fff; border: 2px solid var(--ink); border-radius: 12px; box-shadow: 5px 5px 0 var(--lilac); padding: 16px 16px 12px; font-size: 16px; }
+
+/* 参考文献と次の章 */
+.refs { margin: 0; padding-left: 1.6em; display: grid; gap: 6px; font-size: 14px; color: var(--sub); }
+.refs a { color: var(--navy); word-break: break-all; }
+.next { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; background: #fff; border: 3px solid var(--ink); border-radius: 18px; padding: 14px 20px; }
+.next p { margin: 0; font-family: var(--display); font-weight: 700; }
+.next p small { display: block; color: var(--sub); font-size: 14px; font-weight: 500; }
+
+footer { text-align: center; color: var(--sub); font-size: 14px; }
+@media (max-width: 860px) { .try-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 760px) { .spot-grid { grid-template-columns: minmax(0, 1fr); } }
+@media (prefers-reduced-motion: reduce) { .spin { animation-duration: 3s; } .btn { transition: none; } }
+
+/* 見え方の体験 */
+.demo2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.dbox { background: var(--mist); border-radius: 14px; padding: 16px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.dbox h4 { margin: 0; font-family: var(--display); font-weight: 900; font-size: 18px; }
+.seg { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn.small { font-size: 15px; padding: 5px 14px; box-shadow: 3px 3px 0 var(--ink); }
+.btn.small[aria-pressed="true"] { background: var(--ink); color: #fff; box-shadow: 3px 3px 0 var(--yellow); }
+.statuses { background: #fff; border: 2px solid var(--ink); border-radius: 12px; padding: 14px; display: grid; gap: 12px; }
+.statuses.deut { filter: url(#deut); }
+.srow { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.slabel { width: 5.5em; font-weight: 700; font-size: 16px; }
+.dot { width: 22px; height: 22px; border-radius: 50%; display: inline-block; }
+.dot.ok, .pill.ok { background: #2b7a2b; }
+.dot.ng, .pill.ng { background: #b8321f; }
+.pill { color: #fff; font-weight: 700; font-size: 16px; padding: 2px 12px; border-radius: 999px; }
+.tlabel { font-family: var(--display); font-weight: 700; font-size: 16px; display: flex; justify-content: space-between; }
+.tlabel b { color: var(--navy); font-family: var(--mono); font-size: 15px; }
+#tone { width: 100%; accent-color: var(--navy); }
+.csample { margin: 0; background: #fff; border: 2px solid var(--ink); border-radius: 12px; padding: 16px; font-size: 18px; font-weight: 500; }
+.ratio { margin: 0; font-family: var(--display); font-weight: 900; font-size: 20px; font-variant-numeric: tabular-nums; }
+@media (max-width: 760px) { .demo2 { grid-template-columns: minmax(0, 1fr); } }
+
+/* 目次ボタン */
+.fab { position: fixed; z-index: 9; right: calc(16px + env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); display: grid; justify-items: end; gap: 10px; }
+.fab-b { font-family: var(--display); font-weight: 900; font-size: 16px; min-height: 44px; padding: 6px 20px; background: var(--yellow); color: var(--ink); border: 3px solid var(--ink); border-radius: 999px; cursor: pointer; box-shadow: 4px 4px 0 var(--ink); }
+.fab-b:hover { background: #ffd92e; }
+.fab-b:focus-visible, .fab-menu a:focus-visible { outline: 3px dashed var(--navy); outline-offset: 2px; }
+.fab-menu { width: min(360px, calc(100vw - 32px)); max-height: 70vh; overflow: auto; overscroll-behavior: contain; background: #fff; border: 3px solid var(--ink); border-radius: 14px; box-shadow: 6px 6px 0 var(--ink); padding: 8px; margin: 0; list-style: none; }
+.fab-menu a { display: flex; gap: 12px; align-items: center; min-height: 40px; padding: 4px 10px; border-radius: 8px; color: var(--ink); text-decoration: none; font-family: var(--display); font-weight: 700; font-size: 16px; }
+.fab-menu a b { width: 2.2em; text-align: right; font-weight: 900; color: var(--navy); }
+.fab-menu a:hover { background: #fff6d6; }
+.fab-menu a[aria-current="page"] { background: var(--ink); color: #fff; }
+.fab-menu a[aria-current="page"] b { color: var(--yellow); }
+</style>
+
+</head>
+<body>
+<div class="wrap">
+
+  <section class="cover">
+    <div class="course"><a href="index.html" style="color:var(--navy)">UI デザイン講座</a>　全11章</div>
+    <div class="plate">
+      <span class="chip">第3章</span>
+      <h1><span class="fukuro">色</span>の<br>使い方</h1>
+    </div>
+    <p class="lead">色は、見え方が人によって違います。色に頼りすぎない使い方です。</p>
+    <ul class="goals" aria-label="この章のゴール">
+      <li>避けたい色の組み合わせがわかる</li>
+      <li>色だけで伝えない理由がわかる</li>
+      <li>字と地の濃さの差の目安がわかる</li>
+    </ul>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head"><span class="chip">4つの単元</span><h2>色に頼りすぎない</h2></div>
+    <div class="spot-grid">
+
+      <article class="spot">
+        <h3><span>3-1</span>赤と緑を並べない</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="信号機と、赤いりんごと緑のりんご">
+          <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M60 122v24" fill="none"/>
+            <rect x="40" y="52" width="40" height="70" rx="8" fill="#4f6f9c"/>
+            <circle cx="60" cy="68" r="9" fill="#f2a99d"/>
+            <circle cx="60" cy="87" r="9" fill="#ffe45c"/>
+            <circle cx="60" cy="106" r="9" fill="#a8d5ba"/>
+            <rect x="48" y="141" width="24" height="7" rx="2" fill="#c9d6ea"/>
+            <path d="M130 104c-14-10-30 2-26 20 3 14 14 24 26 18 12 6 23-4 26-18 4-18-12-30-26-20z" fill="#f2a99d"/>
+            <path d="M130 104c0-6 2-10 6-12" fill="none"/>
+            <path d="M134 96c6-6 14-4 16 0-6 4-12 4-16 0z" fill="#a8d5ba"/>
+            <g transform="translate(70 0)">
+              <path d="M130 104c-14-10-30 2-26 20 3 14 14 24 26 18 12 6 23-4 26-18 4-18-12-30-26-20z" fill="#a8d5ba"/>
+              <path d="M130 104c0-6 2-10 6-12" fill="none"/>
+              <path d="M134 96c6-6 14-4 16 0-6 4-12 4-16 0z" fill="#a8d5ba"/>
+            </g>
+            <path d="M270 70v10M265 75h10M292 96v8M288 100h8" stroke="#f6b98f" fill="none"/>
+            <path d="M14 152h292" fill="none"/>
+          </g>
+        </svg>
+        <p class="key">赤と緑は<mark>見分けにくい人が多い</mark></p>
+        <ul class="facts">
+          <li><b>日本人男性</b><span>20人に1人くらい（4〜6.5%）</span></li>
+          <li><b>避けたい</b><span>赤と緑、暗い地に赤い字</span></li>
+        </ul>
+        <details><summary>くわしく</summary><p>生まれつき赤と緑を見分けにくい人は、日本人の男性で 4〜6.5%、ヨーロッパ系の男性で約 8%、女性で約 0.4% です<sup>[1]</sup>。色の見え方に配慮した色づかいのガイドでは、赤と緑、黒や暗い地の上の赤い字、青と紫、緑と茶の組み合わせを避けるよう勧めています<sup>[2]</sup>。暗い赤は、人によってはほぼ黒に見えるからです。</p></details>
+      </article>
+
+      <article class="spot">
+        <h3><span>3-2</span>色だけで伝えない</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="チェックの入った丸、びっくりマークの三角、ばつ印の四角">
+          <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="70" cy="118" r="28" fill="#a8d5ba"/>
+            <path d="M57 118l9 9 17-18" stroke="#2a2a33" stroke-width="4" fill="none"/>
+            <path d="M160 88l32 56h-64z" fill="#ffe45c"/>
+            <path d="M160 106v18M160 134v1" stroke="#2a2a33" stroke-width="4" fill="none"/>
+            <rect x="226" y="92" width="54" height="54" rx="8" fill="#f2a99d"/>
+            <path d="M241 107l24 24M265 107l-24 24" stroke="#2a2a33" stroke-width="4" fill="none"/>
+            <path d="M118 62v10M113 67h10" stroke="#f6b98f" fill="none"/>
+            <path d="M14 152h292" fill="none"/>
+          </g>
+        </svg>
+        <p class="key">色に<mark>形か文字を添える</mark></p>
+        <ul class="facts">
+          <li><b>ダメ</b><span>緑の丸だけ、赤い枠だけ</span></li>
+          <li><b>いい</b><span>「✓ 完了」「✕ 失敗」</span></li>
+        </ul>
+        <details><summary>くわしく</summary><p>Web の読みやすさの基準（WCAG）は、色を情報を伝える唯一の手段にしないよう求めています<sup>[3]</sup>。色の見え方のガイドも、色に形・線の種類・文字を組み合わせるよう勧めています<sup>[2]</sup>。ターミナルの <code>[  OK  ]</code> <code>[FAILED]</code> のように文字で書いてあれば、色が見えなくても意味は残ります。</p></details>
+      </article>
+
+      <article class="spot">
+        <h3><span>3-3</span>字と地の濃さに差をつける</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="薄い字でよく読めない看板と、濃い字でくっきり読める看板">
+          <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M52 124l-8 22M118 124l8 22" fill="none"/>
+            <rect x="30" y="60" width="110" height="64" rx="6" fill="#f6e3c8"/>
+            <path d="M46 80h78M46 94h62M46 108h70" stroke="#ead3b1" stroke-width="5" fill="none"/>
+            <path d="M192 124l-8 22M258 124l8 22" fill="none"/>
+            <rect x="170" y="60" width="110" height="64" rx="6" fill="#fff"/>
+            <path d="M186 80h78M186 94h62M186 108h70" stroke="#2a2a33" stroke-width="5" fill="none"/>
+            <path d="M296 56v10M291 61h10" stroke="#f6b98f" fill="none"/>
+            <path d="M14 152h292" fill="none"/>
+          </g>
+        </svg>
+        <p class="key">字は地より<mark>4.5倍</mark>くっきり</p>
+        <ul class="facts">
+          <li><b>ふつうの字</b><span>4.5 : 1 以上</span></li>
+          <li><b>大きい字</b><span>3 : 1 以上</span></li>
+        </ul>
+        <details><summary>くわしく</summary><p>WCAG は、字と地の明るさの比を 4.5:1 以上、大きい字なら 3:1 以上にするよう求めています<sup>[4]</sup>。ボタンの枠や選んでいる印など、部品を見分けるための見た目も 3:1 以上です<sup>[5]</sup>。補足を薄い灰色で書くと、この基準を割りやすくなります。薄い色は罫線のような飾りにだけ使います。</p></details>
+      </article>
+
+      <article class="spot">
+        <h3><span>3-4</span>明るい地に暗い字</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="太陽と白い紙に黒い字、月と黒い紙に白い字">
+          <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="62" cy="68" r="13" fill="#ffe45c"/>
+            <path d="M62 46v6M62 84v6M40 68h6M78 68h6M47 53l4 4M73 79l4 4M77 53l-4 4M51 79l-4 4" stroke="#f6b98f" fill="none"/>
+            <rect x="34" y="98" width="74" height="48" rx="3" fill="#fff"/>
+            <path d="M44 112h52M44 122h40M44 132h48" stroke="#2a2a33" stroke-width="3" fill="none"/>
+            <path d="M214 56a14 14 0 1 0 12 22 11 11 0 1 1-12-22z" fill="#f6e3c8"/>
+            <rect x="186" y="98" width="74" height="48" rx="3" fill="#2a2a33"/>
+            <path d="M196 112h52M196 122h40M196 132h48" stroke="#dfe2f4" stroke-width="3" fill="none"/>
+            <path d="M262 60v8M258 64h8M284 80v6M281 83h6" stroke="#9aa3d6" fill="none"/>
+            <path d="M14 152h292" fill="none"/>
+          </g>
+        </svg>
+        <p class="key">読む成績は<mark>明るい地</mark>の方がいい</p>
+        <ul class="facts">
+          <li><b>明るい地</b><span>若い人も年配の人も成績がいい</span></li>
+          <li><b>暗い地</b><span>若い人には人気。でも成績は下がる</span></li>
+        </ul>
+        <details><summary>くわしく</summary><p>18〜33 歳と 60〜85 歳のどちらでも、白い地に黒い字の方が、視力検査と文の見直しの成績がよくなりました<sup>[6]</sup>。この差は字が小さいほど大きく、本人は違いに気づいていませんでした<sup>[7]</sup>。暗い地では頭の負担が増える一方、若い人は暗い地を好みました<sup>[8]</sup>。ただ、白内障など目に濁りがある人は暗い地の方が速く読めた、という小さな研究もあります<sup>[7]</sup>。明るい地を基本にして、暗い地も選べるようにするのが安全です。</p></details>
+      </article>
+
+    </div>
+  </section>
+
+  <section class="panel lilac" aria-label="さわって確かめる">
+    <div class="panel-head"><span class="chip">さわって確かめる</span><h2>見え方を変えてみる</h2></div>
+    <div class="demo2">
+      <div class="dbox">
+        <h4>赤と緑が見分けにくい見え方</h4>
+        <div class="seg" role="group" aria-label="見え方">
+          <button class="btn small" type="button" id="v-normal" aria-pressed="true">ふつう</button>
+          <button class="btn small" type="button" id="v-deut" aria-pressed="false">見分けにくい見え方</button>
+        </div>
+        <div class="statuses" id="statuses">
+          <div class="srow"><span class="slabel">色だけ</span><i class="dot ok"></i><i class="dot ng"></i><i class="dot ok"></i><i class="dot ng"></i></div>
+          <div class="srow"><span class="slabel">色＋記号</span><span class="pill ok">✓ 成功</span><span class="pill ng">✕ 失敗</span></div>
+        </div>
+        <p class="try-note">切り替えると、上の段はどれが失敗か分からなくなります。見え方の再現は近似です。</p>
+      </div>
+      <div class="dbox">
+        <h4>字の濃さ</h4>
+        <label for="tone" class="tlabel">字の色 <b id="tone-v"></b></label>
+        <input type="range" id="tone" min="0" max="90" value="60">
+        <p class="csample" id="csample">この字は読みやすいですか</p>
+        <p class="ratio" id="ratio"></p>
+      </div>
+    </div>
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+      <filter id="deut"><feColorMatrix type="matrix" values="0.367 0.861 -0.228 0 0  0.280 0.673 0.047 0 0  -0.012 0.043 0.969 0 0  0 0 0 1 0"/></filter>
+    </svg>
+  </section>
+
+  <section class="panel mint" aria-label="まとめ">
+    <div class="panel-head"><span class="chip">この章のまとめ</span><h2>3つだけ覚えて帰る</h2></div>
+    <ul class="check">
+      <li><b>1</b><span><mark>赤と緑</mark>を並べて区別させない</span></li>
+      <li><b>2</b><span>色には<mark>形か文字</mark>を添える</span></li>
+      <li><b>3</b><span>字は地より <mark>4.5倍</mark>くっきり</span></li>
+    </ul>
+    <div class="point"><b>POINT</b><div>白黒にしても伝わるか、で確かめる。</div></div>
+  </section>
+
+  <section class="panel" aria-label="参考文献" style="box-shadow:none">
+    <div class="panel-head"><span class="chip white">参考文献</span><h2>もっと読むなら</h2></div>
+    <ol class="refs">
+      <li>Birch, J. (2012). Worldwide prevalence of red-green color deficiency. JOSA A 29(3). <a href="https://pubmed.ncbi.nlm.nih.gov/22472762/">pubmed</a></li>
+      <li>Okabe, M., &amp; Ito, K. Color Universal Design (CUD). <a href="https://jfly.uni-koeln.de/color/">jfly.uni-koeln.de</a></li>
+      <li>W3C (2023). Understanding Success Criterion 1.4.1: Use of Color. <a href="https://www.w3.org/WAI/WCAG22/Understanding/use-of-color.html">w3.org</a></li>
+      <li>W3C (2023). Understanding Success Criterion 1.4.3: Contrast (Minimum). <a href="https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html">w3.org</a></li>
+      <li>W3C (2023). Understanding Success Criterion 1.4.11: Non-text Contrast. <a href="https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html">w3.org</a></li>
+      <li>Piepenbrock, C. ほか (2013). Positive display polarity is advantageous for both younger and older adults. Ergonomics 56(7). <a href="https://doi.org/10.1080/00140139.2013.790485">doi.org</a></li>
+      <li>Budiu, R. (2020). Dark Mode vs. Light Mode: Which Is Better? Nielsen Norman Group. <a href="https://www.nngroup.com/articles/dark-mode/">nngroup.com</a></li>
+      <li>Sethi, T., &amp; Ziat, M. (2023). Dark mode vogue. Ergonomics 66(12). <a href="https://pubmed.ncbi.nlm.nih.gov/36533999/">pubmed</a></li>
+    </ol>
+  </section>
+
+  <div class="next">
+    <p><small>表紙</small><a href="index.html" style="color:var(--navy)">目次へ戻る</a></p>
+    <p><small>前の章</small><a href="ch02.html" style="color:var(--navy)">第2章　文字の読みやすさ</a></p>
+    <p><small>次の章</small>第4章　選択とフォーカス（いまどこを選んでいるか）</p>
+    <a class="chip" href="ch04.html" style="color:inherit;text-decoration:none">読む →</a>
+  </div>
+
+  <footer>出典: Kodou-ui の文献調査 docs/research/retro-vs-modern.md をもとに作成。見え方の再現は Machado ら（2009）の行列による近似。</footer>
+</div>
+
+<script>
+/* 線の後処理: 塗りと線を別の層に分け、塗りをずらし（版ずれ）、長い線に1〜2か所すき間を入れる */
+document.querySelectorAll('.scene').forEach(function (svg, i) {
+  var art = svg.querySelector('g.art');
+  if (!art) return;
+  var lines = art.cloneNode(true);
+  lines.setAttribute('class', 'lines');
+  lines.querySelectorAll('*').forEach(function (el) { if (el.tagName !== 'g') el.setAttribute('fill', 'none'); });
+  art.setAttribute('class', 'fills');
+  art.setAttribute('stroke', 'none');
+  art.querySelectorAll('[stroke]').forEach(function (el) { el.setAttribute('stroke', 'none'); });
+  svg.appendChild(lines);
+  var seed = 7 + i;
+  function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+  lines.querySelectorAll('path, rect, circle, ellipse, polygon, polyline, line').forEach(function (el) {
+    if (el.hasAttribute('stroke-dasharray') || el.hasAttribute('stroke') || el.hasAttribute('data-solid')) return;
+    if ((el.getAttribute('d') || '').split(/[Mm]/).length > 2) return;
+    var len = el.getTotalLength ? el.getTotalLength() : 0;
+    if (len < 40) return;
+    var gap = 6 + rnd() * 4;
+    var cuts = len > 160 ? 2 : 1;
+    var seg = len / cuts - gap;
+    var a = seg * (0.35 + rnd() * 0.3);
+    el.setAttribute('stroke-dasharray', a.toFixed(1) + ' ' + gap.toFixed(1) + ' ' + (seg - a).toFixed(1) + ' 0');
+    el.setAttribute('stroke-dashoffset', (rnd() * len).toFixed(1));
+  });
+});
+
+
+/* 見え方の切り替え */
+(function () {
+  var box = document.getElementById('statuses');
+  var a = document.getElementById('v-normal'), b = document.getElementById('v-deut');
+  function set(d) { box.classList.toggle('deut', d); a.setAttribute('aria-pressed', d ? 'false' : 'true'); b.setAttribute('aria-pressed', d ? 'true' : 'false'); }
+  a.addEventListener('click', function () { set(false); });
+  b.addEventListener('click', function () { set(true); });
+})();
+/* 字の濃さとコントラスト比 */
+(function () {
+  var tone = document.getElementById('tone'), sample = document.getElementById('csample'), ratio = document.getElementById('ratio'), v = document.getElementById('tone-v');
+  function lin(c) { c /= 255; return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); }
+  function apply() {
+    var g = Math.round(tone.value / 100 * 255);
+    var hex = '#' + ('0' + g.toString(16)).slice(-2).repeat(3);
+    var L = lin(g), r = 1.05 / (L + 0.05);
+    sample.style.color = hex;
+    v.textContent = hex;
+    var ok = r >= 4.5;
+    ratio.textContent = r.toFixed(1) + ' : 1　' + (ok ? '○ 足りている' : (r >= 3 ? '△ 大きい字なら足りる' : '✕ 足りない'));
+    ratio.style.color = ok ? '#2a2a33' : '#9b2c1d';
+  }
+  tone.addEventListener('input', apply);
+  apply();
+})();
+</script>
+
+<div class="fab"><ol class="fab-menu" id="fab-menu" hidden aria-label="目次"><li><a href="index.html"><b></b>表紙と目次</a></li><li><a href="ch01.html"><b>1</b>人はどう画面を見るか</a></li><li><a href="ch02.html"><b>2</b>文字の読みやすさ</a></li><li><a href="ch03.html" aria-current="page"><b>3</b>色の使い方</a></li><li><a href="ch04.html"><b>4</b>いまどこを選んでいるか</a></li><li><a href="ch05.html"><b>5</b>押す・打つのしやすさ</a></li><li><a href="ch06.html"><b>6</b>動きを入れていい時</a></li><li><a href="ch07.html"><b>7</b>情報の見せ方</a></li><li><a href="ch08.html"><b>8</b>エラーと確認</a></li><li><a href="ch09.html"><b>9</b>軽い画面のつくり方</a></li><li><a href="ch10.html"><b>10</b>目の疲れ</a></li><li><a href="ch11.html"><b>11</b>これからの UI</a></li></ol><button class="fab-b" type="button" id="fab-b" aria-expanded="false" aria-controls="fab-menu">目次</button></div>
+<script>
+(function () {
+  var b = document.getElementById('fab-b'), m = document.getElementById('fab-menu');
+  function close() { if (!m.hidden) { m.hidden = true; b.setAttribute('aria-expanded', 'false'); } }
+  b.addEventListener('click', function () { if (m.hidden) { m.hidden = false; b.setAttribute('aria-expanded', 'true'); (m.querySelector('[aria-current]') || m.querySelector('a')).focus(); } else close(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !m.hidden) { close(); b.focus(); } });
+  document.addEventListener('click', function (e) { if (!e.target.closest('.fab')) close(); });
+})();
+</script>
+</body>
+</html>

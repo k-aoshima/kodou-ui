@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>エラーと確認｜UI デザイン講座</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Klee+One:wght@600&display=swap">
+<style>
+body{margin:0;font-size:14px}img{max-width:100%}[hidden]{display:none!important}
+
+/* 白い方眼の紙に、章の札→4つの単元カード→さわって確かめる欄→まとめ→参考文献 */
+:root {
+  color-scheme: light;
+  --paper: #fffdf9;
+  --ink: #2a2a33;
+  --sub: #6b6a78;
+  --mist: #eef0f6;
+  --salmon: #f2a99d;
+  --peach: #f6b98f;
+  --lilac: #9aa3d6;
+  --navy: #4f6f9c;
+  --mint: #a8d5ba;
+  --yellow: #ffe45c;
+  --orange: #f09a6c;
+  --display: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Hiragino Sans", sans-serif;
+  --body: "Zen Kaku Gothic New", "Hiragino Sans", "Yu Gothic", sans-serif;
+  --hand: "Klee One", "Zen Maru Gothic", sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, monospace;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--paper); color: var(--ink);
+  font-family: var(--body); font-size: 17px; line-height: 1.8;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 32px 64px;
+  background-image: linear-gradient(var(--mist) 1px, transparent 1px), linear-gradient(90deg, var(--mist) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.wrap { max-width: 1040px; margin: 0 auto; display: grid; gap: 40px; }
+
+.chip { display: inline-block; background: var(--yellow); border: 3px solid var(--ink); border-radius: 999px; padding: 2px 18px; font-family: var(--display); font-weight: 900; font-size: 16px; letter-spacing: .1em; }
+.chip.white { background: #fff; }
+.panel { background: #fff; border: 3px solid var(--ink); border-radius: 24px; box-shadow: 8px 8px 0 var(--salmon); padding: 24px 22px; display: grid; gap: 18px; }
+.panel.lilac { box-shadow: 8px 8px 0 var(--lilac); }
+.panel.mint { box-shadow: 8px 8px 0 var(--mint); }
+.panel-head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.panel-head h2 { margin: 0; font-family: var(--display); font-weight: 900; font-size: 24px; text-wrap: balance; }
+.fukuro { color: #fff; -webkit-text-stroke: 2.5px var(--ink); paint-order: stroke fill; text-shadow: 4px 4px 0 var(--ink); }
+mark { background: linear-gradient(transparent 55%, var(--yellow) 55%); color: inherit; font-weight: 700; padding: 0 1px; }
+code { font-family: var(--mono); font-size: .9em; background: var(--mist); border-radius: 4px; padding: 0 4px; }
+sup { font-size: 12px; color: var(--navy); font-weight: 700; }
+
+/* 章の表紙 */
+.cover { text-align: center; display: grid; gap: 14px; justify-items: center; padding-top: 8px; }
+.course { font-family: var(--display); font-weight: 700; color: var(--sub); font-size: 16px; letter-spacing: .08em; }
+.plate { position: relative; background: #fff; border: 3px solid var(--ink); border-radius: 56px; box-shadow: 8px 8px 0 var(--ink); padding: 34px clamp(20px, 5vw, 56px) 26px; max-width: 100%; }
+.plate .chip { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); white-space: nowrap; }
+.plate h1 { margin: 0; font-family: var(--display); font-weight: 900; font-size: clamp(30px, 6vw, 56px); line-height: 1.25; letter-spacing: .04em; text-wrap: balance; }
+.lead { max-width: 640px; margin: 0; font-size: 18px; text-align: center; font-weight: 700; }
+.goals { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 0; padding: 0; list-style: none; }
+.goals li { background: #fff; border: 2px solid var(--ink); border-radius: 999px; padding: 2px 14px; font-size: 16px; font-weight: 700; }
+.goals li::before { content: "□ "; color: var(--navy); }
+
+/* 単元カード */
+.spot-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+.spot { border: 2px solid var(--ink); border-radius: 14px; padding: 12px 14px 14px; min-width: 0; background: #fff; display: grid; gap: 8px; align-content: start; }
+.spot h3 { margin: 0; display: flex; align-items: center; gap: 10px; font-family: var(--display); font-weight: 900; font-size: 19px; border-bottom: 2px solid var(--ink); padding-bottom: 8px; line-height: 1.4; }
+.spot h3 span { background: #f8cfc6; border: 2px solid var(--ink); padding: 0 8px; font-size: 16px; line-height: 1.5; flex: none; }
+.spot p { margin: 0; font-size: 16px; }
+.scene { width: 100%; height: auto; display: block; }
+.scene .fills { transform: translate(3.5px, 3px); }
+.facts { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+.facts li { display: grid; grid-template-columns: max-content 1fr; gap: 10px; align-items: baseline; font-size: 16px; }
+.facts li b { font-family: var(--display); font-weight: 900; font-size: 17px; text-align: right; color: var(--navy); font-variant-numeric: tabular-nums; }
+.key { margin: 0; font-family: var(--display); font-weight: 900; font-size: 22px; line-height: 1.5; text-align: center; padding-block: 4px; }
+.spot .facts { justify-self: center; }
+details { font-size: 15px; color: var(--sub); }
+details summary { cursor: pointer; font-family: var(--display); font-weight: 700; color: var(--navy); width: fit-content; }
+details summary:focus-visible { outline: 2px dashed var(--navy); outline-offset: 2px; }
+details p { margin: 6px 0 0; font-size: 16px !important; line-height: 1.85; }
+.apply { background: var(--mist); border-radius: 10px; padding: 8px 12px; font-size: 16px; }
+.apply strong { font-family: var(--display); font-size: 14px; letter-spacing: .1em; display: block; color: var(--navy); }
+
+/* さわって確かめる */
+.try-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.try { background: var(--mist); border-radius: 14px; padding: 14px 12px; display: grid; gap: 10px; justify-items: center; text-align: center; min-width: 0; }
+.try .ms { font-family: var(--display); font-weight: 900; font-size: 24px; font-variant-numeric: tabular-nums; }
+.try .ms small { font-size: 14px; margin-left: 2px; }
+.try .what { font-size: 14px; color: var(--sub); line-height: 1.5; min-height: 3em; }
+.btn {
+  font-family: var(--display); font-weight: 900; font-size: 17px;
+  background: var(--yellow); color: var(--ink);
+  border: 3px solid var(--ink); border-radius: 999px;
+  padding: 8px 20px; cursor: pointer;
+  box-shadow: 5px 5px 0 var(--ink);
+  transition: transform .06s, box-shadow .06s;
+}
+.btn:hover { transform: translate(2px, 2px); box-shadow: 3px 3px 0 var(--ink); }
+.btn:active { transform: translate(5px, 5px); box-shadow: 0 0 0 var(--ink); }
+.btn:focus-visible { outline: 3px dashed var(--navy); outline-offset: 4px; }
+.btn:disabled { cursor: progress; }
+.out { width: 100%; height: 44px; background: #fff; border: 2px solid var(--ink); border-radius: 10px; display: grid; place-items: center; font-weight: 700; font-size: 16px; position: relative; overflow: hidden; }
+.out.done { background: #e4f3ea; }
+.bar { position: absolute; left: 0; top: 0; bottom: 0; background: var(--mint); width: 0; }
+.out span { position: relative; }
+.spin { width: 18px; height: 18px; border: 3px solid var(--mist); border-top-color: var(--navy); border-radius: 50%; animation: sp .8s linear infinite; }
+@keyframes sp { to { transform: rotate(360deg); } }
+.try-note { margin: 0; font-size: 15px; color: var(--sub); }
+
+/* まとめ */
+.check { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.check li { display: flex; gap: 10px; align-items: flex-start; font-size: 17px; }
+.check li b { flex: none; width: 26px; height: 26px; border: 2px solid var(--ink); border-radius: 6px; background: var(--yellow); display: grid; place-items: center; font-family: var(--display); font-size: 15px; }
+.point { position: relative; margin-top: 10px; }
+.point > b { position: absolute; top: -11px; left: 14px; background: var(--navy); color: #fff; border-radius: 999px; font-size: 13px; letter-spacing: .14em; padding: 1px 12px; font-family: var(--display); }
+.point > div { background: #fff; border: 2px solid var(--ink); border-radius: 12px; box-shadow: 5px 5px 0 var(--lilac); padding: 16px 16px 12px; font-size: 16px; }
+
+/* 参考文献と次の章 */
+.refs { margin: 0; padding-left: 1.6em; display: grid; gap: 6px; font-size: 14px; color: var(--sub); }
+.refs a { color: var(--navy); word-break: break-all; }
+.next { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; background: #fff; border: 3px solid var(--ink); border-radius: 18px; padding: 14px 20px; }
+.next p { margin: 0; font-family: var(--display); font-weight: 700; }
+.next p small { display: block; color: var(--sub); font-size: 14px; font-weight: 500; }
+
+footer { text-align: center; color: var(--sub); font-size: 14px; }
+@media (max-width: 860px) { .try-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 760px) { .spot-grid { grid-template-columns: minmax(0, 1fr); } }
+@media (prefers-reduced-motion: reduce) { .spin { animation-duration: 3s; } .btn { transition: none; } }
+
+.demo2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.dbox { background: var(--mist); border-radius: 14px; padding: 16px; display: grid; gap: 12px; align-content: start; min-width: 0; position: relative; }
+.dbox h4 { margin: 0; font-family: var(--display); font-weight: 900; font-size: 18px; }
+.seg { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn.small { font-size: 15px; padding: 5px 14px; box-shadow: 3px 3px 0 var(--ink); }
+.btn.small[aria-pressed="true"] { background: var(--ink); color: #fff; box-shadow: 3px 3px 0 var(--yellow); }
+.btn.danger { background: #b8321f; color: #fff; }
+.files { list-style: none; margin: 0; padding: 4px 0; background: #fff; border: 2px solid var(--ink); border-radius: 12px; min-height: 60px; }
+.files li { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 4px 8px 4px 14px; min-height: 40px; font-family: var(--mono); font-size: 16px; }
+.files li + li { border-top: 1px solid var(--mist); }
+.files .del { font-family: var(--body); font-size: 15px; font-weight: 700; background: #fff; border: 2px solid var(--ink); border-radius: 8px; padding: 2px 10px; min-height: 30px; cursor: pointer; }
+.files .del:focus-visible, .linkbtn:focus-visible, .finput:focus-visible { outline: 3px dashed var(--navy); outline-offset: 2px; }
+.files .empty { color: var(--sub); font-family: var(--body); justify-content: center; }
+.dlg { position: absolute; inset: 0; background: rgba(42,42,51,.35); border-radius: 14px; display: grid; place-items: center; padding: 16px; }
+.dlg[hidden] { display: none; }
+.dlg-box { margin: 0; width: min(100%, 24rem); background: #fff; border: 2px solid var(--ink); border-radius: 12px; padding: 16px; display: grid; gap: 12px; box-shadow: 5px 5px 0 var(--ink); }
+.dlg-box p { margin: 0; font-size: 16px; }
+.dlg-btns { display: flex; gap: 12px; justify-content: flex-end; flex-wrap: wrap; }
+.toast { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: var(--ink); color: #fff; border-radius: 12px; padding: 8px 10px 8px 14px; font-size: 16px; }
+.toast[hidden] { display: none; }
+.linkbtn { background: none; border: 0; color: var(--navy); font: inherit; text-decoration: underline; cursor: pointer; padding: 4px 2px; min-height: 24px; }
+.flabel { font-family: var(--display); font-weight: 700; font-size: 16px; }
+.finput { font-family: var(--mono); font-size: 16px; padding: 8px 12px; border: 2px solid var(--ink); border-radius: 10px; background: #fff; min-height: 44px; width: 100%; }
+.finput.bad { border-color: #b8321f; }
+.ferr { margin: -6px 0 0; min-height: 1.6em; font-size: 15px; font-weight: 700; color: #9b2c1d; }
+.ferr.good { color: #22663a; }
+@media (max-width: 760px) { .demo2 { grid-template-columns: minmax(0, 1fr); } }
+
+/* 目次ボタン */
+.fab { position: fixed; z-index: 9; right: calc(16px + env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); display: grid; justify-items: end; gap: 10px; }
+.fab-b { font-family: var(--display); font-weight: 900; font-size: 16px; min-height: 44px; padding: 6px 20px; background: var(--yellow); color: var(--ink); border: 3px solid var(--ink); border-radius: 999px; cursor: pointer; box-shadow: 4px 4px 0 var(--ink); }
+.fab-b:hover { background: #ffd92e; }
+.fab-b:focus-visible, .fab-menu a:focus-visible { outline: 3px dashed var(--navy); outline-offset: 2px; }
+.fab-menu { width: min(360px, calc(100vw - 32px)); max-height: 70vh; overflow: auto; overscroll-behavior: contain; background: #fff; border: 3px solid var(--ink); border-radius: 14px; box-shadow: 6px 6px 0 var(--ink); padding: 8px; margin: 0; list-style: none; }
+.fab-menu a { display: flex; gap: 12px; align-items: center; min-height: 40px; padding: 4px 10px; border-radius: 8px; color: var(--ink); text-decoration: none; font-family: var(--display); font-weight: 700; font-size: 16px; }
+.fab-menu a b { width: 2.2em; text-align: right; font-weight: 900; color: var(--navy); }
+.fab-menu a:hover { background: #fff6d6; }
+.fab-menu a[aria-current="page"] { background: var(--ink); color: #fff; }
+.fab-menu a[aria-current="page"] b { color: var(--yellow); }
+</style>
+
+</head>
+<body>
+<div class="wrap">
+
+  <section class="cover">
+    <div class="course"><a href="index.html" style="color:var(--navy)">UI デザイン講座</a>　全11章</div>
+    <div class="plate">
+      <span class="chip">第8章</span>
+      <h1><span class="fukuro">エラー</span>と<br>確認</h1>
+    </div>
+    <p class="lead">まちがいは必ず起きます。起きた後に助けるのが UI の仕事です。</p>
+    <ul class="goals" aria-label="この章のゴール">
+      <li>伝わるエラー文の書き方がわかる</li>
+      <li>確認を出しすぎる害がわかる</li>
+      <li>入力チェックのタイミングがわかる</li>
+    </ul>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head"><span class="chip">4つの単元</span><h2>まちがいを助ける</h2></div>
+    <div class="spot-grid">
+
+      <article class="spot">
+        <h3><span>8-1</span>エラーは直し方まで書く</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="びっくりマークの標識、右を指す道案内の看板、スパナ">
+          <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M70 108v38" fill="none"/>
+            <path d="M70 56l30 52H40z" fill="#ffe45c"/>
+            <path d="M70 72v18M70 98v1" stroke="#2a2a33" stroke-width="4" fill="none"/>
+            <path d="M160 100v46" fill="none"/>
+            <path d="M126 70h60l14 15-14 15h-60z" fill="#a8d5ba"/>
+            <path d="M138 85h40" stroke="#fff" stroke-width="3" fill="none"/>
+            <g transform="rotate(-40 262 118)">
+              <rect x="256" y="104" width="12" height="44" rx="5" fill="#dfe2f4"/>
+              <path d="M250 96a12 12 0 0 0 24 0h-7v8h-10v-8z" fill="#dfe2f4"/>
+            </g>
+            <path d="M296 62v10M291 67h10" stroke="#f6b98f" fill="none"/>
+            <path d="M14 152h292" fill="none"/>
+          </g>
+        </svg>
+        <p class="key">何が起きたか＋<mark>どう直すか</mark></p>
+        <ul class="facts">
+          <li><b>ダメ</b><span>「EACCES」「エラーが発生しました」</span></li>
+          <li><b>いい</b><span>「保存できません。フォルダの書き込み権限を確認してください」</span></li>
+        </ul>
+        <details><summary>くわしく</summary><p>エラー文の指針では、色や動きだけに頼らず目立たせる、原因の近くに出す、専門用語を避けて人の言葉で書く、何が問題でどう直すかを書く、入力を消さない、責める言い方をしない、エラーコードだけを出さない、が挙げられています<sup>[1]</sup>。ターミナルの指針も、エラーを人向けに書き直して直し方を示し、大事なことは最後に置くよう勧めています<sup>[2]</sup>。</p></details>
+      </article>
+
+      <article class="spot">
+        <h3><span>8-2</span>確認は2回目から効かなくなる</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="重なった確認の窓と、何度も押されるOKボタン">
+          <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="30" y="56" width="110" height="64" rx="6" fill="#fff"/>
+            <rect x="44" y="68" width="110" height="64" rx="6" fill="#fff"/>
+            <rect x="58" y="80" width="110" height="64" rx="6" fill="#fff"/>
+            <path d="M58 92v-6a6 6 0 0 1 6-6h98a6 6 0 0 1 6 6v6z" fill="#9aa3d6"/>
+            <path d="M70 106h60M70 116h40" stroke="#9aa3d6" fill="none"/>
+            <rect x="196" y="112" width="84" height="34" rx="17" fill="#ffe45c"/>
+            <path d="M206 92a32 32 0 0 1 64 0M270 92l-6-4M270 92l4-6" stroke="#f6b98f" fill="none"/>
+            <path d="M14 152h292" fill="none"/>
+          </g>
+        </svg>
+        <p class="key">確認は<mark>見慣れると読まれない</mark></p>
+        <ul class="facts">
+          <li><b>2回目</b><span>脳の反応がもう大きく落ちる</span></li>
+          <li><b>出す時</b><span>取り返しのつかない操作だけ</span></li>
+        </ul>
+        <details><summary>くわしく</summary><p>脳の動きを測った実験では、警告を見た時の反応が2回目にはもう大きく落ちました。見た目が毎回変わる警告の方が、慣れにくかったそうです<sup>[3]</sup>。何度も「OK」を押すうちに、人は読まずに押すようになります<sup>[4]</sup>。確認は取り返しのつかない重い操作だけにし、乱発しないよう勧められています<sup>[5]</sup>。確認に要る情報に目を向けさせ、危ない操作を少しの間押せなくする工夫で、きちんと見て判断する人が2〜3倍になった研究もあります<sup>[6]</sup>。</p></details>
+      </article>
+
+      <article class="spot">
+        <h3><span>8-3</span>確認より取り消し</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="ごみ箱から紙が戻ってくる矢印">
+          <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="56" y="80" width="64" height="8" rx="3" fill="#c9d6ea"/>
+            <path d="M80 80v-6h16v6" fill="none"/>
+            <path d="M62 88h52l-6 58H68z" fill="#c9d6ea"/>
+            <path d="M78 100v34M98 100v34" fill="none"/>
+            <path d="M126 96q44-50 92-14M218 82l-12-2M218 82l-2-12" stroke="#f6b98f" stroke-width="3" fill="none"/>
+            <path d="M226 74h40l12 12v60h-52z" fill="#fff"/>
+            <path d="M266 74v12h12" fill="#f6e3c8"/>
+            <path d="M236 98h32M236 110h28M236 122h32M236 134h20" stroke="#9aa3d6" fill="none"/>
+            <path d="M14 152h292" fill="none"/>
+          </g>
+        </svg>
+        <p class="key">取り消せるなら<mark>聞かずに実行</mark>して、戻せるように</p>
+        <ul class="facts">
+          <li><b>ボタン</b><span>「はい」ではなく「ファイルを削除」</span></li>
+          <li><b>最初の選択</b><span>「はい」にしない</span></li>
+          <li><b>取り消し</b><span>マウスを乗せている間は消さない</span></li>
+        </ul>
+        <details><summary>くわしく</summary><p>確認を出すくらいなら取り消し（元に戻す）を用意せよ、という主張があります<sup>[4]</sup>。確認を出す時も、ボタンは「はい／いいえ」ではなく「ファイルを削除」のように結果を書き、最初に選ばれているのを「はい」にしないよう勧められています<sup>[5]</sup>。とても重い操作だけ、消す物の名前を打たせる方法もあります<sup>[2]</sup>。「元に戻す」を出す通知が数秒で必ず消えると、操作に制限時間をつけたことになりえます<sup>[7]</sup>。マウスを乗せている間は止め、ほかの場所からも取り消せるようにします。</p></details>
+      </article>
+
+      <article class="spot">
+        <h3><span>8-4</span>入力チェックは欄を離れてから</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="チェックの付いた入力欄と、書きかけの入力欄、鉛筆">
+          <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="30" y="66" width="170" height="30" rx="6" fill="#fff"/>
+            <path d="M42 81h80" stroke="#4f6f9c" fill="none"/>
+            <circle cx="184" cy="81" r="10" fill="#a8d5ba"/>
+            <path d="M179 81l4 4 7-7" stroke="#2a2a33" fill="none"/>
+            <rect x="30" y="112" width="170" height="30" rx="6" fill="#fff"/>
+            <path d="M42 127h40" stroke="#4f6f9c" fill="none"/>
+            <path d="M88 119v16" stroke="#2a2a33" stroke-width="2.5" fill="none"/>
+            <g transform="rotate(-35 262 112)">
+              <rect x="226" y="104" width="64" height="15" fill="#ffe45c"/>
+              <path d="M290 104l18 7.5-18 7.5z" fill="#f6e3c8"/>
+              <rect x="216" y="104" width="10" height="15" rx="3" fill="#f2a99d"/>
+            </g>
+            <path d="M14 152h292" fill="none"/>
+          </g>
+        </svg>
+        <p class="key">打っている最中に<mark>赤くしない</mark></p>
+        <ul class="facts">
+          <li><b>離れてから</b><span>7〜10秒速く入力できた</span></li>
+          <li><b>例外</b><span>名前が空いているかなど、打ちながら知りたい物</span></li>
+        </ul>
+        <details><summary>くわしく</summary><p>入力欄のチェックを比べた実験では、欄を離れた後にチェックする方が、打っている最中にチェックするより 7〜10 秒速く入力が終わりました<sup>[8]</sup>。メールアドレスのように形が決まっている欄は、離れた後に確かめます。使いたい名前が空いているかのように、打ちながら知りたい物だけ、打つたびに確かめます。</p></details>
+      </article>
+
+    </div>
+  </section>
+
+  <section class="panel lilac" aria-label="さわって確かめる">
+    <div class="panel-head"><span class="chip">さわって確かめる</span><h2>確認と取り消し、チェックのタイミング</h2></div>
+    <div class="demo2">
+      <div class="dbox">
+        <h4>ファイルを消す</h4>
+        <div class="seg" role="group" aria-label="消し方">
+          <button class="btn small" type="button" id="d-confirm" aria-pressed="true">毎回確認</button>
+          <button class="btn small" type="button" id="d-undo" aria-pressed="false">取り消しを出す</button>
+        </div>
+        <ul class="files" id="files"></ul>
+        <div class="dlg" id="dlg" hidden role="dialog" aria-modal="true" aria-labelledby="dlg-t">
+          <div class="dlg-box">
+            <p id="dlg-t"></p>
+            <div class="dlg-btns"><button class="btn small" type="button" id="dlg-cancel">キャンセル</button><button class="btn small danger" type="button" id="dlg-ok">ファイルを削除</button></div>
+          </div>
+        </div>
+        <div class="toast" id="toast" hidden role="status"><span id="toast-t"></span><button class="btn small" type="button" id="toast-undo">元に戻す</button></div>
+        <p class="try-note">全部消してみて、どちらが楽か、どちらで読まずに押したか比べてください。<button class="linkbtn" type="button" id="files-reset">ファイルを戻す</button></p>
+      </div>
+      <div class="dbox">
+        <h4>メールアドレスを打つ</h4>
+        <label class="flabel" for="mail-a">打つたびにチェック</label>
+        <input class="finput" id="mail-a" type="text" autocomplete="off" placeholder="name@example.com">
+        <p class="ferr" id="err-a" aria-live="polite"></p>
+        <label class="flabel" for="mail-b">欄を離れてからチェック</label>
+        <input class="finput" id="mail-b" type="text" autocomplete="off" placeholder="name@example.com">
+        <p class="ferr" id="err-b" aria-live="polite"></p>
+        <p class="try-note">上の欄は1文字目から「✕」が出ます。下の欄は、打ち終えて欄の外を押した時だけ確かめます。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel mint" aria-label="まとめ">
+    <div class="panel-head"><span class="chip">この章のまとめ</span><h2>3つだけ覚えて帰る</h2></div>
+    <ul class="check">
+      <li><b>1</b><span>エラーは<mark>どう直すか</mark>まで書く</span></li>
+      <li><b>2</b><span>確認は減らして、<mark>取り消し</mark>を用意する</span></li>
+      <li><b>3</b><span>入力チェックは<mark>欄を離れてから</mark></span></li>
+    </ul>
+    <div class="point"><b>POINT</b><div>止めるより、戻せるようにする。</div></div>
+  </section>
+
+  <section class="panel" aria-label="参考文献" style="box-shadow:none">
+    <div class="panel-head"><span class="chip white">参考文献</span><h2>もっと読むなら</h2></div>
+    <ol class="refs">
+      <li>Neusesser, T., &amp; Sunwall, E. (2023). Error-Message Guidelines. Nielsen Norman Group. <a href="https://www.nngroup.com/articles/error-message-guidelines/">nngroup.com</a></li>
+      <li>Prasad, A. ほか. Command Line Interface Guidelines. <a href="https://clig.dev/">clig.dev</a></li>
+      <li>Anderson, B. B. ほか (2015). How Polymorphic Warnings Reduce Habituation in the Brain: Insights from an fMRI Study. CHI 2015. <a href="https://scholarsarchive.byu.edu/facpub/9306">byu.edu</a></li>
+      <li>Raskin, A. (2007). Never Use a Warning When You Mean Undo. A List Apart. <a href="https://alistapart.com/article/neveruseawarning/">alistapart.com</a></li>
+      <li>Nielsen, J. (2018). Confirmation Dialogs Can Prevent User Errors (If Not Overused). Nielsen Norman Group. <a href="https://www.nngroup.com/articles/confirmation-dialog/">nngroup.com</a></li>
+      <li>Bravo-Lillo, C. ほか (2013). Your Attention Please: Designing security-decision UIs to make genuine risks harder to ignore. SOUPS 2013. <a href="https://www.microsoft.com/en-us/research/?p=164816">microsoft.com</a></li>
+      <li>W3C. WCAG 2.2, 2.2.1 Timing Adjustable ／ 4.1.3 Status Messages. <a href="https://www.w3.org/TR/WCAG22/">w3.org</a></li>
+      <li>Wroblewski, L. (2009). Inline Validation in Web Forms. A List Apart. <a href="https://alistapart.com/article/inline-validation-in-web-forms/">alistapart.com</a></li>
+    </ol>
+  </section>
+
+  <div class="next">
+    <p><small>表紙</small><a href="index.html" style="color:var(--navy)">目次へ戻る</a></p>
+    <p><small>前の章</small><a href="ch07.html" style="color:var(--navy)">第7章　情報の見せ方</a></p>
+    <p><small>次の章</small>第9章　軽い画面のつくり方</p>
+    <a class="chip" href="ch09.html" style="color:inherit;text-decoration:none">読む →</a>
+  </div>
+
+  <footer>出典: Kodou-ui の文献調査 docs/research/retro-vs-modern.md と components-review.md をもとに作成。</footer>
+</div>
+
+<script>
+/* 線の後処理: 塗りと線を別の層に分け、塗りをずらし（版ずれ）、長い線に1〜2か所すき間を入れる */
+document.querySelectorAll('.scene').forEach(function (svg, i) {
+  var art = svg.querySelector('g.art');
+  if (!art) return;
+  var lines = art.cloneNode(true);
+  lines.setAttribute('class', 'lines');
+  lines.querySelectorAll('*').forEach(function (el) { if (el.tagName !== 'g') el.setAttribute('fill', 'none'); });
+  art.setAttribute('class', 'fills');
+  art.setAttribute('stroke', 'none');
+  art.querySelectorAll('[stroke]').forEach(function (el) { el.setAttribute('stroke', 'none'); });
+  svg.appendChild(lines);
+  var seed = 7 + i;
+  function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+  lines.querySelectorAll('path, rect, circle, ellipse, polygon, polyline, line').forEach(function (el) {
+    if (el.hasAttribute('stroke-dasharray') || el.hasAttribute('stroke') || el.hasAttribute('data-solid')) return;
+    if ((el.getAttribute('d') || '').split(/[Mm]/).length > 2) return;
+    var len = el.getTotalLength ? el.getTotalLength() : 0;
+    if (len < 40) return;
+    var gap = 6 + rnd() * 4;
+    var cuts = len > 160 ? 2 : 1;
+    var seg = len / cuts - gap;
+    var a = seg * (0.35 + rnd() * 0.3);
+    el.setAttribute('stroke-dasharray', a.toFixed(1) + ' ' + gap.toFixed(1) + ' ' + (seg - a).toFixed(1) + ' 0');
+    el.setAttribute('stroke-dashoffset', (rnd() * len).toFixed(1));
+  });
+});
+
+
+/* ファイルを消す: 毎回確認 と 取り消し */
+(function () {
+  var NAMES = ['report.pdf', 'photo.jpg', 'memo.txt', 'draft.docx', 'old.zip'];
+  var files = NAMES.slice(), mode = 'confirm', pending = null, timer = null, last = null;
+  var ul = document.getElementById('files'), dlg = document.getElementById('dlg'), dlgT = document.getElementById('dlg-t');
+  var toast = document.getElementById('toast'), toastT = document.getElementById('toast-t');
+  function render() {
+    ul.innerHTML = files.length ? files.map(function (f, i) { return '<li>' + f + '<button type="button" class="del" data-i="' + i + '">削除</button></li>'; }).join('') : '<li class="empty">ファイルはありません</li>';
+  }
+  function remove(i) { last = { name: files[i], at: i }; files.splice(i, 1); render(); }
+  function showToast() {
+    toastT.textContent = '「' + last.name + '」を削除しました';
+    toast.hidden = false; clearTimeout(timer);
+    timer = setTimeout(function () { toast.hidden = true; }, 6000);
+  }
+  toast.addEventListener('mouseenter', function () { clearTimeout(timer); });
+  toast.addEventListener('focusin', function () { clearTimeout(timer); });
+  toast.addEventListener('mouseleave', function () { timer = setTimeout(function () { toast.hidden = true; }, 3000); });
+  document.getElementById('toast-undo').addEventListener('click', function () {
+    if (last) { files.splice(last.at, 0, last.name); last = null; render(); }
+    toast.hidden = true;
+  });
+  ul.addEventListener('click', function (e) {
+    var b = e.target.closest('.del'); if (!b) return;
+    var i = +b.dataset.i;
+    if (mode === 'confirm') {
+      pending = i; dlgT.textContent = '「' + files[i] + '」を削除しますか？ この操作は取り消せません。';
+      dlg.hidden = false; document.getElementById('dlg-cancel').focus();
+    } else { remove(i); showToast(); }
+  });
+  document.getElementById('dlg-ok').addEventListener('click', function () { dlg.hidden = true; remove(pending); });
+  document.getElementById('dlg-cancel').addEventListener('click', function () { dlg.hidden = true; });
+  dlg.addEventListener('keydown', function (e) { if (e.key === 'Escape') dlg.hidden = true; });
+  function setMode(m) {
+    mode = m;
+    document.getElementById('d-confirm').setAttribute('aria-pressed', m === 'confirm' ? 'true' : 'false');
+    document.getElementById('d-undo').setAttribute('aria-pressed', m === 'undo' ? 'true' : 'false');
+    toast.hidden = true; dlg.hidden = true;
+  }
+  document.getElementById('d-confirm').addEventListener('click', function () { setMode('confirm'); });
+  document.getElementById('d-undo').addEventListener('click', function () { setMode('undo'); });
+  document.getElementById('files-reset').addEventListener('click', function () { files = NAMES.slice(); last = null; toast.hidden = true; render(); });
+  render();
+})();
+/* メールの入力チェック */
+(function () {
+  var re = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+  function check(input, out) {
+    var v = input.value.trim();
+    if (!v) { out.textContent = ''; out.className = 'ferr'; input.classList.remove('bad'); return; }
+    if (re.test(v)) { out.textContent = '✓ 使えます'; out.className = 'ferr good'; input.classList.remove('bad'); }
+    else { out.textContent = '✕ 「@」と「.」を含むメールアドレスを入れてください'; out.className = 'ferr'; input.classList.add('bad'); }
+  }
+  var a = document.getElementById('mail-a'), ea = document.getElementById('err-a');
+  var b = document.getElementById('mail-b'), eb = document.getElementById('err-b');
+  a.addEventListener('input', function () { check(a, ea); });
+  b.addEventListener('blur', function () { check(b, eb); });
+  b.addEventListener('input', function () { if (eb.textContent) check(b, eb); });
+})();
+</script>
+
+<div class="fab"><ol class="fab-menu" id="fab-menu" hidden aria-label="目次"><li><a href="index.html"><b></b>表紙と目次</a></li><li><a href="ch01.html"><b>1</b>人はどう画面を見るか</a></li><li><a href="ch02.html"><b>2</b>文字の読みやすさ</a></li><li><a href="ch03.html"><b>3</b>色の使い方</a></li><li><a href="ch04.html"><b>4</b>いまどこを選んでいるか</a></li><li><a href="ch05.html"><b>5</b>押す・打つのしやすさ</a></li><li><a href="ch06.html"><b>6</b>動きを入れていい時</a></li><li><a href="ch07.html"><b>7</b>情報の見せ方</a></li><li><a href="ch08.html" aria-current="page"><b>8</b>エラーと確認</a></li><li><a href="ch09.html"><b>9</b>軽い画面のつくり方</a></li><li><a href="ch10.html"><b>10</b>目の疲れ</a></li><li><a href="ch11.html"><b>11</b>これからの UI</a></li></ol><button class="fab-b" type="button" id="fab-b" aria-expanded="false" aria-controls="fab-menu">目次</button></div>
+<script>
+(function () {
+  var b = document.getElementById('fab-b'), m = document.getElementById('fab-menu');
+  function close() { if (!m.hidden) { m.hidden = true; b.setAttribute('aria-expanded', 'false'); } }
+  b.addEventListener('click', function () { if (m.hidden) { m.hidden = false; b.setAttribute('aria-expanded', 'true'); (m.querySelector('[aria-current]') || m.querySelector('a')).focus(); } else close(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !m.hidden) { close(); b.focus(); } });
+  document.addEventListener('click', function (e) { if (!e.target.closest('.fab')) close(); });
+})();
+</script>
+</body>
+</html>

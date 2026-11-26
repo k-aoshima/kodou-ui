@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>文字の読みやすさ｜UI デザイン講座</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Klee+One:wght@600&display=swap">
+<style>
+body{margin:0;font-size:14px}img{max-width:100%}[hidden]{display:none!important}
+
+/* 白い方眼の紙に、章の札→4つの単元カード→さわって確かめる欄→まとめ→参考文献 */
+:root {
+  color-scheme: light;
+  --paper: #fffdf9;
+  --ink: #2a2a33;
+  --sub: #6b6a78;
+  --mist: #eef0f6;
+  --salmon: #f2a99d;
+  --peach: #f6b98f;
+  --lilac: #9aa3d6;
+  --navy: #4f6f9c;
+  --mint: #a8d5ba;
+  --yellow: #ffe45c;
+  --orange: #f09a6c;
+  --display: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Hiragino Sans", sans-serif;
+  --body: "Zen Kaku Gothic New", "Hiragino Sans", "Yu Gothic", sans-serif;
+  --hand: "Klee One", "Zen Maru Gothic", sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, monospace;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--paper); color: var(--ink);
+  font-family: var(--body); font-size: 17px; line-height: 1.8;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 32px 64px;
+  background-image: linear-gradient(var(--mist) 1px, transparent 1px), linear-gradient(90deg, var(--mist) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.wrap { max-width: 1040px; margin: 0 auto; display: grid; gap: 40px; }
+
+.chip { display: inline-block; background: var(--yellow); border: 3px solid var(--ink); border-radius: 999px; padding: 2px 18px; font-family: var(--display); font-weight: 900; font-size: 16px; letter-spacing: .1em; }
+.chip.white { background: #fff; }
+.panel { background: #fff; border: 3px solid var(--ink); border-radius: 24px; box-shadow: 8px 8px 0 var(--salmon); padding: 24px 22px; display: grid; gap: 18px; }
+.panel.lilac { box-shadow: 8px 8px 0 var(--lilac); }
+.panel.mint { box-shadow: 8px 8px 0 var(--mint); }
+.panel-head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.panel-head h2 { margin: 0; font-family: var(--display); font-weight: 900; font-size: 24px; text-wrap: balance; }
+.fukuro { color: #fff; -webkit-text-stroke: 2.5px var(--ink); paint-order: stroke fill; text-shadow: 4px 4px 0 var(--ink); }
+mark { background: linear-gradient(transparent 55%, var(--yellow) 55%); color: inherit; font-weight: 700; padding: 0 1px; }
+code { font-family: var(--mono); font-size: .9em; background: var(--mist); border-radius: 4px; padding: 0 4px; }
+sup { font-size: 12px; color: var(--navy); font-weight: 700; }
+
+/* 章の表紙 */
+.cover { text-align: center; display: grid; gap: 14px; justify-items: center; padding-top: 8px; }
+.course { font-family: var(--display); font-weight: 700; color: var(--sub); font-size: 16px; letter-spacing: .08em; }
+.plate { position: relative; background: #fff; border: 3px solid var(--ink); border-radius: 56px; box-shadow: 8px 8px 0 var(--ink); padding: 34px clamp(20px, 5vw, 56px) 26px; max-width: 100%; }
+.plate .chip { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); white-space: nowrap; }
+.plate h1 { margin: 0; font-family: var(--display); font-weight: 900; font-size: clamp(30px, 6vw, 56px); line-height: 1.25; letter-spacing: .04em; text-wrap: balance; }
+.lead { max-width: 640px; margin: 0; font-size: 18px; text-align: center; font-weight: 700; }
+.goals { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 0; padding: 0; list-style: none; }
+.goals li { background: #fff; border: 2px solid var(--ink); border-radius: 999px; padding: 2px 14px; font-size: 16px; font-weight: 700; }
+.goals li::before { content: "□ "; color: var(--navy); }
+
+/* 単元カード */
+.spot-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+.spot { border: 2px solid var(--ink); border-radius: 14px; padding: 12px 14px 14px; min-width: 0; background: #fff; display: grid; gap: 8px; align-content: start; }
+.spot h3 { margin: 0; display: flex; align-items: center; gap: 10px; font-family: var(--display); font-weight: 900; font-size: 19px; border-bottom: 2px solid var(--ink); padding-bottom: 8px; line-height: 1.4; }
+.spot h3 span { background: #f8cfc6; border: 2px solid var(--ink); padding: 0 8px; font-size: 16px; line-height: 1.5; flex: none; }
+.spot p { margin: 0; font-size: 16px; }
+.scene { width: 100%; height: auto; display: block; }
+.scene .fills { transform: translate(3.5px, 3px); }
+.facts { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+.facts li { display: grid; grid-template-columns: max-content 1fr; gap: 10px; align-items: baseline; font-size: 16px; }
+.facts li b { font-family: var(--display); font-weight: 900; font-size: 17px; text-align: right; color: var(--navy); font-variant-numeric: tabular-nums; }
+.key { margin: 0; font-family: var(--display); font-weight: 900; font-size: 22px; line-height: 1.5; text-align: center; padding-block: 4px; }
+.spot .facts { justify-self: center; }
+details { font-size: 15px; color: var(--sub); }
+details summary { cursor: pointer; font-family: var(--display); font-weight: 700; color: var(--navy); width: fit-content; }
+details summary:focus-visible { outline: 2px dashed var(--navy); outline-offset: 2px; }
+details p { margin: 6px 0 0; font-size: 16px !important; line-height: 1.85; }
+.apply { background: var(--mist); border-radius: 10px; padding: 8px 12px; font-size: 16px; }
+.apply strong { font-family: var(--display); font-size: 14px; letter-spacing: .1em; display: block; color: var(--navy); }
+
+/* さわって確かめる */
+.try-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.try { background: var(--mist); border-radius: 14px; padding: 14px 12px; display: grid; gap: 10px; justify-items: center; text-align: center; min-width: 0; }
+.try .ms { font-family: var(--display); font-weight: 900; font-size: 24px; font-variant-numeric: tabular-nums; }
+.try .ms small { font-size: 14px; margin-left: 2px; }
+.try .what { font-size: 14px; color: var(--sub); line-height: 1.5; min-height: 3em; }
+.btn {
+  font-family: var(--display); font-weight: 900; font-size: 17px;
+  background: var(--yellow); color: var(--ink);
+  border: 3px solid var(--ink); border-radius: 999px;
+  padding: 8px 20px; cursor: pointer;
+  box-shadow: 5px 5px 0 var(--ink);
+  transition: transform .06s, box-shadow .06s;
+}
+.btn:hover { transform: translate(2px, 2px); box-shadow: 3px 3px 0 var(--ink); }
+.btn:active { transform: translate(5px, 5px); box-shadow: 0 0 0 var(--ink); }
+.btn:focus-visible { outline: 3px dashed var(--navy); outline-offset: 4px; }
+.btn:disabled { cursor: progress; }
+.out { width: 100%; height: 44px; background: #fff; border: 2px solid var(--ink); border-radius: 10px; display: grid; place-items: center; font-weight: 700; font-size: 16px; position: relative; overflow: hidden; }
+.out.done { background: #e4f3ea; }
+.bar { position: absolute; left: 0; top: 0; bottom: 0; background: var(--mint); width: 0; }
+.out span { position: relative; }
+.spin { width: 18px; height: 18px; border: 3px solid var(--mist); border-top-color: var(--navy); border-radius: 50%; animation: sp .8s linear infinite; }
+@keyframes sp { to { transform: rotate(360deg); } }
+.try-note { margin: 0; font-size: 15px; color: var(--sub); }
+
+/* まとめ */
+.check { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.check li { display: flex; gap: 10px; align-items: flex-start; font-size: 17px; }
+.check li b { flex: none; width: 26px; height: 26px; border: 2px solid var(--ink); border-radius: 6px; background: var(--yellow); display: grid; place-items: center; font-family: var(--display); font-size: 15px; }
+.point { position: relative; margin-top: 10px; }
+.point > b { position: absolute; top: -11px; left: 14px; background: var(--navy); color: #fff; border-radius: 999px; font-size: 13px; letter-spacing: .14em; padding: 1px 12px; font-family: var(--display); }
+.point > div { background: #fff; border: 2px solid var(--ink); border-radius: 12px; box-shadow: 5px 5px 0 var(--lilac); padding: 16px 16px 12px; font-size: 16px; }
+
+/* 参考文献と次の章 */
+.refs { margin: 0; padding-left: 1.6em; display: grid; gap: 6px; font-size: 14px; color: var(--sub); }
+.refs a { color: var(--navy); word-break: break-all; }
+.next { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; background: #fff; border: 3px solid var(--ink); border-radius: 18px; padding: 14px 20px; }
+.next p { margin: 0; font-family: var(--display); font-weight: 700; }
+.next p small { display: block; color: var(--sub); font-size: 14px; font-weight: 500; }
+
+footer { text-align: center; color: var(--sub); font-size: 14px; }
+@media (max-width: 860px) { .try-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 760px) { .spot-grid { grid-template-columns: minmax(0, 1fr); } }
+@media (prefers-reduced-motion: reduce) { .spin { animation-duration: 3s; } .btn { transition: none; } }
+
+/* 字の調整の体験 */
+.tuner { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 18px; align-items: start; }
+.knobs { background: var(--mist); border-radius: 14px; padding: 14px; display: grid; gap: 6px; }
+.knobs label { font-family: var(--display); font-weight: 700; font-size: 16px; display: flex; justify-content: space-between; }
+.knobs label b { color: var(--navy); font-variant-numeric: tabular-nums; }
+.knobs input { width: 100%; accent-color: var(--navy); margin-bottom: 8px; }
+.presets { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
+.btn.small { font-size: 15px; padding: 5px 12px; box-shadow: 3px 3px 0 var(--ink); }
+.sample-wrap { background: #fff; border: 2px solid var(--ink); border-radius: 12px; padding: 16px; overflow-x: auto; min-width: 0; }
+.sample { margin: 0; font-size: 17px; line-height: 1.8; max-width: 40em; }
+@media (max-width: 760px) { .tuner { grid-template-columns: minmax(0, 1fr); } }
+
+/* 目次ボタン */
+.fab { position: fixed; z-index: 9; right: calc(16px + env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); display: grid; justify-items: end; gap: 10px; }
+.fab-b { font-family: var(--display); font-weight: 900; font-size: 16px; min-height: 44px; padding: 6px 20px; background: var(--yellow); color: var(--ink); border: 3px solid var(--ink); border-radius: 999px; cursor: pointer; box-shadow: 4px 4px 0 var(--ink); }
+.fab-b:hover { background: #ffd92e; }
+.fab-b:focus-visible, .fab-menu a:focus-visible { outline: 3px dashed var(--navy); outline-offset: 2px; }
+.fab-menu { width: min(360px, calc(100vw - 32px)); max-height: 70vh; overflow: auto; overscroll-behavior: contain; background: #fff; border: 3px solid var(--ink); border-radius: 14px; box-shadow: 6px 6px 0 var(--ink); padding: 8px; margin: 0; list-style: none; }
+.fab-menu a { display: flex; gap: 12px; align-items: center; min-height: 40px; padding: 4px 10px; border-radius: 8px; color: var(--ink); text-decoration: none; font-family: var(--display); font-weight: 700; font-size: 16px; }
+.fab-menu a b { width: 2.2em; text-align: right; font-weight: 900; color: var(--navy); }
+.fab-menu a:hover { background: #fff6d6; }
+.fab-menu a[aria-current="page"] { background: var(--ink); color: #fff; }
+.fab-menu a[aria-current="page"] b { color: var(--yellow); }
+</style>
+
+</head>
+<body>
+<div class="wrap">
+
+  <section class="cover">
+    <div class="course"><a href="index.html" style="color:var(--navy)">UI デザイン講座</a>　全11章</div>
+    <div class="plate">
+      <span class="chip">第2章</span>
+      <h1><span class="fukuro">文字</span>の<br>読みやすさ</h1>
+    </div>
+    <p class="lead">同じ文でも、大きさと並べ方で読みやすさが変わります。</p>
+    <ul class="goals" aria-label="この章のゴール">
+      <li>読みやすい字の大きさがわかる</li>
+      <li>1行の長さと行間の目安がわかる</li>
+      <li>大文字だけにしてよい所がわかる</li>
+    </ul>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head"><span class="chip">4つの単元</span><h2>字の大きさと並べ方</h2></div>
+    <div class="spot-grid">
+
+      <article class="spot">
+        <h3><span>2-1</span>字を小さくしすぎない</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="細かい字の紙、字を大きく映す虫めがね、めがね">
+          <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M30 60h60l18 18v68H30z" fill="#fff"/>
+            <path d="M90 60v18h18" fill="#f6e3c8"/>
+            <path d="M40 80h40M40 88h56M40 96h50M40 104h56M40 112h44M40 120h56M40 128h38M40 136h50" stroke="#9aa3d6" stroke-width="1.4" fill="none"/>
+            <path d="M178 124l18 18" stroke-width="7" fill="none"/>
+            <circle cx="162" cy="106" r="24" fill="#dfe2f4"/>
+            <path d="M150 100h24M150 112h16" stroke="#4f6f9c" stroke-width="4" fill="none"/>
+            <circle cx="236" cy="130" r="15" fill="#fff"/>
+            <circle cx="280" cy="130" r="15" fill="#fff"/>
+            <path d="M251 128q7-6 14 0M221 126l-8-6M295 126l8-6" fill="none"/>
+            <path d="M296 72v10M291 77h10" stroke="#f6b98f" fill="none"/>
+            <path d="M14 152h292" fill="none"/>
+          </g>
+        </svg>
+        <p class="key">小さい字ほど<mark>読みにくさが一気に増す</mark></p>
+        <ul class="facts">
+          <li><b>好まれる</b><span>パソコンで 18px くらい</span></li>
+          <li><b>小さい字</b><span>書体しだいで最大 50% 遅くなる</span></li>
+        </ul>
+        <details><summary>くわしく</summary><p>液晶の画面で好まれた字の大きさは、目から見た角度で 32〜33 分でした<sup>[1]</sup>。ふつうの画面を 50cm 離れて見るなら、だいたい 18px です（この換算は目安）。字が読める限界に近いほど小さいと、書体によって読む速さが最大 50% も違いました<sup>[2]</sup>。ふつうの大きさなら、差は 5% ほどです。</p></details>
+      </article>
+
+      <article class="spot">
+        <h3><span>2-2</span>1行を長くしすぎない</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="横に長い紙の帯と、短い行が並んだメモ">
+          <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M28 96h140M28 96l6-4M28 96l6 4M168 96l-6-4M168 96l-6 4" stroke="#f6b98f" fill="none"/>
+            <rect x="24" y="112" width="148" height="34" rx="3" fill="#f6e3c8"/>
+            <path d="M34 129h128" stroke="#4f6f9c" fill="none"/>
+            <rect x="198" y="58" width="74" height="88" rx="4" fill="#fff"/>
+            <rect x="198" y="58" width="74" height="12" rx="4" fill="#a8d5ba"/>
+            <path d="M208 82h52M208 92h52M208 102h40M208 118h52M208 128h32" stroke="#9aa3d6" fill="none"/>
+            <path d="M290 64v10M285 69h10" stroke="#f6b98f" fill="none"/>
+            <path d="M14 152h292" fill="none"/>
+          </g>
+        </svg>
+        <p class="key">文は<mark>1行 40字まで</mark>、行の間はゆったり</p>
+        <ul class="facts">
+          <li><b>1行</b><span>日本語なら 40字まで</span></li>
+          <li><b>行の間</b><span>字の高さの 1.5倍以上</span></li>
+        </ul>
+        <details><summary>くわしく</summary><p>Web の読みやすさの基準（WCAG）は、1行を英語で 80字、日本語で 40字までにし、行と行の間を 1.5 以上空けるよう勧めています<sup>[3]</sup>。実験では長い行の方が速く読めることもありますが、人が好むのは中くらいの長さでした<sup>[4]</sup>。一覧や表は、1行を目で追うより列で拾うので、幅いっぱいに使ってかまいません。</p></details>
+      </article>
+
+      <article class="spot">
+        <h3><span>2-3</span>読む字と、そろえる字</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="紙をはさんだタイプライターと、万年筆と手紙">
+          <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="52" y="62" width="56" height="44" fill="#fff"/>
+            <path d="M60 74h40M60 82h40M60 90h40" stroke="#4f6f9c" stroke-dasharray="4 2" fill="none"/>
+            <rect x="38" y="100" width="84" height="10" rx="5" fill="#4f6f9c"/>
+            <path d="M30 146l10-36h80l10 36z" fill="#9aa3d6"/>
+            <path d="M50 126h60M46 136h68" stroke="#fff" stroke-width="4" stroke-dasharray="5 4" fill="none"/>
+            <g transform="rotate(-30 232 92)">
+              <rect x="196" y="85" width="62" height="14" rx="7" fill="#f2a99d"/>
+              <path d="M258 85l18 7-18 7z" fill="#ffe45c"/>
+              <path d="M206 85v-5h22" fill="none"/>
+            </g>
+            <rect x="236" y="114" width="64" height="32" rx="3" fill="#fff"/>
+            <path d="M244 126q5-5 10 0t10 0 10 0 10 0M244 136q5-5 10 0t10 0 10 0" stroke="#4f6f9c" fill="none"/>
+            <path d="M14 152h292" fill="none"/>
+          </g>
+        </svg>
+        <p class="key">文は<mark>ふつうの字</mark>、数字やコマンドは<mark>等幅</mark></p>
+        <ul class="facts">
+          <li><b>説明の文</b><span>字の幅がばらばらの書体</span></li>
+          <li><b>数字・表</b><span>全部同じ幅の書体（桁がそろう）</span></li>
+        </ul>
+        <details><summary>くわしく</summary><p>ふつうの大きさの文なら、どちらの書体でも読む速さの差は小さいです<sup>[2]</sup>。それでも分けるのは役目が違うからです。文は流れるように読み、数字やコマンドは縦に桁をそろえて見比べます。日本語では、ゴシック体が明朝体より速く読めたという結果もあります<sup>[5]</sup>。</p></details>
+      </article>
+
+      <article class="spot">
+        <h3><span>2-4</span>大文字だけは短い語に</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="はんこ、短い札、長く伸びた巻物">
+          <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="62" cy="88" r="11" fill="#f6e3c8"/>
+            <rect x="54" y="98" width="16" height="20" rx="2" fill="#f6e3c8"/>
+            <rect x="38" y="118" width="48" height="28" rx="4" fill="#f2a99d"/>
+            <rect x="108" y="104" width="64" height="42" rx="8" fill="#ffe45c"/>
+            <circle cx="120" cy="116" r="4" fill="#fff"/>
+            <path d="M126 130h34" stroke-width="5" fill="none"/>
+            <rect x="200" y="120" width="96" height="26" fill="#fff"/>
+            <path d="M212 133h76" stroke="#9aa3d6" stroke-width="5" stroke-dasharray="6 3" fill="none"/>
+            <circle cx="200" cy="133" r="13" fill="#dfe2f4"/>
+            <circle cx="296" cy="133" r="13" fill="#dfe2f4"/>
+            <path d="M246 70v10M241 75h10" stroke="#f6b98f" fill="none"/>
+            <path d="M14 152h292" fill="none"/>
+          </g>
+        </svg>
+        <p class="key"><mark>OK・ERROR</mark> はいい、長い文はダメ</p>
+        <ul class="facts">
+          <li><b>短い語</b><span>大文字だけでいい</span></li>
+          <li><b>長い文</b><span>大文字だけにしない</span></li>
+        </ul>
+        <details><summary>くわしく</summary><p>小さい字では、大文字だけの方が速く読めたという実験があります。ただし字を大きくすると差は消えました<sup>[6]</sup>。ひと目で単語を見分ける実験では、小文字の方が 26% 長くかかりました。ただしこれは単語1つの話で、文や長い見出しを大文字だけにするのは勧められていません<sup>[7]</sup>。</p></details>
+      </article>
+
+    </div>
+  </section>
+
+  <section class="panel lilac" aria-label="さわって確かめる">
+    <div class="panel-head"><span class="chip">さわって確かめる</span><h2>大きさと行の長さを変えてみる</h2></div>
+    <div class="tuner">
+      <div class="knobs">
+        <label for="fs">字の大きさ <b id="fs-v">15px</b></label>
+        <input type="range" id="fs" min="10" max="22" value="15">
+        <label for="ll">1行の字数 <b id="ll-v">40字</b></label>
+        <input type="range" id="ll" min="15" max="80" value="40">
+        <label for="lh">行の間 <b id="lh-v">1.8</b></label>
+        <input type="range" id="lh" min="10" max="22" value="18">
+        <div class="presets">
+          <button class="btn small" type="button" id="p-bad">読みにくい例</button>
+          <button class="btn small" type="button" id="p-good">読みやすい例</button>
+        </div>
+      </div>
+      <div class="sample-wrap"><p class="sample" id="sample">画面の文字は、紙の本よりも少し大きめにした方が読みやすくなります。1行が長すぎると、次の行の頭を探すときに目が迷い、同じ行を二度読んでしまうことがあります。行と行の間を少し空けるだけで、文の区切りが見つけやすくなり、長い説明でも最後まで読み通しやすくなります。</p></div>
+    </div>
+    <p class="try-note">「読みにくい例」は 11px・80字・行の間 1.2 です。</p>
+  </section>
+
+  <section class="panel mint" aria-label="まとめ">
+    <div class="panel-head"><span class="chip">この章のまとめ</span><h2>3つだけ覚えて帰る</h2></div>
+    <ul class="check">
+      <li><b>1</b><span>字は<mark>小さくしすぎない</mark></span></li>
+      <li><b>2</b><span>文は <mark>1行 40字まで・行の間 1.5倍以上</mark></span></li>
+      <li><b>3</b><span>大文字だけにするのは<mark>短い語だけ</mark></span></li>
+    </ul>
+    <div class="point"><b>POINT</b><div>迷ったら、字は大きく、行は短く。</div></div>
+  </section>
+
+  <section class="panel" aria-label="参考文献" style="box-shadow:none">
+    <div class="panel-head"><span class="chip white">参考文献</span><h2>もっと読むなら</h2></div>
+    <ol class="refs">
+      <li>窪田悟ほか (1999). 映像情報メディア学会誌 53(10). <a href="https://doi.org/10.3169/itej.53.1335">doi.org</a></li>
+      <li>Mansfield, J. S., Legge, G. E., &amp; Bane, M. C. (1996). Psychophysics of Reading XV: Font Effects in Normal and Low Vision. IOVS 37(8). <a href="https://legge.dl8.umn.edu/sites/legge.psych.umn.edu/files/files/media/mansfield96_psychophysics_of_reading_xv-_font_effects_in_normal_and_low_vision.pdf">umn.edu</a></li>
+      <li>W3C (2023). Understanding Success Criterion 1.4.8: Visual Presentation. <a href="https://www.w3.org/WAI/WCAG22/Understanding/visual-presentation.html">w3.org</a></li>
+      <li>Dyson, M. C. (2004). How physical text layout affects reading from screen. Behaviour &amp; Information Technology 23(6). <a href="https://centaur.reading.ac.uk/23344/">reading.ac.uk</a></li>
+      <li>中野泰志ほか (2010). ユニバーサルデザインフォントの見やすさ（3）. <a href="https://web.econ.keio.ac.jp/staff/nakanoy/research/largeprint/03_kaken/2012/fig/JPA2010.pdf">keio.ac.jp</a></li>
+      <li>Arditi, A., &amp; Cho, J. (2007). Letter case and text legibility in normal and low vision. Vision Research 47(19). <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC2016788">nih.gov</a></li>
+      <li>Laubheimer, P. (2017). Glanceable Fonts. Nielsen Norman Group. <a href="https://www.nngroup.com/articles/glanceable-fonts/">nngroup.com</a></li>
+    </ol>
+  </section>
+
+  <div class="next">
+    <p><small>表紙</small><a href="index.html" style="color:var(--navy)">目次へ戻る</a></p>
+    <p><small>前の章</small><a href="ch01.html" style="color:var(--navy)">第1章　人はどう画面を見るか</a></p>
+    <p><small>次の章</small>第3章　色（見えにくい色、色だけで伝えない）</p>
+    <a class="chip" href="ch03.html" style="color:inherit;text-decoration:none">読む →</a>
+  </div>
+
+  <footer>出典: Kodou-ui の文献調査 docs/research/retro-vs-modern.md と components-review.md をもとに作成。</footer>
+</div>
+
+<script>
+/* 線の後処理: 塗りと線を別の層に分け、塗りをずらし（版ずれ）、長い線に1〜2か所すき間を入れる */
+document.querySelectorAll('.scene').forEach(function (svg, i) {
+  var art = svg.querySelector('g.art');
+  if (!art) return;
+  var lines = art.cloneNode(true);
+  lines.setAttribute('class', 'lines');
+  lines.querySelectorAll('*').forEach(function (el) { if (el.tagName !== 'g') el.setAttribute('fill', 'none'); });
+  art.setAttribute('class', 'fills');
+  art.setAttribute('stroke', 'none');
+  art.querySelectorAll('[stroke]').forEach(function (el) { el.setAttribute('stroke', 'none'); });
+  svg.appendChild(lines);
+  var seed = 7 + i;
+  function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+  lines.querySelectorAll('path, rect, circle, ellipse, polygon, polyline, line').forEach(function (el) {
+    if (el.hasAttribute('stroke-dasharray') || el.hasAttribute('stroke') || el.hasAttribute('data-solid')) return;
+    if ((el.getAttribute('d') || '').split(/[Mm]/).length > 2) return;
+    var len = el.getTotalLength ? el.getTotalLength() : 0;
+    if (len < 40) return;
+    var gap = 6 + rnd() * 4;
+    var cuts = len > 160 ? 2 : 1;
+    var seg = len / cuts - gap;
+    var a = seg * (0.35 + rnd() * 0.3);
+    el.setAttribute('stroke-dasharray', a.toFixed(1) + ' ' + gap.toFixed(1) + ' ' + (seg - a).toFixed(1) + ' 0');
+    el.setAttribute('stroke-dashoffset', (rnd() * len).toFixed(1));
+  });
+});
+
+
+/* 字の調整 */
+(function () {
+  var fs = document.getElementById('fs'), ll = document.getElementById('ll'), lh = document.getElementById('lh');
+  var sample = document.getElementById('sample');
+  function apply() {
+    sample.style.fontSize = fs.value + 'px';
+    sample.style.maxWidth = ll.value + 'em';
+    sample.style.lineHeight = (lh.value / 10).toFixed(1);
+    document.getElementById('fs-v').textContent = fs.value + 'px';
+    document.getElementById('ll-v').textContent = ll.value + '字';
+    document.getElementById('lh-v').textContent = (lh.value / 10).toFixed(1);
+  }
+  [fs, ll, lh].forEach(function (el) { el.addEventListener('input', apply); });
+  function set(a, b, c) { fs.value = a; ll.value = b; lh.value = c; apply(); }
+  document.getElementById('p-bad').addEventListener('click', function () { set(11, 80, 12); });
+  document.getElementById('p-good').addEventListener('click', function () { set(16, 38, 18); });
+  apply();
+})();
+</script>
+
+<div class="fab"><ol class="fab-menu" id="fab-menu" hidden aria-label="目次"><li><a href="index.html"><b></b>表紙と目次</a></li><li><a href="ch01.html"><b>1</b>人はどう画面を見るか</a></li><li><a href="ch02.html" aria-current="page"><b>2</b>文字の読みやすさ</a></li><li><a href="ch03.html"><b>3</b>色の使い方</a></li><li><a href="ch04.html"><b>4</b>いまどこを選んでいるか</a></li><li><a href="ch05.html"><b>5</b>押す・打つのしやすさ</a></li><li><a href="ch06.html"><b>6</b>動きを入れていい時</a></li><li><a href="ch07.html"><b>7</b>情報の見せ方</a></li><li><a href="ch08.html"><b>8</b>エラーと確認</a></li><li><a href="ch09.html"><b>9</b>軽い画面のつくり方</a></li><li><a href="ch10.html"><b>10</b>目の疲れ</a></li><li><a href="ch11.html"><b>11</b>これからの UI</a></li></ol><button class="fab-b" type="button" id="fab-b" aria-expanded="false" aria-controls="fab-menu">目次</button></div>
+<script>
+(function () {
+  var b = document.getElementById('fab-b'), m = document.getElementById('fab-menu');
+  function close() { if (!m.hidden) { m.hidden = true; b.setAttribute('aria-expanded', 'false'); } }
+  b.addEventListener('click', function () { if (m.hidden) { m.hidden = false; b.setAttribute('aria-expanded', 'true'); (m.querySelector('[aria-current]') || m.querySelector('a')).focus(); } else close(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !m.hidden) { close(); b.focus(); } });
+  document.addEventListener('click', function (e) { if (!e.target.closest('.fab')) close(); });
+})();
+</script>
+</body>
+</html>

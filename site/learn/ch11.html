@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>これからの UI｜UI デザイン講座</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Klee+One:wght@600&display=swap">
+<style>
+body{margin:0;font-size:14px}img{max-width:100%}[hidden]{display:none!important}
+
+/* 白い方眼の紙に、章の札→4つの単元カード→さわって確かめる欄→まとめ→参考文献 */
+:root {
+  color-scheme: light;
+  --paper: #fffdf9;
+  --ink: #2a2a33;
+  --sub: #6b6a78;
+  --mist: #eef0f6;
+  --salmon: #f2a99d;
+  --peach: #f6b98f;
+  --lilac: #9aa3d6;
+  --navy: #4f6f9c;
+  --mint: #a8d5ba;
+  --yellow: #ffe45c;
+  --orange: #f09a6c;
+  --display: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Hiragino Sans", sans-serif;
+  --body: "Zen Kaku Gothic New", "Hiragino Sans", "Yu Gothic", sans-serif;
+  --hand: "Klee One", "Zen Maru Gothic", sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, monospace;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--paper); color: var(--ink);
+  font-family: var(--body); font-size: 17px; line-height: 1.8;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 32px 64px;
+  background-image: linear-gradient(var(--mist) 1px, transparent 1px), linear-gradient(90deg, var(--mist) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.wrap { max-width: 1040px; margin: 0 auto; display: grid; gap: 40px; }
+
+.chip { display: inline-block; background: var(--yellow); border: 3px solid var(--ink); border-radius: 999px; padding: 2px 18px; font-family: var(--display); font-weight: 900; font-size: 16px; letter-spacing: .1em; }
+.chip.white { background: #fff; }
+.panel { background: #fff; border: 3px solid var(--ink); border-radius: 24px; box-shadow: 8px 8px 0 var(--salmon); padding: 24px 22px; display: grid; gap: 18px; }
+.panel.lilac { box-shadow: 8px 8px 0 var(--lilac); }
+.panel.mint { box-shadow: 8px 8px 0 var(--mint); }
+.panel-head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.panel-head h2 { margin: 0; font-family: var(--display); font-weight: 900; font-size: 24px; text-wrap: balance; }
+.fukuro { color: #fff; -webkit-text-stroke: 2.5px var(--ink); paint-order: stroke fill; text-shadow: 4px 4px 0 var(--ink); }
+mark { background: linear-gradient(transparent 55%, var(--yellow) 55%); color: inherit; font-weight: 700; padding: 0 1px; }
+code { font-family: var(--mono); font-size: .9em; background: var(--mist); border-radius: 4px; padding: 0 4px; }
+sup { font-size: 12px; color: var(--navy); font-weight: 700; }
+
+/* 章の表紙 */
+.cover { text-align: center; display: grid; gap: 14px; justify-items: center; padding-top: 8px; }
+.course { font-family: var(--display); font-weight: 700; color: var(--sub); font-size: 16px; letter-spacing: .08em; }
+.plate { position: relative; background: #fff; border: 3px solid var(--ink); border-radius: 56px; box-shadow: 8px 8px 0 var(--ink); padding: 34px clamp(20px, 5vw, 56px) 26px; max-width: 100%; }
+.plate .chip { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); white-space: nowrap; }
+.plate h1 { margin: 0; font-family: var(--display); font-weight: 900; font-size: clamp(30px, 6vw, 56px); line-height: 1.25; letter-spacing: .04em; text-wrap: balance; }
+.lead { max-width: 640px; margin: 0; font-size: 18px; text-align: center; font-weight: 700; }
+.goals { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 0; padding: 0; list-style: none; }
+.goals li { background: #fff; border: 2px solid var(--ink); border-radius: 999px; padding: 2px 14px; font-size: 16px; font-weight: 700; }
+.goals li::before { content: "□ "; color: var(--navy); }
+
+/* 単元カード */
+.spot-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+.spot { border: 2px solid var(--ink); border-radius: 14px; padding: 12px 14px 14px; min-width: 0; background: #fff; display: grid; gap: 8px; align-content: start; }
+.spot h3 { margin: 0; display: flex; align-items: center; gap: 10px; font-family: var(--display); font-weight: 900; font-size: 19px; border-bottom: 2px solid var(--ink); padding-bottom: 8px; line-height: 1.4; }
+.spot h3 span { background: #f8cfc6; border: 2px solid var(--ink); padding: 0 8px; font-size: 16px; line-height: 1.5; flex: none; }
+.spot p { margin: 0; font-size: 16px; }
+.scene { width: 100%; height: auto; display: block; }
+.scene .fills { transform: translate(3.5px, 3px); }
+.facts { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+.facts li { display: grid; grid-template-columns: max-content 1fr; gap: 10px; align-items: baseline; font-size: 16px; }
+.facts li b { font-family: var(--display); font-weight: 900; font-size: 17px; text-align: right; color: var(--navy); font-variant-numeric: tabular-nums; }
+.key { margin: 0; font-family: var(--display); font-weight: 900; font-size: 22px; line-height: 1.5; text-align: center; padding-block: 4px; }
+.spot .facts { justify-self: center; }
+details { font-size: 15px; color: var(--sub); }
+details summary { cursor: pointer; font-family: var(--display); font-weight: 700; color: var(--navy); width: fit-content; }
+details summary:focus-visible { outline: 2px dashed var(--navy); outline-offset: 2px; }
+details p { margin: 6px 0 0; font-size: 16px !important; line-height: 1.85; }
+.apply { background: var(--mist); border-radius: 10px; padding: 8px 12px; font-size: 16px; }
+.apply strong { font-family: var(--display); font-size: 14px; letter-spacing: .1em; display: block; color: var(--navy); }
+
+/* さわって確かめる */
+.try-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.try { background: var(--mist); border-radius: 14px; padding: 14px 12px; display: grid; gap: 10px; justify-items: center; text-align: center; min-width: 0; }
+.try .ms { font-family: var(--display); font-weight: 900; font-size: 24px; font-variant-numeric: tabular-nums; }
+.try .ms small { font-size: 14px; margin-left: 2px; }
+.try .what { font-size: 14px; color: var(--sub); line-height: 1.5; min-height: 3em; }
+.btn {
+  font-family: var(--display); font-weight: 900; font-size: 17px;
+  background: var(--yellow); color: var(--ink);
+  border: 3px solid var(--ink); border-radius: 999px;
+  padding: 8px 20px; cursor: pointer;
+  box-shadow: 5px 5px 0 var(--ink);
+  transition: transform .06s, box-shadow .06s;
+}
+.btn:hover { transform: translate(2px, 2px); box-shadow: 3px 3px 0 var(--ink); }
+.btn:active { transform: translate(5px, 5px); box-shadow: 0 0 0 var(--ink); }
+.btn:focus-visible { outline: 3px dashed var(--navy); outline-offset: 4px; }
+.btn:disabled { cursor: progress; }
+.out { width: 100%; height: 44px; background: #fff; border: 2px solid var(--ink); border-radius: 10px; display: grid; place-items: center; font-weight: 700; font-size: 16px; position: relative; overflow: hidden; }
+.out.done { background: #e4f3ea; }
+.bar { position: absolute; left: 0; top: 0; bottom: 0; background: var(--mint); width: 0; }
+.out span { position: relative; }
+.spin { width: 18px; height: 18px; border: 3px solid var(--mist); border-top-color: var(--navy); border-radius: 50%; animation: sp .8s linear infinite; }
+@keyframes sp { to { transform: rotate(360deg); } }
+.try-note { margin: 0; font-size: 15px; color: var(--sub); }
+
+/* まとめ */
+.check { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.check li { display: flex; gap: 10px; align-items: flex-start; font-size: 17px; }
+.check li b { flex: none; width: 26px; height: 26px; border: 2px solid var(--ink); border-radius: 6px; background: var(--yellow); display: grid; place-items: center; font-family: var(--display); font-size: 15px; }
+.point { position: relative; margin-top: 10px; }
+.point > b { position: absolute; top: -11px; left: 14px; background: var(--navy); color: #fff; border-radius: 999px; font-size: 13px; letter-spacing: .14em; padding: 1px 12px; font-family: var(--display); }
+.point > div { background: #fff; border: 2px solid var(--ink); border-radius: 12px; box-shadow: 5px 5px 0 var(--lilac); padding: 16px 16px 12px; font-size: 16px; }
+
+/* 参考文献と次の章 */
+.refs { margin: 0; padding-left: 1.6em; display: grid; gap: 6px; font-size: 14px; color: var(--sub); }
+.refs a { color: var(--navy); word-break: break-all; }
+.next { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; background: #fff; border: 3px solid var(--ink); border-radius: 18px; padding: 14px 20px; }
+.next p { margin: 0; font-family: var(--display); font-weight: 700; }
+.next p small { display: block; color: var(--sub); font-size: 14px; font-weight: 500; }
+
+footer { text-align: center; color: var(--sub); font-size: 14px; }
+@media (max-width: 860px) { .try-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 760px) { .spot-grid { grid-template-columns: minmax(0, 1fr); } }
+@media (prefers-reduced-motion: reduce) { .spin { animation-duration: 3s; } .btn { transition: none; } }
+
+/* ガラスの板の体験 */
+.glass-demo { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+.glass-stage { position: relative; height: 240px; border: 2px solid var(--ink); border-radius: 14px; overflow: hidden; background: #fff; }
+.blob { position: absolute; border-radius: 50%; }
+.b1 { width: 150px; height: 150px; left: 6%; top: 14%; background: #4f6f9c; }
+.b2 { width: 120px; height: 120px; left: 40%; top: 46%; background: #f2a99d; }
+.b3 { width: 110px; height: 110px; left: 62%; top: 4%; background: #ffe45c; }
+.b4 { width: 90px; height: 90px; left: 26%; top: 2%; background: #9aa3d6; }
+.glass { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(78%, 300px); border: 2px solid rgba(255,255,255,.9); border-radius: 18px; padding: 16px 18px; display: grid; gap: 4px; color: #2a2a33; font-size: 17px; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); box-shadow: 0 0 0 2px var(--ink); }
+.glass b { font-family: var(--display); font-size: 19px; }
+.glass span { font-variant-numeric: tabular-nums; }
+.glass-knobs { background: var(--mist); border-radius: 14px; padding: 16px; display: grid; gap: 10px; }
+.glass-knobs label { font-family: var(--display); font-weight: 700; font-size: 16px; display: flex; justify-content: space-between; }
+.glass-knobs label b { color: var(--navy); font-variant-numeric: tabular-nums; }
+#op { width: 100%; accent-color: var(--navy); }
+.ratio { margin: 0; font-family: var(--display); font-weight: 900; font-size: 20px; font-variant-numeric: tabular-nums; }
+@media (max-width: 760px) { .glass-demo { grid-template-columns: minmax(0, 1fr); } }
+
+/* 目次ボタン */
+.fab { position: fixed; z-index: 9; right: calc(16px + env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); display: grid; justify-items: end; gap: 10px; }
+.fab-b { font-family: var(--display); font-weight: 900; font-size: 16px; min-height: 44px; padding: 6px 20px; background: var(--yellow); color: var(--ink); border: 3px solid var(--ink); border-radius: 999px; cursor: pointer; box-shadow: 4px 4px 0 var(--ink); }
+.fab-b:hover { background: #ffd92e; }
+.fab-b:focus-visible, .fab-menu a:focus-visible { outline: 3px dashed var(--navy); outline-offset: 2px; }
+.fab-menu { width: min(360px, calc(100vw - 32px)); max-height: 70vh; overflow: auto; overscroll-behavior: contain; background: #fff; border: 3px solid var(--ink); border-radius: 14px; box-shadow: 6px 6px 0 var(--ink); padding: 8px; margin: 0; list-style: none; }
+.fab-menu a { display: flex; gap: 12px; align-items: center; min-height: 40px; padding: 4px 10px; border-radius: 8px; color: var(--ink); text-decoration: none; font-family: var(--display); font-weight: 700; font-size: 16px; }
+.fab-menu a b { width: 2.2em; text-align: right; font-weight: 900; color: var(--navy); }
+.fab-menu a:hover { background: #fff6d6; }
+.fab-menu a[aria-current="page"] { background: var(--ink); color: #fff; }
+.fab-menu a[aria-current="page"] b { color: var(--yellow); }
+</style>
+
+</head>
+<body>
+<div class="wrap">
+
+  <section class="cover">
+    <div class="course"><a href="index.html" style="color:var(--navy)">UI デザイン講座</a>　全11章</div>
+    <div class="plate">
+      <span class="chip">第11章</span>
+      <h1><span class="fukuro">これから</span>の<br>UI</h1>
+    </div>
+    <p class="lead">流行は変わっても、ここまでの決まりは変わりません。</p>
+    <ul class="goals" aria-label="この章のゴール">
+      <li>いまの流れを4つ言える</li>
+      <li>流行を入れるか決める見方がわかる</li>
+      <li>見た目と使いやすさの関係がわかる</li>
+    </ul>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head"><span class="chip">4つの単元</span><h2>いまの流れと、変わらないこと</h2></div>
+    <div class="spot-grid">
+
+      <article class="spot">
+        <h3><span>11-1</span>派手より、静かな画面</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="湯気の立つ急須と湯のみ、葉の付いた小枝">
+          <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M48 110c0-22 18-34 40-34s40 12 40 34c0 20-16 36-40 36s-40-16-40-36z" fill="#a8d5ba"/>
+            <path d="M128 106c12-4 22-14 26-24" fill="none"/>
+            <path d="M48 104c-12-2-18 10-12 20 4 6 10 8 16 6" fill="none"/>
+            <path d="M70 78c4-10 32-10 36 0z" fill="#f6e3c8"/>
+            <circle cx="88" cy="70" r="5" fill="#f6e3c8"/>
+            <path d="M178 114h44l-4 26a6 6 0 0 1-6 6h-24a6 6 0 0 1-6-6z" fill="#fff"/>
+            <path d="M188 104c-4-6 4-10 0-16M206 104c-4-6 4-10 0-16" fill="none"/>
+            <path d="M246 146c10-20 22-40 42-56" fill="none"/>
+            <path d="M262 118c-10-2-16-10-16-18 10 0 16 8 16 18z" fill="#a8d5ba"/>
+            <path d="M276 102c2-10 10-16 18-16 0 10-8 16-18 16z" fill="#a8d5ba"/>
+            <path d="M14 152h292" fill="none"/>
+          </g>
+        </svg>
+        <p class="key">動きは<mark>飾りでなく、知らせるため</mark></p>
+        <ul class="facts">
+          <li><b>派手な演出</b><span>減らす</span></li>
+          <li><b>動き</b><span>進み具合や結果を伝える時だけ</span></li>
+        </ul>
+        <details><summary>くわしく</summary><p>2025〜2026 年の流れとして、派手な演出を減らし、頭の負担を下げる「静かな画面」が挙げられています<sup>[1]</sup>。余白をとり、見やすい初期設定にし、大事な情報から順に並べます。動きは、処理中で固まっていないこと、入力の確認、進み具合のように、状態を伝える役に絞られます<sup>[1]</sup>。動きすぎる画面は押しつけがましく感じられ、避けられる傾向です。</p></details>
+      </article>
+
+      <article class="spot">
+        <h3><span>11-2</span>AI は提案、決めるのは人</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="提案のカードを差し出すロボットと、一時停止ボタンと停止ボタン">
+          <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M58 70v-12" fill="none"/>
+            <circle cx="58" cy="54" r="5" fill="#ffe45c"/>
+            <rect x="30" y="70" width="56" height="44" rx="10" fill="#dfe2f4"/>
+            <circle cx="47" cy="90" r="5" fill="#fff"/>
+            <circle cx="69" cy="90" r="5" fill="#fff"/>
+            <path d="M50 102h16" fill="none"/>
+            <rect x="38" y="116" width="40" height="30" rx="6" fill="#c9d6ea"/>
+            <path d="M78 124l20-10" fill="none"/>
+            <rect x="98" y="84" width="64" height="42" rx="6" fill="#fff"/>
+            <path d="M108 98h34M108 110h24" stroke="#9aa3d6" fill="none"/>
+            <path d="M146 108l4 4 7-8" stroke="#4f6f9c" fill="none"/>
+            <circle cx="210" cy="124" r="22" fill="#ffe45c"/>
+            <path d="M203 114v20M217 114v20" stroke="#2a2a33" stroke-width="4" fill="none"/>
+            <rect x="248" y="104" width="42" height="42" rx="8" fill="#f2a99d"/>
+            <rect x="262" y="118" width="14" height="14" rx="2" fill="#2a2a33"/>
+            <path d="M14 152h292" fill="none"/>
+          </g>
+        </svg>
+        <p class="key">理由を見せて、<mark>いつでも止められる</mark></p>
+        <ul class="facts">
+          <li><b>見せる</b><span>なぜそう提案したか、どこまで進んだか</span></li>
+          <li><b>任せる</b><span>止める・直す・取り消すは人の手に</span></li>
+        </ul>
+        <details><summary>くわしく</summary><p>AI が画面の中心に入ってきたいま、AI が提案の理由やどれくらい確かかを示し、人が上書きしたり断ったりできることが重視されています<sup>[1]</sup>。人は AI の提案には慣れていますが、自分で決められなくなることは嫌います。AI が何段もの作業を進める時は、進み具合を見せ、確認・一時停止・修正・中止の手段を用意します<sup>[1]</sup>。第1章の「待たせるなら何をしているか見せる」と同じ考え方です。</p></details>
+      </article>
+
+      <article class="spot">
+        <h3><span>11-3</span>きれいは「使いやすそう」なだけ</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="色の丸が透けて見えるガラスのような板と、区切られたお弁当箱のような升目">
+          <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="60" cy="86" r="22" fill="#f2a99d"/>
+            <circle cx="104" cy="112" r="24" fill="#9aa3d6"/>
+            <circle cx="132" cy="76" r="16" fill="#ffe45c"/>
+            <rect x="44" y="70" width="104" height="64" rx="14" fill="#ffffff" fill-opacity="0.55"/>
+            <path d="M58 88h52M58 102h36" stroke="#4f6f9c" stroke-width="3" fill="none"/>
+            <path d="M56 78a10 10 0 0 1 10-6" stroke="#fff" stroke-width="3" fill="none"/>
+            <rect x="190" y="70" width="110" height="76" rx="8" fill="#fff"/>
+            <rect x="198" y="78" width="50" height="34" rx="5" fill="#f8cfc6"/>
+            <rect x="254" y="78" width="38" height="16" rx="4" fill="#a8d5ba"/>
+            <rect x="254" y="98" width="38" height="40" rx="4" fill="#dfe2f4"/>
+            <rect x="198" y="118" width="50" height="20" rx="4" fill="#f6e3c8"/>
+            <path d="M14 152h292" fill="none"/>
+          </g>
+        </svg>
+        <p class="key">見た目がいいと<mark>使いやすく「感じる」</mark></p>
+        <ul class="facts">
+          <li><b>感じ方</b><span>見た目がいいほど使いやすく感じる</span></li>
+          <li><b>実際</b><span>使いやすさは保証されない</span></li>
+        </ul>
+        <details><summary>くわしく</summary><p>流行の見た目には、すりガラスのように後ろが透ける「Liquid Glass」や、お弁当箱のように画面を升目で区切る「Bento グリッド」があります<sup>[1]</sup>。ただ、ATM をまねた画面の実験では、見た目の美しさが使う前の「使いやすそう」とも、使った後の評価とも強く結びつき、実際の使いやすさは評価に影響しませんでした<sup>[2]</sup>。好みと実際の読みやすさが食い違うことも多いと分かっています<sup>[3]</sup>。透ける板は飾りではなく、どれが手前かを伝える時に使い、上の字は第3章の濃さの差を守ります。</p></details>
+      </article>
+
+      <article class="spot">
+        <h3><span>11-4</span>使いやすさは最初から組みこむ</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="土台から積み上げた積み木と、丸めた設計図">
+          <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="34" y="124" width="132" height="22" rx="3" fill="#4f6f9c"/>
+            <rect x="44" y="100" width="54" height="24" rx="3" fill="#f6b98f"/>
+            <rect x="102" y="100" width="54" height="24" rx="3" fill="#a8d5ba"/>
+            <rect x="70" y="78" width="60" height="22" rx="3" fill="#ffe45c"/>
+            <path d="M74 78l26-22 26 22z" fill="#f2a99d"/>
+            <rect x="196" y="122" width="90" height="24" rx="12" fill="#c9d6ea"/>
+            <circle cx="208" cy="134" r="12" fill="#dfe2f4"/>
+            <circle cx="208" cy="134" r="4" fill="#fff"/>
+            <path d="M232 128h40M232 138h28" stroke="#4f6f9c" stroke-width="1.6" fill="none"/>
+            <path d="M262 72v10M257 77h10" stroke="#f6b98f" fill="none"/>
+            <path d="M14 152h292" fill="none"/>
+          </g>
+        </svg>
+        <p class="key">読みやすさは<mark>後付けせず土台に</mark></p>
+        <ul class="facts">
+          <li><b>最初から</b><span>字・色・キー操作・動きを決める</span></li>
+          <li><b>後から</b><span>直す手間がかさむ</span></li>
+        </ul>
+        <details><summary>くわしく</summary><p>見やすさ・使いやすさへの配慮（アクセシビリティ）は、後から足す機能ではなく、作り始める前提になりつつあります<sup>[1]</sup>。はっきりした配色、キー操作、動きを減らす設定、やさしい言葉を最初から組みこみます。トレンド記事では、アメリカでの関連の訴訟が前の年より 14% 増え、計画の段階から取り組む組織は 28% にとどまるとされています<sup>[1]</sup>。最初に組みこむ方が、手間も費用も小さく済みます。</p></details>
+      </article>
+
+    </div>
+  </section>
+
+  <section class="panel lilac" aria-label="さわって確かめる">
+    <div class="panel-head"><span class="chip">さわって確かめる</span><h2>ガラスの板、読めますか</h2></div>
+    <div class="glass-demo">
+      <div class="glass-stage" id="stage">
+        <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="blob b4"></div>
+        <div class="glass" id="glass"><b>今日の予定</b><span>14:00　打ち合わせ</span><span>16:30　資料の見直し</span></div>
+      </div>
+      <div class="glass-knobs">
+        <label for="op">板の白さ <b id="op-v"></b></label>
+        <input type="range" id="op" min="10" max="95" value="15">
+        <p class="ratio" id="gratio"></p>
+        <p class="try-note">後ろの色がいちばん濃い所で、字と地の濃さの差を測っています。白さを上げるほど透け感は減り、字は読みやすくなります。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel mint" aria-label="まとめ">
+    <div class="panel-head"><span class="chip">この講座のまとめ</span><h2>3つだけ覚えて帰る</h2></div>
+    <ul class="check">
+      <li><b>1</b><span>流行は<mark>役に立つ時だけ</mark>入れる</span></li>
+      <li><b>2</b><span>機械は提案まで、<mark>決めるのは人</mark></span></li>
+      <li><b>3</b><span>見た目より先に<mark>読める・押せる・分かる</mark></span></li>
+    </ul>
+    <div class="point"><b>POINT</b><div>押したらすぐ応え、中で起きていることを見せ、決めるのは人に任せ、使うほどうまくなれる画面を目指す。</div></div>
+  </section>
+
+  <section class="panel" aria-label="参考文献" style="box-shadow:none">
+    <div class="panel-head"><span class="chip white">参考文献</span><h2>もっと読むなら</h2></div>
+    <ol class="refs">
+      <li>UI/UX トレンドのまとめ（2026-09-07 の調査ノート）。元の記事: UXPin <a href="https://www.uxpin.com/studio/blog/ui-ux-design-trends/">uxpin.com</a>、Mockflow <a href="https://mockflow.com/blog/ui-design-trends">mockflow.com</a>、Envato Elements <a href="https://elements.envato.com/learn/ux-ui-design-trends">envato.com</a>、sanjaydey.com <a href="https://www.sanjaydey.com/ux-ui-design-trends-2026-biggest/">sanjaydey.com</a>、index.dev <a href="https://www.index.dev/blog/ui-ux-design-trends">index.dev</a>、tuxdi.com <a href="https://tuxdi.com/en/blog/uxui-trends-2025-the-year-design-became-more-human">tuxdi.com</a>、think201.com <a href="https://think201.com/blog/ui-ux-wrapped-2025-design-trends-report">think201.com</a></li>
+      <li>Tractinsky, N., Katz, A. S., &amp; Ikar, D. (2000). What is beautiful is usable. Interacting with Computers 13(2). <a href="https://academic.oup.com/iwc/article-abstract/13/2/127/898608">oup.com</a></li>
+      <li>Dyson, M. C. (2004). How physical text layout affects reading from screen. Behaviour &amp; Information Technology 23(6). <a href="https://centaur.reading.ac.uk/23344/">reading.ac.uk</a></li>
+    </ol>
+  </section>
+
+  <div class="next">
+    <p><small>表紙</small><a href="index.html" style="color:var(--navy)">目次へ戻る</a></p>
+    <p><small>前の章</small><a href="ch10.html" style="color:var(--navy)">第10章　目の疲れ</a></p>
+    <p><small>次の章</small>講座はここまで</p>
+    <a class="chip" href="ch01.html" style="color:inherit;text-decoration:none">第1章へ戻る →</a>
+  </div>
+
+  <footer>出典: UI/UX トレンドの調査ノートと、Kodou-ui の文献調査 docs/research/retro-vs-modern.md・docs/principles.md をもとに作成。</footer>
+</div>
+
+<script>
+/* 線の後処理: 塗りと線を別の層に分け、塗りをずらし（版ずれ）、長い線に1〜2か所すき間を入れる */
+document.querySelectorAll('.scene').forEach(function (svg, i) {
+  var art = svg.querySelector('g.art');
+  if (!art) return;
+  var lines = art.cloneNode(true);
+  lines.setAttribute('class', 'lines');
+  lines.querySelectorAll('*').forEach(function (el) { if (el.tagName !== 'g') el.setAttribute('fill', 'none'); });
+  art.setAttribute('class', 'fills');
+  art.setAttribute('stroke', 'none');
+  art.querySelectorAll('[stroke]').forEach(function (el) { el.setAttribute('stroke', 'none'); });
+  svg.appendChild(lines);
+  var seed = 7 + i;
+  function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+  lines.querySelectorAll('path, rect, circle, ellipse, polygon, polyline, line').forEach(function (el) {
+    if (el.hasAttribute('stroke-dasharray') || el.hasAttribute('stroke') || el.hasAttribute('data-solid')) return;
+    if ((el.getAttribute('d') || '').split(/[Mm]/).length > 2) return;
+    var len = el.getTotalLength ? el.getTotalLength() : 0;
+    if (len < 40) return;
+    var gap = 6 + rnd() * 4;
+    var cuts = len > 160 ? 2 : 1;
+    var seg = len / cuts - gap;
+    var a = seg * (0.35 + rnd() * 0.3);
+    el.setAttribute('stroke-dasharray', a.toFixed(1) + ' ' + gap.toFixed(1) + ' ' + (seg - a).toFixed(1) + ' 0');
+    el.setAttribute('stroke-dashoffset', (rnd() * len).toFixed(1));
+  });
+});
+
+
+/* ガラスの板: 白さを変えて、いちばん読みにくい所のコントラストを出す */
+(function () {
+  var op = document.getElementById('op'), glass = document.getElementById('glass'), out = document.getElementById('gratio'), v = document.getElementById('op-v');
+  var behind = [[0x4f,0x6f,0x9c],[0xf2,0xa9,0x9d],[0xff,0xe4,0x5c],[0x9a,0xa3,0xd6],[255,255,255]];
+  var text = [0x2a,0x2a,0x33];
+  function lin(c) { c /= 255; return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); }
+  function L(c) { return 0.2126 * lin(c[0]) + 0.7152 * lin(c[1]) + 0.0722 * lin(c[2]); }
+  function apply() {
+    var a = op.value / 100;
+    glass.style.background = 'rgba(255,255,255,' + a + ')';
+    v.textContent = op.value + '%';
+    var lt = L(text), worst = 99;
+    behind.forEach(function (c) {
+      var mix = c.map(function (x) { return x * (1 - a) + 255 * a; });
+      var lb = L(mix), r = (Math.max(lb, lt) + 0.05) / (Math.min(lb, lt) + 0.05);
+      if (r < worst) worst = r;
+    });
+    var ok = worst >= 4.5;
+    out.textContent = 'いちばん読みにくい所で ' + worst.toFixed(1) + ' : 1　' + (ok ? '○ 足りている' : '✕ 足りない');
+    out.style.color = ok ? '#2a2a33' : '#9b2c1d';
+  }
+  op.addEventListener('input', apply);
+  apply();
+})();
+</script>
+
+<div class="fab"><ol class="fab-menu" id="fab-menu" hidden aria-label="目次"><li><a href="index.html"><b></b>表紙と目次</a></li><li><a href="ch01.html"><b>1</b>人はどう画面を見るか</a></li><li><a href="ch02.html"><b>2</b>文字の読みやすさ</a></li><li><a href="ch03.html"><b>3</b>色の使い方</a></li><li><a href="ch04.html"><b>4</b>いまどこを選んでいるか</a></li><li><a href="ch05.html"><b>5</b>押す・打つのしやすさ</a></li><li><a href="ch06.html"><b>6</b>動きを入れていい時</a></li><li><a href="ch07.html"><b>7</b>情報の見せ方</a></li><li><a href="ch08.html"><b>8</b>エラーと確認</a></li><li><a href="ch09.html"><b>9</b>軽い画面のつくり方</a></li><li><a href="ch10.html"><b>10</b>目の疲れ</a></li><li><a href="ch11.html" aria-current="page"><b>11</b>これからの UI</a></li></ol><button class="fab-b" type="button" id="fab-b" aria-expanded="false" aria-controls="fab-menu">目次</button></div>
+<script>
+(function () {
+  var b = document.getElementById('fab-b'), m = document.getElementById('fab-menu');
+  function close() { if (!m.hidden) { m.hidden = true; b.setAttribute('aria-expanded', 'false'); } }
+  b.addEventListener('click', function () { if (m.hidden) { m.hidden = false; b.setAttribute('aria-expanded', 'true'); (m.querySelector('[aria-current]') || m.querySelector('a')).focus(); } else close(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !m.hidden) { close(); b.focus(); } });
+  document.addEventListener('click', function (e) { if (!e.target.closest('.fab')) close(); });
+})();
+</script>
+</body>
+</html>
