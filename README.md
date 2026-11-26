@@ -32,6 +32,8 @@
 
 macOS のネイティブ（SwiftUI・AppKit）向けにも、同じ 36 の部品を Swift で作りました（[swift/](swift/README.md)）。同じ画面を手当てをした SwiftUI（List と間引いた Swift Charts）で作って比べると、メモリは 112 MB に対して 34 MB、流している間の CPU は 37.1% に対して 7.3% でした。測り方と結果は [bench/swift/README.md](bench/swift/README.md) にあります。
 
+![Swift の部品の見本](site/img/swift.webp)
+
 ## 入れ方
 
 ### Claude Code（プラグイン）
