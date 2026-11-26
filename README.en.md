@@ -40,11 +40,13 @@ Other agents (Codex, Cursor, and others that read [Agent Skills](https://agentsk
 npx skills add k-aoshima/kodou-ui
 ```
 
-Or copy `skills/kodou-ui-build` and `skills/kodou-ui-review` into your agent's skills folder. Install both; the build skill uses the review scripts. The skills carry the components themselves: one HTML file per component (markup, CSS, JS) and 110 pixel icons, extracted from the catalog, so the agent copies working code instead of rewriting it.
+Or copy `skills/kodou-ui-build` and `skills/kodou-ui-review` into your agent's skills folder. Install both; the build skill uses the review scripts. The skills carry the components themselves: one HTML file per component (markup, CSS, JS) and 110 pixel icons, extracted from the catalog, so the agent copies working code instead of rewriting it. The Swift components (`KodouUI`) are in the skill too, at `skills/kodou-ui-build/assets/swift/KodouUI/`.
+
+To use them in your own macOS app, copy that folder into your project and add it to your build target. Steps are in [references/swift.md](skills/kodou-ui-build/references/swift.md) (Japanese). Only the swiftc build has been verified so far; SwiftPM and Xcode have not been tried.
 
 ## Use
 
-Ask the agent to "build this with Kodou-ui" or "review this with Kodou-ui". Put a `DESIGN.md` at your project root and the build skill reads it first; a template in the [DESIGN.md](https://github.com/google-labs-code/design.md) format is at `skills/kodou-ui-build/assets/DESIGN.md`.
+Ask the agent to "build this with Kodou-ui" or "review this with Kodou-ui". For a macOS app, add "in SwiftUI" and it uses the Swift components and the rules for splitting work between SwiftUI and AppKit. Put a `DESIGN.md` at your project root and the build skill reads it first; a template in the [DESIGN.md](https://github.com/google-labs-code/design.md) format is at `skills/kodou-ui-build/assets/DESIGN.md`.
 
 ## Checks without an agent
 
@@ -52,6 +54,7 @@ Ask the agent to "build this with Kodou-ui" or "review this with Kodou-ui". Put 
 S=skills/kodou-ui-review/scripts
 python3 $S/check.py page.html src/   # contrast, icons and rule detection in one run; exit 0 pass, 1 fail, 2 error
 python3 $S/lint.py --rules           # list the detection rules (confirm(), bare "Processing…", Search buttons, left accent bars, hidden focus, ...)
+python3 $S/lint.py Sources/          # Swift: timers that keep running when the window is hidden, bulk rows passed to List, text under 12pt, hard-coded colors
 node $S/measure.mjs page.html        # element count, JS heap, CPU while hidden (needs puppeteer-core and Chrome)
 ```
 
