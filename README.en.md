@@ -15,7 +15,7 @@ The form stays retro: a monospace grid, ruled boxes, reverse video for selection
 Every decision is checked against four principles:
 
 1. **Feedback**: every input gets a visible response. Filter on every keystroke. Key to paint within 16 ms.
-2. **Visible internals**: show what the machine understood and what it will do, with real values. No bare "Processing…".
+2. **Visible internals**: show what the machine understood and what it will do, with real values. No bare "Processing…". Show only the values people act on; fold the rest away.
 3. **The human holds the wheel**: the machine suggests, a person confirms with one key. Nothing runs on its own by default.
 4. **Skill pays off**: usable with a mouse on day one, fewer keystrokes as you learn. Same input, same order of results.
 
@@ -46,7 +46,9 @@ To use them in your own macOS app, copy that folder into your project and add it
 
 ## Use
 
-Ask the agent to "build this with Kodou-ui" or "review this with Kodou-ui". For a macOS app, add "in SwiftUI" and it uses the Swift components and the rules for splitting work between SwiftUI and AppKit. Put a `DESIGN.md` at your project root and the build skill reads it first; a template in the [DESIGN.md](https://github.com/google-labs-code/design.md) format is at `skills/kodou-ui-build/assets/DESIGN.md`.
+Ask the agent to "build this with Kodou-ui" or "review this with Kodou-ui". For a macOS app, add "in SwiftUI" and it uses the Swift components and the rules for splitting work between SwiftUI and AppKit. After its findings, the review skill also gives you a short script for testing the screen with 3 to 5 real people: tasks written as goals, watch without helping, fix where two or more people get stuck.
+
+Put a `DESIGN.md` at your project root and the build skill reads it first; a template in the [DESIGN.md](https://github.com/google-labs-code/design.md) format is at `skills/kodou-ui-build/assets/DESIGN.md`.
 
 ## Checks without an agent
 

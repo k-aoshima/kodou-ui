@@ -68,7 +68,7 @@ Swift の部品 `KodouUI` は、スキルの `skills/kodou-ui-build/assets/swift
 
 ## 使い方
 
-エージェントに「Kodou-ui で作って」と頼むと、部品と決まりに沿って画面を作ります。macOS のアプリなら「SwiftUI で作って」と添えると、Swift の部品と SwiftUI・AppKit の分け方の決まりで作ります。「Kodou-ui で点検して」と頼むと、手応えやキーの覚えやすさを確かめて、場所・問題・直し方の形で指摘します。
+エージェントに「Kodou-ui で作って」と頼むと、部品と決まりに沿って画面を作ります。macOS のアプリなら「SwiftUI で作って」と添えると、Swift の部品と SwiftUI・AppKit の分け方の決まりで作ります。「Kodou-ui で点検して」と頼むと、手応えやキーの覚えやすさを確かめて、場所・問題・直し方の形で指摘します。指摘のあとには、作った人が数人に実際の作業をやってもらって確かめるための手順も添えます。
 
 プロジェクトの根に `DESIGN.md` を置くと、作るスキルが最初に読みます。ひな形は `skills/kodou-ui-build/assets/DESIGN.md` にあり、[DESIGN.md](https://github.com/google-labs-code/design.md) の形で書いてあるので、ほかのツールからも読めます。「このプロジェクトの前提」の欄に、元にする CLI の手触りやアクセントの色を書き足してください。
 
@@ -94,7 +94,7 @@ node $S/measure.mjs page.html             # 要素の数、JS のヒープ、隠
 
 | 層 | 中身 | 置き場所 |
 |---|---|---|
-| 原則 | 判断の基準になる4つの原則、昔のままにするものと今に替えるもの、文面の読みやすさ、速さと軽さ | `docs/principles.md` |
+| 原則 | 判断の基準になる4つの原則、昔のままにするものと今に替えるもの、文面の読みやすさ、速さと軽さ、人で確かめること | `docs/principles.md` |
 | 根拠 | 昔の見せ方と今の見せ方を比べた文献調査 | `docs/research/retro-vs-modern.md` |
 | 紹介ページ | 考え方、サンプル、部品の見本、点検の例 | `site/index.html` |
 | 見本帳 | 36 の基本部品を触って試せる頁と、トークン | `catalog/index.html` |
@@ -103,7 +103,7 @@ node $S/measure.mjs page.html             # 要素の数、JS のヒープ、隠
 | スキル（作る） | エージェントが画面を作るときの手順、部品・アイコン・パターンの決まり、トークン、DESIGN.md | `skills/kodou-ui-build/` |
 | 部品の作り | 見本帳から部品ごとに切り出した HTML・CSS・JS と、110 個のアイコン。Swift の部品の写し（`swift/KodouUI/`）。エージェントはここから写して使う | `skills/kodou-ui-build/assets/` |
 | 書き出し | 見本帳から部品の作り、Swift のトークンとアイコンを書き出すスクリプト。見本帳との食い違いは CI が確かめる | `tools/build-assets.py` |
-| スキル（点検） | できた画面の点検手順、チェックリスト、点検のスクリプト | `skills/kodou-ui-review/` |
+| スキル（点検） | できた画面の点検手順、チェックリスト、点検のスクリプト、人で試す手順 | `skills/kodou-ui-review/` |
 | 比較 | 同じ画面を Kodou-ui と React で作り、メモリと描画の重さを比べた結果。Swift の版は `bench/swift/` | `bench/` |
 | Swift | macOS の SwiftUI・AppKit で使う 36 の部品（KodouUI）と、部品を並べて見る窓 | `swift/` |
 | プラグイン | Claude Code のプラグインとして入れるための定義 | `.claude-plugin/marketplace.json` |
