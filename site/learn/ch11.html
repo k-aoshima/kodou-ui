@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>これからの UI｜UI デザイン講座</title>
+<title>目の疲れ｜UI デザイン講座</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Klee+One:wght@600&display=swap">
 <style>
@@ -129,23 +129,19 @@ footer { text-align: center; color: var(--sub); font-size: 14px; }
 @media (max-width: 760px) { .spot-grid { grid-template-columns: minmax(0, 1fr); } }
 @media (prefers-reduced-motion: reduce) { .spin { animation-duration: 3s; } .btn { transition: none; } }
 
-/* ガラスの板の体験 */
-.glass-demo { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 18px; align-items: start; }
-.glass-stage { position: relative; height: 240px; border: 2px solid var(--ink); border-radius: 14px; overflow: hidden; background: #fff; }
-.blob { position: absolute; border-radius: 50%; }
-.b1 { width: 150px; height: 150px; left: 6%; top: 14%; background: #4f6f9c; }
-.b2 { width: 120px; height: 120px; left: 40%; top: 46%; background: #f2a99d; }
-.b3 { width: 110px; height: 110px; left: 62%; top: 4%; background: #ffe45c; }
-.b4 { width: 90px; height: 90px; left: 26%; top: 2%; background: #9aa3d6; }
-.glass { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(78%, 300px); border: 2px solid rgba(255,255,255,.9); border-radius: 18px; padding: 16px 18px; display: grid; gap: 4px; color: #2a2a33; font-size: 17px; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); box-shadow: 0 0 0 2px var(--ink); }
-.glass b { font-family: var(--display); font-size: 19px; }
-.glass span { font-variant-numeric: tabular-nums; }
-.glass-knobs { background: var(--mist); border-radius: 14px; padding: 16px; display: grid; gap: 10px; }
-.glass-knobs label { font-family: var(--display); font-weight: 700; font-size: 16px; display: flex; justify-content: space-between; }
-.glass-knobs label b { color: var(--navy); font-variant-numeric: tabular-nums; }
-#op { width: 100%; accent-color: var(--navy); }
-.ratio { margin: 0; font-family: var(--display); font-weight: 900; font-size: 20px; font-variant-numeric: tabular-nums; }
-@media (max-width: 760px) { .glass-demo { grid-template-columns: minmax(0, 1fr); } }
+.eyes { display: grid; grid-template-columns: 330px minmax(0, 1fr); gap: 18px; align-items: start; }
+.knobs { background: var(--mist); border-radius: 14px; padding: 14px; display: grid; gap: 8px; }
+.klabel { margin: 0; font-family: var(--display); font-weight: 700; font-size: 16px; }
+.seg { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
+.btn.small { font-size: 15px; padding: 5px 14px; box-shadow: 3px 3px 0 var(--ink); }
+.btn.small[aria-pressed="true"] { background: var(--ink); color: #fff; box-shadow: 3px 3px 0 var(--yellow); }
+.reader { border: 2px solid var(--ink); border-radius: 12px; padding: 18px 20px; line-height: 1.85; min-width: 0; transition: background .2s, color .2s; }
+.reader p { margin: 0; max-width: 38em; }
+.reader.light { background: #ffffff; color: #2a2a33; }
+.reader.dim { background: #d6d7d1; color: #23232b; }
+.reader.dark { background: #26262e; color: #d9dce3; }
+@media (max-width: 760px) { .eyes { grid-template-columns: minmax(0, 1fr); } }
+@media (prefers-reduced-motion: reduce) { .reader { transition: none; } }
 
 /* 目次ボタン */
 .fab { position: fixed; z-index: 9; right: calc(16px + env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); display: grid; justify-items: end; gap: 10px; }
@@ -165,175 +161,175 @@ footer { text-align: center; color: var(--sub); font-size: 14px; }
 <div class="wrap">
 
   <section class="cover">
-    <div class="course"><a href="index.html" style="color:var(--navy)">UI デザイン講座</a>　全11章</div>
+    <div class="course"><a href="index.html" style="color:var(--navy)">UI デザイン講座</a>　全12章</div>
     <div class="plate">
       <span class="chip">第11章</span>
-      <h1><span class="fukuro">これから</span>の<br>UI</h1>
+      <h1><span class="fukuro">目</span>の<br>疲れ</h1>
     </div>
-    <p class="lead">流行は変わっても、ここまでの決まりは変わりません。</p>
+    <p class="lead">目の疲れの元は、色よりも、まばたきと明るさの差です。</p>
     <ul class="goals" aria-label="この章のゴール">
-      <li>いまの流れを4つ言える</li>
-      <li>流行を入れるか決める見方がわかる</li>
-      <li>見た目と使いやすさの関係がわかる</li>
+      <li>目が疲れる本当の原因がわかる</li>
+      <li>「目に優しい色」の根拠の弱さがわかる</li>
+      <li>画面でできる手当てがわかる</li>
     </ul>
   </section>
 
   <section class="panel">
-    <div class="panel-head"><span class="chip">4つの単元</span><h2>いまの流れと、変わらないこと</h2></div>
+    <div class="panel-head"><span class="chip">4つの単元</span><h2>疲れの元と手当て</h2></div>
     <div class="spot-grid">
 
       <article class="spot">
-        <h3><span>11-1</span>派手より、静かな画面</h3>
-        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="湯気の立つ急須と湯のみ、葉の付いた小枝">
+        <h3><span>11-1</span>疲れの元は、まばたき</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="大きな目、涙のしずく、目薬">
           <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M48 110c0-22 18-34 40-34s40 12 40 34c0 20-16 36-40 36s-40-16-40-36z" fill="#a8d5ba"/>
-            <path d="M128 106c12-4 22-14 26-24" fill="none"/>
-            <path d="M48 104c-12-2-18 10-12 20 4 6 10 8 16 6" fill="none"/>
-            <path d="M70 78c4-10 32-10 36 0z" fill="#f6e3c8"/>
-            <circle cx="88" cy="70" r="5" fill="#f6e3c8"/>
-            <path d="M178 114h44l-4 26a6 6 0 0 1-6 6h-24a6 6 0 0 1-6-6z" fill="#fff"/>
-            <path d="M188 104c-4-6 4-10 0-16M206 104c-4-6 4-10 0-16" fill="none"/>
-            <path d="M246 146c10-20 22-40 42-56" fill="none"/>
-            <path d="M262 118c-10-2-16-10-16-18 10 0 16 8 16 18z" fill="#a8d5ba"/>
-            <path d="M276 102c2-10 10-16 18-16 0 10-8 16-18 16z" fill="#a8d5ba"/>
+            <path d="M28 102q52-44 104 0-52 44-104 0z" fill="#fff"/>
+            <circle cx="80" cy="102" r="17" fill="#9aa3d6"/>
+            <circle cx="80" cy="102" r="7" fill="#2a2a33"/>
+            <path d="M44 84l-6-8M62 74l-3-9M80 71v-9M98 74l3-9M116 84l6-8" fill="none"/>
+            <path d="M172 82c10 14 16 22 16 30a16 16 0 0 1-32 0c0-8 6-16 16-30z" fill="#c9d6ea"/>
+            <path d="M166 114a6 6 0 0 0 6 6" stroke="#fff" stroke-width="3" fill="none"/>
+            <path d="M238 82l6-14 6 14z" fill="#fff"/>
+            <rect x="234" y="82" width="20" height="14" rx="2" fill="#f6e3c8"/>
+            <rect x="226" y="96" width="36" height="50" rx="6" fill="#fff"/>
+            <rect x="232" y="110" width="24" height="18" rx="2" fill="#a8d5ba"/>
             <path d="M14 152h292" fill="none"/>
           </g>
         </svg>
-        <p class="key">動きは<mark>飾りでなく、知らせるため</mark></p>
+        <p class="key">画面を見ると<mark>まばたきが減る</mark></p>
         <ul class="facts">
-          <li><b>派手な演出</b><span>減らす</span></li>
-          <li><b>動き</b><span>進み具合や結果を伝える時だけ</span></li>
+          <li><b>まばたき</b><span>約 5分の1 に減る</span></li>
+          <li><b>多い症状</b><span>目の乾き（ドライアイ）</span></li>
         </ul>
-        <details><summary>くわしく</summary><p>2025〜2026 年の流れとして、派手な演出を減らし、頭の負担を下げる「静かな画面」が挙げられています<sup>[1]</sup>。余白をとり、見やすい初期設定にし、大事な情報から順に並べます。動きは、処理中で固まっていないこと、入力の確認、進み具合のように、状態を伝える役に絞られます<sup>[1]</sup>。動きすぎる画面は押しつけがましく感じられ、避けられる傾向です。</p></details>
+        <details><summary>くわしく</summary><p>画面で作業すると、まばたきが約 5 分の 1 に減ります<sup>[1]</sup>。画面を見る時のピント合わせや寄り目の負担は紙とほぼ同じで、画面で多いのは目の乾きだとまとめられています<sup>[1]</sup>。まばたきの回数は、画面の色では変えられません。</p></details>
       </article>
 
       <article class="spot">
-        <h3><span>11-2</span>AI は提案、決めるのは人</h3>
-        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="提案のカードを差し出すロボットと、一時停止ボタンと停止ボタン">
+        <h3><span>11-2</span>画面だけ明るくしない</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="まぶしく光るモニターと、机のライト">
           <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M58 70v-12" fill="none"/>
-            <circle cx="58" cy="54" r="5" fill="#ffe45c"/>
-            <rect x="30" y="70" width="56" height="44" rx="10" fill="#dfe2f4"/>
-            <circle cx="47" cy="90" r="5" fill="#fff"/>
-            <circle cx="69" cy="90" r="5" fill="#fff"/>
-            <path d="M50 102h16" fill="none"/>
-            <rect x="38" y="116" width="40" height="30" rx="6" fill="#c9d6ea"/>
-            <path d="M78 124l20-10" fill="none"/>
-            <rect x="98" y="84" width="64" height="42" rx="6" fill="#fff"/>
-            <path d="M108 98h34M108 110h24" stroke="#9aa3d6" fill="none"/>
-            <path d="M146 108l4 4 7-8" stroke="#4f6f9c" fill="none"/>
-            <circle cx="210" cy="124" r="22" fill="#ffe45c"/>
-            <path d="M203 114v20M217 114v20" stroke="#2a2a33" stroke-width="4" fill="none"/>
-            <rect x="248" y="104" width="42" height="42" rx="8" fill="#f2a99d"/>
-            <rect x="262" y="118" width="14" height="14" rx="2" fill="#2a2a33"/>
+            <path d="M30 60l-10-8M150 60l10-8M30 120l-10 6M150 120l10 6" stroke="#f6b98f" fill="none"/>
+            <rect x="40" y="58" width="100" height="68" rx="6" fill="#4f6f9c"/>
+            <rect x="48" y="66" width="84" height="52" rx="2" fill="#fff"/>
+            <path d="M90 126v12M70 146h40l-6-8H76z" fill="#dfe2f4"/>
+            <rect x="206" y="140" width="56" height="7" rx="3" fill="#c9d6ea"/>
+            <path d="M234 140l-16-42 30-28" fill="none"/>
+            <path d="M244 66l30 8-12 26z" fill="#ffe45c"/>
+            <path d="M268 104l6 10M256 108l2 12" stroke="#f6b98f" fill="none"/>
             <path d="M14 152h292" fill="none"/>
           </g>
         </svg>
-        <p class="key">理由を見せて、<mark>いつでも止められる</mark></p>
+        <p class="key">画面と<mark>まわりの明るさの差</mark>が疲れる</p>
         <ul class="facts">
-          <li><b>見せる</b><span>なぜそう提案したか、どこまで進んだか</span></li>
-          <li><b>任せる</b><span>止める・直す・取り消すは人の手に</span></li>
+          <li><b>明るい画面</b><span>まばたきが減り、疲れが増えた</span></li>
+          <li><b>差が大きい</b><span>暗い部屋で明るい画面は疲れる</span></li>
         </ul>
-        <details><summary>くわしく</summary><p>AI が画面の中心に入ってきたいま、AI が提案の理由やどれくらい確かかを示し、人が上書きしたり断ったりできることが重視されています<sup>[1]</sup>。人は AI の提案には慣れていますが、自分で決められなくなることは嫌います。AI が何段もの作業を進める時は、進み具合を見せ、確認・一時停止・修正・中止の手段を用意します<sup>[1]</sup>。第1章の「待たせるなら何をしているか見せる」と同じ考え方です。</p></details>
+        <details><summary>くわしく</summary><p>画面をとても明るくした時（140 cd/m²）は、暗めにした時（20 cd/m²）よりまばたきが減り、疲れが増えました<sup>[2]</sup>。部屋が明るいほど快適な画面の明るさは上がり、部屋と画面の明るさの差が大きいほど疲れる、という結果もあります<sup>[2]</sup>。</p></details>
       </article>
 
       <article class="spot">
-        <h3><span>11-3</span>きれいは「使いやすそう」なだけ</h3>
-        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="色の丸が透けて見えるガラスのような板と、区切られたお弁当箱のような升目">
+        <h3><span>11-3</span>「目に優しい色」は根拠が弱い</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="色の付いためがねと、重ねた色付きの透明な板">
           <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="60" cy="86" r="22" fill="#f2a99d"/>
-            <circle cx="104" cy="112" r="24" fill="#9aa3d6"/>
-            <circle cx="132" cy="76" r="16" fill="#ffe45c"/>
-            <rect x="44" y="70" width="104" height="64" rx="14" fill="#ffffff" fill-opacity="0.55"/>
-            <path d="M58 88h52M58 102h36" stroke="#4f6f9c" stroke-width="3" fill="none"/>
-            <path d="M56 78a10 10 0 0 1 10-6" stroke="#fff" stroke-width="3" fill="none"/>
-            <rect x="190" y="70" width="110" height="76" rx="8" fill="#fff"/>
-            <rect x="198" y="78" width="50" height="34" rx="5" fill="#f8cfc6"/>
-            <rect x="254" y="78" width="38" height="16" rx="4" fill="#a8d5ba"/>
-            <rect x="254" y="98" width="38" height="40" rx="4" fill="#dfe2f4"/>
-            <rect x="198" y="118" width="50" height="20" rx="4" fill="#f6e3c8"/>
+            <rect x="34" y="96" width="44" height="34" rx="14" fill="#f6b98f"/>
+            <rect x="92" y="96" width="44" height="34" rx="14" fill="#f6b98f"/>
+            <path d="M78 106q7-6 14 0M34 104l-10-8M136 104l10-8" fill="none"/>
+            <rect x="182" y="70" width="64" height="64" rx="4" fill="#f8cfc6"/>
+            <rect x="214" y="84" width="64" height="62" rx="4" fill="#a8d5ba"/>
+            <path d="M214 84h32v50h-32z" fill="#c9cfb8"/>
+            <path d="M290 62v10M285 67h10" stroke="#f6b98f" fill="none"/>
             <path d="M14 152h292" fill="none"/>
           </g>
         </svg>
-        <p class="key">見た目がいいと<mark>使いやすく「感じる」</mark></p>
+        <p class="key">色を変えても<mark>疲れはほぼ変わらない</mark></p>
         <ul class="facts">
-          <li><b>感じ方</b><span>見た目がいいほど使いやすく感じる</span></li>
-          <li><b>実際</b><span>使いやすさは保証されない</span></li>
+          <li><b>暗い地</b><span>疲れの差は、はっきりしない</span></li>
+          <li><b>青カット</b><span>疲れを減らさない見込みが高い</span></li>
+          <li><b>色付きの板</b><span>読みが楽になる根拠なし</span></li>
         </ul>
-        <details><summary>くわしく</summary><p>流行の見た目には、すりガラスのように後ろが透ける「Liquid Glass」や、お弁当箱のように画面を升目で区切る「Bento グリッド」があります<sup>[1]</sup>。ただ、ATM をまねた画面の実験では、見た目の美しさが使う前の「使いやすそう」とも、使った後の評価とも強く結びつき、実際の使いやすさは評価に影響しませんでした<sup>[2]</sup>。好みと実際の読みやすさが食い違うことも多いと分かっています<sup>[3]</sup>。透ける板は飾りではなく、どれが手前かを伝える時に使い、上の字は第3章の濃さの差を守ります。</p></details>
+        <details><summary>くわしく</summary><p>明るい地と暗い地で疲れに差はなかったという研究があり、暗い地で疲れが減ったのは明るい部屋だけという研究もあって、結果は割れています<sup>[3]</sup>。色付きの透明板やレンズで読みが楽になるという主張は、研究をまとめた見直しで支持されませんでした<sup>[4]</sup>。画面の青い光が目を傷める根拠はなく、青い光を切るめがねも疲れを減らさない見込みが高いです<sup>[5]</sup>。黒い字と白い地の組み合わせが近視に関係するかもしれない、という実験もありますが、まだ仮説の段階です<sup>[6]</sup>。</p></details>
       </article>
 
       <article class="spot">
-        <h3><span>11-4</span>使いやすさは最初から組みこむ</h3>
-        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="土台から積み上げた積み木と、丸めた設計図">
+        <h3><span>11-4</span>しま模様と、暗い地の派手な色</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="同じ幅の濃い縞が並ぶ板と、暗い地に赤と青の細い線が並んだ板">
           <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="34" y="124" width="132" height="22" rx="3" fill="#4f6f9c"/>
-            <rect x="44" y="100" width="54" height="24" rx="3" fill="#f6b98f"/>
-            <rect x="102" y="100" width="54" height="24" rx="3" fill="#a8d5ba"/>
-            <rect x="70" y="78" width="60" height="22" rx="3" fill="#ffe45c"/>
-            <path d="M74 78l26-22 26 22z" fill="#f2a99d"/>
-            <rect x="196" y="122" width="90" height="24" rx="12" fill="#c9d6ea"/>
-            <circle cx="208" cy="134" r="12" fill="#dfe2f4"/>
-            <circle cx="208" cy="134" r="4" fill="#fff"/>
-            <path d="M232 128h40M232 138h28" stroke="#4f6f9c" stroke-width="1.6" fill="none"/>
-            <path d="M262 72v10M257 77h10" stroke="#f6b98f" fill="none"/>
+            <rect x="34" y="62" width="110" height="78" rx="4" fill="#fff"/>
+            <path d="M35 72h108M35 88h108M35 104h108M35 120h108M35 135h108" stroke="#4f6f9c" stroke-width="7" fill="none"/>
+            <path d="M60 140l-6 6M118 140l6 6" fill="none"/>
+            <rect x="176" y="72" width="116" height="74" rx="6" fill="#2a2a33"/>
+            <path d="M190 92h40M190 112h52M190 128h34" stroke="#ff7a66" stroke-width="3" fill="none"/>
+            <path d="M236 92h42M248 112h30M230 128h48" stroke="#6f9bff" stroke-width="3" fill="none"/>
+            <path d="M160 52v10M155 57h10" stroke="#f6b98f" fill="none"/>
             <path d="M14 152h292" fill="none"/>
           </g>
         </svg>
-        <p class="key">読みやすさは<mark>後付けせず土台に</mark></p>
+        <p class="key">同じ幅の<mark>濃いしま</mark>は、見ていてつらい</p>
         <ul class="facts">
-          <li><b>最初から</b><span>字・色・キー操作・動きを決める</span></li>
-          <li><b>後から</b><span>直す手間がかさむ</span></li>
+          <li><b>しま</b><span>表の縞はごく薄く</span></li>
+          <li><b>暗い地</b><span>派手な色は淡くする</span></li>
         </ul>
-        <details><summary>くわしく</summary><p>見やすさ・使いやすさへの配慮（アクセシビリティ）は、後から足す機能ではなく、作り始める前提になりつつあります<sup>[1]</sup>。はっきりした配色、キー操作、動きを減らす設定、やさしい言葉を最初から組みこみます。トレンド記事では、アメリカでの関連の訴訟が前の年より 14% 増え、計画の段階から取り組む組織は 28% にとどまるとされています<sup>[1]</sup>。最初に組みこむ方が、手間も費用も小さく済みます。</p></details>
+        <details><summary>くわしく</summary><p>同じ幅の明暗の帯が等間隔に並ぶと、見ていて不快になりやすくなります<sup>[7]</sup>。表に縞を付けるなら薄く、選んだ行の反転を何行も続けて並べないようにします。暗い地の上の鮮やかな色はちらついて見えやすいので淡い色を使う、という指針もあります。ただしこれは実験の裏付けのない指針です<sup>[8]</sup>。暗い地で赤と青の細い線を隣り合わせると、前後に浮いて見えることがあり、見え方には個人差があります<sup>[8]</sup>。</p></details>
       </article>
 
     </div>
   </section>
 
   <section class="panel lilac" aria-label="さわって確かめる">
-    <div class="panel-head"><span class="chip">さわって確かめる</span><h2>ガラスの板、読めますか</h2></div>
-    <div class="glass-demo">
-      <div class="glass-stage" id="stage">
-        <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="blob b4"></div>
-        <div class="glass" id="glass"><b>今日の予定</b><span>14:00　打ち合わせ</span><span>16:30　資料の見直し</span></div>
+    <div class="panel-head"><span class="chip">さわって確かめる</span><h2>明るさと字の大きさを選ぶ</h2></div>
+    <div class="eyes">
+      <div class="knobs">
+        <p class="klabel">地の明るさ</p>
+        <div class="seg" role="group" aria-label="地の明るさ">
+          <button class="btn small" type="button" data-bg="light" aria-pressed="true">明るい</button>
+          <button class="btn small" type="button" data-bg="dim" aria-pressed="false">少し暗い</button>
+          <button class="btn small" type="button" data-bg="dark" aria-pressed="false">暗い</button>
+        </div>
+        <p class="klabel">字の大きさ</p>
+        <div class="seg" role="group" aria-label="字の大きさ">
+          <button class="btn small" type="button" data-fs="15" aria-pressed="false">小</button>
+          <button class="btn small" type="button" data-fs="18" aria-pressed="true">中</button>
+          <button class="btn small" type="button" data-fs="22" aria-pressed="false">大</button>
+        </div>
       </div>
-      <div class="glass-knobs">
-        <label for="op">板の白さ <b id="op-v"></b></label>
-        <input type="range" id="op" min="10" max="95" value="15">
-        <p class="ratio" id="gratio"></p>
-        <p class="try-note">後ろの色がいちばん濃い所で、字と地の濃さの差を測っています。白さを上げるほど透け感は減り、字は読みやすくなります。</p>
+      <div class="reader light" id="reader" style="font-size:18px">
+        <p>画面で作業していると、まばたきが減っていきます。部屋と画面の明るさの差が大きいほど、目は疲れやすくなります。明るさと字の大きさを、いまの部屋に合わせて選んでみてください。</p>
       </div>
     </div>
+    <p class="try-note">どの色が一番いいかは人と部屋によって違います。画面にできる一番の手当ては、選べるようにしておくことです。</p>
   </section>
 
   <section class="panel mint" aria-label="まとめ">
-    <div class="panel-head"><span class="chip">この講座のまとめ</span><h2>3つだけ覚えて帰る</h2></div>
+    <div class="panel-head"><span class="chip">この章のまとめ</span><h2>3つだけ覚えて帰る</h2></div>
     <ul class="check">
-      <li><b>1</b><span>流行は<mark>役に立つ時だけ</mark>入れる</span></li>
-      <li><b>2</b><span>機械は提案まで、<mark>決めるのは人</mark></span></li>
-      <li><b>3</b><span>見た目より先に<mark>読める・押せる・分かる</mark></span></li>
+      <li><b>1</b><span>疲れの元は<mark>まばたきと明るさの差</mark></span></li>
+      <li><b>2</b><span>「目に優しい色」に<mark>頼らない</mark></span></li>
+      <li><b>3</b><span>明るさと字の大きさを<mark>選べる</mark>ようにする</span></li>
     </ul>
-    <div class="point"><b>POINT</b><div>押したらすぐ応え、中で起きていることを見せ、決めるのは人に任せ、使うほどうまくなれる画面を目指す。</div></div>
+    <div class="point"><b>POINT</b><div>色を1つに決めるより、利用者に選ばせる。</div></div>
   </section>
 
   <section class="panel" aria-label="参考文献" style="box-shadow:none">
     <div class="panel-head"><span class="chip white">参考文献</span><h2>もっと読むなら</h2></div>
     <ol class="refs">
-      <li>UI/UX トレンドのまとめ（2026-09-07 の調査ノート）。元の記事: UXPin <a href="https://www.uxpin.com/studio/blog/ui-ux-design-trends/">uxpin.com</a>、Mockflow <a href="https://mockflow.com/blog/ui-design-trends">mockflow.com</a>、Envato Elements <a href="https://elements.envato.com/learn/ux-ui-design-trends">envato.com</a>、sanjaydey.com <a href="https://www.sanjaydey.com/ux-ui-design-trends-2026-biggest/">sanjaydey.com</a>、index.dev <a href="https://www.index.dev/blog/ui-ux-design-trends">index.dev</a>、tuxdi.com <a href="https://tuxdi.com/en/blog/uxui-trends-2025-the-year-design-became-more-human">tuxdi.com</a>、think201.com <a href="https://think201.com/blog/ui-ux-wrapped-2025-design-trends-report">think201.com</a></li>
-      <li>Tractinsky, N., Katz, A. S., &amp; Ikar, D. (2000). What is beautiful is usable. Interacting with Computers 13(2). <a href="https://academic.oup.com/iwc/article-abstract/13/2/127/898608">oup.com</a></li>
-      <li>Dyson, M. C. (2004). How physical text layout affects reading from screen. Behaviour &amp; Information Technology 23(6). <a href="https://centaur.reading.ac.uk/23344/">reading.ac.uk</a></li>
+      <li>Patel, S. ほか (1991). Effect of visual display unit use on blink rate and tear stability. Optom Vis Sci 68. <a href="https://pubmed.ncbi.nlm.nih.gov/1766652/">pubmed</a> ／ Rosenfield, M. (2011). Computer vision syndrome. Ophthalmic Physiol Opt 31. <a href="https://pubmed.ncbi.nlm.nih.gov/21480937/">pubmed</a></li>
+      <li>Benedetto, S. ほか (2014). Effects of luminance and illuminance on visual fatigue and arousal during digital reading. <a href="https://lead.ube.fr/wp-content/uploads/2023/09/Benedetto_et_al._2014.pdf">ube.fr</a> ／ Zhou, Y. ほか (2021). Applied Sciences. <a href="https://doi.org/10.3390/app11094108">doi.org</a></li>
+      <li>Sengsoon, P., &amp; Intaruk, R. (2025). IJERPH. <a href="https://doi.org/10.3390/ijerph22040609">doi.org</a> ／ Xie, X. ほか (2021). IEEE Access. <a href="https://doi.org/10.1109/ACCESS.2021.3061770">doi.org</a></li>
+      <li>Griffiths, P. G. ほか (2016). The effect of coloured overlays and lenses on reading: a systematic review. Ophthalmic Physiol Opt 36. <a href="https://doi.org/10.1111/opo.12316">doi.org</a></li>
+      <li>Singh, S. ほか (2023). Blue-light filtering spectacles for computer vision syndrome. Cochrane. <a href="https://doi.org/10.1002/14651858.CD013244.pub2">doi.org</a></li>
+      <li>Aleman, A. C., Wang, M., &amp; Schaeffel, F. (2018). Reading and Myopia: Contrast Polarity Matters. Scientific Reports. <a href="https://doi.org/10.1038/s41598-018-28904-x">doi.org</a></li>
+      <li>Monger, L. J., Wilkins, A. J., &amp; Allen, P. M. (2015). Frontiers in Psychology. <a href="https://doi.org/10.3389/fpsyg.2015.01651">doi.org</a></li>
+      <li>Ozolinsh, M. ほか (2015). Frontiers in Psychology. <a href="https://doi.org/10.3389/fpsyg.2015.00337">doi.org</a> ／ Material Design. Dark theme. <a href="https://m2.material.io/design/color/dark-theme">material.io</a></li>
     </ol>
   </section>
 
   <div class="next">
     <p><small>表紙</small><a href="index.html" style="color:var(--navy)">目次へ戻る</a></p>
-    <p><small>前の章</small><a href="ch10.html" style="color:var(--navy)">第10章　目の疲れ</a></p>
-    <p><small>次の章</small>講座はここまで</p>
-    <a class="chip" href="ch01.html" style="color:inherit;text-decoration:none">第1章へ戻る →</a>
+    <p><small>前の章</small><a href="ch10.html" style="color:var(--navy)">第10章　軽い画面のつくり方</a></p>
+    <p><small>次の章</small>第12章　これからの UI</p>
+    <a class="chip" href="ch12.html" style="color:inherit;text-decoration:none">読む →</a>
   </div>
 
-  <footer>出典: UI/UX トレンドの調査ノートと、Kodou-ui の文献調査 docs/research/retro-vs-modern.md・docs/principles.md をもとに作成。</footer>
+  <footer>出典: Kodou-ui の文献調査 docs/research/components-review.md をもとに作成。</footer>
 </div>
 
 <script>
@@ -365,33 +361,24 @@ document.querySelectorAll('.scene').forEach(function (svg, i) {
 });
 
 
-/* ガラスの板: 白さを変えて、いちばん読みにくい所のコントラストを出す */
+/* 明るさと字の大きさを選ぶ */
 (function () {
-  var op = document.getElementById('op'), glass = document.getElementById('glass'), out = document.getElementById('gratio'), v = document.getElementById('op-v');
-  var behind = [[0x4f,0x6f,0x9c],[0xf2,0xa9,0x9d],[0xff,0xe4,0x5c],[0x9a,0xa3,0xd6],[255,255,255]];
-  var text = [0x2a,0x2a,0x33];
-  function lin(c) { c /= 255; return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); }
-  function L(c) { return 0.2126 * lin(c[0]) + 0.7152 * lin(c[1]) + 0.0722 * lin(c[2]); }
-  function apply() {
-    var a = op.value / 100;
-    glass.style.background = 'rgba(255,255,255,' + a + ')';
-    v.textContent = op.value + '%';
-    var lt = L(text), worst = 99;
-    behind.forEach(function (c) {
-      var mix = c.map(function (x) { return x * (1 - a) + 255 * a; });
-      var lb = L(mix), r = (Math.max(lb, lt) + 0.05) / (Math.min(lb, lt) + 0.05);
-      if (r < worst) worst = r;
+  var r = document.getElementById('reader');
+  function group(attr, apply) {
+    var bs = document.querySelectorAll('[data-' + attr + ']');
+    bs.forEach(function (b) {
+      b.addEventListener('click', function () {
+        bs.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+        apply(b.getAttribute('data-' + attr));
+      });
     });
-    var ok = worst >= 4.5;
-    out.textContent = 'いちばん読みにくい所で ' + worst.toFixed(1) + ' : 1　' + (ok ? '○ 足りている' : '✕ 足りない');
-    out.style.color = ok ? '#2a2a33' : '#9b2c1d';
   }
-  op.addEventListener('input', apply);
-  apply();
+  group('bg', function (v) { r.className = 'reader ' + v; });
+  group('fs', function (v) { r.style.fontSize = v + 'px'; });
 })();
 </script>
 
-<div class="fab"><ol class="fab-menu" id="fab-menu" hidden aria-label="目次"><li><a href="index.html"><b></b>表紙と目次</a></li><li><a href="ch01.html"><b>1</b>人はどう画面を見るか</a></li><li><a href="ch02.html"><b>2</b>文字の読みやすさ</a></li><li><a href="ch03.html"><b>3</b>色の使い方</a></li><li><a href="ch04.html"><b>4</b>いまどこを選んでいるか</a></li><li><a href="ch05.html"><b>5</b>押す・打つのしやすさ</a></li><li><a href="ch06.html"><b>6</b>動きを入れていい時</a></li><li><a href="ch07.html"><b>7</b>情報の見せ方</a></li><li><a href="ch08.html"><b>8</b>エラーと確認</a></li><li><a href="ch09.html"><b>9</b>軽い画面のつくり方</a></li><li><a href="ch10.html"><b>10</b>目の疲れ</a></li><li><a href="ch11.html" aria-current="page"><b>11</b>これからの UI</a></li></ol><button class="fab-b" type="button" id="fab-b" aria-expanded="false" aria-controls="fab-menu">目次</button></div>
+<div class="fab"><ol class="fab-menu" id="fab-menu" hidden aria-label="目次"><li><a href="index.html"><b></b>表紙と目次</a></li><li><a href="ch01.html"><b>1</b>人はどう画面を見るか</a></li><li><a href="ch02.html"><b>2</b>文字の読みやすさ</a></li><li><a href="ch03.html"><b>3</b>色の使い方</a></li><li><a href="ch04.html"><b>4</b>いまどこを選んでいるか</a></li><li><a href="ch05.html"><b>5</b>押す・打つのしやすさ</a></li><li><a href="ch06.html"><b>6</b>動きを入れていい時</a></li><li><a href="ch07.html"><b>7</b>情報の見せ方</a></li><li><a href="ch08.html"><b>8</b>詳しいものは奥に置く</a></li><li><a href="ch09.html"><b>9</b>エラーと確認</a></li><li><a href="ch10.html"><b>10</b>軽い画面のつくり方</a></li><li><a href="ch11.html" aria-current="page"><b>11</b>目の疲れ</a></li><li><a href="ch12.html"><b>12</b>これからの UI</a></li></ol><button class="fab-b" type="button" id="fab-b" aria-expanded="false" aria-controls="fab-menu">目次</button></div>
 <script>
 (function () {
   var b = document.getElementById('fab-b'), m = document.getElementById('fab-menu');

@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>軽い画面のつくり方｜UI デザイン講座</title>
+<title>エラーと確認｜UI デザイン講座</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=optional">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Klee+One:wght@600&display=swap">
 <style>
 body{margin:0;font-size:14px}img{max-width:100%}[hidden]{display:none!important}
 
@@ -130,17 +130,31 @@ footer { text-align: center; color: var(--sub); font-size: 14px; }
 @media (prefers-reduced-motion: reduce) { .spin { animation-duration: 3s; } .btn { transition: none; } }
 
 .demo2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
-.dbox { background: var(--mist); border-radius: 14px; padding: 16px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.dbox { background: var(--mist); border-radius: 14px; padding: 16px; display: grid; gap: 12px; align-content: start; min-width: 0; position: relative; }
 .dbox h4 { margin: 0; font-family: var(--display); font-weight: 900; font-size: 18px; }
-.btn.small { font-size: 15px; padding: 5px 14px; box-shadow: 3px 3px 0 var(--ink); justify-self: start; }
-.wtable { width: 100%; border-collapse: collapse; background: #fff; border: 2px solid var(--ink); border-radius: 12px; font-size: 16px; font-variant-numeric: tabular-nums; }
-.wtable td, .wtable th { padding: 6px 12px; text-align: left; border-bottom: 1px solid var(--mist); }
-.wtable th { font-family: var(--display); font-size: 15px; }
-.wtable td.n { text-align: right; }
-.bignum { margin: 0; font-family: var(--display); font-weight: 900; font-size: 32px; font-variant-numeric: tabular-nums; }
-.gauge { position: relative; height: 22px; background: #fff; border: 2px solid var(--ink); border-radius: 11px; overflow: hidden; }
-.gbar { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: var(--mint); }
-.gline { position: absolute; top: 0; bottom: 0; left: 70%; width: 3px; background: var(--ink); }
+.seg { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn.small { font-size: 15px; padding: 5px 14px; box-shadow: 3px 3px 0 var(--ink); }
+.btn.small[aria-pressed="true"] { background: var(--ink); color: #fff; box-shadow: 3px 3px 0 var(--yellow); }
+.btn.danger { background: #b8321f; color: #fff; }
+.files { list-style: none; margin: 0; padding: 4px 0; background: #fff; border: 2px solid var(--ink); border-radius: 12px; min-height: 60px; }
+.files li { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 4px 8px 4px 14px; min-height: 40px; font-family: var(--mono); font-size: 16px; }
+.files li + li { border-top: 1px solid var(--mist); }
+.files .del { font-family: var(--body); font-size: 15px; font-weight: 700; background: #fff; border: 2px solid var(--ink); border-radius: 8px; padding: 2px 10px; min-height: 30px; cursor: pointer; }
+.files .del:focus-visible, .linkbtn:focus-visible, .finput:focus-visible { outline: 3px dashed var(--navy); outline-offset: 2px; }
+.files .empty { color: var(--sub); font-family: var(--body); justify-content: center; }
+.dlg { position: absolute; inset: 0; background: rgba(42,42,51,.35); border-radius: 14px; display: grid; place-items: center; padding: 16px; }
+.dlg[hidden] { display: none; }
+.dlg-box { margin: 0; width: min(100%, 24rem); background: #fff; border: 2px solid var(--ink); border-radius: 12px; padding: 16px; display: grid; gap: 12px; box-shadow: 5px 5px 0 var(--ink); }
+.dlg-box p { margin: 0; font-size: 16px; }
+.dlg-btns { display: flex; gap: 12px; justify-content: flex-end; flex-wrap: wrap; }
+.toast { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: var(--ink); color: #fff; border-radius: 12px; padding: 8px 10px 8px 14px; font-size: 16px; }
+.toast[hidden] { display: none; }
+.linkbtn { background: none; border: 0; color: var(--navy); font: inherit; text-decoration: underline; cursor: pointer; padding: 4px 2px; min-height: 24px; }
+.flabel { font-family: var(--display); font-weight: 700; font-size: 16px; }
+.finput { font-family: var(--mono); font-size: 16px; padding: 8px 12px; border: 2px solid var(--ink); border-radius: 10px; background: #fff; min-height: 44px; width: 100%; }
+.finput.bad { border-color: #b8321f; }
+.ferr { margin: -6px 0 0; min-height: 1.6em; font-size: 15px; font-weight: 700; color: #9b2c1d; }
+.ferr.good { color: #22663a; }
 @media (max-width: 760px) { .demo2 { grid-template-columns: minmax(0, 1fr); } }
 
 /* 目次ボタン */
@@ -161,143 +175,153 @@ footer { text-align: center; color: var(--sub); font-size: 14px; }
 <div class="wrap">
 
   <section class="cover">
-    <div class="course"><a href="index.html" style="color:var(--navy)">UI デザイン講座</a>　全11章</div>
+    <div class="course"><a href="index.html" style="color:var(--navy)">UI デザイン講座</a>　全12章</div>
     <div class="plate">
       <span class="chip">第9章</span>
-      <h1><span class="fukuro">軽い</span><br>画面のつくり方</h1>
+      <h1><span class="fukuro">エラー</span>と<br>確認</h1>
     </div>
-    <p class="lead">画面が重いと、開くのも動くのも遅くなります。何が重いのかを知る章です。</p>
+    <p class="lead">まちがいは必ず起きます。起きた後に助けるのが UI の仕事です。</p>
     <ul class="goals" aria-label="この章のゴール">
-      <li>日本語の画面で一番重い物がわかる</li>
-      <li>文字の差し替えでずれない方法がわかる</li>
-      <li>見えない所を止める理由がわかる</li>
+      <li>伝わるエラー文の書き方がわかる</li>
+      <li>確認を出しすぎる害がわかる</li>
+      <li>入力チェックのタイミングがわかる</li>
     </ul>
   </section>
 
   <section class="panel">
-    <div class="panel-head"><span class="chip">4つの単元</span><h2>重さのもとを減らす</h2></div>
+    <div class="panel-head"><span class="chip">4つの単元</span><h2>まちがいを助ける</h2></div>
     <div class="spot-grid">
 
       <article class="spot">
-        <h3><span>9-1</span>一番重いのは文字の形</h3>
-        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="ガムテープを貼った重い段ボール箱、鉄の重り、軽い羽根">
+        <h3><span>9-1</span>エラーは直し方まで書く</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="びっくりマークの標識、右を指す道案内の看板、スパナ">
           <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="30" y="84" width="92" height="62" rx="4" fill="#f6e3c8"/>
-            <rect x="68" y="84" width="16" height="62" fill="#f6b98f"/>
-            <path d="M22 74l-6-6M40 70l-2-8M118 72l6-6" stroke="#f6b98f" fill="none"/>
-            <path d="M162 104a18 18 0 0 1 36 0" stroke-width="6" fill="none"/>
-            <circle cx="180" cy="122" r="24" fill="#4f6f9c"/>
-            <path d="M172 116a8 8 0 0 1 8-6" stroke="#fff" stroke-width="3" fill="none"/>
-            <path d="M232 144c10-30 34-50 66-56-6 30-30 52-66 56z" fill="#fff"/>
-            <path d="M232 144c18-18 38-36 60-50" fill="none"/>
+            <path d="M70 108v38" fill="none"/>
+            <path d="M70 56l30 52H40z" fill="#ffe45c"/>
+            <path d="M70 72v18M70 98v1" stroke="#2a2a33" stroke-width="4" fill="none"/>
+            <path d="M160 100v46" fill="none"/>
+            <path d="M126 70h60l14 15-14 15h-60z" fill="#a8d5ba"/>
+            <path d="M138 85h40" stroke="#fff" stroke-width="3" fill="none"/>
+            <g transform="rotate(-40 262 118)">
+              <rect x="256" y="104" width="12" height="44" rx="5" fill="#dfe2f4"/>
+              <path d="M250 96a12 12 0 0 0 24 0h-7v8h-10v-8z" fill="#dfe2f4"/>
+            </g>
+            <path d="M296 62v10M291 67h10" stroke="#f6b98f" fill="none"/>
             <path d="M14 152h292" fill="none"/>
           </g>
         </svg>
-        <p class="key">日本語の画面は<mark>文字の形のデータ</mark>が重い</p>
+        <p class="key">何が起きたか＋<mark>どう直すか</mark></p>
         <ul class="facts">
-          <li><b>重さの内訳</b><span>8割以上が文字の形</span></li>
-          <li><b>1つ出すだけ</b><span>200〜600KB</span></li>
+          <li><b>ダメ</b><span>「EACCES」「エラーが発生しました」</span></li>
+          <li><b>いい</b><span>「保存できません。フォルダの書き込み権限を確認してください」</span></li>
         </ul>
-        <details><summary>くわしく</summary><p>ネットから読み込む文字の形のデータを「Web フォント」と言います。日本語は字の数が多いので、Google Fonts は1つの太さを 124 個のファイルに分けて配り、ページで使う字が入ったファイルだけを読み込みます<sup>[1]</sup>。それでも、書体を3種類使った見本では、部品を1つ出すだけで 9〜36 回の読み込み、208〜595KB になり、全体の重さの 8 割以上を占めました。部品の見た目と動きのプログラムは、合わせて約 17KB（圧縮後）でした。</p></details>
+        <details><summary>くわしく</summary><p>エラー文の指針では、色や動きだけに頼らず目立たせる、原因の近くに出す、専門用語を避けて人の言葉で書く、何が問題でどう直すかを書く、入力を消さない、責める言い方をしない、エラーコードだけを出さない、が挙げられています<sup>[1]</sup>。ターミナルの指針も、エラーを人向けに書き直して直し方を示し、大事なことは最後に置くよう勧めています<sup>[2]</sup>。</p></details>
       </article>
 
       <article class="spot">
-        <h3><span>9-2</span>文字が差し替わっても、ずらさない</h3>
-        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="上の箱が横にずれた積み木と、水平器">
+        <h3><span>9-2</span>確認は2回目から効かなくなる</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="重なった確認の窓と、何度も押されるOKボタン">
           <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="36" y="112" width="74" height="34" rx="3" fill="#c9d6ea"/>
-            <rect x="62" y="78" width="74" height="34" rx="3" fill="#f2a99d"/>
-            <path d="M44 86h10M40 96h12M46 106h6" stroke="#f6b98f" fill="none"/>
-            <rect x="172" y="118" width="122" height="22" rx="5" fill="#ffe45c"/>
-            <rect x="220" y="122" width="26" height="14" rx="7" fill="#a8d5ba"/>
-            <circle cx="229" cy="129" r="4" fill="#fff"/>
-            <path d="M186 140v6M280 140v6" fill="none"/>
-            <path d="M262 70v10M257 75h10" stroke="#f6b98f" fill="none"/>
+            <rect x="30" y="56" width="110" height="64" rx="6" fill="#fff"/>
+            <rect x="44" y="68" width="110" height="64" rx="6" fill="#fff"/>
+            <rect x="58" y="80" width="110" height="64" rx="6" fill="#fff"/>
+            <path d="M58 92v-6a6 6 0 0 1 6-6h98a6 6 0 0 1 6 6v6z" fill="#9aa3d6"/>
+            <path d="M70 106h60M70 116h40" stroke="#9aa3d6" fill="none"/>
+            <rect x="196" y="112" width="84" height="34" rx="17" fill="#ffe45c"/>
+            <path d="M206 92a32 32 0 0 1 64 0M270 92l-6-4M270 92l4-6" stroke="#f6b98f" fill="none"/>
             <path d="M14 152h292" fill="none"/>
           </g>
         </svg>
-        <p class="key">遅れて届いた字で<mark>画面をずらさない</mark></p>
+        <p class="key">確認は<mark>見慣れると読まれない</mark></p>
         <ul class="facts">
-          <li><b>先に使う</b><span>パソコンに入っている字</span></li>
-          <li><b>間に合わなければ</b><span>差し替えない</span></li>
+          <li><b>2回目</b><span>脳の反応がもう大きく落ちる</span></li>
+          <li><b>出す時</b><span>取り返しのつかない操作だけ</span></li>
         </ul>
-        <details><summary>くわしく</summary><p>Web フォントが遅れて届くと、字の幅が変わって、読んでいる途中の文や押そうとしたボタンがずれます。見本の1つでは、このずれの大きさ（CLS）が 0.106 で、「良好」の目安 0.1 を超えました。直し方は、まずパソコンに入っている字（Mac ならヒラギノ）で足りる時は読み込まないこと、次に書体の種類を減らすこと、そして <code>font-display: optional</code> で、100ms 以内に届かなければ差し替えないことです<sup>[1]</sup>。このページも <code>optional</code> にしていて、初めて開いた時は Mac の字のまま表示されることがあります。</p></details>
+        <details><summary>くわしく</summary><p>脳の動きを測った実験では、警告を見た時の反応が2回目にはもう大きく落ちました。見た目が毎回変わる警告の方が、慣れにくかったそうです<sup>[3]</sup>。何度も「OK」を押すうちに、人は読まずに押すようになります<sup>[4]</sup>。確認は取り返しのつかない重い操作だけにし、乱発しないよう勧められています<sup>[5]</sup>。確認に要る情報に目を向けさせ、危ない操作を少しの間押せなくする工夫で、きちんと見て判断する人が2〜3倍になった研究もあります<sup>[6]</sup>。</p></details>
       </article>
 
       <article class="spot">
-        <h3><span>9-3</span>見えない所は動かさない</h3>
-        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="画面の消えたモニター、コンセントから抜いたプラグ、月">
+        <h3><span>9-3</span>確認より取り消し</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="ごみ箱から紙が戻ってくる矢印">
           <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="34" y="58" width="112" height="72" rx="6" fill="#4f6f9c"/>
-            <rect x="42" y="66" width="96" height="56" rx="2" fill="#2a2a33"/>
-            <path d="M90 130v10M70 146h40" fill="none"/>
-            <path d="M54 76l14 14" stroke="#9aa3d6" fill="none"/>
-            <path d="M176 140c18 0 24-14 36-14" fill="none"/>
-            <rect x="212" y="116" width="30" height="22" rx="4" fill="#fff"/>
-            <path d="M242 122h10M242 132h10" stroke-width="3" fill="none"/>
-            <rect x="268" y="100" width="32" height="46" rx="5" fill="#dfe2f4"/>
-            <path d="M280 116v6M288 116v6" stroke-width="3" fill="none"/>
-            <path d="M206 64a12 12 0 1 0 10 18 9 9 0 1 1-10-18z" fill="#f6e3c8"/>
+            <rect x="56" y="80" width="64" height="8" rx="3" fill="#c9d6ea"/>
+            <path d="M80 80v-6h16v6" fill="none"/>
+            <path d="M62 88h52l-6 58H68z" fill="#c9d6ea"/>
+            <path d="M78 100v34M98 100v34" fill="none"/>
+            <path d="M126 96q44-50 92-14M218 82l-12-2M218 82l-2-12" stroke="#f6b98f" stroke-width="3" fill="none"/>
+            <path d="M226 74h40l12 12v60h-52z" fill="#fff"/>
+            <path d="M266 74v12h12" fill="#f6e3c8"/>
+            <path d="M236 98h32M236 110h28M236 122h32M236 134h20" stroke="#9aa3d6" fill="none"/>
             <path d="M14 152h292" fill="none"/>
           </g>
         </svg>
-        <p class="key">隠れたら<mark>止める</mark></p>
+        <p class="key">取り消せるなら<mark>聞かずに実行</mark>して、戻せるように</p>
         <ul class="facts">
-          <li><b>隠れた画面</b><span>描き直しを止める</span></li>
-          <li><b>何もしない</b><span>空回りでも電気を使う</span></li>
+          <li><b>ボタン</b><span>「はい」ではなく「ファイルを削除」</span></li>
+          <li><b>最初の選択</b><span>「はい」にしない</span></li>
+          <li><b>取り消し</b><span>マウスを乗せている間は消さない</span></li>
         </ul>
-        <details><summary>くわしく</summary><p>動く部品は、画面を描き直す回し車（ループ）を1本にまとめ、ページが隠れたら止め、画面の外に出た部品は更新しません。何も描かない空回りのループでも電力を使うので、画面の中に動く物が無くなったら止めます<sup>[2]</sup>。部品の中で字が変わっても、計算をその部品の中だけで済ませる指定（<code>contain</code>）も効きます<sup>[3]</sup>。ぼかした影や半透明のぼかしは重いので使わない、という方法もあります<sup>[4]</sup>。</p></details>
+        <details><summary>くわしく</summary><p>確認を出すくらいなら取り消し（元に戻す）を用意せよ、という主張があります<sup>[4]</sup>。確認を出す時も、ボタンは「はい／いいえ」ではなく「ファイルを削除」のように結果を書き、最初に選ばれているのを「はい」にしないよう勧められています<sup>[5]</sup>。とても重い操作だけ、消す物の名前を打たせる方法もあります<sup>[2]</sup>。「元に戻す」を出す通知が数秒で必ず消えると、操作に制限時間をつけたことになりえます<sup>[7]</sup>。マウスを乗せている間は止め、ほかの場所からも取り消せるようにします。</p></details>
       </article>
 
       <article class="spot">
-        <h3><span>9-4</span>画面に置く物の数を減らす</h3>
-        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="ばらばらに積まれたたくさんの積み木と、お盆に並んだ三つの積み木">
+        <h3><span>9-4</span>入力チェックは欄を離れてから</h3>
+        <svg class="scene" viewBox="0 40 320 120" role="img" aria-label="チェックの付いた入力欄と、書きかけの入力欄、鉛筆">
           <g class="art" stroke="#2a2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="30" y="126" width="22" height="20" rx="2" fill="#f2a99d"/>
-            <rect x="54" y="126" width="22" height="20" rx="2" fill="#c9d6ea"/>
-            <rect x="78" y="126" width="22" height="20" rx="2" fill="#ffe45c"/>
-            <rect x="102" y="126" width="22" height="20" rx="2" fill="#a8d5ba"/>
-            <rect x="40" y="106" width="22" height="20" rx="2" fill="#ffe45c" transform="rotate(-8 51 116)"/>
-            <rect x="66" y="106" width="22" height="20" rx="2" fill="#f6b98f"/>
-            <rect x="90" y="106" width="22" height="20" rx="2" fill="#c9d6ea" transform="rotate(10 101 116)"/>
-            <rect x="54" y="86" width="22" height="20" rx="2" fill="#9aa3d6" transform="rotate(6 65 96)"/>
-            <rect x="80" y="86" width="22" height="20" rx="2" fill="#f2a99d" transform="rotate(-6 91 96)"/>
-            <rect x="66" y="66" width="22" height="20" rx="2" fill="#a8d5ba" transform="rotate(12 77 76)"/>
-            <rect x="176" y="138" width="124" height="8" rx="3" fill="#f6e3c8"/>
-            <rect x="188" y="110" width="28" height="28" rx="3" fill="#9aa3d6"/>
-            <rect x="224" y="110" width="28" height="28" rx="3" fill="#ffe45c"/>
-            <rect x="260" y="110" width="28" height="28" rx="3" fill="#f2a99d"/>
+            <rect x="30" y="66" width="170" height="30" rx="6" fill="#fff"/>
+            <path d="M42 81h80" stroke="#4f6f9c" fill="none"/>
+            <circle cx="184" cy="81" r="10" fill="#a8d5ba"/>
+            <path d="M179 81l4 4 7-7" stroke="#2a2a33" fill="none"/>
+            <rect x="30" y="112" width="170" height="30" rx="6" fill="#fff"/>
+            <path d="M42 127h40" stroke="#4f6f9c" fill="none"/>
+            <path d="M88 119v16" stroke="#2a2a33" stroke-width="2.5" fill="none"/>
+            <g transform="rotate(-35 262 112)">
+              <rect x="226" y="104" width="64" height="15" fill="#ffe45c"/>
+              <path d="M290 104l18 7.5-18 7.5z" fill="#f6e3c8"/>
+              <rect x="216" y="104" width="10" height="15" rx="3" fill="#f2a99d"/>
+            </g>
             <path d="M14 152h292" fill="none"/>
           </g>
         </svg>
-        <p class="key">部品が多いと<mark>描き直しが重くなる</mark></p>
+        <p class="key">打っている最中に<mark>赤くしない</mark></p>
         <ul class="facts">
-          <li><b>目安</b><span>1ページ約 1,400 個まで</span></li>
-          <li><b>点の多いグラフ</b><span>画面の幅ぶんに間引く</span></li>
+          <li><b>離れてから</b><span>7〜10秒速く入力できた</span></li>
+          <li><b>例外</b><span>名前が空いているかなど、打ちながら知りたい物</span></li>
         </ul>
-        <details><summary>くわしく</summary><p>画面の部品は、見出し・段落・ボタンなどの小さな箱（要素）の集まりです。箱が多いほど、押した後の描き直しに時間がかかります。速さを点検する道具（Lighthouse）は、約 1,400 個を超えると警告を出します<sup>[5]</sup>。部品を全部1ページに並べた見本帳は 1,808 個で、これを超えました。点がたくさんのグラフは、画面の横1列に1点まで間引けば、点の数が画面の幅で頭打ちになります。1万点を超える量なら、絵として描く <code>canvas</code> が勧められています<sup>[6]</sup>。</p></details>
+        <details><summary>くわしく</summary><p>入力欄のチェックを比べた実験では、欄を離れた後にチェックする方が、打っている最中にチェックするより 7〜10 秒速く入力が終わりました<sup>[8]</sup>。メールアドレスのように形が決まっている欄は、離れた後に確かめます。使いたい名前が空いているかのように、打ちながら知りたい物だけ、打つたびに確かめます。</p></details>
       </article>
 
     </div>
   </section>
 
   <section class="panel lilac" aria-label="さわって確かめる">
-    <div class="panel-head"><span class="chip">さわって確かめる</span><h2>このページの重さを量る</h2></div>
+    <div class="panel-head"><span class="chip">さわって確かめる</span><h2>確認と取り消し、チェックのタイミング</h2></div>
     <div class="demo2">
       <div class="dbox">
-        <h4>読み込んだ物の重さ</h4>
-        <button class="btn small" type="button" id="m-res">量る</button>
-        <table class="wtable" id="wtable" aria-live="polite">
-          <tbody><tr><td colspan="3">「量る」を押すと、このページが読み込んだ物を数えます</td></tr></tbody>
-        </table>
-        <p class="try-note">ブラウザによっては、別のサイトから来た物の重さが 0 と出ます。その時は回数だけを見てください。</p>
+        <h4>ファイルを消す</h4>
+        <div class="seg" role="group" aria-label="消し方">
+          <button class="btn small" type="button" id="d-confirm" aria-pressed="true">毎回確認</button>
+          <button class="btn small" type="button" id="d-undo" aria-pressed="false">取り消しを出す</button>
+        </div>
+        <ul class="files" id="files"></ul>
+        <div class="dlg" id="dlg" hidden role="dialog" aria-modal="true" aria-labelledby="dlg-t">
+          <div class="dlg-box">
+            <p id="dlg-t"></p>
+            <div class="dlg-btns"><button class="btn small" type="button" id="dlg-cancel">キャンセル</button><button class="btn small danger" type="button" id="dlg-ok">ファイルを削除</button></div>
+          </div>
+        </div>
+        <div class="toast" id="toast" hidden role="status"><span id="toast-t"></span><button class="btn small" type="button" id="toast-undo">元に戻す</button></div>
+        <p class="try-note">全部消してみて、どちらが楽か、どちらで読まずに押したか比べてください。<button class="linkbtn" type="button" id="files-reset">ファイルを戻す</button></p>
       </div>
       <div class="dbox">
-        <h4>画面の箱の数</h4>
-        <button class="btn small" type="button" id="m-dom">数える</button>
-        <p class="bignum" id="domcount">― 個</p>
-        <div class="gauge" aria-hidden="true"><div class="gbar" id="gbar"></div><div class="gline"></div></div>
-        <p class="try-note">線の位置が、警告の目安の 1,400 個です。</p>
+        <h4>メールアドレスを打つ</h4>
+        <label class="flabel" for="mail-a">打つたびにチェック</label>
+        <input class="finput" id="mail-a" type="text" autocomplete="off" placeholder="name@example.com">
+        <p class="ferr" id="err-a" aria-live="polite"></p>
+        <label class="flabel" for="mail-b">欄を離れてからチェック</label>
+        <input class="finput" id="mail-b" type="text" autocomplete="off" placeholder="name@example.com">
+        <p class="ferr" id="err-b" aria-live="polite"></p>
+        <p class="try-note">上の欄は1文字目から「✕」が出ます。下の欄は、打ち終えて欄の外を押した時だけ確かめます。</p>
       </div>
     </div>
   </section>
@@ -305,33 +329,35 @@ footer { text-align: center; color: var(--sub); font-size: 14px; }
   <section class="panel mint" aria-label="まとめ">
     <div class="panel-head"><span class="chip">この章のまとめ</span><h2>3つだけ覚えて帰る</h2></div>
     <ul class="check">
-      <li><b>1</b><span>日本語の画面は<mark>文字の形</mark>が一番重い</span></li>
-      <li><b>2</b><span>遅れて届いた字で<mark>ずらさない</mark></span></li>
-      <li><b>3</b><span>見えない所は<mark>止める</mark>、置く物は<mark>減らす</mark></span></li>
+      <li><b>1</b><span>エラーは<mark>どう直すか</mark>まで書く</span></li>
+      <li><b>2</b><span>確認は減らして、<mark>取り消し</mark>を用意する</span></li>
+      <li><b>3</b><span>入力チェックは<mark>欄を離れてから</mark></span></li>
     </ul>
-    <div class="point"><b>POINT</b><div>見た目を飾る前に、何を読み込んでいるかを量る。</div></div>
+    <div class="point"><b>POINT</b><div>止めるより、戻せるようにする。</div></div>
   </section>
 
   <section class="panel" aria-label="参考文献" style="box-shadow:none">
     <div class="panel-head"><span class="chip white">参考文献</span><h2>もっと読むなら</h2></div>
     <ol class="refs">
-      <li>web.dev. Best practices for fonts. <a href="https://web.dev/articles/font-best-practices">web.dev</a> ／ Google Developers Blog (2018). Google Fonts launches Japanese support. <a href="https://developers.googleblog.com/2018/09/google-fonts-launches-japanese-support.html">googleblog.com</a></li>
-      <li>Chrome for Developers. Heavy throttling of chained JS timers beginning in Chrome 88. <a href="https://developer.chrome.com/blog/timer-throttling-in-chrome-88">developer.chrome.com</a></li>
-      <li>web.dev. Avoid large, complex layouts and layout thrashing. <a href="https://web.dev/articles/avoid-large-complex-layouts-and-layout-thrashing">web.dev</a> ／ MDN. contain. <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/contain">mozilla.org</a></li>
-      <li>web.dev. Animations guide. <a href="https://web.dev/articles/animations-guide">web.dev</a></li>
-      <li>Chrome for Developers. Avoid an excessive DOM size. <a href="https://developer.chrome.com/docs/lighthouse/performance/dom-size">developer.chrome.com</a></li>
-      <li>MDN. &lt;canvas&gt;. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/canvas">mozilla.org</a> ／ Horak, T. ほか (2018). Comparing Rendering Performance of Common Web Technologies for Large Graphs. <a href="https://mt.inf.tu-dresden.de/cnt/uploads/Horak-2018-Graph-Performance-Poster.pdf">tu-dresden.de</a></li>
+      <li>Neusesser, T., &amp; Sunwall, E. (2023). Error-Message Guidelines. Nielsen Norman Group. <a href="https://www.nngroup.com/articles/error-message-guidelines/">nngroup.com</a></li>
+      <li>Prasad, A. ほか. Command Line Interface Guidelines. <a href="https://clig.dev/">clig.dev</a></li>
+      <li>Anderson, B. B. ほか (2015). How Polymorphic Warnings Reduce Habituation in the Brain: Insights from an fMRI Study. CHI 2015. <a href="https://scholarsarchive.byu.edu/facpub/9306">byu.edu</a></li>
+      <li>Raskin, A. (2007). Never Use a Warning When You Mean Undo. A List Apart. <a href="https://alistapart.com/article/neveruseawarning/">alistapart.com</a></li>
+      <li>Nielsen, J. (2018). Confirmation Dialogs Can Prevent User Errors (If Not Overused). Nielsen Norman Group. <a href="https://www.nngroup.com/articles/confirmation-dialog/">nngroup.com</a></li>
+      <li>Bravo-Lillo, C. ほか (2013). Your Attention Please: Designing security-decision UIs to make genuine risks harder to ignore. SOUPS 2013. <a href="https://www.microsoft.com/en-us/research/?p=164816">microsoft.com</a></li>
+      <li>W3C. WCAG 2.2, 2.2.1 Timing Adjustable ／ 4.1.3 Status Messages. <a href="https://www.w3.org/TR/WCAG22/">w3.org</a></li>
+      <li>Wroblewski, L. (2009). Inline Validation in Web Forms. A List Apart. <a href="https://alistapart.com/article/inline-validation-in-web-forms/">alistapart.com</a></li>
     </ol>
   </section>
 
   <div class="next">
     <p><small>表紙</small><a href="index.html" style="color:var(--navy)">目次へ戻る</a></p>
-    <p><small>前の章</small><a href="ch08.html" style="color:var(--navy)">第8章　エラーと確認</a></p>
-    <p><small>次の章</small>第10章　目の疲れ</p>
+    <p><small>前の章</small><a href="ch08.html" style="color:var(--navy)">第8章　詳しいものは奥に置く</a></p>
+    <p><small>次の章</small>第10章　軽い画面のつくり方</p>
     <a class="chip" href="ch10.html" style="color:inherit;text-decoration:none">読む →</a>
   </div>
 
-  <footer>出典: Kodou-ui の文献調査 docs/research/components-review.md をもとに作成。</footer>
+  <footer>出典: Kodou-ui の文献調査 docs/research/retro-vs-modern.md と components-review.md をもとに作成。</footer>
 </div>
 
 <script>
@@ -363,32 +389,68 @@ document.querySelectorAll('.scene').forEach(function (svg, i) {
 });
 
 
-/* このページの重さ */
+/* ファイルを消す: 毎回確認 と 取り消し */
 (function () {
-  function kb(b) { return (b / 1024).toFixed(1) + ' KB'; }
-  document.getElementById('m-res').addEventListener('click', function () {
-    var groups = { '文字の形（フォント）': [0, 0], '見た目の指定（CSS）': [0, 0], 'そのほか': [0, 0] };
-    var nav = performance.getEntriesByType('navigation')[0];
-    var page = nav ? (nav.transferSize || nav.encodedBodySize || 0) : 0;
-    performance.getEntriesByType('resource').forEach(function (r) {
-      var size = r.transferSize || r.encodedBodySize || 0;
-      var k = /\.(woff2?|ttf|otf)(\?|$)/.test(r.name) || r.name.indexOf('fonts.gstatic.com') >= 0 ? '文字の形（フォント）'
-            : (r.initiatorType === 'link' || /\.css/.test(r.name) || r.name.indexOf('fonts.googleapis.com') >= 0) ? '見た目の指定（CSS）' : 'そのほか';
-      groups[k][0]++; groups[k][1] += size;
-    });
-    var rows = '<tr><th>種類</th><th>回数</th><th>重さ</th></tr><tr><td>このページ本体</td><td class="n">1</td><td class="n">' + kb(page) + '</td></tr>';
-    Object.keys(groups).forEach(function (k) { rows += '<tr><td>' + k + '</td><td class="n">' + groups[k][0] + '</td><td class="n">' + kb(groups[k][1]) + '</td></tr>'; });
-    document.getElementById('wtable').innerHTML = '<tbody>' + rows + '</tbody>';
+  var NAMES = ['report.pdf', 'photo.jpg', 'memo.txt', 'draft.docx', 'old.zip'];
+  var files = NAMES.slice(), mode = 'confirm', pending = null, timer = null, last = null;
+  var ul = document.getElementById('files'), dlg = document.getElementById('dlg'), dlgT = document.getElementById('dlg-t');
+  var toast = document.getElementById('toast'), toastT = document.getElementById('toast-t');
+  function render() {
+    ul.innerHTML = files.length ? files.map(function (f, i) { return '<li>' + f + '<button type="button" class="del" data-i="' + i + '">削除</button></li>'; }).join('') : '<li class="empty">ファイルはありません</li>';
+  }
+  function remove(i) { last = { name: files[i], at: i }; files.splice(i, 1); render(); }
+  function showToast() {
+    toastT.textContent = '「' + last.name + '」を削除しました';
+    toast.hidden = false; clearTimeout(timer);
+    timer = setTimeout(function () { toast.hidden = true; }, 6000);
+  }
+  toast.addEventListener('mouseenter', function () { clearTimeout(timer); });
+  toast.addEventListener('focusin', function () { clearTimeout(timer); });
+  toast.addEventListener('mouseleave', function () { timer = setTimeout(function () { toast.hidden = true; }, 3000); });
+  document.getElementById('toast-undo').addEventListener('click', function () {
+    if (last) { files.splice(last.at, 0, last.name); last = null; render(); }
+    toast.hidden = true;
   });
-  document.getElementById('m-dom').addEventListener('click', function () {
-    var n = document.getElementsByTagName('*').length;
-    document.getElementById('domcount').textContent = n.toLocaleString() + ' 個';
-    document.getElementById('gbar').style.width = Math.min(100, n / 2000 * 100) + '%';
+  ul.addEventListener('click', function (e) {
+    var b = e.target.closest('.del'); if (!b) return;
+    var i = +b.dataset.i;
+    if (mode === 'confirm') {
+      pending = i; dlgT.textContent = '「' + files[i] + '」を削除しますか？ この操作は取り消せません。';
+      dlg.hidden = false; document.getElementById('dlg-cancel').focus();
+    } else { remove(i); showToast(); }
   });
+  document.getElementById('dlg-ok').addEventListener('click', function () { dlg.hidden = true; remove(pending); });
+  document.getElementById('dlg-cancel').addEventListener('click', function () { dlg.hidden = true; });
+  dlg.addEventListener('keydown', function (e) { if (e.key === 'Escape') dlg.hidden = true; });
+  function setMode(m) {
+    mode = m;
+    document.getElementById('d-confirm').setAttribute('aria-pressed', m === 'confirm' ? 'true' : 'false');
+    document.getElementById('d-undo').setAttribute('aria-pressed', m === 'undo' ? 'true' : 'false');
+    toast.hidden = true; dlg.hidden = true;
+  }
+  document.getElementById('d-confirm').addEventListener('click', function () { setMode('confirm'); });
+  document.getElementById('d-undo').addEventListener('click', function () { setMode('undo'); });
+  document.getElementById('files-reset').addEventListener('click', function () { files = NAMES.slice(); last = null; toast.hidden = true; render(); });
+  render();
+})();
+/* メールの入力チェック */
+(function () {
+  var re = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+  function check(input, out) {
+    var v = input.value.trim();
+    if (!v) { out.textContent = ''; out.className = 'ferr'; input.classList.remove('bad'); return; }
+    if (re.test(v)) { out.textContent = '✓ 使えます'; out.className = 'ferr good'; input.classList.remove('bad'); }
+    else { out.textContent = '✕ 「@」と「.」を含むメールアドレスを入れてください'; out.className = 'ferr'; input.classList.add('bad'); }
+  }
+  var a = document.getElementById('mail-a'), ea = document.getElementById('err-a');
+  var b = document.getElementById('mail-b'), eb = document.getElementById('err-b');
+  a.addEventListener('input', function () { check(a, ea); });
+  b.addEventListener('blur', function () { check(b, eb); });
+  b.addEventListener('input', function () { if (eb.textContent) check(b, eb); });
 })();
 </script>
 
-<div class="fab"><ol class="fab-menu" id="fab-menu" hidden aria-label="目次"><li><a href="index.html"><b></b>表紙と目次</a></li><li><a href="ch01.html"><b>1</b>人はどう画面を見るか</a></li><li><a href="ch02.html"><b>2</b>文字の読みやすさ</a></li><li><a href="ch03.html"><b>3</b>色の使い方</a></li><li><a href="ch04.html"><b>4</b>いまどこを選んでいるか</a></li><li><a href="ch05.html"><b>5</b>押す・打つのしやすさ</a></li><li><a href="ch06.html"><b>6</b>動きを入れていい時</a></li><li><a href="ch07.html"><b>7</b>情報の見せ方</a></li><li><a href="ch08.html"><b>8</b>エラーと確認</a></li><li><a href="ch09.html" aria-current="page"><b>9</b>軽い画面のつくり方</a></li><li><a href="ch10.html"><b>10</b>目の疲れ</a></li><li><a href="ch11.html"><b>11</b>これからの UI</a></li></ol><button class="fab-b" type="button" id="fab-b" aria-expanded="false" aria-controls="fab-menu">目次</button></div>
+<div class="fab"><ol class="fab-menu" id="fab-menu" hidden aria-label="目次"><li><a href="index.html"><b></b>表紙と目次</a></li><li><a href="ch01.html"><b>1</b>人はどう画面を見るか</a></li><li><a href="ch02.html"><b>2</b>文字の読みやすさ</a></li><li><a href="ch03.html"><b>3</b>色の使い方</a></li><li><a href="ch04.html"><b>4</b>いまどこを選んでいるか</a></li><li><a href="ch05.html"><b>5</b>押す・打つのしやすさ</a></li><li><a href="ch06.html"><b>6</b>動きを入れていい時</a></li><li><a href="ch07.html"><b>7</b>情報の見せ方</a></li><li><a href="ch08.html"><b>8</b>詳しいものは奥に置く</a></li><li><a href="ch09.html" aria-current="page"><b>9</b>エラーと確認</a></li><li><a href="ch10.html"><b>10</b>軽い画面のつくり方</a></li><li><a href="ch11.html"><b>11</b>目の疲れ</a></li><li><a href="ch12.html"><b>12</b>これからの UI</a></li></ol><button class="fab-b" type="button" id="fab-b" aria-expanded="false" aria-controls="fab-menu">目次</button></div>
 <script>
 (function () {
   var b = document.getElementById('fab-b'), m = document.getElementById('fab-menu');
