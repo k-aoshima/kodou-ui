@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Kodou-ui の決まりのうち、ファイルを読むだけで見つけられるものを探す。
 
-AI を使わず、決まった規則で HTML・CSS・JS（jsx・tsx・vue・svelte も）を読む。
+AI を使わず、決まった規則で HTML・CSS・JS（jsx・tsx・vue・svelte も）と Swift を読む。
 見つけたものは「[重さ] 場所 規則: 問題 → 直し方」の形で出す。
 
   python3 lint.py page.html src/          # ファイルかフォルダ（中を探す）
@@ -13,8 +13,8 @@ AI を使わず、決まった規則で HTML・CSS・JS（jsx・tsx・vue・svel
 """
 import argparse, json, os, re, sys
 
-EXT = {'.html', '.htm', '.css', '.js', '.mjs', '.jsx', '.ts', '.tsx', '.vue', '.svelte'}
-SKIP_DIRS = {'node_modules', '.git', 'dist', 'build', '.next', 'vendor'}
+EXT = {'.html', '.htm', '.css', '.js', '.mjs', '.jsx', '.ts', '.tsx', '.vue', '.svelte', '.swift'}
+SKIP_DIRS = {'node_modules', '.git', 'dist', 'build', '.next', 'vendor', '.build', 'Vendor'}
 
 # 規則: 名前 → (重さ, 問題, 直し方)
 RULES = {
@@ -38,6 +38,15 @@ RULES = {
                         'visibilitychange で document.hidden を見て止める。画面外の部品は IntersectionObserver で止める'),
     'tiny-text':       ('軽い', '読ませる文字が 12px 未満',
                         'データは 12px 以上、文は 15px 以上にする'),
+    # Swift（SwiftUI・AppKit）
+    'swift-hidden-timer': ('中', 'Timer を使っているのに、窓が隠れたとき（occlusionState・しまう・アプリを隠す）に止めていない',
+                           'KodouTicker を使うか、NSWindow.didChangeOcclusionStateNotification で occlusionState を見て Timer を止める'),
+    'swift-bulk-rows':  ('中', '1,000 件以上の決まった数の行を、ForEach・List・Chart にそのまま渡している',
+                         '一覧とログは KodouRows（NSTableView）にする。グラフは描く幅の 1 列に最小と最大まで間引いて渡す'),
+    'swift-tiny-text':  ('軽い', '文字の大きさが 12pt 未満',
+                         'データは 12pt 以上、文は 14pt 以上にする（.kdMono(13)、.kdRead(14)）'),
+    'swift-fixed-color': ('軽い', '色を数値で直に書いている。暗い外観・高いコントラストで替わらない',
+                          'KD.fg のようなトークン（SwiftUI）か KodouColor.fg（AppKit）を使う'),
 }
 
 def css_rules(css):
@@ -60,6 +69,23 @@ def segments(text, ext):
         segs.append(('js', 0, text))
     segs.append(('html', 0, text))
     return segs
+
+def check_swift(text, add):
+    """Swift のファイル。文字列とコメントの中は見ない。"""
+    code = re.sub(r'//[^\n]*', lambda m: ' ' * len(m.group(0)), text)
+    code = re.sub(r'"(?:\\.|[^"\\\n])*"', lambda m: '"' + ' ' * (len(m.group(0)) - 2) + '"', code)
+    # 繰り返す Timer（Timer.publish、repeats: true）だけを見る。1 回きりの Timer は見ない
+    t = re.search(r'\bTimer\s*\.publish\s*\(', code) or next((m for m in re.finditer(r'repeats\s*:\s*true', code) if 'Timer' in code[max(0, m.start() - 200):m.start()]), None)
+    if t and not re.search(r'occlusionState|didChangeOcclusionState|isMiniaturized|didHideNotification|scenePhase|KodouTicker', code):
+        add('swift-hidden-timer', t.start(), t.group(0))
+    for m in re.finditer(r'\b(ForEach|List|Chart)\s*\(\s*(?:0|1)\s*(\.\.<|\.\.\.)\s*(\d[\d_]*)', code):
+        if int(m.group(3).replace('_', '')) >= 1000:
+            add('swift-bulk-rows', m.start(), m.group(0))
+    for m in re.finditer(r'(?:\.system\(\s*size:|ofSize:|\.kdMono\(|\.kdRead\(|KodouFont\.(?:mono|read)\(|\bsize:)\s*(\d+(?:\.\d+)?)\b', code):
+        if float(m.group(1)) < 12 and re.search(r'font|Font|ofSize|kdMono|kdRead', code[max(0, m.start() - 40):m.end()]):
+            add('swift-tiny-text', m.start(), m.group(0))
+    for m in re.finditer(r'\b(?:Color|NSColor|UIColor)\s*\(\s*(?:\.sRGB\s*,\s*)?(?:red|srgbRed|calibratedRed|deviceRed|hex|white)\s*:', code):
+        add('swift-fixed-color', m.start(), m.group(0))
 
 def check(path):
     text = open(path, encoding='utf-8', errors='replace').read()
@@ -86,6 +112,9 @@ def check(path):
         sev, msg, fix = RULES[rule]
         found.append({'rule': rule, 'severity': sev, 'file': path, 'line': ln, 'what': what.strip()[:80], 'message': msg, 'fix': fix})
 
+    if ext == '.swift':
+        check_swift(text, add)
+        return found
     segs = segments(text, ext)
     css_all = ''.join(s for k, _, s in segs if k == 'css')
     js_all = ''.join(s for k, _, s in segs if k == 'js')

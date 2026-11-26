@@ -9,6 +9,9 @@ skills/kodou-ui-build/assets/ に書き出す。
   icons.js             ドット絵のアイコン（PX 8×8、PX12 12×12）と px()
   components/<名前>.html  部品ごとの見本。HTML と、その部品の JS だけを持つ。開けばそのまま動く
   components/README.md 部品の一覧
+  swift/Sources/KodouUI/Tokens.swift  Swift 版のトークン（:root の明・暗・高いコントラストから）
+  swift/Sources/KodouUI/IconData.swift  Swift 版のアイコンのマス目（icons.js と同じ）
+  swift/KodouUI/*.swift  swift/Sources/KodouUI の写し（スキルだけを入れた環境でも Swift の部品を使えるように）
 
   python3 tools/build-assets.py           # 書き出す
   python3 tools/build-assets.py --check   # 書き出した物が見本帳と合っているか（CI 用。合わなければ終了コード 1）
@@ -20,6 +23,9 @@ import argparse, os, re, sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CAT = os.path.join(ROOT, 'catalog', 'index.html')
 OUT = os.path.join(ROOT, 'skills', 'kodou-ui-build', 'assets')
+SWIFT_TOKENS = os.path.join(ROOT, 'swift', 'Sources', 'KodouUI', 'Tokens.swift')
+SWIFT_ICONS = os.path.join(ROOT, 'swift', 'Sources', 'KodouUI', 'IconData.swift')
+SWIFT_SRC = os.path.join(ROOT, 'swift', 'Sources', 'KodouUI')
 
 # ---- CSS の節: 見出しの書き出し → 扱い
 CSS_RULES = [
@@ -110,11 +116,87 @@ def rule_for(head, rules):
             return v
     return None
 
+# ---- Swift のトークン
+def swift_tokens(style):
+    """見本帳の :root（明・暗・高いコントラストの明と暗）から Tokens.swift を作る。"""
+    pick = {
+        'light': r'^:root \{\n(.*?)\n\}',
+        'dark': r'^@media \(prefers-color-scheme: dark\) \{ :root:not\(\[data-theme="light"\]\) \{\n(.*?) \} \}',
+        'hcLight': r'^@media \(prefers-contrast: more\) \{ :root \{[^\n]*\n(.*?) \} \}',
+        'hcDark': r'^@media \(prefers-contrast: more\) and \(prefers-color-scheme: dark\) \{ :root:not\(\[data-theme="light"\]\) \{\n(.*?) \} \}',
+    }
+    sets = {}
+    for k, pat in pick.items():
+        m = re.search(pat, style, re.S | re.M)
+        if not m:
+            raise SystemExit(f'Swift のトークン: 見本帳の :root（{k}）が見つかりません')
+        body = re.sub(r'/\*.*?\*/', '', m.group(1), flags=re.S)
+        sets[k] = dict(re.findall(r'--([\w-]+):\s*([^;]+?)\s*(?:;|$)', body, re.M))
+    def rgba(v, env):
+        v = v.strip()
+        m = re.fullmatch(r'var\(--([\w-]+)\)', v)
+        if m:
+            return rgba(env[m.group(1)], env)
+        m = re.fullmatch(r'#([0-9A-Fa-f]{6})', v)
+        if m:
+            return (int(m.group(1), 16), 1.0)
+        m = re.fullmatch(r'rgba\((\d+),\s*(\d+),\s*(\d+),\s*([\d.]+)\)', v)
+        if m:
+            r, g, b, a = m.groups()
+            return ((int(r) << 16) | (int(g) << 8) | int(b), float(a))
+        return None
+    camel = lambda n: re.sub(r'-(\w)', lambda m: m.group(1).upper(), n)
+    lit = lambda c: f'.init(0x{c[0]:06X})' if c[1] == 1.0 else f'.init(0x{c[0]:06X}, {c[1]:g})'
+    light, dark = sets['light'], {**sets['light'], **sets['dark']}
+    hcl, hcd = {**light, **sets['hcLight']}, {**dark, **sets['hcDark']}
+    colors, spaces, motions = [], [], []
+    for name, v in light.items():
+        c = rgba(v, light)
+        if c:
+            d = rgba(dark[name], dark)
+            args = [lit(c), lit(d)]
+            if name in sets['hcLight']:
+                args.append('hcLight: ' + lit(rgba(hcl[name], hcl)))
+            if name in sets['hcDark']:
+                args.append('hcDark: ' + lit(rgba(hcd[name], hcd)))
+            colors.append((camel(name), ', '.join(args)))
+        elif re.fullmatch(r's\d', name):
+            spaces.append((name, v.replace('px', '')))
+        elif name.startswith('t-'):
+            motions.append((camel(name[2:]), int(v.replace('ms', '')) / 1000))
+    out = ['// Kodou-ui のトークン。tools/build-assets.py が catalog/index.html の :root から書き出す（手で直さない）',
+           '// 明・暗・高いコントラスト（明と暗）の値を持つ動的な色で、外観が変わると自動で替わる',
+           'import AppKit', 'import SwiftUI', '',
+           '/// AppKit で使う色（NSColor）', 'public enum KodouColor {']
+    out += [f'    public static let {n} = KodouDynamic.color({a})' for n, a in colors]
+    out += ['}', '', '/// SwiftUI で使う色（KD.fg のように書く）', 'public enum KD {']
+    out += [f'    public static let {n} = Color(nsColor: KodouColor.{n})' for n, _ in colors]
+    out += ['}', '', '/// 間隔（pt）。Web の px と同じ数', 'public enum KodouSpace {']
+    out += [f'    public static let {n}: CGFloat = {v}' for n, v in spaces]
+    out += ['}', '', '/// 動きの長さ（秒）', 'public enum KodouMotion {']
+    out += [f'    public static let {n}: Double = {v:g}' for n, v in motions]
+    out += ['}', '']
+    return '\n'.join(out)
+
+def swift_icons(js):
+    """icons.js の PX（8×8）と PX12（12×12）のマス目を Swift の辞書にする。"""
+    out = ['// Kodou-ui のドット絵のアイコンのマス目。tools/build-assets.py が icons.js から書き出す（手で直さない）',
+           '// 描き方は Icon.swift。決まりは skills/kodou-ui-build/references/icons.md', '']
+    for var, sw in (('PX', 'px8'), ('PX12', 'px12')):
+        body = re.search(r'const ' + var + r' = \{\n(.*?)\n\};', js, re.S).group(1)
+        out.append(f'let kodouIcon{sw.upper()[2:]}: [String: [String]] = [')
+        for name, rows in re.findall(r'^\s*(\w+):\s*\[([^\]]*)\]', body, re.M):
+            cells = re.findall(r'[\'"]([#.]+)[\'"]', rows)
+            out.append(f'    "{name}": [' + ', '.join(f'"{c}"' for c in cells) + '],')
+        out.append(']')
+        out.append('')
+    return '\n'.join(out)
+
 def build():
     src = open(CAT, encoding='utf-8').read()
     style = re.search(r'<style>\n(.*?)\n</style>', src, re.S).group(1)
     script = re.search(r'<script>\n(.*?)\n</script>', src, re.S).group(1)
-    files = {}
+    files = {SWIFT_TOKENS: swift_tokens(style)}
 
     # ---- CSS
     css_out = ['/* Kodou-ui の部品の CSS。tools/build-assets.py が見本帳から書き出す（手で直さない）。tokens.css の後に読む */']
@@ -215,6 +297,12 @@ def build():
         files[f'components/{cid}.html'] = page
         summary = re.sub(r'<[^>]+>', '', lead.group(1)).strip().split('。')[0] + '。' if lead else ''
         rows.append(f'| {grp} | [{ja}]({cid}.html) | `{cid}.html` | {summary} |')
+    files[SWIFT_ICONS] = swift_icons(files['icons.js'])
+    # Swift の部品はスキルの assets/swift/KodouUI/ に写す。書き出した Tokens.swift と IconData.swift は、今作った中身を写す
+    for f in sorted(os.listdir(SWIFT_SRC)):
+        if f.endswith('.swift'):
+            src_path = os.path.join(SWIFT_SRC, f)
+            files[f'swift/KodouUI/{f}'] = files.get(src_path) or open(src_path, encoding='utf-8').read()
     files['components/README.md'] = ('# 部品の見本\n\n'
         '見本帳（catalog/index.html）から、部品ごとに切り出した見本です。`tools/build-assets.py` が書き出すので、手で直さないでください。\n\n'
         '作るときは、使う部品のファイルだけを読み、HTML と最後の `<script>` の JS を写します。'
@@ -239,7 +327,11 @@ def main():
         else:
             os.makedirs(os.path.dirname(p), exist_ok=True)
             open(p, 'w', encoding='utf-8').write(text)
-    have = {f'components/{f}' for f in os.listdir(os.path.join(OUT, 'components'))} if os.path.isdir(os.path.join(OUT, 'components')) else set()
+    have = set()
+    for sub in ('components', os.path.join('swift', 'KodouUI')):
+        d = os.path.join(OUT, sub)
+        if os.path.isdir(d):
+            have |= {f'{sub}/{f}' for f in os.listdir(d)}
     extra = sorted(have - set(files))
     if a.check:
         if stale or extra:
@@ -249,7 +341,7 @@ def main():
         return 0
     for e in extra:
         os.remove(os.path.join(OUT, e))
-    print(f'{len(files)} 個のファイルを書き出しました（部品 {sum(1 for f in files if f.endswith(".html"))} 個）。')
+    print(f'{len(files)} 個のファイルを書き出しました（部品 {sum(1 for f in files if f.endswith(".html"))} 個、Swift {sum(1 for f in files if f.startswith("swift/"))} 個）。')
     return 0
 
 if __name__ == '__main__':
